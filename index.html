@@ -2,462 +2,328 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
-  <title>WA Order Pro | Dashboard</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Gestionale WhatsApp | Pro Edition</title>
   <style>
     :root {
-      --bg: #030712;
-      --card: #111827;
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-glow: rgba(59, 130, 246, 0.3);
-      --text: #f9fafb;
-      --text-muted: #9ca3af;
-      --success: #10b981;
-      --error: #ef4444;
-      --warning: #f59e0b;
-      --radius-xl: 24px;
-      --radius-lg: 16px;
-      --font-sans: 'Plus Jakarta Sans', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg: #0b1220; --text: #e5e7eb; --muted: #9ca3af; --border: rgba(255,255,255,.10);
+      --accent: #60a5fa; --ok: #34d399; --warn: #fbbf24; --danger: #fb7185;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif; --radius: 16px;
     }
-
-    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--sans); background: linear-gradient(180deg, #070b14, var(--bg)); color: var(--text); min-height: 100vh; }
+    .app { max-width: 980px; margin: 0 auto; padding: 14px 14px 100px; }
     
-    body {
-      margin: 0;
-      font-family: var(--font-sans);
-      background-color: var(--bg);
-      background-image: 
-        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 100% 100%, rgba(30, 27, 75, 0.2) 0%, transparent 40%);
-      background-attachment: fixed;
-      color: var(--text);
-      overflow-x: hidden;
+    /* Topbar */
+    .topbar { 
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; position: sticky; top: 0; z-index: 5;
+      background: rgba(7, 11, 20, 0.75); backdrop-filter: blur(12px); padding: 12px 16px; border-bottom: 1px solid var(--border);
+      border-radius: 0 0 18px 18px; margin-bottom: 16px;
     }
+    .title h1 { font-size: 16px; margin: 0; font-weight: 800; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .title .sub { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    /* Layout */
+    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media(min-width: 860px) { .grid { grid-template-columns: 1.05fr 0.95fr; } }
+    
+    .card { border: 1px solid var(--border); border-radius: var(--radius); background: rgba(255,255,255,0.03); overflow: hidden; height: fit-content; }
+    .cardhead { padding: 12px 16px; background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .cardhead h2 { margin: 0; font-size: 13px; font-weight: 700; color: var(--accent); }
+    .cardbody { padding: 16px; }
 
-    .app-container { max-width: 1200px; margin: 0 auto; padding: 20px 20px 120px; }
+    textarea { width: 100%; min-height: 280px; background: rgba(0,0,0,0.3); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 14px; font-size: 14px; outline: none; transition: 0.2s; }
+    textarea:focus { border-color: var(--accent); background: rgba(0,0,0,0.4); }
+    
+    .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .btn { border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--text); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .btn.primary { background: var(--accent); color: #000; border: none; }
+    .btn.danger { border-color: var(--danger); color: var(--danger); background: rgba(251, 113, 133, 0.05); }
+    .btn:active { transform: scale(0.97); }
 
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 30px 0; margin-bottom: 20px;
-    }
+    .tabs { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 10px; }
+    .tab { padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 7px; cursor: pointer; color: var(--muted); border: none; background: none; }
+    .tab.active { background: var(--accent); color: #000; }
 
-    .brand h1 {
-      font-size: 1.8rem; font-weight: 800; margin: 0; letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    .out { font-family: var(--mono); white-space: pre-wrap; font-size: 13px; background: #000; border-radius: 12px; padding: 16px; min-height: 280px; border: 1px solid var(--border); color: #adbac7; }
+    .pill { font-size: 10px; color: var(--muted); border: 1px solid var(--border); padding: 2px 8px; border-radius: 20px; font-weight: 700; }
+    .iconbtn { background: none; border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 8px; cursor: pointer; }
 
-    /* Grid Layout */
-    .dashboard-grid {
-      display: grid; grid-template-columns: 1fr; gap: 24px;
-    }
-    @media (min-width: 1024px) { .dashboard-grid { grid-template-columns: 1.1fr 0.9fr; } }
-
-    /* Cards */
-    .glass-card {
-      background: rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      box-shadow: 0 20px 50px -12px rgba(0,0,0,0.5);
-    }
-
-    .card-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--card-border);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-
-    .card-header h2 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0; }
-
-    /* Input Area */
-    .input-wrapper { padding: 24px; }
-    textarea {
-      width: 100%; min-height: 400px;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      color: var(--text); padding: 20px;
-      font-family: var(--font-sans); font-size: 1rem;
-      resize: none; transition: all 0.3s ease;
-    }
-    textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
-
-    /* Output Viewers */
-    .output-wrapper { padding: 24px; }
-    .viewer {
-      font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5;
-      background: #000; padding: 24px; border-radius: var(--radius-lg);
-      min-height: 400px; white-space: pre-wrap; color: #adbac7;
-      border: 1px solid var(--card-border);
-      animation: fadeIn 0.3s ease;
-    }
-
-    /* Tabs */
-    .tabs { display: flex; gap: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 12px; }
-    .tab {
-      padding: 8px 16px; border: none; background: transparent;
-      color: var(--text-muted); font-size: 0.8rem; font-weight: 700;
-      border-radius: 8px; cursor: pointer; transition: all 0.2s;
-    }
-    .tab.active { background: var(--accent); color: white; box-shadow: 0 4px 12px var(--accent-glow); }
-
-    /* Action Buttons */
-    .actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-    .btn {
-      padding: 14px 24px; border-radius: 14px; font-weight: 700; font-size: 0.9rem;
-      cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .btn-main { background: var(--accent); color: white; flex: 1; justify-content: center; }
-    .btn-main:hover { background: var(--accent-hover); transform: translateY(-2px); }
-    .btn-sec { background: rgba(255,255,255,0.05); color: var(--text); border-color: var(--card-border); }
-    .btn-sec:hover { background: rgba(255,255,255,0.1); }
-    .btn-danger { color: var(--error); background: rgba(239, 68, 68, 0.1); }
-
-    /* Stats bar */
-    .bottom-nav {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-      width: calc(100% - 40px); max-width: 800px;
-      background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border); border-radius: 100px;
-      padding: 16px 32px; display: flex; justify-content: space-between;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 100;
-    }
-    .stat-box { display: flex; flex-direction: column; }
-    .stat-val { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
-    .stat-lab { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
-
-    /* Toast */
-    #toast {
-      position: fixed; top: 30px; left: 50%; transform: translate(-50%, -100px);
-      background: var(--accent); color: white; padding: 12px 30px;
-      border-radius: 50px; font-weight: 700; z-index: 1000;
-      transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-    }
-    #toast.show { transform: translate(-50%, 0); }
+    /* Bottom Bar */
+    .bottombar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(7, 11, 20, 0.9); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 12px 20px; z-index: 6; }
+    .bottomwrap { max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .stat { font-size: 13px; font-weight: 800; }
+    .stat span { color: var(--accent); }
 
     /* Modal */
-    .modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-      display: none; align-items: center; justify-content: center; z-index: 200;
-      backdrop-filter: blur(10px);
-    }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
     .modal.open { display: flex; }
-    .modal-content {
-      width: 90%; max-width: 700px; max-height: 80vh; background: var(--card);
-      border-radius: var(--radius-xl); border: 1px solid var(--card-border);
-      padding: 30px; overflow-y: auto;
-    }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .sheet { width: min(980px, 100%); background: var(--bg); border: 1px solid var(--border); border-radius: 24px 24px 0 0; padding: 24px; max-height: 90vh; overflow: auto; }
+    .section { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+    .section h4 { margin: 0 0 12px; font-size: 12px; text-transform: uppercase; color: var(--accent); letter-spacing: 1px; }
+    
+    label { display: block; margin-bottom: 12px; font-size: 12px; color: var(--muted); }
+    input, select { width: 100%; background: #000; color: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 4px; }
 
     @media print {
-      body { background: white; }
-      .app-container { padding: 0; }
-      .dashboard-grid { display: block; }
-      .glass-card { border: none; background: transparent; box-shadow: none; }
-      header, .actions, .bottom-nav, .tabs, .card-header { display: none !important; }
-      .viewer { background: white; color: black; border: none; padding: 0; min-height: auto; }
+      body { background: #fff; color: #000; }
+      .topbar, .bottombar, .no-print, .modal, .btnrow { display: none !important; }
+      .app { padding: 0; }
+      .grid { display: block; }
+      .card { border: none; }
+      .out { border: none; background: none; color: #000; }
     }
   </style>
 </head>
 <body>
 
-  <div id="toast">Copiato negli appunti!</div>
-
-  <div class="app-container">
-    <header>
-      <div class="brand">
-        <h1>WA Order Pro</h1>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span id="dayIndicator" style="font-size: 0.8rem; color: var(--success); font-weight: 700;">● LIVE</span>
-          <span style="color:var(--text-muted); font-size: 0.8rem;">V3.5 Intelligent Parser</span>
-        </div>
+  <div class="app">
+    <div class="topbar">
+      <div class="title">
+        <h1>WA Order Manager</h1>
+        <div class="sub" id="dayBadge">Inizializzazione...</div>
       </div>
-      <button onclick="toggleModal(true)" class="btn btn-sec" style="padding: 10px 15px;">Configurazione ⚙️</button>
-    </header>
+      <button id="openSettings" class="iconbtn">⚙️</button>
+    </div>
 
-    <div class="dashboard-grid">
-      <div class="glass-card">
-        <div class="card-header">
-          <h2>Messaggio WhatsApp</h2>
-          <span id="extLabel" style="font-size: 0.7rem; font-weight: 800; color: var(--accent);">AUTO-DETECT</span>
+    <div class="grid">
+      <div class="card">
+        <div class="cardhead">
+          <h2>Input Ordine</h2>
+          <span class="pill" id="extractBadge">Auto-Detect</span>
         </div>
-        <div class="input-wrapper">
-          <textarea id="mainInput" placeholder="Incolla qui la chat... 
-Es:
-Ciao, 3 margherite per le 20:00
-Via Roma 10
-Mario Rossi"></textarea>
-          <div class="actions">
-            <button id="btnGen" class="btn btn-main">Genera Comanda ✨</button>
-            <button id="btnClean" class="btn btn-sec btn-danger">Pulisci 🗑️</button>
+        <div class="cardbody">
+          <textarea id="input" placeholder="Incolla l'ordine qui..."></textarea>
+          <div class="btnrow no-print">
+            <button id="gen" class="btn primary">Genera ✨</button>
+            <button id="copy" class="btn">Copia</button>
+            <button id="print" class="btn">Stampa</button>
+            <button id="closeDay" class="btn danger">Nuovo Giorno</button>
           </div>
         </div>
       </div>
 
-      <div class="glass-card">
-        <div class="card-header">
-          <div class="tabs">
-            <button class="tab active" data-v="kitchen">Cucina</button>
-            <button class="tab" data-v="receipt">Ricevuta</button>
-            <button class="tab" data-v="debug">Analisi Dati</button>
+      <div class="card">
+        <div class="cardhead">
+          <div class="tabs no-print">
+            <button class="tab active" data-view="kitchen">Cucina</button>
+            <button class="tab" data-view="receipt">Ricevuta</button>
+            <button class="tab" data-view="debug">Debug</button>
           </div>
         </div>
-        <div class="output-wrapper">
-          <div id="mainOutput" class="viewer">In attesa dell'ordine...</div>
-          <div class="actions">
-            <button id="btnCopy" class="btn btn-sec">Copia Testo 📋</button>
-            <button id="btnPrint" class="btn btn-sec">Stampa 🖨️</button>
-          </div>
+        <div class="cardbody">
+          <div id="outKitchen" class="out">In attesa...</div>
+          <div id="outReceipt" class="out" style="display:none">In attesa...</div>
+          <div id="outDebug" class="out" style="display:none">In attesa...</div>
+          <div id="status" class="status no-print" style="margin-top:10px; font-size:11px;"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="bottom-nav">
-    <div class="stat-box">
-      <span class="stat-lab">Pizze</span>
-      <span id="statQty" class="stat-val">0</span>
-    </div>
-    <div class="stat-box" style="align-items: center;">
-      <span class="stat-lab">Consegna</span>
-      <span id="statMode" class="stat-val" style="color: var(--text-muted);">---</span>
-    </div>
-    <div class="stat-box" style="align-items: flex-end;">
-      <span class="stat-lab">Totale</span>
-      <span id="statTotal" class="stat-val">€ 0,00</span>
+  <div class="bottombar no-print">
+    <div class="bottomwrap">
+      <div class="stat">Totale: <span id="totalMini">€ 0.00</span></div>
+      <div class="stat">Articoli: <span id="qtyMini">0</span></div>
+      <div class="stat" id="printModeMini" style="font-size:11px; color:var(--muted)">Stampa: Both</div>
     </div>
   </div>
 
-  <div id="settingsModal" class="modal">
-    <div class="modal-content">
+  <div id="modal" class="modal no-print">
+    <div class="sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="margin:0;">Impostazioni Catalogo</h2>
-        <button onclick="toggleModal(false)" class="btn btn-sec">Chiudi</button>
+        <h3 style="margin:0">Configurazione</h3>
+        <button id="closeSettings" class="iconbtn">✕</button>
       </div>
-      <p style="color:var(--text-muted); font-size:0.8rem;">Modifica il JSON sottostante per aggiornare prezzi e alias.</p>
-      <textarea id="catalogArea" style="min-height:300px; font-family:var(--font-mono); font-size:0.8rem;"></textarea>
-      <div class="actions">
-        <button id="btnSaveCat" class="btn btn-main">Salva Catalogo</button>
-        <button id="btnResetCat" class="btn btn-sec">Reset Fabbrica</button>
+
+      <div class="section">
+        <h4>Parametri Generali</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <label>Costo Consegna<input id="deliveryFee" type="number" step="0.5"></label>
+          <label>Pizza Base Custom<select id="fallbackBasePizza"></select></label>
+        </div>
+        <label>Modalità Stampa
+          <select id="printMode">
+            <option value="both">Entrambe (Cucina + Ricevuta)</option>
+            <option value="kitchen">Solo Cucina</option>
+            <option value="receipt">Solo Ricevuta</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="section">
+        <h4>Catalogo JSON</h4>
+        <textarea id="catalog" style="min-height:200px; font-family:var(--mono); font-size:12px;"></textarea>
+        <div class="btnrow">
+          <button id="saveCatalog" class="btn primary">Salva</button>
+          <button id="resetCatalog" class="btn">Reset</button>
+        </div>
       </div>
     </div>
   </div>
 
 <script>
-/* =========================================
-   DATABASE & CONFIG
-   ========================================= */
+// --- LOGICA CORE ---
+const LS = { catalog:"wa_cat_v5", settings:"wa_set_v5", lastDay:"wa_day_v5" };
+
 const SAMPLE_CATALOG = {
-  currency: "€",
-  pizzas: { "margherita": 6.00, "diavola": 7.50, "prosciutto": 7.50, "salame piccante": 7.50, "salsiccia porcini e grana": 9.50 },
-  drinks: { "coca cola 33": 2.50, "acqua 0.5": 1.50, "birra 33": 3.50 },
-  extras: { "speck": 1.50, "brie": 1.50, "porcini": 2.00, "grana": 1.00, "senza glutine": 3.00 },
-  doughs: { "classico": 0.00, "integrale": 1.00, "senza glutine": 3.00 },
-  sizes: { "normale": 0.00, "baby": -1.00, "maxi": 2.00 },
-  aliases: { "marg": "margherita", "coca": "coca cola 33", "sg": "senza glutine", "s.g.": "senza glutine" }
+  currency:"€",
+  pizzas:{ "margherita":6.00, "diavola":7.50, "prosciutto":7.50, "salame piccante":7.50, "salsiccia porcini e grana":9.50 },
+  drinks:{ "coca cola 33":2.50, "acqua 0.5":1.50, "birra 33":3.50 },
+  extras:{ "speck":1.50, "brie":1.50, "porcini":2.00, "grana":1.00, "cipolla":0.80 },
+  doughs:{ "classico":0.00, "integrale":1.00, "senza glutine":3.00 },
+  sizes:{ "normale":0.00, "baby":-1.00, "maxi":2.00 },
+  aliases:{ "marg":"margherita", "coca":"coca cola 33", "sg":"senza glutine", "s.g.":"senza glutine" }
 };
 
-let CATALOG = JSON.parse(localStorage.getItem('wa_cat_v4')) || SAMPLE_CATALOG;
-let SETTINGS = { deliveryFee: 2.00, printMode: 'both' };
-let CURRENT_ORDER = null;
+const DEFAULT_SETTINGS = { printMode:"both", deliveryFee:0, halfHalfPricing:"max", halfHalfExtras:"full", fallbackBasePizza:"margherita" };
 
-/* =========================================
-   PARSER LOGIC (CORE)
-   ========================================= */
-function parseOrder(raw) {
-    const text = raw.toLowerCase();
-    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+let CATALOG = JSON.parse(localStorage.getItem(LS.catalog)) || structuredClone(SAMPLE_CATALOG);
+let SETTINGS = JSON.parse(localStorage.getItem(LS.settings)) || structuredClone(DEFAULT_SETTINGS);
+
+// --- FUNZIONI DI SUPPORTO ---
+function safeLower(s){ return (s||"").toLowerCase().trim(); }
+function money(n){ return n.toFixed(2); }
+
+function parseOrder(rawText) {
+  // 1. Estrazione blocco utile (Logica Stop Phrases)
+  const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+  let o = { name:"", address:"", items:[], total:0, qty:0, mode:"RITIRO", time:"" };
+
+  // 2. Metadati veloci
+  const textAll = rawText.toLowerCase();
+  if(/\b(consegna|via|viale|piazza)\b/.test(textAll)) o.mode = "CONSEGNA";
+  const tm = rawText.match(/(\d{1,2})[.:](\d{2})/);
+  if(tm) o.time = tm[0];
+
+  lines.forEach(line => {
+    const l = safeLower(line);
     
-    let order = {
-        name: "", address: "", time: "", mode: "RITIRO",
-        items: [], total: 0, qtyPizze: 0
-    };
+    // Esclusione nomi ALL CAPS (Clienti) dagli articoli
+    const isAllCaps = line === line.toUpperCase() && /[A-Z]/.test(line) && line.length > 4;
+    
+    // Riconoscimento articoli (Qty + Testo)
+    const m = line.match(/^(\d+)\s+(.+)$/);
+    if(m && !isAllCaps) {
+      const q = parseInt(m[1]);
+      let txt = m[2].toLowerCase();
+      
+      // Risoluzione Alias & Prezzi
+      let baseKey = CATALOG.aliases[txt] || txt;
+      let price = 0;
+      let found = false;
 
-    // Estrazione Metadati
-    const timeMatch = raw.match(/(\d{1,2}[:.]\d{2})/);
-    if(timeMatch) order.time = timeMatch[1];
-    if(text.includes("via") || text.includes("consegna")) order.mode = "CONSEGNA";
+      // Cerca in Pizze
+      for(let p in CATALOG.pizzas) {
+        if(txt.includes(p)) { price = CATALOG.pizzas[p]; baseKey = p; found = true; break; }
+      }
+      // Se non trovata e c'è un impasto speciale, usa la fallback base
+      if(!found && (txt.includes("senza glutine") || txt.includes("sg"))) {
+         price = CATALOG.pizzas[SETTINGS.fallbackBasePizza] || 0;
+         baseKey = SETTINGS.fallbackBasePizza;
+         found = true;
+      }
 
-    // Parsing Righe
-    lines.forEach(line => {
-        const l = line.toLowerCase();
-        
-        // Riconoscimento semplice Nome/Indirizzo
-        if(!order.name && l.length > 3 && !l.includes("pizza") && !l.includes("per le")) {
-            if(!l.match(/\d/)) order.name = line;
-        }
-        if(l.includes("via ") || l.includes("piazza ")) order.address = line;
+      // Extra
+      if(txt.includes("senza glutine") || txt.includes("sg")) price += CATALOG.doughs["senza glutine"];
+      
+      // Calcolo finali
+      o.items.push({ qty: q, label: line.replace(/^\d+\s+/, ""), price: price, sub: price * q });
+      o.total += price * q;
+      o.qty += q;
+    } else {
+      // Se non è articolo, prova a mappare indirizzo o nome
+      if(/\b(via|viale|piazza)\b/.test(l)) o.address = line;
+      else if(isAllCaps && !o.name) o.name = line;
+    }
+  });
 
-        // Analisi Prodotti
-        const qtyMatch = line.match(/^(\d+)\s+(.+)/);
-        if(qtyMatch) {
-            const q = parseInt(qtyMatch[1]);
-            const itemRaw = qtyMatch[2].toLowerCase();
-            
-            let price = 0;
-            let found = false;
-
-            // Cerca in Pizze
-            for(let p in CATALOG.pizzas) {
-                if(itemRaw.includes(p) || (CATALOG.aliases[itemRaw] === p)) {
-                    price = CATALOG.pizzas[p];
-                    order.qtyPizze += q;
-                    found = true;
-                    break;
-                }
-            }
-            // Cerca in Drink
-            if(!found) {
-                for(let d in CATALOG.drinks) {
-                    if(itemRaw.includes(d)) { price = CATALOG.drinks[d]; found = true; break; }
-                }
-            }
-
-            // Calcolo Extra
-            if(itemRaw.includes("senza glutine") || itemRaw.includes("sg")) price += CATALOG.extras["senza glutine"];
-
-            order.items.push({ q, desc: line.replace(/^\d+\s+/, ''), unit: price, total: price * q });
-            order.total += price * q;
-        }
-    });
-
-    if(order.mode === "CONSEGNA") order.total += SETTINGS.deliveryFee;
-    return order;
+  if(o.mode === "CONSEGNA") o.total += Number(SETTINGS.deliveryFee);
+  return o;
 }
 
-/* =========================================
-   FORMATTERS
-   ========================================= */
+// --- RENDERERS ---
 function renderKitchen(o) {
-    let res = `=== COMANDA CUCINA ===\n`;
-    res += `ORA: ${o.time || '--:--'} | ${o.mode}\n`;
-    res += `CLIENTE: ${o.name || 'N.D.'}\n`;
-    if(o.address) res += `IND: ${o.address}\n`;
-    res += `----------------------\n`;
-    o.items.forEach(i => res += `${i.q}x ${i.desc.toUpperCase()}\n`);
-    res += `----------------------\n`;
-    res += `TOTALE PIZZE: ${o.qtyPizze}`;
-    return res;
+  let res = `--- COMANDA CUCINA ---\nORA: ${o.time || '--:--'} | ${o.mode}\nCLIENTE: ${o.name || 'N.D.'}\nIND: ${o.address || 'ASPORTO'}\n----------------------\n`;
+  o.items.forEach(i => res += `${i.qty}x ${i.label.toUpperCase()}\n`);
+  res += `----------------------\nTOTALE PIZZE: ${o.qty}`;
+  return res;
 }
 
 function renderReceipt(o) {
-    let res = `=== RICEVUTA CLIENTE ===\n`;
-    o.items.forEach(i => res += `${i.q} x ${i.desc} ... €${i.total.toFixed(2)}\n`);
-    if(o.mode === "CONSEGNA") res += `Consegna ... €${SETTINGS.deliveryFee.toFixed(2)}\n`;
-    res += `----------------------\n`;
-    res += `TOTALE DA PAGARE: €${o.total.toFixed(2)}\n`;
-    res += `Grazie e buon appetito!`;
-    return res;
+  let res = `--- RICEVUTA CLIENTE ---\n`;
+  o.items.forEach(i => res += `${i.qty} x ${i.label} -> €${money(i.sub)}\n`);
+  if(o.mode === "CONSEGNA") res += `Consegna: €${money(Number(SETTINGS.deliveryFee))}\n`;
+  res += `----------------------\nTOTALE: €${money(o.total)}`;
+  return res;
 }
 
-/* =========================================
-   UI HANDLERS
-   ========================================= */
-const mainInput = document.getElementById('mainInput');
-const mainOutput = document.getElementById('mainOutput');
-
-function updateUI() {
-    const raw = mainInput.value;
-    if(!raw) return;
-
-    CURRENT_ORDER = parseOrder(raw);
-    
-    // Update Stats
-    document.getElementById('statQty').textContent = CURRENT_ORDER.qtyPizze;
-    document.getElementById('statTotal').textContent = `€ ${CURRENT_ORDER.total.toFixed(2)}`;
-    document.getElementById('statMode').textContent = CURRENT_ORDER.mode;
-    document.getElementById('statMode').style.color = CURRENT_ORDER.mode === 'CONSEGNA' ? 'var(--warning)' : 'var(--success)';
-
-    // Update Viewer
-    const activeTab = document.querySelector('.tab.active').dataset.v;
-    if(activeTab === 'kitchen') mainOutput.textContent = renderKitchen(CURRENT_ORDER);
-    else if(activeTab === 'receipt') mainOutput.textContent = renderReceipt(CURRENT_ORDER);
-    else mainOutput.textContent = JSON.stringify(CURRENT_ORDER, null, 2);
+// --- UI HANDLERS ---
+function init() {
+  const d = new Date();
+  document.getElementById("dayBadge").textContent = d.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+  document.getElementById("catalog").value = JSON.stringify(CATALOG, null, 2);
+  document.getElementById("deliveryFee").value = SETTINGS.deliveryFee;
+  
+  // Popola select fallback
+  const sel = document.getElementById("fallbackBasePizza");
+  Object.keys(CATALOG.pizzas).forEach(p => {
+    let opt = new Option(p, p);
+    if(p === SETTINGS.fallbackBasePizza) opt.selected = true;
+    sel.add(opt);
+  });
 }
 
-// Events
-document.getElementById('btnGen').onclick = () => {
-    updateUI();
-    showToast("Comanda Elaborata ✨");
+document.getElementById("gen").onclick = () => {
+  const order = parseOrder(document.getElementById("input").value);
+  document.getElementById("outKitchen").textContent = renderKitchen(order);
+  document.getElementById("outReceipt").textContent = renderReceipt(order);
+  document.getElementById("totalMini").textContent = `€ ${money(order.total)}`;
+  document.getElementById("qtyMini").textContent = order.qty;
+  
+  // Debug info
+  document.getElementById("outDebug").textContent = JSON.stringify(order, null, 2);
 };
 
-document.querySelectorAll('.tab').forEach(t => {
-    t.onclick = () => {
-        document.querySelector('.tab.active').classList.remove('active');
-        t.classList.add('active');
-        updateUI();
-    };
+document.getElementById("openSettings").onclick = () => document.getElementById("modal").classList.add("open");
+document.getElementById("closeSettings").onclick = () => document.getElementById("modal").classList.remove("open");
+
+document.getElementById("saveCatalog").onclick = () => {
+  try {
+    CATALOG = JSON.parse(document.getElementById("catalog").value);
+    SETTINGS.deliveryFee = document.getElementById("deliveryFee").value;
+    SETTINGS.fallbackBasePizza = document.getElementById("fallbackBasePizza").value;
+    SETTINGS.printMode = document.getElementById("printMode").value;
+    
+    localStorage.setItem(LS.catalog, JSON.stringify(CATALOG));
+    localStorage.setItem(LS.settings, JSON.stringify(SETTINGS));
+    alert("Salvato correttamente!");
+    location.reload();
+  } catch(e) { alert("Errore nel JSON!"); }
+};
+
+document.getElementById("copy").onclick = () => {
+  const activeTab = document.querySelector(".tab.active").getAttribute("data-view");
+  const text = activeTab === "kitchen" ? document.getElementById("outKitchen").textContent : document.getElementById("outReceipt").textContent;
+  navigator.clipboard.writeText(text);
+  document.getElementById("status").textContent = "Copiato!";
+};
+
+document.getElementById("print").onclick = () => window.print();
+
+document.querySelectorAll(".tab").forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    const v = t.getAttribute("data-view");
+    document.getElementById("outKitchen").style.display = (v === "kitchen" ? "block" : "none");
+    document.getElementById("outReceipt").style.display = (v === "receipt" ? "block" : "none");
+    document.getElementById("outDebug").style.display = (v === "debug" ? "block" : "none");
+  };
 });
 
-document.getElementById('btnCopy').onclick = () => {
-    navigator.clipboard.writeText(mainOutput.textContent);
-    showToast("Copiato negli appunti! 📋");
-};
-
-document.getElementById('btnPrint').onclick = () => window.print();
-
-document.getElementById('btnClean').onclick = () => {
-    mainInput.value = "";
-    mainOutput.textContent = "In attesa dell'ordine...";
-    document.getElementById('statQty').textContent = "0";
-    document.getElementById('statTotal').textContent = "€ 0,00";
-    showToast("Pulito! 🗑️");
-};
-
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-function toggleModal(show) {
-    const m = document.getElementById('settingsModal');
-    if(show) {
-        document.getElementById('catalogArea').value = JSON.stringify(CATALOG, null, 2);
-        m.classList.add('open');
-    } else {
-        m.classList.remove('open');
-    }
-}
-
-document.getElementById('btnSaveCat').onclick = () => {
-    try {
-        CATALOG = JSON.parse(document.getElementById('catalogArea').value);
-        localStorage.setItem('wa_cat_v4', JSON.stringify(CATALOG));
-        showToast("Catalogo Salvato! ✅");
-        toggleModal(false);
-        updateUI();
-    } catch(e) {
-        alert("Errore nel formato JSON!");
-    }
-};
-
-document.getElementById('btnResetCat').onclick = () => {
-    if(confirm("Sei sicuro? Questo cancellerà i tuoi prezzi personalizzati.")) {
-        CATALOG = SAMPLE_CATALOG;
-        localStorage.removeItem('wa_cat_v4');
-        toggleModal(false);
-        showToast("Reset Effettuato 🔄");
-    }
-};
-
-// Inizializzazione
-document.getElementById('catalogArea').value = JSON.stringify(CATALOG, null, 2);
+init();
 </script>
-
 </body>
 </html>
