@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
-  <title>WhatsApp Order Pro — Gestionale</title>
+  <title>WA Order Pro | Dashboard</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -15,330 +15,449 @@
       --card: #111827;
       --card-border: rgba(255, 255, 255, 0.08);
       --accent: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.35);
-      --text-main: #f9fafb;
+      --accent-hover: #2563eb;
+      --accent-glow: rgba(59, 130, 246, 0.3);
+      --text: #f9fafb;
       --text-muted: #9ca3af;
       --success: #10b981;
       --error: #ef4444;
       --warning: #f59e0b;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --font-sans: 'Inter', -apple-system, sans-serif;
+      --radius-xl: 24px;
+      --radius-lg: 16px;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
     
     body {
       margin: 0;
       font-family: var(--font-sans);
       background-color: var(--bg);
-      background-image: radial-gradient(circle at top right, #1e1b4b, transparent), 
-                        radial-gradient(circle at bottom left, #0f172a, transparent);
+      background-image: 
+        radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(30, 27, 75, 0.2) 0%, transparent 40%);
       background-attachment: fixed;
-      color: var(--text-main);
-      line-height: 1.5;
+      color: var(--text);
+      overflow-x: hidden;
     }
 
-    /* Layout Principale */
-    .app-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 20px 100px;
-    }
+    .app-container { max-width: 1200px; margin: 0 auto; padding: 20px 20px 120px; }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 0;
-      margin-bottom: 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 30px 0; margin-bottom: 20px;
     }
 
     .brand h1 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin: 0;
-      background: linear-gradient(to right, #fff, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 1.8rem; font-weight: 800; margin: 0; letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    .brand p { font-size: 0.85rem; color: var(--text-muted); margin: 4px 0 0; }
-
-    /* Dashboard Grid */
+    /* Grid Layout */
     .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
+      display: grid; grid-template-columns: 1fr; gap: 24px;
     }
+    @media (min-width: 1024px) { .dashboard-grid { grid-template-columns: 1.1fr 0.9fr; } }
 
-    @media (min-width: 900px) {
-      .dashboard-grid { grid-template-columns: 1.1fr 0.9fr; }
-    }
-
-    /* Glass Card Style */
+    /* Cards */
     .glass-card {
-      background: var(--card);
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
       overflow: hidden;
-      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
-      display: flex;
-      flex-direction: column;
+      box-shadow: 0 20px 50px -12px rgba(0,0,0,0.5);
     }
 
     .card-header {
-      padding: 16px 20px;
-      background: rgba(255,255,255,0.02);
+      padding: 20px 24px;
       border-bottom: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
     }
 
-    .card-header h2 { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin: 0; }
+    .card-header h2 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0; }
 
-    .card-content { padding: 20px; }
-
-    /* Input & Textarea */
+    /* Input Area */
+    .input-wrapper { padding: 24px; }
     textarea {
-      width: 100%;
-      min-height: 350px;
-      background: rgba(0,0,0,0.3);
+      width: 100%; min-height: 400px;
+      background: rgba(0,0,0,0.4);
       border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      color: var(--text-main);
-      padding: 15px;
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      resize: vertical;
-      transition: border-color 0.2s;
+      border-radius: var(--radius-lg);
+      color: var(--text); padding: 20px;
+      font-family: var(--font-sans); font-size: 1rem;
+      resize: none; transition: all 0.3s ease;
     }
-
-    textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
+    textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
 
     /* Output Viewers */
-    .output-area {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      line-height: 1.4;
-      background: #000;
-      padding: 20px;
-      border-radius: var(--radius-md);
-      min-height: 350px;
-      white-space: pre-wrap;
-      color: #adbac7;
+    .output-wrapper { padding: 24px; }
+    .viewer {
+      font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5;
+      background: #000; padding: 24px; border-radius: var(--radius-lg);
+      min-height: 400px; white-space: pre-wrap; color: #adbac7;
       border: 1px solid var(--card-border);
+      animation: fadeIn 0.3s ease;
     }
 
     /* Tabs */
-    .tabs-nav {
-      display: flex;
-      gap: 4px;
-      background: rgba(255,255,255,0.05);
-      padding: 4px;
-      border-radius: 10px;
+    .tabs { display: flex; gap: 6px; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 12px; }
+    .tab {
+      padding: 8px 16px; border: none; background: transparent;
+      color: var(--text-muted); font-size: 0.8rem; font-weight: 700;
+      border-radius: 8px; cursor: pointer; transition: all 0.2s;
     }
+    .tab.active { background: var(--accent); color: white; box-shadow: 0 4px 12px var(--accent-glow); }
 
-    .tab-btn {
-      padding: 6px 14px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .tab-btn.active {
-      background: var(--accent);
-      color: white;
-    }
-
-    /* Buttons */
-    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
-
+    /* Action Buttons */
+    .actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
     .btn {
-      padding: 12px 20px;
-      border-radius: var(--radius-md);
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid transparent;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      padding: 14px 24px; border-radius: 14px; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+      display: flex; align-items: center; gap: 10px;
     }
+    .btn-main { background: var(--accent); color: white; flex: 1; justify-content: center; }
+    .btn-main:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .btn-sec { background: rgba(255,255,255,0.05); color: var(--text); border-color: var(--card-border); }
+    .btn-sec:hover { background: rgba(255,255,255,0.1); }
+    .btn-danger { color: var(--error); background: rgba(239, 68, 68, 0.1); }
 
-    .btn-primary { background: var(--accent); color: white; }
-    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px var(--accent-glow); }
+    /* Stats bar */
+    .bottom-nav {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 40px); max-width: 800px;
+      background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border); border-radius: 100px;
+      padding: 16px 32px; display: flex; justify-content: space-between;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 100;
+    }
+    .stat-box { display: flex; flex-direction: column; }
+    .stat-val { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+    .stat-lab { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
 
-    .btn-outline { background: transparent; border-color: var(--card-border); color: var(--text-main); }
-    .btn-outline:hover { background: rgba(255,255,255,0.05); }
-
-    .btn-danger { color: var(--error); background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); }
-
-    /* Toast Notification */
+    /* Toast */
     #toast {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--accent);
-      color: white;
-      padding: 10px 24px;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      opacity: 0;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 100;
-      pointer-events: none;
+      position: fixed; top: 30px; left: 50%; transform: translate(-50%, -100px);
+      background: var(--accent); color: white; padding: 12px 30px;
+      border-radius: 50px; font-weight: 700; z-index: 1000;
+      transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    }
+    #toast.show { transform: translate(-50%, 0); }
+
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      display: none; align-items: center; justify-content: center; z-index: 200;
+      backdrop-filter: blur(10px);
+    }
+    .modal.open { display: flex; }
+    .modal-content {
+      width: 90%; max-width: 700px; max-height: 80vh; background: var(--card);
+      border-radius: var(--radius-xl); border: 1px solid var(--card-border);
+      padding: 30px; overflow-y: auto;
     }
 
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* Sticky Footer Stats */
-    .stats-bar {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 40px);
-      max-width: 1100px;
-      background: rgba(17, 24, 39, 0.8);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      padding: 12px 24px;
-      border-radius: 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 50;
-    }
-
-    .stat-item { display: flex; flex-direction: column; }
-    .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
-    .stat-value { font-size: 1rem; font-weight: 800; color: var(--accent); }
-
-    /* Stampa */
     @media print {
-      .stats-bar, .btn-group, header, .card-header, .tabs-nav { display: none !important; }
-      body { background: white; color: black; }
+      body { background: white; }
+      .app-container { padding: 0; }
       .dashboard-grid { display: block; }
-      .glass-card { border: none; box-shadow: none; }
-      .output-area { border: none; padding: 0; color: black; background: white; }
+      .glass-card { border: none; background: transparent; box-shadow: none; }
+      header, .actions, .bottom-nav, .tabs, .card-header { display: none !important; }
+      .viewer { background: white; color: black; border: none; padding: 0; min-height: auto; }
     }
   </style>
 </head>
 <body>
 
+  <div id="toast">Copiato negli appunti!</div>
+
   <div class="app-container">
     <header>
       <div class="brand">
         <h1>WA Order Pro</h1>
-        <p>Smart Parser per Comande WhatsApp</p>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span id="dayIndicator" style="font-size: 0.8rem; color: var(--success); font-weight: 700;">● LIVE</span>
+          <span style="color:var(--text-muted); font-size: 0.8rem;">V3.5 Intelligent Parser</span>
+        </div>
       </div>
-      <button id="openSettings" class="btn btn-outline" style="padding: 10px;">⚙️</button>
+      <button onclick="toggleModal(true)" class="btn btn-sec" style="padding: 10px 15px;">Configurazione ⚙️</button>
     </header>
 
     <div class="dashboard-grid">
-      <section class="glass-card">
+      <div class="glass-card">
         <div class="card-header">
-          <h2>Input Chat</h2>
-          <span id="extractionType" style="font-size: 0.7rem; color: var(--success)">Rilevamento Auto</span>
+          <h2>Messaggio WhatsApp</h2>
+          <span id="extLabel" style="font-size: 0.7rem; font-weight: 800; color: var(--accent);">AUTO-DETECT</span>
         </div>
-        <div class="card-content">
-          <textarea id="mainInput" placeholder="Incolla qui il messaggio del cliente o l'intera conversazione..."></textarea>
-          <div class="btn-group">
-            <button id="btnGen" class="btn btn-primary">✨ Genera Comanda</button>
-            <button id="btnCopy" class="btn btn-outline">📋 Copia</button>
-            <button id="btnPrint" class="btn btn-outline">🖨️ Stampa</button>
+        <div class="input-wrapper">
+          <textarea id="mainInput" placeholder="Incolla qui la chat... 
+Es:
+Ciao, 3 margherite per le 20:00
+Via Roma 10
+Mario Rossi"></textarea>
+          <div class="actions">
+            <button id="btnGen" class="btn btn-main">Genera Comanda ✨</button>
+            <button id="btnClean" class="btn btn-sec btn-danger">Pulisci 🗑️</button>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section class="glass-card">
+      <div class="glass-card">
         <div class="card-header">
-          <div class="tabs-nav">
-            <button class="tab-btn active" data-view="kitchen">Cucina</button>
-            <button class="tab-btn" data-view="receipt">Ricevuta</button>
-            <button class="tab-btn" data-view="debug">Analisi</button>
+          <div class="tabs">
+            <button class="tab active" data-v="kitchen">Cucina</button>
+            <button class="tab" data-v="receipt">Ricevuta</button>
+            <button class="tab" data-v="debug">Analisi Dati</button>
           </div>
         </div>
-        <div class="card-content">
-          <div id="outputContainer" class="output-area">In attesa di dati...</div>
+        <div class="output-wrapper">
+          <div id="mainOutput" class="viewer">In attesa dell'ordine...</div>
+          <div class="actions">
+            <button id="btnCopy" class="btn btn-sec">Copia Testo 📋</button>
+            <button id="btnPrint" class="btn btn-sec">Stampa 🖨️</button>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   </div>
 
-  <div class="stats-bar">
-    <div class="stat-item">
-      <span class="stat-label">Stato</span>
-      <span id="statusIndicator" class="stat-value" style="color: var(--success); font-size: 0.8rem;">Pronto</span>
+  <div class="bottom-nav">
+    <div class="stat-box">
+      <span class="stat-lab">Pizze</span>
+      <span id="statQty" class="stat-val">0</span>
     </div>
-    <div class="stat-item" style="text-align: center;">
-      <span class="stat-label">Pizze</span>
-      <span id="countPizze" class="stat-value">0</span>
+    <div class="stat-box" style="align-items: center;">
+      <span class="stat-lab">Consegna</span>
+      <span id="statMode" class="stat-val" style="color: var(--text-muted);">---</span>
     </div>
-    <div class="stat-item" style="text-align: right;">
-      <span class="stat-label">Totale Stimato</span>
-      <span id="totalValue" class="stat-value">€ 0.00</span>
+    <div class="stat-box" style="align-items: flex-end;">
+      <span class="stat-lab">Totale</span>
+      <span id="statTotal" class="stat-val">€ 0,00</span>
     </div>
   </div>
 
-  <div id="toast">Copiato negli appunti!</div>
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="margin:0;">Impostazioni Catalogo</h2>
+        <button onclick="toggleModal(false)" class="btn btn-sec">Chiudi</button>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.8rem;">Modifica il JSON sottostante per aggiornare prezzi e alias.</p>
+      <textarea id="catalogArea" style="min-height:300px; font-family:var(--font-mono); font-size:0.8rem;"></textarea>
+      <div class="actions">
+        <button id="btnSaveCat" class="btn btn-main">Salva Catalogo</button>
+        <button id="btnResetCat" class="btn btn-sec">Reset Fabbrica</button>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    // Inserire qui la logica del tuo script originale, 
-    // ma agganciandola ai nuovi ID (mainInput, btnGen, outputContainer, etc.)
+<script>
+/* =========================================
+   DATABASE & CONFIG
+   ========================================= */
+const SAMPLE_CATALOG = {
+  currency: "€",
+  pizzas: { "margherita": 6.00, "diavola": 7.50, "prosciutto": 7.50, "salame piccante": 7.50, "salsiccia porcini e grana": 9.50 },
+  drinks: { "coca cola 33": 2.50, "acqua 0.5": 1.50, "birra 33": 3.50 },
+  extras: { "speck": 1.50, "brie": 1.50, "porcini": 2.00, "grana": 1.00, "senza glutine": 3.00 },
+  doughs: { "classico": 0.00, "integrale": 1.00, "senza glutine": 3.00 },
+  sizes: { "normale": 0.00, "baby": -1.00, "maxi": 2.00 },
+  aliases: { "marg": "margherita", "coca": "coca cola 33", "sg": "senza glutine", "s.g.": "senza glutine" }
+};
+
+let CATALOG = JSON.parse(localStorage.getItem('wa_cat_v4')) || SAMPLE_CATALOG;
+let SETTINGS = { deliveryFee: 2.00, printMode: 'both' };
+let CURRENT_ORDER = null;
+
+/* =========================================
+   PARSER LOGIC (CORE)
+   ========================================= */
+function parseOrder(raw) {
+    const text = raw.toLowerCase();
+    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
     
-    // --- Esempio di gestione UI ---
-    const toast = document.getElementById('toast');
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+    let order = {
+        name: "", address: "", time: "", mode: "RITIRO",
+        items: [], total: 0, qtyPizze: 0
+    };
+
+    // Estrazione Metadati
+    const timeMatch = raw.match(/(\d{1,2}[:.]\d{2})/);
+    if(timeMatch) order.time = timeMatch[1];
+    if(text.includes("via") || text.includes("consegna")) order.mode = "CONSEGNA";
+
+    // Parsing Righe
+    lines.forEach(line => {
+        const l = line.toLowerCase();
+        
+        // Riconoscimento semplice Nome/Indirizzo
+        if(!order.name && l.length > 3 && !l.includes("pizza") && !l.includes("per le")) {
+            if(!l.match(/\d/)) order.name = line;
+        }
+        if(l.includes("via ") || l.includes("piazza ")) order.address = line;
+
+        // Analisi Prodotti
+        const qtyMatch = line.match(/^(\d+)\s+(.+)/);
+        if(qtyMatch) {
+            const q = parseInt(qtyMatch[1]);
+            const itemRaw = qtyMatch[2].toLowerCase();
+            
+            let price = 0;
+            let found = false;
+
+            // Cerca in Pizze
+            for(let p in CATALOG.pizzas) {
+                if(itemRaw.includes(p) || (CATALOG.aliases[itemRaw] === p)) {
+                    price = CATALOG.pizzas[p];
+                    order.qtyPizze += q;
+                    found = true;
+                    break;
+                }
+            }
+            // Cerca in Drink
+            if(!found) {
+                for(let d in CATALOG.drinks) {
+                    if(itemRaw.includes(d)) { price = CATALOG.drinks[d]; found = true; break; }
+                }
+            }
+
+            // Calcolo Extra
+            if(itemRaw.includes("senza glutine") || itemRaw.includes("sg")) price += CATALOG.extras["senza glutine"];
+
+            order.items.push({ q, desc: line.replace(/^\d+\s+/, ''), unit: price, total: price * q });
+            order.total += price * q;
+        }
+    });
+
+    if(order.mode === "CONSEGNA") order.total += SETTINGS.deliveryFee;
+    return order;
+}
+
+/* =========================================
+   FORMATTERS
+   ========================================= */
+function renderKitchen(o) {
+    let res = `=== COMANDA CUCINA ===\n`;
+    res += `ORA: ${o.time || '--:--'} | ${o.mode}\n`;
+    res += `CLIENTE: ${o.name || 'N.D.'}\n`;
+    if(o.address) res += `IND: ${o.address}\n`;
+    res += `----------------------\n`;
+    o.items.forEach(i => res += `${i.q}x ${i.desc.toUpperCase()}\n`);
+    res += `----------------------\n`;
+    res += `TOTALE PIZZE: ${o.qtyPizze}`;
+    return res;
+}
+
+function renderReceipt(o) {
+    let res = `=== RICEVUTA CLIENTE ===\n`;
+    o.items.forEach(i => res += `${i.q} x ${i.desc} ... €${i.total.toFixed(2)}\n`);
+    if(o.mode === "CONSEGNA") res += `Consegna ... €${SETTINGS.deliveryFee.toFixed(2)}\n`;
+    res += `----------------------\n`;
+    res += `TOTALE DA PAGARE: €${o.total.toFixed(2)}\n`;
+    res += `Grazie e buon appetito!`;
+    return res;
+}
+
+/* =========================================
+   UI HANDLERS
+   ========================================= */
+const mainInput = document.getElementById('mainInput');
+const mainOutput = document.getElementById('mainOutput');
+
+function updateUI() {
+    const raw = mainInput.value;
+    if(!raw) return;
+
+    CURRENT_ORDER = parseOrder(raw);
+    
+    // Update Stats
+    document.getElementById('statQty').textContent = CURRENT_ORDER.qtyPizze;
+    document.getElementById('statTotal').textContent = `€ ${CURRENT_ORDER.total.toFixed(2)}`;
+    document.getElementById('statMode').textContent = CURRENT_ORDER.mode;
+    document.getElementById('statMode').style.color = CURRENT_ORDER.mode === 'CONSEGNA' ? 'var(--warning)' : 'var(--success)';
+
+    // Update Viewer
+    const activeTab = document.querySelector('.tab.active').dataset.v;
+    if(activeTab === 'kitchen') mainOutput.textContent = renderKitchen(CURRENT_ORDER);
+    else if(activeTab === 'receipt') mainOutput.textContent = renderReceipt(CURRENT_ORDER);
+    else mainOutput.textContent = JSON.stringify(CURRENT_ORDER, null, 2);
+}
+
+// Events
+document.getElementById('btnGen').onclick = () => {
+    updateUI();
+    showToast("Comanda Elaborata ✨");
+};
+
+document.querySelectorAll('.tab').forEach(t => {
+    t.onclick = () => {
+        document.querySelector('.tab.active').classList.remove('active');
+        t.classList.add('active');
+        updateUI();
+    };
+});
+
+document.getElementById('btnCopy').onclick = () => {
+    navigator.clipboard.writeText(mainOutput.textContent);
+    showToast("Copiato negli appunti! 📋");
+};
+
+document.getElementById('btnPrint').onclick = () => window.print();
+
+document.getElementById('btnClean').onclick = () => {
+    mainInput.value = "";
+    mainOutput.textContent = "In attesa dell'ordine...";
+    document.getElementById('statQty').textContent = "0";
+    document.getElementById('statTotal').textContent = "€ 0,00";
+    showToast("Pulito! 🗑️");
+};
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function toggleModal(show) {
+    const m = document.getElementById('settingsModal');
+    if(show) {
+        document.getElementById('catalogArea').value = JSON.stringify(CATALOG, null, 2);
+        m.classList.add('open');
+    } else {
+        m.classList.remove('open');
     }
+}
 
-    // Gestione Tabs
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelector('.tab-btn.active').classList.remove('active');
-        btn.classList.add('active');
-        // Qui aggiungi la logica per cambiare il contenuto di outputContainer
-        showToast(`Vista ${btn.textContent} attivata`);
-      });
-    });
+document.getElementById('btnSaveCat').onclick = () => {
+    try {
+        CATALOG = JSON.parse(document.getElementById('catalogArea').value);
+        localStorage.setItem('wa_cat_v4', JSON.stringify(CATALOG));
+        showToast("Catalogo Salvato! ✅");
+        toggleModal(false);
+        updateUI();
+    } catch(e) {
+        alert("Errore nel formato JSON!");
+    }
+};
 
-    // Esempio Interazione
-    document.getElementById('btnGen').addEventListener('click', () => {
-      const input = document.getElementById('mainInput').value;
-      if(!input) {
-        showToast("Incolla del testo prima!");
-        return;
-      }
-      // Qui chiami la tua funzione di parsing
-      document.getElementById('statusIndicator').textContent = "Elaborato";
-      showToast("Comanda generata con successo!");
-    });
+document.getElementById('btnResetCat').onclick = () => {
+    if(confirm("Sei sicuro? Questo cancellerà i tuoi prezzi personalizzati.")) {
+        CATALOG = SAMPLE_CATALOG;
+        localStorage.removeItem('wa_cat_v4');
+        toggleModal(false);
+        showToast("Reset Effettuato 🔄");
+    }
+};
 
-    document.getElementById('btnCopy').addEventListener('click', () => {
-      showToast("Copiato negli appunti!");
-    });
-    
-    // Integrazione dei tuoi dati:
-    // Ti basta copiare le tue funzioni (parseOrder, fmtKitchen, etc.) 
-    // e aggiornare i riferimenti agli elementi DOM.
-  </script>
+// Inizializzazione
+document.getElementById('catalogArea').value = JSON.stringify(CATALOG, null, 2);
+</script>
+
 </body>
 </html>
