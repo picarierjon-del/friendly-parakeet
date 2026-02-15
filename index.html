@@ -3,151 +3,337 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-  <title>WhatsApp → Comanda Smart</title>
+  <title>Gestionale WhatsApp → Comande</title>
   <style>
-    :root { --b:#e5e7eb; --t:#111827; --m:#6b7280; }
-    body{font-family:-apple-system,system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:14px;color:var(--t);max-width:980px}
-    h1{font-size:20px;margin:0 0 8px}
-    .small{font-size:12px;color:var(--m)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .grid{display:grid;grid-template-columns:1fr;gap:12px}
-    @media (min-width: 860px){ .grid{grid-template-columns:1.05fr 0.95fr} }
-    .card{border:1px solid var(--b);border-radius:14px;padding:12px}
-    textarea{width:100%;min-height:260px;padding:12px;font-size:15px;border:1px solid var(--b);border-radius:12px}
-    .btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
-    button{
-      padding:12px 14px;border:1px solid var(--b);border-radius:12px;background:#fff;cursor:pointer;
-      font-size:15px; -webkit-tap-highlight-color: transparent;
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a31;
+      --card2:#0c1528;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --border:rgba(255,255,255,.10);
+      --accent:#60a5fa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      --radius:16px;
     }
-    button:active{transform:scale(0.99)}
-    .primary{border-color:#111827}
-    details summary{cursor:pointer;font-weight:700}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
-    .box{white-space:pre-wrap;line-height:1.25;font-size:14px}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
-    .tab{padding:10px 12px;border:1px solid var(--b);border-radius:12px;cursor:pointer;background:#fff}
-    .tab.active{border-color:#111827}
-    .pill{display:inline-block;padding:2px 10px;border:1px solid var(--b);border-radius:999px;font-size:12px}
-    .ok{color:#166534}
-    .warn{color:#b45309}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:linear-gradient(180deg, #070b14, var(--bg));
+      color:var(--text);
+    }
+    .app{max-width:980px;margin:0 auto;padding:14px 14px 90px}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      position:sticky;top:0;z-index:5;
+      background:rgba(7,11,20,.75);backdrop-filter: blur(10px);
+      padding:12px 10px;border-bottom:1px solid var(--border);
+      border-radius:0 0 18px 18px;
+    }
+    .title{display:flex;flex-direction:column;gap:2px}
+    .title h1{font-size:16px;margin:0;font-weight:800;letter-spacing:.2px}
+    .title .sub{font-size:12px;color:var(--muted)}
+    .iconbtn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .iconbtn:active{transform:scale(.99)}
+    .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:4px 10px;border-radius:999px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+    @media(min-width:860px){.grid{grid-template-columns:1.05fr .95fr}}
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow:0 8px 30px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .cardhead{
+      padding:12px 12px 10px;
+      background:rgba(255,255,255,.04);
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .cardhead h2{margin:0;font-size:14px}
+    .cardbody{padding:12px}
+    textarea{
+      width:100%;
+      min-height:260px;
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      font-size:15px;
+      outline:none;
+    }
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      flex:0 0 auto;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:15px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn.primary{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15)}
+    .btn.danger{border-color:rgba(251,113,133,.55);background:rgba(251,113,133,.12)}
+    .btn:active{transform:scale(.99)}
+    .hint{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.35}
+    .tabs{
+      display:flex;gap:8px;flex-wrap:wrap;
+    }
+    .tab{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:13px;
+      cursor:pointer;
+    }
+    .tab.active{border-color:rgba(96,165,250,.65);background:rgba(96,165,250,.16)}
+    .out{
+      font-family:var(--mono);
+      white-space:pre-wrap;
+      line-height:1.25;
+      font-size:13px;
+      background:rgba(0,0,0,.22);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      min-height:260px;
+    }
+    .status{margin-top:10px;font-size:12px;color:var(--muted)}
+    .status.ok{color:var(--ok)}
+    .status.warn{color:var(--warn)}
+    .status.err{color:var(--danger)}
+    .bottombar{
+      position:fixed;left:0;right:0;bottom:0;z-index:6;
+      background:rgba(7,11,20,.85);backdrop-filter: blur(12px);
+      border-top:1px solid var(--border);
+      padding:10px 14px;
+    }
+    .bottomwrap{max-width:980px;margin:0 auto;display:flex;gap:10px;justify-content:space-between;align-items:center}
+    .bottomwrap .mini{font-size:12px;color:var(--muted)}
+    .modal{
+      position:fixed;inset:0;display:none;align-items:flex-end;justify-content:center;
+      background:rgba(0,0,0,.55);z-index:10;
+    }
+    .modal.open{display:flex}
+    .sheet{
+      width:min(980px,100%);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid var(--border);
+      border-radius:20px 20px 0 0;
+      padding:14px;
+      max-height:86vh;
+      overflow:auto;
+    }
+    .sheethead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .sheethead h3{margin:0;font-size:15px}
+    .close{font-size:16px}
+    .section{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:rgba(0,0,0,.18);
+      padding:12px;
+      margin:10px 0;
+    }
+    .section h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:700}
+    .formgrid{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:720px){.formgrid{grid-template-columns:1fr 1fr}}
+    label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+    input, select{
+      width:100%;
+      background:rgba(0,0,0,.22);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:14px;
+      outline:none;
+    }
+    .tinybtn{padding:10px 12px;border-radius:12px}
+    .jsonarea{min-height:300px;font-family:var(--mono);font-size:13px}
+    @media print{
+      body{background:#fff;color:#000}
+      .topbar,.bottombar,.no-print,.modal{display:none !important}
+      .app{padding:0;max-width:none}
+      .card{border:none;box-shadow:none;background:none}
+      .out{border:none;background:none}
+    }
   </style>
 </head>
 <body>
-  <div class="row">
-    <div>
-      <h1>WhatsApp → Comanda Smart</h1>
-      <div class="small">iPhone-friendly: incolla ordine → genera → copia/stampa.</div>
+  <div class="app">
+    <div class="topbar">
+      <div class="title">
+        <h1>Gestionale WhatsApp → Comande</h1>
+        <div class="sub">Incolla anche tutta la chat: l’app estrae il blocco ordine “cliente”.</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span id="dayBadge" class="pill">—</span>
+        <button id="openSettings" class="iconbtn" aria-label="Impostazioni">⚙️</button>
+      </div>
     </div>
-    <span id="dayBadge" class="pill">—</span>
+
+    <div class="grid">
+      <div class="card">
+        <div class="cardhead">
+          <h2>Input WhatsApp</h2>
+          <span class="pill" id="extractBadge">Estrazione: auto</span>
+        </div>
+        <div class="cardbody">
+          <textarea id="input" placeholder="Incolla qui l’ordine (anche tutta la chat).
+
+Esempio:
+Ciao, vorrei ordinare 4 pizze per le 19.30
+Via Bertazzoli n.12
+STABILE DINO
+
+1 Margherita
+1 senza glutine speck e brie
+1 salame piccante
+1 salsiccia porcini e grana"></textarea>
+
+          <div class="btnrow no-print">
+            <button id="gen" class="btn primary">Genera</button>
+            <button id="copy" class="btn">Copia</button>
+            <button id="print" class="btn">Stampa</button>
+            <button id="closeDay" class="btn danger">Chiusura serale</button>
+          </div>
+
+          <div class="hint">
+            ✅ Consiglio: se incolli tutta la chat, la funzione “Estrazione intelligente” scarta i messaggi di risposta (template) e prende il blocco ordine del cliente.<br/>
+            ⚠️ Se il cliente scrive nomi pizza “fantasia” (es. “profumo di langa”), mettili nel Catalogo (pizzas/aliases) per avere prezzo corretto.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cardhead">
+          <div class="tabs no-print">
+            <div class="tab active" data-view="kitchen">Comanda cucina</div>
+            <div class="tab" data-view="receipt">Ricevuta cliente</div>
+            <div class="tab" data-view="debug">Debug</div>
+          </div>
+        </div>
+        <div class="cardbody">
+          <div id="outKitchen" class="out">—</div>
+          <div id="outReceipt" class="out" style="display:none">—</div>
+          <div id="outDebug" class="out" style="display:none">—</div>
+
+          <div id="status" class="status no-print"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="grid">
-    <div class="card no-print">
-      <h3 style="margin:0 0 8px">Incolla ordine WhatsApp</h3>
-      <textarea id="input" placeholder="Esempio:
-Buonasera, vorrei ordinare 3 pizze margherita a domicilio, se possibile per le 19:30
-Nome: Tura
-Indirizzo: Via Nazioni Unite 2, Bagnolo Mella
-
-Oppure:
-Buonasera, vorrei prenotare 2 pizze a domicilio per le 20:00.
-1 profumo di langa
-1 quella della suocera
-Via Agostino Gallo 58, Bagnolo Mella
-Campanello: Lippolis - D’Orfeo
-Grazie"></textarea>
-
-      <div class="btns">
-        <button id="gen" class="primary">Genera</button>
-        <button id="copy">Copia</button>
-        <button id="print">Stampa</button>
-        <button id="closeDay">Chiusura serale</button>
-      </div>
-
-      <details>
-        <summary>Catalogo (prezzi, extra, impasti, formati, alias)</summary>
-        <div class="small" style="margin:8px 0">
-          Modifica e salva. Le pizze “fantasia” (es. “profumo di langa”) vanno messe in <b>pizzas</b> o in <b>aliases</b>.
-        </div>
-        <textarea id="catalog" class="mono" style="min-height:340px"></textarea>
-        <div class="btns">
-          <button id="saveCatalog">Salva catalogo</button>
-          <button id="resetCatalog">Ripristina esempio</button>
-        </div>
-        <div id="catStatus" class="small"></div>
-      </details>
+  <div class="bottombar no-print">
+    <div class="bottomwrap">
+      <div class="mini" id="printModeMini">Stampa: entrambe</div>
+      <div class="mini" id="totalMini">Totale: —</div>
     </div>
+  </div>
 
-    <div class="card">
-      <div class="tabs">
-        <div class="tab active" data-view="kitchen">Comanda cucina</div>
-        <div class="tab" data-view="receipt">Ricevuta cliente</div>
+  <!-- SETTINGS MODAL -->
+  <div id="modal" class="modal no-print" role="dialog" aria-modal="true">
+    <div class="sheet">
+      <div class="sheethead">
+        <h3>Impostazioni</h3>
+        <button id="closeSettings" class="iconbtn close" aria-label="Chiudi">✕</button>
       </div>
 
-      <div id="outKitchen" class="mono box">—</div>
-      <div id="outReceipt" class="mono box" style="display:none">—</div>
+      <div class="section">
+        <h4>Stampa</h4>
+        <div class="formgrid">
+          <label>
+            Modalità stampa
+            <select id="printMode">
+              <option value="both">Entrambe (cucina + ricevuta)</option>
+              <option value="kitchen">Solo comanda cucina</option>
+              <option value="receipt">Solo ricevuta cliente</option>
+            </select>
+          </label>
+          <label>
+            Costo consegna (se CONSEGNA)
+            <input id="deliveryFee" inputmode="decimal" placeholder="0.00" />
+          </label>
+        </div>
+      </div>
 
-      <div id="status" class="small"></div>
+      <div class="section">
+        <h4>Regole “metà e metà”</h4>
+        <div class="formgrid">
+          <label>
+            Prezzo metà e metà
+            <select id="halfRule">
+              <option value="max">Prezzo più alto</option>
+              <option value="avg">Media</option>
+            </select>
+          </label>
+          <label>
+            Extra su metà e metà
+            <select id="halfExtraRule">
+              <option value="full">Extra interi</option>
+              <option value="half">Extra 50%</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h4>Catalogo (JSON)</h4>
+        <div class="hint">Modifica prezzi/alias e salva. Puoi fare Export/Import per backup.</div>
+        <textarea id="catalog" class="jsonarea" spellcheck="false"></textarea>
+        <div class="btnrow">
+          <button id="saveCatalog" class="btn primary tinybtn">Salva catalogo</button>
+          <button id="resetCatalog" class="btn tinybtn">Ripristina esempio</button>
+          <button id="exportCatalog" class="btn tinybtn">Export</button>
+          <button id="importCatalog" class="btn tinybtn">Import</button>
+        </div>
+        <div id="catStatus" class="status"></div>
+      </div>
     </div>
   </div>
 
 <script>
-/* ---------------- Storage ---------------- */
-const LS = { catalog: "wa_catalog_smart_v1", lastDay: "wa_last_day_smart_v1" };
+/* =========================
+   STORAGE
+========================= */
+const LS = {
+  catalog: "wa_gestionale_catalog_v3",
+  settings: "wa_gestionale_settings_v3",
+  lastDay: "wa_gestionale_lastday_v3"
+};
 
-/* ---------------- Helpers ---------------- */
-function todayKey(){
-  const d = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
-function nowStr(){
-  const d = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-function normalizeTime(t){
-  const m = t.match(/(\d{1,2})[.:](\d{2})/);
-  if(!m) return '';
-  const hh = String(Number(m[1])).padStart(2,'0');
-  return `${hh}:${m[2]}`;
-}
-function stripChatNoise(line){
-  return line.replace(/\s+\d{1,2}:\d{2}\s*$/,'').trim();
-}
-function money(n){ return (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2); }
-function safeLower(s){ return (s||"").toLowerCase(); }
-function normSpaces(s){ return (s||"").replace(/\s+/g,' ').trim(); }
-function setStatus(msg, type=""){
-  const el = document.getElementById("status");
-  el.className = "small " + (type==="ok" ? "ok" : type==="warn" ? "warn" : "");
-  el.textContent = msg || "";
-}
-function ensureDaily(){
-  const t = todayKey();
-  document.getElementById("dayBadge").textContent = `Giorno: ${t}`;
-  const last = localStorage.getItem(LS.lastDay);
-  if(last !== t){
-    localStorage.setItem(LS.lastDay, t);
-    setStatus("Nuovo giorno: pronto.", "ok");
-  }
-}
-
-/* ---------------- Catalog sample ---------------- */
+/* =========================
+   DEFAULTS
+========================= */
 const SAMPLE_CATALOG = {
   currency: "€",
-  rules: {
-    deliveryFee: 0.00,
-    halfHalfPricing: "max",  // "max" o "avg"
-    halfHalfExtras: "full"   // "full" o "half"
-  },
   pizzas: {
     "margherita": 6.00,
     "diavola": 7.50,
     "prosciutto": 7.50,
     "salame piccante": 7.50,
     "salsiccia porcini e grana": 9.50
-    /* aggiungi qui: "profumo di langa": 10.00, "quella della suocera": 9.50 ... */
   },
   drinks: {
     "coca cola 33": 2.50,
@@ -174,23 +360,75 @@ const SAMPLE_CATALOG = {
   },
   aliases: {
     "marg": "margherita",
-    "margherita": "margherita",
-    "diavola": "diavola",
-    "prosciutto": "prosciutto",
-    "salame piccante": "salame piccante",
-
     "coca": "coca cola 33",
     "cocacola": "coca cola 33",
     "coca cola": "coca cola 33",
     "coca cola 33cl": "coca cola 33",
     "acqua": "acqua 0.5",
-
     "sg": "senza glutine",
     "s.g.": "senza glutine",
     "senza glutine": "senza glutine"
   }
 };
 
+const DEFAULT_SETTINGS = {
+  printMode: "both",      // both | kitchen | receipt
+  deliveryFee: 0.00,
+  halfHalfPricing: "max", // max | avg
+  halfHalfExtras: "full"  // full | half
+};
+
+/* =========================
+   HELPERS
+========================= */
+function todayKey(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function nowStr(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  return `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function normalizeTime(t){
+  const m = t.match(/(\d{1,2})[.:](\d{2})/);
+  if(!m) return "";
+  const hh = String(Number(m[1])).padStart(2,'0');
+  return `${hh}:${m[2]}`;
+}
+function stripChatNoise(line){
+  // remove trailing timestamps like "18:12"
+  return line.replace(/\s+\d{1,2}:\d{2}\s*$/,'').trim();
+}
+function safeLower(s){ return (s||"").toLowerCase(); }
+function normSpaces(s){ return (s||"").replace(/\s+/g,' ').trim(); }
+function money(n){
+  return (Math.round((n + Number.EPSILON) * 100) / 100).toFixed(2);
+}
+function setStatus(msg, type=""){
+  const el = document.getElementById("status");
+  el.className = "status no-print " + (type==="ok" ? "ok" : type==="warn" ? "warn" : type==="err" ? "err" : "");
+  el.textContent = msg || "";
+}
+function setCatStatus(msg, type=""){
+  const el = document.getElementById("catStatus");
+  el.className = "status " + (type==="ok" ? "ok" : type==="warn" ? "warn" : type==="err" ? "err" : "");
+  el.textContent = msg || "";
+}
+function ensureDaily(){
+  const t = todayKey();
+  document.getElementById("dayBadge").textContent = `Giorno: ${t}`;
+  const last = localStorage.getItem(LS.lastDay);
+  if(last !== t){
+    localStorage.setItem(LS.lastDay, t);
+    setStatus("Nuovo giorno: pronto.", "ok");
+  }
+}
+
+/* =========================
+   LOAD/SAVE
+========================= */
 function loadCatalog(){
   const saved = localStorage.getItem(LS.catalog);
   if(saved){
@@ -201,25 +439,140 @@ function loadCatalog(){
 function saveCatalog(obj){
   localStorage.setItem(LS.catalog, JSON.stringify(obj, null, 2));
 }
-function setCatalogTextarea(obj){
-  document.getElementById("catalog").value = JSON.stringify(obj, null, 2);
+function loadSettings(){
+  const saved = localStorage.getItem(LS.settings);
+  if(saved){
+    try { return {...DEFAULT_SETTINGS, ...JSON.parse(saved)}; } catch {}
+  }
+  return structuredClone(DEFAULT_SETTINGS);
+}
+function saveSettings(obj){
+  localStorage.setItem(LS.settings, JSON.stringify(obj, null, 2));
 }
 
-/* ---------------- Field extraction ---------------- */
+/* =========================
+   SMART EXTRACTION (CRITICAL)
+   - If user pastes full chat, pick the block
+     that looks like an order and NOT your templates.
+========================= */
+const STOP_PHRASES = [
+  // your template / confirmations (green messages)
+  "salve e grazie per averci contattato",
+  "per effettuare ordini",
+  "cognome e nome",
+  "indirizzo completo",
+  "numero di telefono",
+  "orario desiderato",
+  "elenco completo",
+  "nota bene",
+  "whatsapp viene utilizzato",
+  "i tempi di consegna stimati",
+  "l’ordine sarà considerato valido",
+  "grazie per la collaborazione",
+  "gentile cliente",
+  "la ringraziamo per il suo ordine",
+  "il suo ordine è stato correttamente ricevuto",
+  "la consegna / il ritiro è previsto",
+  "la preghiamo cortesemente",
+  "non sarà possibile rispondere",
+  "grazie per averci scelto"
+];
+
+function isStopLine(line){
+  const l = safeLower(line);
+  // bullet lines from template
+  if(l.startsWith("•") || l.startsWith("- ") || l.startsWith("·")) return true;
+  // long legal-ish template lines
+  for(const p of STOP_PHRASES){
+    if(l.includes(p)) return true;
+  }
+  return false;
+}
+
+function scoreOrderBlock(block){
+  // Higher score = more likely real customer order
+  const lines = block.split("\n").map(s=>stripChatNoise(s).trim()).filter(Boolean);
+  if(!lines.length) return -999;
+
+  let score = 0;
+  const text = safeLower(block);
+
+  // penalties for containing stop phrases
+  for(const p of STOP_PHRASES){
+    if(text.includes(p)) score -= 8;
+  }
+
+  // rewards: contains time, address, qty lines, "pizze", "domicilio", etc.
+  if(/\b\d{1,2}[:.]\d{2}\b/.test(text)) score += 6;
+  if(/\b(pizza|pizze)\b/.test(text)) score += 6;
+  if(/\b(domicilio|consegna|ritiro|asporto)\b/.test(text)) score += 4;
+  if(/\b(via|viale|piazza|corso)\b/.test(text)) score += 5;
+
+  // count item-like lines
+  for(const ln of lines){
+    const l = safeLower(ln);
+    if(isStopLine(ln)) score -= 5;
+    if(/^\d+\s+/.test(ln)) score += 4;                      // "1 margherita"
+    if(/\b\d+\s*pizz[ae]\b/.test(l)) score += 4;            // "3 pizze margherita"
+    if(/^nome\s*:/.test(l)) score += 3;
+    if(/^indirizzo\s*:/.test(l)) score += 3;
+    if(/^campanello\s*:/.test(l)) score += 2;
+  }
+
+  // tiny penalty if block is extremely long (often template)
+  if(lines.length > 30) score -= 3;
+
+  return score;
+}
+
+function extractLikelyOrderText(raw){
+  // Split into blocks by 1+ blank lines
+  const normalized = raw.replace(/\r/g,"");
+  const blocks = normalized.split(/\n{2,}/g).map(b=>b.trim()).filter(Boolean);
+  if(blocks.length <= 1){
+    return { text: normalized.trim(), mode: "raw" };
+  }
+
+  // Try best-scoring block, but also allow combination of adjacent blocks
+  let best = { score: -9999, text: blocks[0] };
+  for(const b of blocks){
+    const s = scoreOrderBlock(b);
+    if(s > best.score) best = { score: s, text: b };
+  }
+
+  // If best still contains heavy stop phrases, do a line-filter fallback
+  if(best.score < 2){
+    const lines = normalized.split("\n").map(x=>stripChatNoise(x));
+    const kept = lines.filter(ln => ln.trim() && !isStopLine(ln));
+    return { text: kept.join("\n").trim(), mode: "filtered" };
+  }
+
+  return { text: best.text.trim(), mode: "block" };
+}
+
+/* =========================
+   FIELD RECOGNITION
+========================= */
 function extractLabeled(text, label){
-  // label: "Nome", "Indirizzo", "Campanello"
   const re = new RegExp(`\\b${label}\\s*:\\s*(.+)$`, "im");
   const m = text.match(re);
   return m ? normSpaces(m[1]) : "";
 }
-
-function looksLikeAddress(line){
+function looksLikeAddressLine(line){
   const l = safeLower(line).trim();
-  // oppure righe che iniziano con "indirizzo:"
   if(/^indirizzo\s*:/.test(l)) return true;
   return /^(via|viale|piazza|corso|strada|v\.|p\.|c\.so)\b/.test(l);
 }
-
+function looksLikeAllCapsName(line){
+  const cleaned = line.replace(/[0-9]/g,'').trim();
+  if(cleaned.length < 5) return false;
+  if(!/[A-ZÀÈÉÌÒÙ]/.test(cleaned)) return false;
+  if(/^(VIA|VIALE|PIAZZA|CORSO)\b/.test(cleaned)) return false;
+  if(/[a-z]/.test(cleaned)) return false;
+  // avoid screaming words like "CONSEGNA" or "RITIRO"
+  if(/^(CONSEGNA|RITIRO|ASPORTO|DOMICILIO)\b/.test(cleaned)) return false;
+  return true;
+}
 function detectPickupDelivery(text){
   const t = safeLower(text);
   const hasDelivery = /\b(consegna|domicilio|a casa|delivery)\b/.test(t);
@@ -229,13 +582,15 @@ function detectPickupDelivery(text){
   if(hasDelivery && hasPickup) return "CONSEGNA/RITIRO";
   return "";
 }
-
 function resolveAlias(cat, raw){
   const k = normSpaces(safeLower(raw));
   if(cat.aliases && cat.aliases[k]) return cat.aliases[k];
   return k;
 }
 
+/* =========================
+   ITEM PARSING
+========================= */
 function extractQtyAndText(line){
   let m = line.match(/^(\d+)\s+(.+)$/);
   if(m) return { qty: Number(m[1]), text: m[2].trim() };
@@ -243,24 +598,6 @@ function extractQtyAndText(line){
   if(m) return { qty: Number(m[2]), text: m[1].trim() };
   return { qty: 1, text: line.trim() };
 }
-
-/* --- NEW: parse "3 pizze margherita" in one sentence --- */
-function findInlinePizzaStatements(cat, text){
-  // Cerca pattern: "3 pizze margherita" / "2 pizza diavola"
-  // prende la parte dopo "pizze/pizza" fino a virgola o "a" (a domicilio) o fine.
-  const out = [];
-  const re = /\b(\d{1,2})\s*pizz[ae]\s+([a-zàèéìòù0-9'\- ]{2,})(?=,|\b(a|per|al|alla|a\s+domicilio|domicilio|ritiro|asporto)\b|$)/gi;
-  let m;
-  while((m = re.exec(text)) !== null){
-    const qty = Number(m[1]);
-    const nameRaw = normSpaces(m[2]);
-    if(!nameRaw) continue;
-    const nameKey = findPizzaName(cat, nameRaw);
-    out.push({ qty, nameKey });
-  }
-  return out;
-}
-
 function parseHalfHalf(text){
   const t = normSpaces(text);
   if(!/met[àa]\s*e\s*met[àa]/i.test(t) && !/\bmezza\s+e\s+mezza\b/i.test(t) && !/\b1\/2\b/.test(t)) return null;
@@ -271,7 +608,6 @@ function parseHalfHalf(text){
   if(parts.length >= 2) return { a: parts[0], b: parts[1] };
   return null;
 }
-
 function parseExtrasAndRemovals(cat, text){
   const extras = [];
   const removals = [];
@@ -295,7 +631,7 @@ function parseExtrasAndRemovals(cat, text){
     });
   });
 
-  // extra impliciti (se presenti nel testo)
+  // implicit extras (if mentioned)
   const lower = safeLower(text);
   for(const ex of Object.keys(cat.extras||{})){
     const exL = safeLower(ex);
@@ -308,7 +644,6 @@ function parseExtrasAndRemovals(cat, text){
   const uniq = arr => [...new Set(arr)];
   return { extras: uniq(extras), removals: uniq(removals) };
 }
-
 function detectDough(cat, text){
   if(/\b(senza\s+glutine|sg|s\.g\.)\b/i.test(text)) return "senza glutine";
   const lower = safeLower(text);
@@ -326,7 +661,6 @@ function detectSize(cat, text){
   }
   return "normale";
 }
-
 function findPizzaName(cat, text){
   let t = normSpaces(safeLower(text))
     .replace(/\b(met[àa]\s*e\s*met[àa]|mezza\s+e\s+mezza|1\/2)\b/g,'')
@@ -335,7 +669,6 @@ function findPizzaName(cat, text){
     .replace(/\+.*$/g,'')
     .trim();
 
-  // match diretto per chiavi note
   const keys = Object.keys(cat.pizzas||{}).sort((a,b)=>b.length-a.length);
   for(const k of keys){
     if(t.includes(safeLower(k))) return k;
@@ -344,9 +677,9 @@ function findPizzaName(cat, text){
   const alias = resolveAlias(cat, t);
   if(cat.pizzas && cat.pizzas[alias] != null) return alias;
 
+  // keep as raw (unknown pizza name)
   return t || text.trim();
 }
-
 function isDrinkLine(cat, text){
   const t = normSpaces(safeLower(text));
   const alias = resolveAlias(cat, t);
@@ -357,7 +690,24 @@ function isDrinkLine(cat, text){
   return "";
 }
 
-/* ---------------- Pricing ---------------- */
+// NEW: inline statement "3 pizze margherita"
+function findInlinePizzaStatements(cat, text){
+  const out = [];
+  const re = /\b(\d{1,2})\s*pizz[ae]\s+([a-zàèéìòù0-9'\- ]{2,})(?=,|\b(a|per|al|alla|a\s+domicilio|domicilio|ritiro|asporto|consegna)\b|$)/gi;
+  let m;
+  while((m = re.exec(text)) !== null){
+    const qty = Number(m[1]);
+    const nameRaw = normSpaces(m[2]);
+    if(!nameRaw) continue;
+    const nameKey = findPizzaName(cat, nameRaw);
+    out.push({ qty, nameKey });
+  }
+  return out;
+}
+
+/* =========================
+   PRICING
+========================= */
 function extrasSum(cat, extras){
   return (extras||[]).reduce((acc, ex)=>{
     const k = resolveAlias(cat, ex);
@@ -372,42 +722,49 @@ function pricePizza(cat, pizzaKey, doughKey, sizeKey, extras){
   const size  = (cat.sizes && cat.sizes[sizeKey] != null) ? Number(cat.sizes[sizeKey]) : 0;
   return { unit: base + dough + size + extrasSum(cat, extras), known: baseKnown };
 }
-function priceHalfHalf(cat, aKey, bKey, doughKey, sizeKey, extras){
+function priceHalfHalf(cat, aKey, bKey, doughKey, sizeKey, extras, settings){
   const aKnown = (cat.pizzas && cat.pizzas[aKey] != null);
   const bKnown = (cat.pizzas && cat.pizzas[bKey] != null);
   const a = aKnown ? Number(cat.pizzas[aKey]) : 0;
   const b = bKnown ? Number(cat.pizzas[bKey]) : 0;
 
-  const rule = cat.rules?.halfHalfPricing || "max";
-  const base = (rule === "avg") ? (a+b)/2 : Math.max(a,b);
-
+  const base = (settings.halfHalfPricing === "avg") ? (a+b)/2 : Math.max(a,b);
   const dough = (cat.doughs && cat.doughs[doughKey] != null) ? Number(cat.doughs[doughKey]) : 0;
   const size  = (cat.sizes && cat.sizes[sizeKey] != null) ? Number(cat.sizes[sizeKey]) : 0;
 
   let ex = extrasSum(cat, extras);
-  const exRule = cat.rules?.halfHalfExtras || "full";
-  if(exRule === "half") ex = ex/2;
+  if(settings.halfHalfExtras === "half") ex = ex/2;
 
   return { unit: base + dough + size + ex, known: (aKnown || bKnown) };
 }
 
-/* ---------------- Parse order ---------------- */
-function parseOrder(cat, text){
-  const rawLines = text.replace(/\r/g,'').split('\n').map(l => stripChatNoise(l)).filter(Boolean);
-  const lines = rawLines.map(l => l.trim()).filter(l => l.length);
+/* =========================
+   PARSE ORDER (TOP)
+========================= */
+function parseOrder(cat, settings, rawText){
+  // 1) extract likely order text
+  const extracted = extractLikelyOrderText(rawText);
+  document.getElementById("extractBadge").textContent =
+    extracted.mode === "block" ? "Estrazione: blocco ordine" :
+    extracted.mode === "filtered" ? "Estrazione: filtrata" :
+    "Estrazione: testo unico";
 
-  // labeled fields
-  let name = extractLabeled(text, "Nome") || "";
-  let address = extractLabeled(text, "Indirizzo") || "";
-  let bell = extractLabeled(text, "Campanello") || "";
+  const text = extracted.text || "";
+  const lines = text.replace(/\r/g,"").split("\n")
+    .map(l=>stripChatNoise(l).trim())
+    .filter(Boolean);
 
-  // other fields
+  // fields
+  let name = extractLabeled(text, "Nome");
+  let address = extractLabeled(text, "Indirizzo");
+  let bell = extractLabeled(text, "Campanello");
+
   let phone = "";
   let desiredTime = "";
   let requestedTotal = null;
   let mode = detectPickupDelivery(text);
 
-  // if address not labeled, detect from lines
+  // address fallback + uppercase name fallback
   for(const line of lines){
     if(!phone){
       const pm = line.match(/(\+?\d[\d\s\-]{6,}\d)/);
@@ -418,58 +775,68 @@ function parseOrder(cat, text){
       if(tm) desiredTime = normalizeTime(tm[1]);
     }
     if(requestedTotal === null){
-      const qm = line.match(/\b(\d{1,2})\s*pizz[ae]\b/i);
+      const qm = safeLower(line).match(/\b(\d{1,2})\s*pizz[ae]\b/);
       if(qm) requestedTotal = Number(qm[1]);
     }
-    if(!address && looksLikeAddress(line)){
-      address = line.replace(/^indirizzo\s*:\s*/i,'').trim();
+    if(!address && looksLikeAddressLine(line)){
+      address = line.replace(/^indirizzo\s*:\s*/i,"").trim();
     }
-    // se non c'è "Nome:" e la riga sembra un nome (breve) possiamo lasciar perdere: meglio non inventare.
+    if(!name && looksLikeAllCapsName(line)){
+      name = line.trim();
+    }
   }
 
-  // items
   const items = [];
 
-  // 1) inline "3 pizze margherita"
+  // 2) inline "3 pizze margherita"
   const inline = findInlinePizzaStatements(cat, text);
   for(const it of inline){
-    const p = pricePizza(cat, it.nameKey, "classico", "normale", []);
+    const pr = pricePizza(cat, it.nameKey, "classico", "normale", []);
     items.push({
-      kind:"pizza", qty: it.qty,
-      halfHalf:false, pizzaKey: it.nameKey,
+      kind:"pizza", qty:it.qty,
+      halfHalf:false, pizzaKey:it.nameKey,
       doughKey:"classico", sizeKey:"normale",
       extras:[], removals:[],
       glutenFree:false,
-      unitPrice: p.unit, lineTotal: p.unit*it.qty,
-      priceKnown: p.known
+      unitPrice: pr.unit, lineTotal: pr.unit*it.qty,
+      priceKnown: pr.known
     });
   }
 
-  // 2) line-by-line items
+  // 3) per-line parsing
   for(const line0 of lines){
     const line = line0.trim();
-    if(!line) continue;
+    const l = safeLower(line);
 
-    // Skip headers / polite text / labeled fields
-    if(/^(ciao|buonasera|buongiorno|salve)\b/i.test(line)) continue;
-    if(/^nome\s*:/i.test(line)) continue;
-    if(/^indirizzo\s*:/i.test(line)) continue;
-    if(/^campanello\s*:/i.test(line)) continue;
-    if(looksLikeAddress(line) && !/^(\d+)\s+/.test(line)) continue;
-    if(/\bvorrei\b/i.test(line) && /\bpizz[ae]\b/i.test(line)) continue;
-    if(/\battendo\b/i.test(line) || /\bconferma\b/i.test(line) || /\bgrazie\b/i.test(line)) continue;
+    // skip noise/headers
+    if(/^(ciao|buonasera|buongiorno|salve)\b/.test(l)) continue;
+    if(/^nome\s*:/.test(l)) continue;
+    if(/^indirizzo\s*:/.test(l)) continue;
+    if(/^campanello\s*:/.test(l)) continue;
+    if(isStopLine(line)) continue;
+    if(/\battendo\b/.test(l) || /\bconferma\b/.test(l) || /\bgrazie\b/.test(l)) continue;
+
+    // address line: never item
+    if(looksLikeAddressLine(line) && !/^\d+\s+/.test(line)) continue;
+
+    // "vorrei ordinare ... pizze ..." line: already handled by inline extractor
+    if(/\bvorrei\b/.test(l) && /\bpizz[ae]\b/.test(l)) continue;
+
+    // If this line is a mode indicator only, skip
+    if(/^(consegna|domicilio|ritiro|asporto)\b/.test(l) && l.split(" ").length <= 2) continue;
 
     const {qty, text: itemText} = extractQtyAndText(line);
 
-    // Drinks
+    // drinks
     const drinkKey = isDrinkLine(cat, itemText);
     if(drinkKey){
-      const unit = Number(cat.drinks[drinkKey] || 0);
-      items.push({ kind:"drink", qty, label:drinkKey, unitPrice:unit, lineTotal:unit*qty, priceKnown: (cat.drinks[drinkKey]!=null) });
+      const known = (cat.drinks && cat.drinks[drinkKey] != null);
+      const unit = known ? Number(cat.drinks[drinkKey]) : 0;
+      items.push({ kind:"drink", qty, label:drinkKey, unitPrice:unit, lineTotal:unit*qty, priceKnown: known });
       continue;
     }
 
-    // Pizza
+    // pizza
     const doughKey = detectDough(cat, itemText);
     const sizeKey = detectSize(cat, itemText);
     const {extras, removals} = parseExtrasAndRemovals(cat, itemText);
@@ -478,7 +845,7 @@ function parseOrder(cat, text){
     if(half){
       const aKey = findPizzaName(cat, half.a);
       const bKey = findPizzaName(cat, half.b);
-      const pr = priceHalfHalf(cat, aKey, bKey, doughKey, sizeKey, extras);
+      const pr = priceHalfHalf(cat, aKey, bKey, doughKey, sizeKey, extras, settings);
       items.push({
         kind:"pizza", qty, halfHalf:true, aKey, bKey,
         doughKey, sizeKey, extras, removals,
@@ -499,19 +866,25 @@ function parseOrder(cat, text){
     }
   }
 
-  // Totals
+  // totals
   const computedPizzas = items.filter(i=>i.kind==="pizza").reduce((a,i)=>a+i.qty,0);
   let total = items.reduce((a,i)=>a+i.lineTotal,0);
 
-  // Delivery fee
-  const deliveryFee = Number(cat.rules?.deliveryFee || 0);
   const addDelivery = (mode === "CONSEGNA") || (mode.includes("CONSEGNA") && !mode.includes("/"));
-  if(addDelivery && deliveryFee>0) total += deliveryFee;
+  const delFee = addDelivery ? Number(settings.deliveryFee || 0) : 0;
+  if(delFee > 0) total += delFee;
 
-  return { name, phone, address, bell, desiredTime, requestedTotal, computedPizzas, mode, items, total, deliveryFee:(addDelivery?deliveryFee:0) };
+  return {
+    extractedMode: extracted.mode,
+    extractedText: text,
+    name, phone, address, bell, desiredTime, requestedTotal, computedPizzas, mode,
+    items, total, deliveryFee: delFee
+  };
 }
 
-/* ---------------- Format outputs ---------------- */
+/* =========================
+   FORMAT OUTPUT
+========================= */
 function fmtKitchen(cat, o){
   const sep = "--------------------------------";
   const head = [
@@ -560,6 +933,7 @@ function fmtReceipt(cat, o){
   const cur = cat.currency || "€";
   const sep = "--------------------------------";
   const lines = [];
+  let missing = 0;
 
   lines.push("================================");
   lines.push("         RICEVUTA CLIENTE       ");
@@ -573,8 +947,6 @@ function fmtReceipt(cat, o){
   if(o.bell) lines.push(`Campanello: ${o.bell}`);
   lines.push(sep);
 
-  let missing = 0;
-
   for(const it of o.items){
     if(it.kind==="drink"){
       lines.push(`${it.qty} x ${it.label}`);
@@ -583,12 +955,14 @@ function fmtReceipt(cat, o){
       lines.push(sep);
       continue;
     }
+
     const name = it.halfHalf ? `½ ${it.aKey} / ½ ${it.bKey}` : it.pizzaKey;
     const gf = it.glutenFree ? " [SENZA GLUTINE]" : "";
     const size = (it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
     const dough = (it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
     const extras = (it.extras?.length) ? ` +${it.extras.join(", ")}` : "";
     const rem = (it.removals?.length) ? ` -${it.removals.join(", ")}` : "";
+
     lines.push(`${it.qty} x ${name}${size}${dough}${gf}${extras}${rem}`);
     if(!it.priceKnown){ missing++; lines.push(`   ⚠️ PREZZO NON TROVATO`); }
     else lines.push(`   ${money(it.unitPrice)}${cur} -> ${money(it.lineTotal)}${cur}`);
@@ -607,86 +981,248 @@ function fmtReceipt(cat, o){
   return lines.join("\n");
 }
 
-/* ---------------- UI wiring ---------------- */
+/* =========================
+   UI / APP LOGIC
+========================= */
 let CATALOG = loadCatalog();
-setCatalogTextarea(CATALOG);
-ensureDaily();
+let SETTINGS = loadSettings();
+
+function refreshSettingsUI(){
+  document.getElementById("printMode").value = SETTINGS.printMode;
+  document.getElementById("deliveryFee").value = money(Number(SETTINGS.deliveryFee || 0));
+  document.getElementById("halfRule").value = SETTINGS.halfHalfPricing;
+  document.getElementById("halfExtraRule").value = SETTINGS.halfHalfExtras;
+
+  const pm = SETTINGS.printMode === "both" ? "entrambe" : SETTINGS.printMode === "kitchen" ? "solo cucina" : "solo ricevuta";
+  document.getElementById("printModeMini").textContent = `Stampa: ${pm}`;
+}
+
+function setCatalogTextarea(){
+  document.getElementById("catalog").value = JSON.stringify(CATALOG, null, 2);
+}
+
+function applySettingsFromUI(){
+  SETTINGS.printMode = document.getElementById("printMode").value;
+  SETTINGS.deliveryFee = Number(String(document.getElementById("deliveryFee").value).replace(",",".") || 0);
+  SETTINGS.halfHalfPricing = document.getElementById("halfRule").value;
+  SETTINGS.halfHalfExtras = document.getElementById("halfExtraRule").value;
+  saveSettings(SETTINGS);
+  refreshSettingsUI();
+}
 
 function renderAll(){
   ensureDaily();
-  const text = document.getElementById("input").value || "";
-  if(!text.trim()){
+  const raw = document.getElementById("input").value || "";
+  if(!raw.trim()){
     document.getElementById("outKitchen").textContent = "—";
     document.getElementById("outReceipt").textContent = "—";
+    document.getElementById("outDebug").textContent = "—";
+    document.getElementById("totalMini").textContent = "Totale: —";
     setStatus("", "");
     return;
   }
-  const o = parseOrder(CATALOG, text);
-  document.getElementById("outKitchen").textContent = fmtKitchen(CATALOG, o);
-  document.getElementById("outReceipt").textContent = fmtReceipt(CATALOG, o);
-  setStatus("Generato.", "ok");
+
+  const order = parseOrder(CATALOG, SETTINGS, raw);
+
+  document.getElementById("outKitchen").textContent = fmtKitchen(CATALOG, order);
+  document.getElementById("outReceipt").textContent = fmtReceipt(CATALOG, order);
+
+  // Debug: show extracted block + summary
+  const dbg = [];
+  dbg.push("=== DEBUG ===");
+  dbg.push(`Estrazione: ${order.extractedMode}`);
+  dbg.push("");
+  dbg.push("--- TESTO ESTRATTO ---");
+  dbg.push(order.extractedText || "—");
+  dbg.push("");
+  dbg.push("--- CAMPI ---");
+  dbg.push(`Nome: ${order.name || "—"}`);
+  dbg.push(`Tel: ${order.phone || "—"}`);
+  dbg.push(`Indirizzo: ${order.address || "—"}`);
+  dbg.push(`Campanello: ${order.bell || "—"}`);
+  dbg.push(`Orario: ${order.desiredTime || "—"}`);
+  dbg.push(`Tipo: ${order.mode || "—"}`);
+  dbg.push(`Totale pizze: ${order.computedPizzas} (dichiarate: ${order.requestedTotal ?? "—"})`);
+  dbg.push(`Totale: ${money(order.total)}${CATALOG.currency || "€"}`);
+  document.getElementById("outDebug").textContent = dbg.join("\n");
+
+  document.getElementById("totalMini").textContent = `Totale: ${money(order.total)}${CATALOG.currency || "€"}`;
+  setStatus("Generato (con estrazione intelligente).", "ok");
 }
 
-document.getElementById("gen").addEventListener("click", renderAll);
+async function copyOutput(){
+  const k = document.getElementById("outKitchen").textContent || "";
+  const r = document.getElementById("outReceipt").textContent || "";
 
-document.getElementById("copy").addEventListener("click", async () => {
-  const kitchen = document.getElementById("outKitchen").textContent;
-  const receipt = document.getElementById("outReceipt").textContent;
-  const combined = kitchen + "\n\n" + receipt;
-  if(!combined || combined.startsWith("—")) return;
+  let out = "";
+  if(SETTINGS.printMode === "both") out = k + "\n\n" + r;
+  else if(SETTINGS.printMode === "kitchen") out = k;
+  else out = r;
+
+  if(!out.trim() || out.trim()==="—") return;
+
   try{
-    await navigator.clipboard.writeText(combined);
-    setStatus("Copiato (comanda + ricevuta).", "ok");
+    await navigator.clipboard.writeText(out);
+    setStatus("Copiato negli appunti.", "ok");
   }catch{
     setStatus("Copia automatica non disponibile: copia manualmente.", "warn");
   }
-});
+}
 
-document.getElementById("print").addEventListener("click", () => window.print());
+function printNow(){
+  // Respect print mode by hiding blocks during print
+  const kitchen = document.getElementById("outKitchen");
+  const receipt = document.getElementById("outReceipt");
 
-document.getElementById("closeDay").addEventListener("click", () => {
+  const prevK = kitchen.style.display;
+  const prevR = receipt.style.display;
+
+  if(SETTINGS.printMode === "kitchen"){
+    kitchen.style.display = "block";
+    receipt.style.display = "none";
+  } else if(SETTINGS.printMode === "receipt"){
+    kitchen.style.display = "none";
+    receipt.style.display = "block";
+  } else {
+    // both: show current tab only? Better: print both by temporarily showing both sequentially
+    // simplest: print currently visible tab if user wants "both"? No, user asked both.
+    // We'll concatenate in the visible area by temporarily showing both in the same view.
+    kitchen.style.display = "block";
+    receipt.style.display = "block";
+  }
+
+  window.print();
+
+  // restore
+  kitchen.style.display = prevK;
+  receipt.style.display = prevR;
+}
+
+function closeDay(){
   document.getElementById("input").value = "";
   document.getElementById("outKitchen").textContent = "—";
   document.getElementById("outReceipt").textContent = "—";
+  document.getElementById("outDebug").textContent = "—";
+  document.getElementById("totalMini").textContent = "Totale: —";
   localStorage.setItem(LS.lastDay, todayKey());
   setStatus("Chiusura serale: pulito.", "ok");
+}
+
+/* =========================
+   SETTINGS MODAL
+========================= */
+const modal = document.getElementById("modal");
+document.getElementById("openSettings").addEventListener("click", ()=>{
+  modal.classList.add("open");
+});
+document.getElementById("closeSettings").addEventListener("click", ()=>{
+  modal.classList.remove("open");
+});
+modal.addEventListener("click", (e)=>{
+  if(e.target === modal) modal.classList.remove("open");
 });
 
-document.getElementById("saveCatalog").addEventListener("click", () => {
-  const el = document.getElementById("catStatus");
+/* =========================
+   CATALOG ACTIONS
+========================= */
+document.getElementById("saveCatalog").addEventListener("click", ()=>{
   try{
     const obj = JSON.parse(document.getElementById("catalog").value);
-    saveCatalog(obj);
+    // minimal sanity check
+    if(!obj || typeof obj !== "object") throw new Error("Invalid");
+    if(!obj.pizzas) obj.pizzas = {};
+    if(!obj.drinks) obj.drinks = {};
+    if(!obj.extras) obj.extras = {};
+    if(!obj.doughs) obj.doughs = {};
+    if(!obj.sizes) obj.sizes = {};
+    if(!obj.aliases) obj.aliases = {};
     CATALOG = obj;
-    el.className = "small ok";
-    el.textContent = "Catalogo salvato.";
+    saveCatalog(CATALOG);
+    setCatStatus("Catalogo salvato.", "ok");
     setStatus("Catalogo aggiornato.", "ok");
+    renderAll();
   }catch{
-    el.className = "small warn";
-    el.textContent = "Errore JSON: controlla virgole/virgolette.";
-    setStatus("Errore nel catalogo JSON.", "warn");
+    setCatStatus("Errore JSON: controlla virgole/virgolette.", "warn");
+  }
+});
+document.getElementById("resetCatalog").addEventListener("click", ()=>{
+  CATALOG = structuredClone(SAMPLE_CATALOG);
+  setCatalogTextarea();
+  saveCatalog(CATALOG);
+  setCatStatus("Ripristinato esempio.", "ok");
+  renderAll();
+});
+document.getElementById("exportCatalog").addEventListener("click", async ()=>{
+  const text = JSON.stringify(CATALOG, null, 2);
+  try{
+    await navigator.clipboard.writeText(text);
+    setCatStatus("Export: copiato negli appunti.", "ok");
+  }catch{
+    setCatStatus("Export non riuscito: copia manualmente.", "warn");
+  }
+});
+document.getElementById("importCatalog").addEventListener("click", ()=>{
+  const pasted = prompt("Incolla qui il JSON del catalogo (Import):");
+  if(!pasted) return;
+  try{
+    const obj = JSON.parse(pasted);
+    CATALOG = obj;
+    setCatalogTextarea();
+    saveCatalog(CATALOG);
+    setCatStatus("Import riuscito.", "ok");
+    renderAll();
+  }catch{
+    setCatStatus("Import fallito: JSON non valido.", "warn");
   }
 });
 
-document.getElementById("resetCatalog").addEventListener("click", () => {
-  CATALOG = structuredClone(SAMPLE_CATALOG);
-  setCatalogTextarea(CATALOG);
-  saveCatalog(CATALOG);
-  document.getElementById("catStatus").className = "small ok";
-  document.getElementById("catStatus").textContent = "Ripristinato esempio.";
-  setStatus("Catalogo ripristinato.", "ok");
+/* =========================
+   SETTINGS INPUTS
+========================= */
+document.getElementById("printMode").addEventListener("change", ()=>{
+  applySettingsFromUI();
+});
+document.getElementById("deliveryFee").addEventListener("change", ()=>{
+  applySettingsFromUI();
+});
+document.getElementById("halfRule").addEventListener("change", ()=>{
+  applySettingsFromUI();
+});
+document.getElementById("halfExtraRule").addEventListener("change", ()=>{
+  applySettingsFromUI();
 });
 
-// Tabs
+/* =========================
+   TABS
+========================= */
 for(const t of document.querySelectorAll(".tab")){
-  t.addEventListener("click", () => {
+  t.addEventListener("click", ()=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
     t.classList.add("active");
     const view = t.getAttribute("data-view");
+
     document.getElementById("outKitchen").style.display = (view==="kitchen") ? "block" : "none";
     document.getElementById("outReceipt").style.display = (view==="receipt") ? "block" : "none";
+    document.getElementById("outDebug").style.display   = (view==="debug")   ? "block" : "none";
   });
 }
+
+/* =========================
+   BUTTONS
+========================= */
+document.getElementById("gen").addEventListener("click", renderAll);
+document.getElementById("copy").addEventListener("click", copyOutput);
+document.getElementById("print").addEventListener("click", printNow);
+document.getElementById("closeDay").addEventListener("click", closeDay);
+
+/* =========================
+   INIT
+========================= */
+CATALOG = loadCatalog();
+SETTINGS = loadSettings();
+setCatalogTextarea();
+refreshSettingsUI();
+ensureDaily();
 </script>
 </body>
 </html>
