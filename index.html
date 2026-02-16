@@ -3,465 +3,885 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
-  <title>WA Order Pro V9 — Professional Full</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+  <title>COMMANDER ÉLITE V12 - TOTAL CONTROL</title>
   <style>
     :root {
-      --bg: #030712;
-      --card: rgba(17, 24, 39, 0.85);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent: #3b82f6;
-      --accent-glow: rgba(59, 130, 246, 0.35);
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --success: #10b981;
-      --error: #ef4444;
-      --warning: #f59e0b;
-      --radius-lg: 18px;
-      --radius-md: 12px;
-      --font-sans: 'Inter', -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg: #020617; --surface: #0f172a; --surface-alt: #1e293b;
+      --accent: #38bdf8; --text: #f8fafc; --text-dim: #94a3b8;
+      --success: #22c55e; --danger: #ef4444; --border: rgba(255,255,255,0.1);
+      --warn: #f59e0b;
     }
+    * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 50px; }
+    .app { max-width: 1400px; margin: 0 auto; padding: 1rem; display: grid; gap: 1rem; }
+    @media (min-width: 1024px) { .app { grid-template-columns: 1fr 1.2fr; } }
 
-    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-    body {
-      margin: 0;
-      font-family: var(--font-sans);
-      background-color: var(--bg);
-      background-image: radial-gradient(circle at top right, #1e1b4b, transparent),
-                        radial-gradient(circle at bottom left, #0f172a, transparent);
-      background-attachment: fixed;
-      color: var(--text-main);
-      line-height: 1.5;
-    }
+    header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .card-h { padding: 1rem; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); font-weight: 800; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .card-b { padding: 1rem; }
 
-    .app-container { max-width: 1100px; margin: 0 auto; padding: 10px 15px 120px; }
+    textarea { width: 100%; min-height: 200px; background: #000; color: #10b981; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; outline: none; }
 
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 15px 0; position: sticky; top: 0; z-index: 100;
-      background: rgba(3,7,18,0.7); backdrop-filter: blur(12px);
-    }
+    .btn { padding: 0.7rem 1rem; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; justify-content: center; user-select: none; }
+    .btn:active { transform: translateY(1px); }
+    .btn-main { background: var(--accent); color: #000; }
+    .btn-sec { background: var(--surface-alt); color: white; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-warn { background: var(--warn); color: #000; }
 
-    .brand h1 {
-      font-size: 1.3rem; font-weight: 800; margin: 0;
-      background: linear-gradient(to right, #fff, var(--accent));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    /* Output per Stampante 80mm */
+    .output-wrap { background: #111; overflow-x: auto; padding: 1rem; }
+    .output-box { background: #fff; color: #000; padding: 10mm; font-family: 'Courier New', ui-monospace, monospace; font-size: 14px; border: 1px solid #ddd; width: 80mm; margin: 0 auto; line-height: 1.2; box-shadow: 0 0 20px rgba(0,0,0,0.5); white-space: pre; }
 
-    .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-    @media (min-width: 900px) { .dashboard-grid { grid-template-columns: 1.1fr 0.9fr; } }
+    /* Modal / Editor Styles */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; z-index: 1000; padding: 1rem; overflow-y: auto; }
+    .modal.open { display: flex; justify-content: center; }
+    .modal-sheet { background: var(--surface); width: 100%; max-width: 900px; height: fit-content; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border); margin: 2rem 0; }
 
-    .glass-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      overflow: hidden;
-    }
-    .card-header {
-      padding: 12px 20px;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid var(--card-border);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .card-content { padding: 15px; }
+    .order-row { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+    .row-main { display: grid; grid-template-columns: 70px 1fr 120px 44px; gap: 10px; margin-bottom: 10px; align-items: end; }
+    .row-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-    textarea {
-      width: 100%; min-height: 250px;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      color: var(--text-main);
-      padding: 15px; font-family: var(--font-sans);
-      font-size: 0.95rem; resize: vertical; transition: 0.2s;
-    }
-    textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    select, input { background: #000; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 6px; font-size: 13px; width: 100%; }
+    label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; display: block; margin-bottom: 3px; letter-spacing: .04em; }
 
-    .output-area {
-      font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.4;
-      background: #000; padding: 15px; border-radius: var(--radius-md);
-      min-height: 350px; white-space: pre-wrap; color: #adbac7;
-      border: 1px solid var(--card-border);
-    }
-
-    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; }
-    .btn {
-      padding: 10px 16px; border-radius: var(--radius-md); font-weight: 600;
-      font-size: 0.85rem; cursor: pointer; transition: 0.2s;
-      border: 1px solid transparent; display: inline-flex; align-items: center; gap: 6px;
-    }
-    .btn-primary { background: var(--accent); color: white; }
-    .btn-whatsapp { background: #25d366; color: white; }
-    .btn-outline { background: transparent; border-color: var(--card-border); color: var(--text-main); }
-    .btn-danger { background: rgba(239, 68, 68, 0.1); color: var(--error); border-color: rgba(239, 68, 68, 0.2); }
-
-    .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
-    .badge-auto { background: rgba(59, 130, 246, 0.2); color: var(--accent); }
-
-    .stats-bar {
-      position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-      width: 95%; max-width: 1100px;
-      background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(15px);
-      border: 1px solid var(--card-border); padding: 12px 25px;
-      border-radius: 50px; display: flex; justify-content: space-between; align-items: center;
-      z-index: 200; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    }
-
-    /* Modals */
-    .sheet-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
-      display: none; z-index: 300; align-items: flex-end; justify-content: center;
-    }
-    .sheet-backdrop.open { display: flex; }
-    .sheet {
-      width: 100%; max-width: 800px; background: #111827;
-      border-radius: 20px 20px 0 0; max-height: 85vh; overflow-y: auto;
-      animation: slideUp 0.3s cubic-bezier(0, 0, 0.2, 1);
-    }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-    .item-edit {
-      border: 1px solid var(--card-border); padding: 12px;
-      border-radius: 12px; background: rgba(255,255,255,0.02);
-      margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
-    }
-    .item-edit.warning { border-left: 4px solid var(--warning); background: rgba(245, 158, 11, 0.05); }
-
-    #toast {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      padding: 10px 20px; border-radius: 50px; color: white;
-      font-weight: 600; opacity: 0; transition: 0.3s; z-index: 1000; pointer-events: none;
-    }
-    #toast.show { opacity: 1; top: 40px; }
-
-    .tabs-nav { display: flex; gap: 4px; background: #000; padding: 4px; border-radius: 10px; }
-    .tab-btn {
-      background: transparent; border: none; color: var(--text-muted);
-      padding: 6px 14px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border-radius: 7px;
-    }
-    .tab-btn.active { background: var(--accent); color: white; }
+    .hint { color: var(--text-dim); font-size: 12px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--text-dim); background: rgba(255,255,255,0.03); }
+    .pill strong { color: var(--text); font-weight: 800; }
 
     @media print {
-        .btn-group, header, .stats-bar, .tabs-nav, .badge { display: none !important; }
-        .dashboard-grid { display: block; }
-        .glass-card { border: none; box-shadow: none; background: white; }
-        .output-area { border: none; color: black; background: white; font-size: 10pt; }
+      .no-print { display: none !important; }
+      body { background: white; padding-bottom: 0; }
+      .output-wrap { padding: 0; background: white; }
+      .output-box { border: none; box-shadow: none; width: 80mm; margin: 0; padding: 5mm; }
+      @page { size: 80mm auto; margin: 0; }
     }
   </style>
 </head>
 <body>
 
-  <div id="toast"></div>
-
-  <div class="app-container">
-    <header>
-      <div class="brand">
-        <h1>WA Order Pro <span style="font-size: 0.8rem; opacity: 0.5;">V9 Full</span></h1>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button id="btnConfirm" class="btn btn-outline">✅ Revisione</button>
-        <button id="btnWA" class="btn btn-whatsapp">📲 WhatsApp</button>
-      </div>
-    </header>
-
-    <div class="dashboard-grid">
-      <section class="glass-card">
-        <div class="card-header">
-          <span class="badge badge-auto">Chat WhatsApp</span>
-          <span id="statusIndicator" style="font-size: 0.7rem; opacity: 0.7;">Pronto</span>
-        </div>
-        <div class="card-content">
-          <textarea id="mainInput" placeholder="Incolla qui la conversazione... Es:
-2 margherita
-1 diavola senza olive
-alle 20:30
-Nome: Marco"></textarea>
-          <div class="btn-group">
-            <button id="btnAnalyze" class="btn btn-primary">🧠 Analizza</button>
-            <button id="btnGen" class="btn btn-primary">✨ Genera Comanda</button>
-            <button id="btnCopy" class="btn btn-outline">📋 Copia</button>
-            <button id="btnPrint" class="btn btn-outline">🖨️ Stampa</button>
-            <button id="btnClear" class="btn btn-danger">🗑️ Clear</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="glass-card">
-        <div class="card-header">
-          <div class="tabs-nav">
-            <button class="tab-btn active" data-view="kitchen">CUCINA</button>
-            <button class="tab-btn" data-view="receipt">RICEVUTA</button>
-          </div>
-          <span id="timeBadge" style="font-weight: 800; color: var(--warning); font-size: 0.8rem;">--:--</span>
-        </div>
-        <div class="card-content">
-          <div id="outputContainer" class="output-area">In attesa di dati...</div>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <div class="stats-bar">
+<div class="app">
+  <header class="no-print">
     <div>
-      <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Totale Pizze</div>
-      <div id="countPizze" style="font-weight: 800; color: var(--accent); font-size: 1.2rem;">0</div>
+      <div style="font-weight: 900; font-size: 1.6rem; color: var(--accent);">COMMANDER ÉLITE <span style="color:white; font-weight:300">V12</span></div>
+      <div id="clock" style="font-size: 12px; color: var(--text-dim);">...</div>
+      <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="pill">Modalità: <strong id="pill-mode">—</strong></span>
+        <span class="pill">Totale: <strong id="pill-total">€ 0,00</strong></span>
+        <span class="pill">Righe: <strong id="pill-rows">0</strong></span>
+      </div>
     </div>
-    <div style="text-align: right;">
-      <div style="font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase;">Totale Conto</div>
-      <div id="totalValue" style="font-weight: 800; color: var(--success); font-size: 1.2rem;">€ 0.00</div>
+    <div style="display: flex; gap: 8px; align-items:center; flex-wrap:wrap;">
+      <button class="btn btn-sec" onclick="App.openSettings()">⚙️ MENU</button>
+      <button class="btn btn-warn" onclick="App.exportHistory()">⬇️ ESPORTA STORICO</button>
+      <button class="btn btn-danger" onclick="App.nightClosure()">🌙 CHIUSURA SERALE</button>
+    </div>
+  </header>
+
+  <div class="card no-print">
+    <div class="card-h">
+      <span>📥 WHATSAPP INPUT</span>
+      <span class="hint">Suggerimento: “2 margherita bufala”, “1 diavola grande”, “ore 19:30”, “via roma 10”</span>
+    </div>
+    <div class="card-b">
+      <textarea id="raw-input" placeholder="Incolla qui l'ordine..."></textarea>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1rem;">
+        <button class="btn btn-main" onclick="App.process()">⚡ ANALISI INTELLIGENTE</button>
+        <button class="btn btn-sec" onclick="App.openEditor()">✏️ GESTIONALE AVANZATO</button>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+        <button class="btn btn-sec" onclick="App.demoFill()">🧪 ESEMPIO</button>
+        <button class="btn btn-sec" onclick="App.clearInput()">🧹 PULISCI</button>
+      </div>
     </div>
   </div>
 
-  <div id="confirmBackdrop" class="sheet-backdrop">
-    <div class="sheet">
-      <div style="padding: 20px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center;">
-        <strong style="font-size: 1.1rem;">Revisione Ordine</strong>
-        <button id="closeConfirm" style="background:none; border:none; color:white; font-size: 1.5rem; cursor:pointer;">✕</button>
+  <div class="card">
+    <div class="card-h no-print">
+      <span>🖨️ ANTEPRIMA 80mm</span>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <button class="btn btn-sec" onclick="App.copyTicket()">📋 COPIA</button>
+        <button class="btn btn-main" onclick="window.print()">STAMPA IPHONE</button>
       </div>
-      <div style="padding: 20px;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
-            <div style="display:flex; flex-direction:column; gap:4px;">
-                <label style="font-size: 0.7rem; color: var(--text-muted);">Nome</label>
-                <input id="fName" style="padding:10px; background:#000; border:1px solid #333; color:white; border-radius:8px;">
-            </div>
-            <div style="display:flex; flex-direction:column; gap:4px;">
-                <label style="font-size: 0.7rem; color: var(--text-muted);">Orario</label>
-                <input id="fTime" style="padding:10px; background:#000; border:1px solid #333; color:white; border-radius:8px;">
-            </div>
-            <div style="display:flex; flex-direction:column; gap:4px; grid-column: span 2;">
-                <label style="font-size: 0.7rem; color: var(--text-muted);">Indirizzo / Note</label>
-                <input id="fAddress" style="padding:10px; background:#000; border:1px solid #333; color:white; border-radius:8px;">
-            </div>
-        </div>
-        
-        <div id="itemsEditor" style="margin-bottom: 20px;"></div>
-        
-        <button id="btnApplyConfirm" class="btn btn-primary" style="width:100%; justify-content:center; padding: 14px;">✅ Conferma Modifiche</button>
+    </div>
+    <div class="output-wrap">
+      <div id="output" class="output-box">In attesa...</div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-editor" class="modal no-print" onclick="App.backdropClose(event)">
+  <div class="modal-sheet">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; gap:12px;">
+      <h2 style="margin:0;">✏️ Gestionale Ordine</h2>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-sec" onclick="App.closeModals()">Chiudi</button>
+      </div>
+    </div>
+
+    <div class="row-options" style="margin-bottom:20px; background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+      <div><label>Cliente</label><input type="text" id="edt-customer"></div>
+      <div><label>Orario</label><input type="text" id="edt-time"></div>
+      <div><label>Indirizzo/Note</label><input type="text" id="edt-address"></div>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+      <span class="pill">Rilevato: <strong id="edt-detected">—</strong></span>
+      <span class="pill">Consegna: <strong id="edt-fee">€ 0,00</strong></span>
+    </div>
+
+    <div id="edt-items-list"></div>
+
+    <button class="btn btn-sec" style="width:100%; margin-top:10px;" onclick="App.addOrderItem()">➕ AGGIUNGI PIZZA</button>
+
+    <div style="margin-top:20px; padding:20px; background:var(--surface-alt); border-radius:12px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+      <div style="font-weight:900; font-size:1.2rem;">TOTALE: <span id="edt-total" style="color:var(--success)">€ 0.00</span></div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-sec" onclick="App.closeModals()">Annulla</button>
+        <button class="btn btn-main" onclick="App.saveOrderEdits()">🚀 CONFERMA E GENERA COMANDA</button>
       </div>
     </div>
   </div>
+</div>
+
+<div id="modal-settings" class="modal no-print" onclick="App.backdropClose(event)">
+  <div class="modal-sheet">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <h2 style="margin:0;">⚙️ Configurazione Catalogo</h2>
+      <button class="btn btn-sec" onclick="App.closeModals()">Chiudi</button>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 18px;">
+      <span class="pill">Consegna: <strong id="cfg-fee-pill">€ 0,00</strong></span>
+      <button class="btn btn-sec" onclick="App.resetConfig()">♻️ RESET DEFAULT</button>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div>
+        <h3 style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Pizze</span>
+          <button class="btn btn-sec" style="padding:2px 8px; font-size:12px" onclick="App.addCatalogItem('pizzas')">+</button>
+        </h3>
+        <div id="cfg-pizzas"></div>
+      </div>
+      <div>
+        <h3 style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Impasti / Formati</span>
+          <button class="btn btn-sec" style="padding:2px 8px; font-size:12px" onclick="App.addCatalogItem('variations')">+</button>
+        </h3>
+        <div id="cfg-variations"></div>
+
+        <h3 style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+          <span>Extra</span>
+          <button class="btn btn-sec" style="padding:2px 8px; font-size:12px" onclick="App.addCatalogItem('extras')">+</button>
+        </h3>
+        <div id="cfg-extras"></div>
+
+        <h3 style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+          <span>Consegna</span>
+        </h3>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input type="number" step="0.5" id="cfg-delivery-fee" style="max-width:140px;">
+          <span class="hint">€</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-main" style="width:100%; margin-top:2rem;" onclick="App.saveSettings()">💾 SALVA CONFIGURAZIONE</button>
+  </div>
+</div>
 
 <script>
-/* ===================== CONFIGURAZIONE & CATALOGO ===================== */
-const CATALOG = {
-    pizzas: {
-        "margherita": 6.50,
-        "diavola": 8.00,
-        "capricciosa": 9.00,
-        "bufala": 8.50,
-        "marinara": 5.00,
-        "quattro formaggi": 8.50,
-        "ortolana": 8.00,
-        "salamino": 7.50
-    },
-    currency: "€"
-};
+/**
+ * Commander Élite V12 - refactor
+ * Obiettivi:
+ * - Lettura ordine più robusta (normalizzazione, sinonimi, parsing quantità, impasto/formato, extra, note)
+ * - Gestione più sicura (sanitizzazione HTML, no inline onchange con stringhe)
+ * - Totali coerenti (calcolo centralizzato)
+ * - Storico semplice + export JSON
+ */
 
-let DRAFT = { name: "", time: "", address: "", items: [], mode: "RITIRO" };
-let ACTIVE_VIEW = "kitchen";
-
-/* ===================== UTILS ===================== */
-function showToast(msg, color = "var(--accent)") {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.background = color;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-function money(n) { return n.toFixed(2) + CATALOG.currency; }
-
-/* ===================== PARSER CORE ===================== */
-function parseWhatsApp(text) {
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-    const result = { name: "", time: "", address: "", items: [] };
-
-    lines.forEach(line => {
-        const lowerLine = line.toLowerCase();
-
-        // 1. Estrazione Orario (HH:MM o HH.MM)
-        const timeMatch = line.match(/(\d{1,2}[:.]\d{2})/);
-        if (timeMatch && !result.time) result.time = timeMatch[1].replace('.', ':');
-
-        // 2. Estrazione Nome (Nome: Marco o sono Marco)
-        if (lowerLine.includes("nome:") || lowerLine.startsWith("sono ")) {
-            result.name = line.replace(/nome:|sono /i, "").trim();
-        }
-
-        // 3. Estrazione Articoli (es: 2 margherita)
-        const itemMatch = line.match(/^(\d+)\s+(.+)/);
-        if (itemMatch) {
-            const qty = parseInt(itemMatch[1]);
-            const itemName = itemMatch[2].toLowerCase().trim();
-            const price = CATALOG.pizzas[itemName] || 0;
-            result.items.push({ qty, name: itemName, price });
-        }
-    });
-
-    return result;
-}
-
-/* ===================== LOGICA UI ===================== */
-function performAnalysis() {
-    const input = document.getElementById('mainInput').value;
-    if (!input) return showToast("Incolla del testo!", "var(--error)");
-
-    const parsed = parseWhatsApp(input);
-    DRAFT = parsed;
-
-    // Sincronizza UI
-    document.getElementById('timeBadge').textContent = DRAFT.time || "--:--";
-    updateStats();
-    showToast("Analisi completata ✨");
-}
-
-function updateStats() {
-    const total = DRAFT.items.reduce((sum, it) => sum + (it.price * it.qty), 0);
-    const count = DRAFT.items.reduce((sum, it) => sum + it.qty, 0);
-    document.getElementById('totalValue').textContent = money(total);
-    document.getElementById('countPizze').textContent = count;
-}
-
-function renderOutput() {
-    const container = document.getElementById('outputContainer');
-    if (DRAFT.items.length === 0) {
-        container.textContent = "Nessun dato analizzato.";
-        return;
-    }
-
-    let text = "";
-    const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-    if (ACTIVE_VIEW === "kitchen") {
-        text += `=== COMANDA CUCINA ===\n`;
-        text += `ORA ORDINE: ${DRAFT.time || 'N/D'}\n`;
-        text += `CLIENTE: ${DRAFT.name || 'N/D'}\n`;
-        text += `----------------------\n`;
-        DRAFT.items.forEach(it => {
-            text += `${it.qty}x ${it.name.toUpperCase()}\n`;
-        });
-        text += `----------------------\n`;
-        text += `Stampato alle: ${now}`;
-    } else {
-        text += `=== RICEVUTA CLIENTE ===\n`;
-        text += `Cliente: ${DRAFT.name || 'N/D'}\n`;
-        text += `Orario: ${DRAFT.time || 'N/D'}\n`;
-        text += `----------------------\n`;
-        let tot = 0;
-        DRAFT.items.forEach(it => {
-            const riga = it.price * it.qty;
-            tot += riga;
-            text += `${it.qty}x ${it.name} (${money(it.price)}) = ${money(riga)}\n`;
-        });
-        text += `----------------------\n`;
-        text += `TOTALE: ${money(tot)}\n`;
-        text += `Grazie e buon appetito!`;
-    }
-    container.textContent = text;
-}
-
-/* ===================== WHATSAPP & AZIONI ===================== */
-function sendWhatsApp() {
-    if (DRAFT.items.length === 0) return showToast("Analizza prima l'ordine", "var(--warning)");
-    
-    let msg = `*CONFERMA ORDINE 🍕*\n\n`;
-    msg += `👤 *Nome:* ${DRAFT.name || 'N/D'}\n`;
-    msg += `⏰ *Orario:* ${DRAFT.time || 'N/D'}\n\n`;
-    
-    let total = 0;
-    DRAFT.items.forEach(it => {
-        msg += `• ${it.qty}x ${it.name} (${money(it.price)})\n`;
-        total += it.price * it.qty;
-    });
-    
-    msg += `\n💰 *Totale: ${money(total)}*`;
-    
-    const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
-    window.open(url, '_blank');
-}
-
-function renderEditor() {
-    const area = document.getElementById('itemsEditor');
-    document.getElementById('fName').value = DRAFT.name;
-    document.getElementById('fTime').value = DRAFT.time;
-    document.getElementById('fAddress').value = DRAFT.address;
-
-    area.innerHTML = '';
-    DRAFT.items.forEach((it, idx) => {
-        const div = document.createElement('div');
-        div.className = `item-edit ${it.price === 0 ? 'warning' : ''}`;
-        div.innerHTML = `
-            <div>
-                <strong>${it.qty}x</strong> ${it.name} 
-                <span style="font-size:0.7rem; opacity:0.6; margin-left:10px;">${it.price > 0 ? money(it.price) : 'PREZZO MANCANTE'}</span>
-            </div>
-            <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--error); cursor:pointer; font-size:1.2rem;">🗑️</button>
-        `;
-        area.appendChild(div);
-    });
-}
-
-window.removeItem = function(idx) {
-    DRAFT.items.splice(idx, 1);
-    renderEditor();
-    updateStats();
-};
-
-/* ===================== EVENT LISTENERS ===================== */
-document.getElementById('btnAnalyze').onclick = performAnalysis;
-document.getElementById('btnGen').onclick = renderOutput;
-document.getElementById('btnWA').onclick = sendWhatsApp;
-
-document.getElementById('btnConfirm').onclick = () => {
-    document.getElementById('confirmBackdrop').classList.add('open');
-    renderEditor();
-};
-
-document.getElementById('closeConfirm').onclick = () => {
-    document.getElementById('confirmBackdrop').classList.remove('open');
-};
-
-document.getElementById('btnApplyConfirm').onclick = () => {
-    DRAFT.name = document.getElementById('fName').value;
-    DRAFT.time = document.getElementById('fTime').value;
-    DRAFT.address = document.getElementById('fAddress').value;
-    document.getElementById('timeBadge').textContent = DRAFT.time || "--:--";
-    document.getElementById('confirmBackdrop').classList.remove('open');
-    showToast("Dati aggiornati!");
-    updateStats();
-    renderOutput();
-};
-
-document.getElementById('btnCopy').onclick = async () => {
-    const text = document.getElementById('outputContainer').textContent;
-    await navigator.clipboard.writeText(text);
-    showToast("Copiato negli appunti! 📋");
-};
-
-document.getElementById('btnPrint').onclick = () => window.print();
-
-document.getElementById('btnClear').onclick = () => {
-    document.getElementById('mainInput').value = '';
-    DRAFT = { name: "", time: "", address: "", items: [] };
-    document.getElementById('outputContainer').textContent = "In attesa di dati...";
-    updateStats();
-    showToast("Tabula rasa 🧹", "var(--error)");
-};
-
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.onclick = () => {
-        document.querySelector('.tab-btn.active').classList.remove('active');
-        btn.classList.add('active');
-        ACTIVE_VIEW = btn.dataset.view;
-        renderOutput();
+const App = {
+  // ---------- DEFAULT CONFIG ----------
+  defaultConfig() {
+    return {
+      pizzas: { "margherita": 6.5, "diavola": 8.0, "capricciosa": 9.5, "quattro stagioni": 9.5, "napoli": 7.5 },
+      variations: { "normale": 0, "integrale": 1.5, "verace": 2.0, "senza glutine": 3.0, "mezzo metro": 15.0, "grande": 2.5 },
+      extras: { "nessuno": 0, "bufala": 2.0, "speck": 1.5, "brie": 1.5, "crudo": 2.5, "porcini": 2.0, "cipolla": 0.5 },
+      deliveryFee: 2.0,
+      history: []
     };
-});
+  },
+
+  config: null,
+  order: null,
+
+  // ---------- UTILS ----------
+  $: (sel) => document.querySelector(sel),
+  $$: (sel) => Array.from(document.querySelectorAll(sel)),
+
+  money(v) {
+    const n = Number(v || 0);
+    return n.toFixed(2);
+  },
+
+  moneyIt(v) {
+    // format semplice IT (virgola) senza Intl per evitare sorprese su vecchi iOS
+    const s = this.money(v).replace('.', ',');
+    return `€ ${s}`;
+  },
+
+  safeText(s) {
+    // converte in stringa e rimuove controlli strani
+    return String(s ?? '').replace(/[\u0000-\u001F\u007F]/g, '').trim();
+  },
+
+  escHtml(s) {
+    return this.safeText(s)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  },
+
+  normalize(s) {
+    // normalizzazione forte: minuscole, spazi puliti, accenti base
+    let t = this.safeText(s).toLowerCase();
+    t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // rimuovi diacritici
+    t = t.replace(/[•·\t]/g, ' ');
+    t = t.replace(/\s+/g, ' ').trim();
+    return t;
+  },
+
+  // match "19:30", "19.30", "ore 19:30", "h 19.30"
+  parseTimeFromLine(line) {
+    const m = line.match(/(?:ore|h)?\s*(\d{1,2})[:.](\d{2})/i);
+    if(!m) return null;
+    let hh = parseInt(m[1], 10);
+    let mm = parseInt(m[2], 10);
+    if(Number.isNaN(hh) || Number.isNaN(mm)) return null;
+    if(hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+    return `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+  },
+
+  isDeliveryLine(line) {
+    // euristiche: presenza indirizzo o parole chiave consegna/domicilio
+    const hasStreet = /(via|v\.|viale|piazza|p\.zza|corso|c\.so|largo|vicolo|strada|st\.|localita|loc\.|km)\b/.test(line);
+    const deliveryKw = /(consegna|a domicilio|domicilio|delivery)\b/.test(line);
+    return hasStreet || deliveryKw;
+  },
+
+  // quantità: "2 margherite", "x2 margherita", "2x margherita", "n.2 margherita"
+  parseQtyAndText(line) {
+    let l = line.trim();
+
+    // x2 / 2x / n.2
+    let m = l.match(/^(?:n\.?\s*)?(\d{1,2})\s*(?:x)?\s+(.*)$/i);
+    if(!m) m = l.match(/^x\s*(\d{1,2})\s+(.*)$/i);
+    if(!m) m = l.match(/^(\d{1,2})x\s*(.*)$/i);
+
+    if(m) {
+      const qty = Math.max(1, parseInt(m[1], 10));
+      const text = (m[2] || '').trim();
+      return { qty, text };
+    }
+    return null;
+  },
+
+  // ---------- "SMART" DICTIONARIES ----------
+  getSynonyms() {
+    return {
+      pizzas: {
+        // alias -> chiave config
+        "margherita": "margherita",
+        "margherite": "margherita",
+        "marghe": "margherita",
+        "margerita": "margherita",
+
+        "diavola": "diavola",
+        "diavolo": "diavola",
+
+        "capricciosa": "capricciosa",
+        "capricci": "capricciosa",
+
+        "4 stagioni": "quattro stagioni",
+        "quattro stagioni": "quattro stagioni",
+        "4stagioni": "quattro stagioni",
+
+        "napoli": "napoli"
+      },
+      variations: {
+        "normale": "normale",
+        "integrale": "integrale",
+        "verace": "verace",
+        "sg": "senza glutine",
+        "senza glutine": "senza glutine",
+        "gluten free": "senza glutine",
+        "gf": "senza glutine",
+
+        "mezzo metro": "mezzo metro",
+        "1/2 metro": "mezzo metro",
+        "mezzo": "mezzo metro",
+
+        "grande": "grande",
+        "maxi": "grande"
+      },
+      extras: {
+        "nessuno": "nessuno",
+        "bufala": "bufala",
+        "mozzarella di bufala": "bufala",
+        "speck": "speck",
+        "brie": "brie",
+        "crudo": "crudo",
+        "prosciutto crudo": "crudo",
+        "porcini": "porcini",
+        "cipolla": "cipolla"
+      }
+    };
+  },
+
+  // trova una chiave config in base al testo (usa sinonimi + contains su chiavi config)
+  detectFromText(text, type) {
+    const t = this.normalize(text);
+    const syn = this.getSynonyms()[type] || {};
+    const keys = Object.keys(this.config[type] || {});
+
+    // 1) prova match sinonimi più lunghi prima
+    const synEntries = Object.entries(syn).sort((a,b) => b[0].length - a[0].length);
+    for(const [alias, key] of synEntries) {
+      if(t.includes(alias)) return key;
+    }
+
+    // 2) fallback: match su chiavi config (più lunghe prima)
+    const sortedKeys = keys.slice().sort((a,b) => b.length - a.length);
+    for(const k of sortedKeys) {
+      if(t.includes(k)) return k;
+    }
+
+    return null;
+  },
+
+  detectNote(text) {
+    const t = this.normalize(text);
+    const notes = [];
+
+    if(/\bmeta\b|\bmet[aà]\b|\bmezza\b/.test(t)) notes.push("DIVISA A METÀ");
+    if(/\bsenza\b.*\b(cipolla|aglio|piccante|origano)\b/.test(t)) notes.push("SENZA (vedi testo)");
+    if(/\bbene cotta\b/.test(t)) notes.push("BENE COTTA");
+    if(/\bpoco cotta\b/.test(t)) notes.push("POCO COTTA");
+
+    // se c'è testo residuo utile, lo metto come nota libera (max 40 char)
+    const raw = this.safeText(text);
+    const compact = raw.length > 40 ? raw.slice(0, 40) + "…" : raw;
+    if(compact && notes.length === 0) {
+      // non invadere: aggiungi solo se c'è una keyword "nota"
+      if(/\bnota\b|\bnote\b|\bper favore\b|\bpf\b/i.test(raw)) notes.push(compact);
+    }
+
+    return notes.join(" | ");
+  },
+
+  computeLine(it) {
+    const base = Number(it.price || 0);
+    const vAdd = Number(this.config.variations[it.impasto] ?? 0);
+    const eAdd = Number(this.config.extras[it.extra] ?? 0);
+    const qty = Math.max(1, parseInt(it.qty || 1, 10));
+    const unit = base + vAdd + eAdd;
+    const total = unit * qty;
+    return { unit, total };
+  },
+
+  computeOrder(o) {
+    let subtotal = 0;
+    for(const it of o.items) {
+      subtotal += this.computeLine(it).total;
+    }
+    let fee = 0;
+    if(o.mode === "CONSEGNA") fee = Number(this.config.deliveryFee || 0);
+    const total = subtotal + fee;
+    return { subtotal, fee, total };
+  },
+
+  // ---------- INIT ----------
+  init() {
+    const saved = localStorage.getItem('commander_v12_cfg');
+    this.config = saved ? this.safeJsonParse(saved, this.defaultConfig()) : this.defaultConfig();
+
+    // clock
+    setInterval(() => {
+      const el = document.getElementById('clock');
+      if(el) el.textContent = new Date().toLocaleString();
+    }, 1000);
+
+    // shortcut: CTRL/CMD+Enter per analizzare
+    document.addEventListener('keydown', (e) => {
+      const ta = document.getElementById('raw-input');
+      if(!ta) return;
+      const isCmdEnter = (e.key === 'Enter' && (e.ctrlKey || e.metaKey));
+      if(isCmdEnter && document.activeElement === ta) this.process();
+      if(e.key === 'Escape') this.closeModals();
+    });
+
+    this.updatePills();
+  },
+
+  safeJsonParse(str, fallback) {
+    try { return JSON.parse(str); } catch { return fallback; }
+  },
+
+  updatePills() {
+    const modeEl = document.getElementById('pill-mode');
+    const totalEl = document.getElementById('pill-total');
+    const rowsEl = document.getElementById('pill-rows');
+    if(!modeEl || !totalEl || !rowsEl) return;
+
+    if(!this.order) {
+      modeEl.textContent = "—";
+      totalEl.textContent = this.moneyIt(0);
+      rowsEl.textContent = "0";
+      return;
+    }
+    const sums = this.computeOrder(this.order);
+    modeEl.textContent = this.order.mode;
+    totalEl.textContent = this.moneyIt(sums.total);
+    rowsEl.textContent = String(this.order.items.length);
+  },
+
+  clearInput() {
+    document.getElementById('raw-input').value = "";
+    document.getElementById('output').textContent = "Pronto...";
+    this.order = null;
+    this.updatePills();
+  },
+
+  demoFill() {
+    document.getElementById('raw-input').value =
+`Mario
+ore 19:30
+via Roma 10
+2 margherita bufala
+1 diavola grande
+1 capricciosa integrale
+`;
+  },
+
+  // ---------- SMART PARSER ----------
+  process() {
+    const raw = document.getElementById('raw-input').value;
+    const normalized = this.normalize(raw);
+
+    const o = {
+      customer: "Cliente",
+      time: "ASAP",
+      address: "",
+      items: [],
+      total: 0,
+      mode: "RITIRO",
+      raw: raw
+    };
+
+    const lines = raw.split('\n')
+      .map(l => this.safeText(l))
+      .filter(l => l.length > 0);
+
+    // 1) prima pass: time + address/mode
+    for(const line of lines) {
+      const t = this.parseTimeFromLine(line);
+      if(t) o.time = t;
+
+      const ln = this.normalize(line);
+      if(this.isDeliveryLine(ln)) {
+        o.address = line;
+        o.mode = "CONSEGNA";
+      }
+    }
+
+    // 2) cliente (euristica): prima riga che non sembra item, né time, né indirizzo
+    for(const line of lines) {
+      const ln = this.normalize(line);
+      if(this.parseTimeFromLine(ln)) continue;
+      if(this.isDeliveryLine(ln)) continue;
+      if(this.parseQtyAndText(ln)) continue;
+      // se è una riga "nome" corta, la prendo
+      if(ln.length <= 30) { o.customer = line; break; }
+    }
+
+    // 3) items: righe con quantità
+    for(const line of lines) {
+      const ln = this.normalize(line);
+      const qt = this.parseQtyAndText(ln);
+      if(!qt) continue;
+
+      const { qty, text } = qt;
+      const pizzaKey = this.detectFromText(text, 'pizzas') || 'margherita';
+      const basePrice = Number(this.config.pizzas[pizzaKey] ?? this.config.pizzas['margherita'] ?? 0);
+      const variationKey = this.detectFromText(text, 'variations') || 'normale';
+      const extraKey = this.detectFromText(text, 'extras') || 'nessuno';
+
+      // nome base in UI: da chiave config
+      const baseName = String(pizzaKey).toUpperCase();
+
+      const note = this.detectNote(text);
+
+      o.items.push({
+        qty,
+        baseName,
+        price: basePrice,
+        impasto: variationKey,
+        extra: extraKey,
+        note
+      });
+    }
+
+    // se non ho items ma ho testo, prova fallback: riga singola "margherita" senza quantità => qty 1
+    if(o.items.length === 0 && normalized.length > 0) {
+      const pizzaKey = this.detectFromText(normalized, 'pizzas');
+      if(pizzaKey) {
+        o.items.push({
+          qty: 1,
+          baseName: String(pizzaKey).toUpperCase(),
+          price: Number(this.config.pizzas[pizzaKey] ?? 0),
+          impasto: this.detectFromText(normalized, 'variations') || 'normale',
+          extra: this.detectFromText(normalized, 'extras') || 'nessuno',
+          note: this.detectNote(normalized)
+        });
+      }
+    }
+
+    this.order = o;
+    this.render();
+  },
+
+  // ---------- TICKET RENDER ----------
+  render() {
+    if(!this.order) return;
+    const o = this.order;
+
+    const sums = this.computeOrder(o);
+    this.order.total = sums.total;
+
+    let h = `*** COMANDA PIZZERIA ***\n`;
+    h += `--------------------------------\n`;
+    h += `ORA: ${o.time} | ${o.mode}\n`;
+    h += `CLI: ${this.safeText(o.customer).toUpperCase()}\n`;
+    if(o.address) h += `IND: ${this.safeText(o.address).toUpperCase()}\n`;
+    h += `--------------------------------\n`;
+
+    o.items.forEach(it => {
+      const calc = this.computeLine(it);
+      h += `${it.qty}x ${this.safeText(it.baseName)}\n`;
+      if(it.impasto && it.impasto !== "normale") h += `   [IMP: ${String(it.impasto).toUpperCase()}]\n`;
+      if(it.extra && it.extra !== "nessuno") h += `   [EXT: ${String(it.extra).toUpperCase()}]\n`;
+      if(it.note) h += `   (${this.safeText(it.note)})\n`;
+      h += `               EUR ${this.money(calc.total)}\n`;
+    });
+
+    h += `--------------------------------\n`;
+    if(o.mode === "CONSEGNA") {
+      h += `CONSEGNA:          EUR ${this.money(sums.fee)}\n`;
+    }
+    h += `TOTALE:            EUR ${this.money(sums.total)}\n`;
+    h += `--------------------------------\n\n\n\n`;
+
+    document.getElementById('output').textContent = h;
+    this.updatePills();
+  },
+
+  // ---------- COPY ----------
+  async copyTicket() {
+    const text = document.getElementById('output').textContent || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Comanda copiata!");
+    } catch {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      alert("Comanda copiata!");
+    }
+  },
+
+  // ---------- EDITOR ----------
+  openEditor() {
+    if(!this.order) return alert("Analizza prima un ordine!");
+    const o = this.order;
+    document.getElementById('edt-customer').value = o.customer;
+    document.getElementById('edt-time').value = o.time;
+    document.getElementById('edt-address').value = o.address;
+
+    document.getElementById('edt-detected').textContent = `${o.mode} @ ${o.time}`;
+    document.getElementById('edt-fee').textContent = this.moneyIt(o.mode === "CONSEGNA" ? this.config.deliveryFee : 0);
+
+    this.renderEditorItems();
+    document.getElementById('modal-editor').classList.add('open');
+  },
+
+  renderEditorItems() {
+    const container = document.getElementById('edt-items-list');
+    container.innerHTML = "";
+
+    this.order.items.forEach((it, idx) => {
+      const row = document.createElement('div');
+      row.className = "order-row";
+
+      row.innerHTML = `
+        <div class="row-main">
+          <div>
+            <label>Qtà</label>
+            <input type="number" min="1" value="${this.escHtml(it.qty)}" data-k="qty">
+          </div>
+          <div>
+            <label>Pizza Base</label>
+            <select data-k="baseName">
+              ${Object.keys(this.config.pizzas).map(p => {
+                const up = p.toUpperCase();
+                const sel = (it.baseName === up) ? 'selected' : '';
+                return `<option value="${this.escHtml(up)}" ${sel}>${this.escHtml(up)}</option>`;
+              }).join('')}
+            </select>
+          </div>
+          <div>
+            <label>Prezzo Base</label>
+            <input type="number" step="0.5" value="${this.escHtml(it.price)}" data-k="price" readonly>
+          </div>
+          <button class="btn btn-danger" style="margin-top:15px; border-radius:6px;" data-act="remove">X</button>
+        </div>
+
+        <div class="row-options">
+          <div>
+            <label>Impasto / Formato</label>
+            <select data-k="impasto">
+              ${Object.keys(this.config.variations).map(v => {
+                const sel = (it.impasto === v) ? 'selected' : '';
+                return `<option value="${this.escHtml(v)}" ${sel}>${this.escHtml(v.toUpperCase())} (+€${this.money(this.config.variations[v])})</option>`;
+              }).join('')}
+            </select>
+          </div>
+
+          <div>
+            <label>Aggiunta Extra</label>
+            <select data-k="extra">
+              ${Object.keys(this.config.extras).map(e => {
+                const sel = (it.extra === e) ? 'selected' : '';
+                return `<option value="${this.escHtml(e)}" ${sel}>${this.escHtml(e.toUpperCase())} (+€${this.money(this.config.extras[e])})</option>`;
+              }).join('')}
+            </select>
+          </div>
+
+          <div>
+            <label>Note</label>
+            <input type="text" placeholder="es: metà crudo" value="${this.escHtml(it.note)}" data-k="note">
+          </div>
+        </div>
+      `;
+
+      // bindings
+      row.querySelector('[data-k="qty"]').addEventListener('input', (e) => {
+        const v = parseInt(e.target.value, 10);
+        this.order.items[idx].qty = Number.isFinite(v) && v > 0 ? v : 1;
+        this.updateEditorTotal();
+      });
+
+      row.querySelector('[data-k="baseName"]').addEventListener('change', (e) => {
+        const baseName = e.target.value;
+        const key = this.normalize(baseName); // torna su chiave pizzas
+        const foundKey = Object.keys(this.config.pizzas).find(k => this.normalize(k) === key) || key;
+        this.order.items[idx].baseName = baseName;
+        this.order.items[idx].price = Number(this.config.pizzas[foundKey] ?? this.order.items[idx].price ?? 0);
+        // aggiorna campo prezzo visualizzato
+        row.querySelector('[data-k="price"]').value = this.order.items[idx].price;
+        this.updateEditorTotal();
+      });
+
+      row.querySelector('[data-k="impasto"]').addEventListener('change', (e) => {
+        this.order.items[idx].impasto = e.target.value;
+        this.updateEditorTotal();
+      });
+
+      row.querySelector('[data-k="extra"]').addEventListener('change', (e) => {
+        this.order.items[idx].extra = e.target.value;
+        this.updateEditorTotal();
+      });
+
+      row.querySelector('[data-k="note"]').addEventListener('input', (e) => {
+        this.order.items[idx].note = e.target.value;
+      });
+
+      row.querySelector('[data-act="remove"]').addEventListener('click', () => {
+        this.removeOrderItem(idx);
+      });
+
+      container.appendChild(row);
+    });
+
+    this.updateEditorTotal();
+  },
+
+  addOrderItem() {
+    if(!this.order) return;
+    this.order.items.push({ qty: 1, baseName: "MARGHERITA", price: Number(this.config.pizzas["margherita"] ?? 0), impasto: "normale", extra: "nessuno", note: "" });
+    this.renderEditorItems();
+  },
+
+  removeOrderItem(idx) {
+    if(!this.order) return;
+    this.order.items.splice(idx, 1);
+    this.renderEditorItems();
+  },
+
+  updateEditorTotal() {
+    if(!this.order) return;
+    const sums = this.computeOrder(this.order);
+    document.getElementById('edt-total').textContent = this.moneyIt(sums.total);
+    document.getElementById('edt-fee').textContent = this.moneyIt(this.order.mode === "CONSEGNA" ? sums.fee : 0);
+  },
+
+  saveOrderEdits() {
+    if(!this.order) return;
+    this.order.customer = document.getElementById('edt-customer').value;
+    this.order.time = document.getElementById('edt-time').value;
+    this.order.address = document.getElementById('edt-address').value;
+
+    // aggiorna mode in base a indirizzo
+    const addrNorm = this.normalize(this.order.address);
+    this.order.mode = (addrNorm && this.isDeliveryLine(addrNorm)) ? "CONSEGNA" : "RITIRO";
+
+    this.pushHistory(this.order);
+    this.closeModals();
+    this.render();
+  },
+
+  // chiudi cliccando sul backdrop
+  backdropClose(e) {
+    if(e.target.classList.contains('modal')) this.closeModals();
+  },
+
+  // ---------- SETTINGS ----------
+  openSettings() {
+    const list = (obj, mountId, keyName) => {
+      const mount = document.getElementById(mountId);
+      mount.innerHTML = "";
+
+      Object.entries(obj).forEach(([k,v]) => {
+        const row = document.createElement('div');
+        row.style.display = "flex";
+        row.style.gap = "5px";
+        row.style.marginBottom = "5px";
+
+        row.innerHTML = `
+          <input type="text" value="${this.escHtml(k)}" readonly style="flex:1">
+          <input type="number" step="0.5" value="${this.escHtml(v)}" style="width:80px">
+          <button class="btn btn-danger" style="padding:0 8px">X</button>
+        `;
+
+        const valInput = row.querySelector('input[type="number"]');
+        valInput.addEventListener('change', () => {
+          const n = parseFloat(valInput.value);
+          this.config[keyName][k] = Number.isFinite(n) ? n : 0;
+        });
+
+        row.querySelector('button').addEventListener('click', () => {
+          delete this.config[keyName][k];
+          this.openSettings();
+        });
+
+        mount.appendChild(row);
+      });
+    };
+
+    list(this.config.pizzas, 'cfg-pizzas', 'pizzas');
+    list(this.config.variations, 'cfg-variations', 'variations');
+    list(this.config.extras, 'cfg-extras', 'extras');
+
+    document.getElementById('cfg-delivery-fee').value = Number(this.config.deliveryFee ?? 0);
+    document.getElementById('cfg-fee-pill').textContent = this.moneyIt(this.config.deliveryFee ?? 0);
+
+    document.getElementById('modal-settings').classList.add('open');
+  },
+
+  addCatalogItem(type) {
+    const n = prompt("Nome:");
+    if(!n) return;
+    const key = this.normalize(n);
+    if(!key) return;
+    if(!this.config[type]) this.config[type] = {};
+    if(this.config[type][key] != null) return alert("Esiste già!");
+
+    this.config[type][key] = 0;
+    this.openSettings();
+  },
+
+  saveSettings() {
+    const fee = parseFloat(document.getElementById('cfg-delivery-fee').value);
+    this.config.deliveryFee = Number.isFinite(fee) ? fee : 0;
+
+    localStorage.setItem('commander_v12_cfg', JSON.stringify(this.config));
+    this.closeModals();
+
+    // ricalcolo se c'è un ordine aperto
+    if(this.order) this.render();
+  },
+
+  resetConfig() {
+    if(!confirm("Ripristinare la configurazione di default?")) return;
+    this.config = this.defaultConfig();
+    localStorage.setItem('commander_v12_cfg', JSON.stringify(this.config));
+    this.openSettings();
+    if(this.order) this.render();
+  },
+
+  // ---------- HISTORY ----------
+  pushHistory(order) {
+    try {
+      const snap = JSON.parse(JSON.stringify(order));
+      snap._savedAt = new Date().toISOString();
+      this.config.history = Array.isArray(this.config.history) ? this.config.history : [];
+      this.config.history.unshift(snap);
+      // limite storico
+      this.config.history = this.config.history.slice(0, 200);
+      localStorage.setItem('commander_v12_cfg', JSON.stringify(this.config));
+    } catch { /* no-op */ }
+  },
+
+  exportHistory() {
+    const hist = Array.isArray(this.config.history) ? this.config.history : [];
+    const blob = new Blob([JSON.stringify(hist, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `commander_v12_history_${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  },
+
+  // ---------- NIGHT CLOSURE ----------
+  nightClosure() {
+    if(!confirm("Eseguire chiusura e reset?")) return;
+
+    // salva in storico se presente
+    if(this.order) this.pushHistory(this.order);
+
+    this.order = null;
+    document.getElementById('raw-input').value = "";
+    document.getElementById('output').textContent = "Pronto...";
+    this.updatePills();
+    alert("Giornata chiusa con successo!");
+  },
+
+  closeModals() {
+    document.querySelectorAll('.modal').forEach(m => m.classList.remove('open'));
+  }
+};
+
+App.init();
 </script>
 </body>
 </html>
