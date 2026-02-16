@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
-  <title>COMMANDER ÉLITE V11</title>
+  <title>COMMANDER ÉLITE V12 - TOTAL CONTROL</title>
   <style>
     :root {
       --bg: #020617; --surface: #0f172a; --surface-alt: #1e293b;
@@ -19,27 +19,32 @@
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
     .card-h { padding: 1rem; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); font-weight: 800; display: flex; justify-content: space-between; }
     
-    textarea { width: 100%; min-height: 250px; background: #000; color: #10b981; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: monospace; outline: none; }
+    textarea { width: 100%; min-height: 200px; background: #000; color: #10b981; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; font-family: monospace; outline: none; }
     
     .btn { padding: 0.7rem 1rem; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
     .btn-main { background: var(--accent); color: #000; }
-    .btn-wa { background: #25D366; color: white; }
     .btn-sec { background: var(--surface-alt); color: white; }
-    .btn-add { background: var(--success); color: white; padding: 4px 10px; font-size: 12px; }
+    .btn-danger { background: var(--danger); color: white; }
 
-    .output-box { background: #fff; color: #000; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 14px; border: 1px solid #ddd; width: 100%; max-width: 80mm; margin: 0 auto; line-height: 1.2; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    /* Output per Stampante 80mm */
+    .output-box { background: #fff; color: #000; padding: 10mm; font-family: 'Courier New', monospace; font-size: 14px; border: 1px solid #ddd; width: 80mm; margin: 0 auto; line-height: 1.2; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
     
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; z-index: 1000; padding: 1rem; overflow-y: auto; }
+    /* Modal / Editor Styles */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; z-index: 1000; padding: 1rem; overflow-y: auto; }
     .modal.open { display: flex; justify-content: center; }
-    .modal-sheet { background: var(--surface); width: 100%; max-width: 800px; height: fit-content; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border); }
+    .modal-sheet { background: var(--surface); width: 100%; max-width: 900px; height: fit-content; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border); margin: 2rem 0; }
 
-    .item-row { display: grid; grid-template-columns: 50px 1fr 80px 40px; gap: 8px; margin-bottom: 8px; align-items: center; }
-    input { background: #000; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 6px; }
+    .order-row { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+    .row-main { display: grid; grid-template-columns: 60px 1fr 100px 40px; gap: 10px; margin-bottom: 10px; }
+    .row-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    
+    select, input { background: #000; border: 1px solid var(--border); color: white; padding: 8px; border-radius: 6px; font-size: 13px; }
+    label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; display: block; margin-bottom: 3px; }
 
     @media print { 
       .no-print { display: none !important; } 
-      body { background: white; padding: 0; margin: 0; }
-      .output-box { border: none; box-shadow: none; width: 80mm; max-width: 80mm; margin: 0; padding: 5mm; font-size: 12px; }
+      body { background: white; }
+      .output-box { border: none; box-shadow: none; width: 80mm; margin: 0; padding: 5mm; }
       @page { size: 80mm auto; margin: 0; }
     }
   </style>
@@ -49,129 +54,126 @@
 <div class="app">
   <header class="no-print">
     <div>
-      <div style="font-weight: 900; font-size: 1.6rem; color: var(--accent);">COMMANDER ÉLITE</div>
+      <div style="font-weight: 900; font-size: 1.6rem; color: var(--accent);">COMMANDER ÉLITE <span style="color:white; font-weight:300">V12</span></div>
       <div id="clock" style="font-size: 12px; color: var(--text-dim);">...</div>
     </div>
     <div style="display: flex; gap: 8px;">
-      <button class="btn btn-sec" onclick="App.openSettings()">⚙️ CONFIG</button>
-      <button class="btn btn-main" style="background:var(--danger); color:white" onclick="App.nightClosure()">🌙 RESET</button>
+      <button class="btn btn-sec" onclick="App.openSettings()">⚙️ MENU</button>
+      <button class="btn btn-danger" onclick="App.nightClosure()">🌙 CHIUSURA SERALE</button>
     </div>
   </header>
 
   <div class="card no-print">
-    <div class="card-h">📥 RICEZIONE ORDINE WHATSAPP</div>
+    <div class="card-h">📥 WHATSAPP INPUT</div>
     <div class="card-b">
-      <textarea id="raw-input" placeholder="Incolla il messaggio completo..."></textarea>
+      <textarea id="raw-input" placeholder="Incolla qui l'ordine..."></textarea>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1rem;">
         <button class="btn btn-main" onclick="App.process()">⚡ ANALISI INTELLIGENTE</button>
-        <button class="btn btn-sec" onclick="App.openEditor()">✏️ GESTIONALE ORDINE</button>
+        <button class="btn btn-sec" onclick="App.openEditor()">✏️ GESTIONALE AVANZATO</button>
       </div>
     </div>
   </div>
 
   <div class="card">
     <div class="card-h no-print">
-      <span>🖨️ ANTEPRIMA STAMPA 80mm</span>
+      <span>🖨️ ANTEPRIMA 80mm</span>
       <button class="btn btn-main" onclick="window.print()">STAMPA IPHONE</button>
     </div>
-    <div class="card-b" style="background: #222;">
-      <div id="output" class="output-box">Pronto per l'analisi...</div>
+    <div class="card-b" style="background: #111; overflow-x: auto;">
+      <div id="output" class="output-box">In attesa...</div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-editor" class="modal no-print">
+  <div class="modal-sheet">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h2 style="margin:0;">✏️ Gestionale Ordine</h2>
+        <button class="btn btn-sec" onclick="App.closeModals()">Chiudi</button>
+    </div>
+    
+    <div class="row-options" style="margin-bottom:20px; background:rgba(255,255,255,0.05); padding:15px; border-radius:10px;">
+      <div><label>Cliente</label><input type="text" id="edt-customer" style="width:100%"></div>
+      <div><label>Orario</label><input type="text" id="edt-time" style="width:100%"></div>
+      <div><label>Indirizzo/Note</label><input type="text" id="edt-address" style="width:100%"></div>
+    </div>
+
+    <div id="edt-items-list"></div>
+    
+    <button class="btn btn-sec" style="width:100%; margin-top:10px;" onclick="App.addOrderItem()">➕ AGGIUNGI PIZZA</button>
+
+    <div style="margin-top:20px; padding:20px; background:var(--surface-alt); border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-weight:900; font-size:1.2rem;">TOTALE: <span id="edt-total" style="color:var(--success)">€ 0.00</span></div>
+        <button class="btn btn-main" onclick="App.saveOrderEdits()">🚀 CONFERMA E GENERA COMANDA</button>
     </div>
   </div>
 </div>
 
 <div id="modal-settings" class="modal no-print">
   <div class="modal-sheet">
-    <h2>🛠️ Configurazione Catalogo</h2>
+    <h2>⚙️ Configurazione Catalogo</h2>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
       <div>
-        <h3>Pizze <button class="btn-add" onclick="App.addCatalogItem('pizzas')">+</button></h3>
+        <h3>Pizze <button class="btn" style="padding:2px 8px; font-size:12px" onclick="App.addCatalogItem('pizzas')">+</button></h3>
         <div id="cfg-pizzas"></div>
       </div>
       <div>
-        <h3>Impasti/Formati <button class="btn-add" onclick="App.addCatalogItem('variations')">+</button></h3>
+        <h3>Impasti <button class="btn" style="padding:2px 8px; font-size:12px" onclick="App.addCatalogItem('variations')">+</button></h3>
         <div id="cfg-variations"></div>
-        <h3>Extra <button class="btn-add" onclick="App.addCatalogItem('extras')">+</button></h3>
+        <h3>Extra <button class="btn" style="padding:2px 8px; font-size:12px" onclick="App.addCatalogItem('extras')">+</button></h3>
         <div id="cfg-extras"></div>
       </div>
     </div>
-    <button class="btn btn-main" style="width:100%; margin-top:2rem;" onclick="App.saveSettings()">💾 SALVA E CHIUDI</button>
-  </div>
-</div>
-
-<div id="modal-editor" class="modal no-print">
-  <div class="modal-sheet">
-    <h2>✏️ Gestione Avanzata Ordine</h2>
-    <div id="edt-meta" class="item-row" style="grid-template-columns: 1fr 1fr 1fr;">
-      <input type="text" id="edt-customer" placeholder="Cliente">
-      <input type="text" id="edt-time" placeholder="Orario">
-      <input type="text" id="edt-phone" placeholder="Telefono">
-    </div>
-    <hr style="opacity:0.1; margin:15px 0;">
-    <div id="edt-items-list"></div>
-    <button class="btn btn-sec" onclick="App.addOrderItem()">➕ AGGIUNGI RIGA</button>
-    <div style="margin-top:2rem; padding:1rem; background:rgba(255,255,255,0.05); border-radius:8px;">
-        <div style="display:flex; justify-content:space-between;">
-            <span>TOTALE RICALCOLATO:</span>
-            <span id="edt-total" style="color:var(--success); font-weight:900;">€ 0.00</span>
-        </div>
-    </div>
-    <button class="btn btn-main" style="width:100%; margin-top:1rem;" onclick="App.saveOrderEdits()">🚀 AGGIORNA E STAMPA</button>
+    <button class="btn btn-main" style="width:100%; margin-top:2rem;" onclick="App.saveSettings()">💾 SALVA CONFIGURAZIONE</button>
   </div>
 </div>
 
 <script>
 const App = {
   config: {
-    pizzas: { "margherita": 6.5, "diavola": 8.0, "capricciosa": 9.0, "salame piccante": 8.0 },
-    variations: { "integrale": 1.5, "verace": 2.0, "senza glutine": 3.0, "mezzo metro": 15.0, "grande": 2.5 },
-    extras: { "bufala": 2.0, "speck": 1.5, "brie": 1.5, "crudo": 2.5 },
-    deliveryFee: 2.0
+    pizzas: { "margherita": 6.5, "diavola": 8.0, "capricciosa": 9.5, "quattro stagioni": 9.5, "napoli": 7.5 },
+    variations: { "normale": 0, "integrale": 1.5, "verace": 2.0, "senza glutine": 3.0, "mezzo metro": 15.0, "grande": 2.5 },
+    extras: { "nessuno": 0, "bufala": 2.0, "speck": 1.5, "brie": 1.5, "crudo": 2.5, "porcini": 2.0, "cipolla": 0.5 },
+    deliveryFee: 2.0,
+    history: []
   },
   
   order: null,
 
   init() {
-    const s = localStorage.getItem('commander_cfg');
+    const s = localStorage.getItem('commander_v12_cfg');
     if(s) this.config = JSON.parse(s);
-    setInterval(() => document.getElementById('clock').textContent = new Date().toLocaleTimeString(), 1000);
+    setInterval(() => document.getElementById('clock').textContent = new Date().toLocaleString(), 1000);
   },
 
-  // --- PARSER SUPER MEGA INTELLIGENTE ---
   process() {
     const raw = document.getElementById('raw-input').value;
-    let o = { customer: "Anonimo", time: "ASAP", address: "", phone: "", items: [], total: 0, mode: "RITIRO" };
-
+    let o = { customer: "Cliente", time: "ASAP", address: "", items: [], total: 0, mode: "RITIRO" };
     const lines = raw.split('\n').map(l => l.trim().toLowerCase());
     
     lines.forEach(l => {
-      // Metadati
       if(l.match(/(\d{2}[:.]\d{2})/)) o.time = l.match(/(\d{2}[:.]\d{2})/)[0];
-      if(l.includes("via")) { o.address = l; o.mode = "CONSEGNA"; }
-      if(l.match(/\b\d{9,10}\b/)) o.phone = l.match(/\b\d{9,10}\b/)[0];
-      if(l.includes("nome:") || l.match(/^[a-z]+\s[a-z]+$/)) o.customer = l.replace("nome:", "").trim();
-
-      // Analisi Righe (Pizze)
+      if(l.includes("via") || l.includes("consegna")) { o.address = l; o.mode = "CONSEGNA"; }
+      
       let qtyM = l.match(/^(\d+)/);
       if(qtyM) {
         let qty = parseInt(qtyM[1]);
-        let name = l.replace(/^\d+/, "").trim();
-        let price = 0;
+        let text = l.replace(/^\d+/, "").trim();
+        let baseName = "MARGHERITA";
+        let basePrice = 6.5;
 
-        // Gestione Multi-Gusto (Metà e Metà)
-        if(name.includes("metà")) {
-            let gusti = [];
-            for(let p in this.config.pizzas) { if(name.includes(p)) gusti.push(this.config.pizzas[p]); }
-            price = gusti.length > 0 ? (gusti.reduce((a,b)=>a+b,0) / gusti.length) : 7.0;
-        } else {
-            for(let p in this.config.pizzas) { if(name.includes(p)) price = this.config.pizzas[p]; }
+        for(let p in this.config.pizzas) {
+          if(text.includes(p)) { baseName = p.toUpperCase(); basePrice = this.config.pizzas[p]; break; }
         }
 
-        // Aggiunte Impasti e Extra
-        for(let v in this.config.variations) { if(name.includes(v)) price += this.config.variations[v]; }
-        for(let e in this.config.extras) { if(name.includes(e)) price += this.config.extras[e]; }
-
-        if(price > 0) o.items.push({ qty, name: name.toUpperCase(), price });
+        o.items.push({ 
+          qty, 
+          baseName, 
+          price: basePrice, 
+          impasto: "normale", 
+          extra: "nessuno",
+          note: text.includes("metà") ? "DIVISA A METÀ" : "" 
+        });
       }
     });
 
@@ -182,36 +184,46 @@ const App = {
   render() {
     if(!this.order) return;
     const o = this.order;
-    const sub = o.items.reduce((a,b) => a + (b.price * b.qty), 0);
-    o.total = sub + (o.mode === "CONSEGNA" ? this.config.deliveryFee : 0);
-
-    let h = `*** PIZZERIA GESTIONALE ***\n`;
+    let subtotal = 0;
+    
+    let h = `*** COMANDA PIZZERIA ***\n`;
     h += `--------------------------------\n`;
-    h += `ORDINE: ${o.time}\n`;
-    h += `CLIENTE: ${o.customer.toUpperCase()}\n`;
-    if(o.phone) h += `TEL: ${o.phone}\n`;
+    h += `ORA: ${o.time} | ${o.mode}\n`;
+    h += `CLI: ${o.customer.toUpperCase()}\n`;
     if(o.address) h += `IND: ${o.address.toUpperCase()}\n`;
-    h += `MODO: ${o.mode}\n`;
     h += `--------------------------------\n`;
-    o.items.forEach(it => {
-      h += `${it.qty}x ${it.name.padEnd(20)} ${ (it.price * it.qty).toFixed(2) }\n`;
-    });
-    h += `--------------------------------\n`;
-    if(o.mode === "CONSEGNA") h += `CONSEGNA:          ${this.config.deliveryFee.toFixed(2)}\n`;
-    h += `TOTALE:            EUR ${o.total.toFixed(2)}\n`;
-    h += `--------------------------------\n`;
-    h += `\n\n\n`; // Spazio per taglio carta
 
+    o.items.forEach(it => {
+      let rigaPrice = it.price + this.config.variations[it.impasto] + this.config.extras[it.extra];
+      let rigaTotal = rigaPrice * it.qty;
+      subtotal += rigaTotal;
+
+      h += `${it.qty}x ${it.baseName}\n`;
+      if(it.impasto !== "normale") h += `   [IMP: ${it.impasto.toUpperCase()}]\n`;
+      if(it.extra !== "nessuno") h += `   [EXT: ${it.extra.toUpperCase()}]\n`;
+      if(it.note) h += `   (${it.note})\n`;
+      h += `               EUR ${rigaTotal.toFixed(2)}\n`;
+    });
+
+    h += `--------------------------------\n`;
+    if(o.mode === "CONSEGNA") {
+        subtotal += this.config.deliveryFee;
+        h += `CONSEGNA:          EUR ${this.config.deliveryFee.toFixed(2)}\n`;
+    }
+    h += `TOTALE:            EUR ${subtotal.toFixed(2)}\n`;
+    h += `--------------------------------\n\n\n\n`;
+
+    this.order.total = subtotal;
     document.getElementById('output').textContent = h;
   },
 
-  // --- GESTIONALE ORDINE (MODIFICA) ---
+  // --- EDITOR AVANZATO DI RIGA ---
   openEditor() {
-    if(!this.order) return alert("Nessun ordine caricato");
+    if(!this.order) return alert("Analizza prima un ordine!");
     const o = this.order;
     document.getElementById('edt-customer').value = o.customer;
     document.getElementById('edt-time').value = o.time;
-    document.getElementById('edt-phone').value = o.phone;
+    document.getElementById('edt-address').value = o.address;
     
     this.renderEditorItems();
     document.getElementById('modal-editor').classList.add('open');
@@ -220,18 +232,37 @@ const App = {
   renderEditorItems() {
     const container = document.getElementById('edt-items-list');
     container.innerHTML = this.order.items.map((it, idx) => `
-      <div class="item-row">
-        <input type="number" value="${it.qty}" onchange="App.order.items[${idx}].qty=parseInt(this.value); App.updateEditorTotal()">
-        <input type="text" value="${it.name}" onchange="App.order.items[${idx}].name=this.value.toUpperCase()">
-        <input type="number" value="${it.price}" onchange="App.order.items[${idx}].price=parseFloat(this.value); App.updateEditorTotal()">
-        <button class="btn" style="background:var(--danger)" onclick="App.removeOrderItem(${idx})">X</button>
+      <div class="order-row">
+        <div class="row-main">
+          <div><label>Qtà</label><input type="number" value="${it.qty}" onchange="App.order.items[${idx}].qty=parseInt(this.value); App.updateEditorTotal()"></div>
+          <div><label>Pizza Base</label>
+            <select onchange="App.order.items[${idx}].baseName=this.value; App.order.items[${idx}].price=App.config.pizzas[this.value.toLowerCase()]; App.updateEditorTotal()">
+              ${Object.keys(this.config.pizzas).map(p => `<option value="${p.toUpperCase()}" ${it.baseName==p.toUpperCase()?'selected':''}>${p.toUpperCase()}</option>`).join('')}
+            </select>
+          </div>
+          <div><label>Prezzo Base</label><input type="number" step="0.5" value="${it.price}" readonly></div>
+          <button class="btn-danger" style="margin-top:15px; border-radius:5px;" onclick="App.removeOrderItem(${idx})">X</button>
+        </div>
+        <div class="row-options">
+          <div><label>Impasto / Formato</label>
+            <select onchange="App.order.items[${idx}].impasto=this.value; App.updateEditorTotal()">
+              ${Object.keys(this.config.variations).map(v => `<option value="${v}" ${it.impasto==v?'selected':''}>${v.toUpperCase()} (+€${this.config.variations[v]})</option>`).join('')}
+            </select>
+          </div>
+          <div><label>Aggiunta Extra</label>
+            <select onchange="App.order.items[${idx}].extra=this.value; App.updateEditorTotal()">
+              ${Object.keys(this.config.extras).map(e => `<option value="${e}" ${it.extra==e?'selected':''}>${e.toUpperCase()} (+€${this.config.extras[e]})</option>`).join('')}
+            </select>
+          </div>
+          <div><label>Note / Metà</label><input type="text" placeholder="es: metà crudo" value="${it.note}" onchange="App.order.items[${idx}].note=this.value" style="width:100%"></div>
+        </div>
       </div>
     `).join('');
     this.updateEditorTotal();
   },
 
   addOrderItem() {
-    this.order.items.push({ qty: 1, name: "NUOVA PIZZA", price: 7.0 });
+    this.order.items.push({ qty: 1, baseName: "MARGHERITA", price: 6.5, impasto: "normale", extra: "nessuno", note: "" });
     this.renderEditorItems();
   },
 
@@ -241,60 +272,59 @@ const App = {
   },
 
   updateEditorTotal() {
-    const sub = this.order.items.reduce((a,b) => a + (b.price * b.qty), 0);
+    let sub = 0;
+    this.order.items.forEach(it => {
+        sub += (it.price + this.config.variations[it.impasto] + this.config.extras[it.extra]) * it.qty;
+    });
     document.getElementById('edt-total').textContent = `€ ${sub.toFixed(2)}`;
   },
 
   saveOrderEdits() {
     this.order.customer = document.getElementById('edt-customer').value;
     this.order.time = document.getElementById('edt-time').value;
-    this.order.phone = document.getElementById('edt-phone').value;
-    document.getElementById('modal-editor').classList.remove('open');
+    this.order.address = document.getElementById('edt-address').value;
+    this.closeModals();
     this.render();
   },
 
-  // --- IMPOSTAZIONI AVANZATE ---
+  // --- CATALOGO ---
   openSettings() {
-    const render = (obj, id) => {
+    const list = (obj, id) => {
       document.getElementById(id).innerHTML = Object.entries(obj).map(([k,v]) => `
-        <div class="item-row" style="grid-template-columns: 1fr 60px 40px;">
-          <input type="text" value="${k}" readonly>
-          <input type="number" value="${v}" onchange="App.config.${id.split('-')[1]}['${k}']=parseFloat(this.value)">
-          <button class="btn" style="background:var(--danger); padding:2px" onclick="App.deleteCatalogItem('${id.split('-')[1]}','${k}')">X</button>
+        <div style="display:flex; gap:5px; margin-bottom:5px;">
+          <input type="text" value="${k}" readonly style="flex:1">
+          <input type="number" value="${v}" onchange="App.config.${id.split('-')[1]}['${k}']=parseFloat(this.value)" style="width:60px">
+          <button class="btn-danger" style="padding:0 8px" onclick="delete App.config.${id.split('-')[1]}['${k}']; App.openSettings()">X</button>
         </div>
       `).join('');
     };
-    render(this.config.pizzas, 'cfg-pizzas');
-    render(this.config.variations, 'cfg-variations');
-    render(this.config.extras, 'cfg-extras');
+    list(this.config.pizzas, 'cfg-pizzas');
+    list(this.config.variations, 'cfg-variations');
+    list(this.config.extras, 'cfg-extras');
     document.getElementById('modal-settings').classList.add('open');
   },
 
   addCatalogItem(type) {
-    const key = prompt("Nome nuovo elemento:");
-    if(key) {
-      this.config[type][key.toLowerCase()] = 0;
-      this.openSettings();
-    }
-  },
-
-  deleteCatalogItem(type, key) {
-    delete this.config[type][key];
-    this.openSettings();
+    const n = prompt("Nome:");
+    if(n) { this.config[type][n.toLowerCase()] = 0; this.openSettings(); }
   },
 
   saveSettings() {
-    localStorage.setItem('commander_cfg', JSON.stringify(this.config));
-    document.getElementById('modal-settings').classList.remove('open');
+    localStorage.setItem('commander_v12_cfg', JSON.stringify(this.config));
+    this.closeModals();
   },
 
   nightClosure() {
-    if(confirm("RESET TOTALE?")) {
+    if(confirm("Eseguire chiusura e reset?")) {
+        // Qui si potrebbe implementare il salvataggio in un archivio storico
         this.order = null;
         document.getElementById('raw-input').value = "";
         document.getElementById('output').textContent = "Pronto...";
+        alert("Giornata chiusa con successo!");
     }
-  }
+  },
+
+  closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('open')); }
 };
 
 App.init();
