@@ -1,1102 +1,180 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" />
-  <title>COMMANDER ÉLITE V15 - ABSOLUTE INTELLIGENCE</title>
-  <style>
-    :root{
-      --bg:#020617;--surface:#0f172a;--surface-alt:#1e293b;--accent:#38bdf8;
-      --text:#f8fafc;--text-dim:#94a3b8;--success:#22c55e;--danger:#ef4444;--warn:#f59e0b;
-      --border:rgba(255,255,255,.12);
-    }
-    *{box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
-    body{margin:0;background:var(--bg);color:var(--text);padding-bottom:50px}
-    .app{max-width:1480px;margin:0 auto;padding:1rem;display:grid;gap:1rem}
-    @media(min-width:1024px){.app{grid-template-columns:1fr 1.25fr}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzeria AI Command Center</title>
+    <style>
+        :root {
+            --piz-red: #d32f2f;
+            --piz-green: #388e3c;
+            --piz-dark: #2c3e50;
+        }
+        
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #eef2f3; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        
+        .app-card { width: 100%; max-width: 500px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        
+        header { text-align: center; border-bottom: 2px solid #f0f0f0; margin-bottom: 20px; padding-bottom: 10px; }
+        h1 { color: var(--piz-red); margin: 0; font-size: 24px; }
+        
+        .input-group { margin-bottom: 20px; }
+        textarea { 
+            width: 100%; height: 150px; border: 2px solid #eceff1; border-radius: 12px; 
+            padding: 12px; font-size: 16px; resize: none; box-sizing: border-box; outline: none; transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--piz-green); }
+        
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        
+        button { 
+            border: none; border-radius: 10px; padding: 15px; font-weight: bold; 
+            font-size: 15px; cursor: pointer; transition: 0.2s; 
+        }
+        .btn-ai { background: var(--piz-green); color: white; }
+        .btn-print { background: var(--piz-dark); color: white; }
+        button:active { transform: scale(0.98); }
 
-    header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:flex-start;padding:1rem;background:var(--surface);
-      border-radius:14px;border:1px solid var(--border);gap:12px;flex-wrap:wrap}
-    .brand{font-weight:950;font-size:1.65rem;color:var(--accent);line-height:1}
-    .brand span{color:#fff;font-weight:300}
-    .sub{font-size:12px;color:var(--text-dim);margin-top:6px}
-    .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);padding:6px 10px;border-radius:999px;
-      font-size:12px;color:var(--text-dim);background:rgba(255,255,255,.03)}
-    .pill strong{color:var(--text);font-weight:900}
-    .btn{padding:.7rem 1rem;border-radius:10px;border:none;font-weight:950;cursor:pointer;transition:.15s;
-      display:inline-flex;align-items:center;gap:8px;justify-content:center;user-select:none}
-    .btn:active{transform:translateY(1px)}
-    .btn-main{background:var(--accent);color:#000}
-    .btn-sec{background:var(--surface-alt);color:#fff}
-    .btn-danger{background:var(--danger);color:#fff}
-    .btn-warn{background:var(--warn);color:#000}
+        /* Anteprima Scontrino */
+        #receipt-preview { 
+            margin-top: 25px; padding: 20px; border: 1px solid #eee; background: #fafafa;
+            border-radius: 8px; position: relative;
+        }
+        .receipt-header { text-align: center; font-weight: bold; border-bottom: 1px dashed #ccc; padding-bottom: 10px; margin-bottom: 10px; }
+        .item-line { display: flex; justify-content: space-between; font-family: monospace; font-size: 14px; margin-bottom: 5px; }
+        .total-line { border-top: 2px solid #000; margin-top: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; text-align: right; }
+        .details { font-size: 12px; color: #555; font-style: italic; }
 
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-    .card-h{padding:1rem;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);font-weight:900;
-      display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-    .card-b{padding:1rem}
+        /* Configurazione per Stampa Termica 80mm */
+        @media print {
+            body { background: white; padding: 0; margin: 0; }
+            .app-card { box-shadow: none; max-width: 100%; padding: 0; }
+            .input-group, .actions, header, p { display: none; }
+            #receipt-preview { 
+                border: none; background: white; width: 80mm; 
+                position: absolute; left: 0; top: 0; padding: 0;
+            }
+            .item-line { font-size: 16px; } /* Più grande per la termica */
+        }
 
-    textarea{
-      width:100%;min-height:230px;background:#000;color:#10b981;border:1px solid var(--border);border-radius:10px;padding:1rem;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;outline:none;
-      line-height:1.35;font-size:13px;
-    }
-
-    .hint{color:var(--text-dim);font-size:12px;line-height:1.35}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media(max-width:640px){.grid2{grid-template-columns:1fr}}
-
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .tab{padding:.55rem .9rem;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.03);
-      color:var(--text);cursor:pointer;font-weight:950}
-    .tab.active{background:rgba(56,189,248,.18);border-color:rgba(56,189,248,.65)}
-
-    .output-wrap{background:#0b1020;overflow-x:auto;padding:1rem}
-    .output-box{
-      background:#fff;color:#000;padding:8mm;font-family:"Courier New",ui-monospace,monospace;
-      font-size:13px;border:1px solid #ddd;width:80mm;margin:0 auto;line-height:1.18;
-      box-shadow:0 0 18px rgba(0,0,0,.45);white-space:pre;
-    }
-
-    .okbox,.warnbox{border-radius:12px;padding:10px;font-size:12px}
-    .okbox{border:1px dashed rgba(34,197,94,.65);background:rgba(34,197,94,.08)}
-    .warnbox{border:1px dashed rgba(245,158,11,.65);background:rgba(245,158,11,.08)}
-    .mini{font-size:12px;color:var(--text-dim)}
-
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;z-index:1000;padding:1rem;overflow-y:auto}
-    .modal.open{display:flex;justify-content:center}
-    .modal-sheet{background:var(--surface);width:100%;max-width:1060px;border-radius:16px;padding:1.25rem;border:1px solid var(--border);margin:2rem 0}
-    input,select{
-      background:#000;border:1px solid var(--border);color:#fff;padding:8px;border-radius:8px;font-size:13px;outline:none
-    }
-    label{font-size:10px;color:var(--text-dim);text-transform:uppercase;display:block;margin-bottom:4px}
-    .cfg-row{display:grid;grid-template-columns:1.2fr 90px 1.3fr 44px;gap:6px;margin-bottom:6px}
-    .cfg-row2{display:grid;grid-template-columns:1.2fr 80px 110px 1.3fr 44px;gap:6px;margin-bottom:6px}
-    .sep{height:1px;background:var(--border);margin:12px 0}
-
-    /* PRINT */
-    @media print{
-      .no-print{display:none!important}
-      body{background:#fff;padding-bottom:0}
-      .output-wrap{padding:0;background:#fff}
-      .output-box{border:none;box-shadow:none;width:80mm;margin:0;padding:5mm;font-size:12px}
-      @page{size:80mm auto;margin:0}
-    }
-  </style>
+        .loader { text-align: center; display: none; margin: 10px 0; font-weight: bold; color: var(--piz-green); }
+    </style>
 </head>
 <body>
 
-<div class="app">
-  <header class="no-print">
-    <div>
-      <div class="brand">COMMANDER ÉLITE <span>V15</span></div>
-      <div id="clock" class="sub">...</div>
-      <div class="row">
-        <span class="pill">Tipo: <strong id="pill-mode">—</strong></span>
-        <span class="pill">Orario: <strong id="pill-time">—</strong></span>
-        <span class="pill">Cliente: <strong id="pill-customer">—</strong></span>
-        <span class="pill">Pizze: <strong id="pill-qty">0</strong></span>
-        <span class="pill">Totale: <strong id="pill-total">€ 0,00</strong></span>
-        <span class="pill">Qualità: <strong id="pill-q">—</strong></span>
-      </div>
-      <div class="mini" style="margin-top:8px">
-        CTRL/⌘+ENTER analizza • ESC chiudi • CTRL/⌘+P stampa (usa la modalità scelta in impostazioni)
-      </div>
+<div class="app-card">
+    <header>
+        <h1>🍕 Pizzeria AI 80mm</h1>
+    </header>
+
+    <div class="input-group">
+        <p style="margin-top:0; font-size: 14px; color: #666;">Incolla il messaggio WhatsApp del cliente:</p>
+        <textarea id="wa-input" placeholder="Es: Vorrei 2 margherite ben cotte, una diavola senza olive e una coca da 1.5L. Consegna a domicilio in Via Roma 12 per le 20:30"></textarea>
     </div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="btn btn-sec" onclick="App.openSettings()">⚙️ IMPOSTAZIONI</button>
-      <button class="btn btn-warn" onclick="App.exportBackup()">⬇️ BACKUP</button>
-      <button class="btn btn-danger" onclick="App.nightClosure()">🌙 CHIUSURA</button>
-    </div>
-  </header>
-
-  <div class="card no-print">
-    <div class="card-h">
-      <span>📥 INPUT (incolla chat o blocco ordine)</span>
-      <span class="hint">Parser a “probabilità”: estrae SOLO ciò che serve (pizze + formato/impasto + orario + consegna/ritiro + indirizzo + nome).</span>
-    </div>
-    <div class="card-b">
-      <textarea id="raw-input" placeholder="Incolla qui..."></textarea>
-
-      <div class="grid2" style="margin-top:1rem">
-        <button class="btn btn-main" onclick="App.process()">⚡ ANALISI SUPER INTELLIGENTE</button>
-        <button class="btn btn-sec" onclick="App.printNow()">🖨️ STAMPA</button>
-      </div>
-
-      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-        <button class="btn btn-sec" onclick="App.setView('CUCINA')">🍕 VEDI CUCINA</button>
-        <button class="btn btn-sec" onclick="App.setView('CLIENTE')">🧾 VEDI CLIENTE</button>
-        <button class="btn btn-sec" onclick="App.setView('DEBUG')">🧠 DEBUG</button>
-        <button class="btn btn-sec" onclick="App.demoAll()">🧪 ESEMPI</button>
-        <button class="btn btn-sec" onclick="App.clearAll()">🧹 PULISCI</button>
-      </div>
-
-      <div id="parse-warnings" style="margin-top:12px"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-h no-print">
-      <span>🖨️ OUTPUT 80mm</span>
-      <div class="tabs">
-        <button class="tab active" id="tab-k" onclick="App.setView('CUCINA')">Comanda cucina</button>
-        <button class="tab" id="tab-c" onclick="App.setView('CLIENTE')">Ricevuta cliente</button>
-        <button class="tab" id="tab-d" onclick="App.setView('DEBUG')">Debug</button>
-        <button class="btn btn-sec" onclick="App.copyOut()">📋 COPIA</button>
-        <button class="btn btn-main" onclick="App.printNow()">STAMPA</button>
-      </div>
-    </div>
-    <div class="output-wrap">
-      <div id="output" class="output-box">In attesa...</div>
-    </div>
-  </div>
-</div>
-
-<!-- SETTINGS -->
-<div id="modal-settings" class="modal no-print" onclick="App.backdropClose(event)">
-  <div class="modal-sheet">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-      <h2 style="margin:0">⚙️ Impostazioni (Catalogo + Stampa)</h2>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-sec" onclick="App.resetConfig()">♻️ RESET</button>
-        <button class="btn btn-sec" onclick="App.closeModals()">Chiudi</button>
-      </div>
+    <div class="actions">
+        <button class="btn-ai" onclick="analyzeOrderWithAI()">✨ Elabora con AI</button>
+        <button class="btn-print" onclick="window.print()">🖨️ Stampa Comanda</button>
     </div>
 
-    <div class="sep"></div>
+    <div id="loader" class="loader">L'intelligenza artificiale sta leggendo...</div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
-      <div>
-        <h3 style="display:flex;justify-content:space-between;align-items:center;margin:0 0 10px">
-          🍕 Pizze <button class="btn btn-sec" style="padding:2px 8px;font-size:12px" onclick="App.addPizza()">+</button>
-        </h3>
-        <div class="mini" style="margin-bottom:8px">Aggiungi alias per “pizze fantasia”. Es: “profumo di langa”.</div>
-        <div id="cfg-pizzas"></div>
-      </div>
-
-      <div>
-        <h3 style="display:flex;justify-content:space-between;align-items:center;margin:0 0 10px">
-          🍞 Impasti <button class="btn btn-sec" style="padding:2px 8px;font-size:12px" onclick="App.addDough()">+</button>
-        </h3>
-        <div class="mini" style="margin-bottom:8px">Impasto = sovrapprezzo (add).</div>
-        <div id="cfg-doughs"></div>
-      </div>
-
-      <div>
-        <h3 style="display:flex;justify-content:space-between;align-items:center;margin:0 0 10px">
-          📐 Formati <button class="btn btn-sec" style="padding:2px 8px;font-size:12px" onclick="App.addFormat()">+</button>
-        </h3>
-        <div class="mini" style="margin-bottom:8px">Formato = add oppure replace (es: “mezzo metro” = prezzo fisso).</div>
-        <div id="cfg-formats"></div>
-      </div>
-    </div>
-
-    <div class="sep"></div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-      <div>
-        <h3 style="margin:0 0 10px">🚚 Consegna</h3>
-        <label>Supplemento consegna</label>
-        <div style="display:flex;gap:8px;align-items:center">
-          <input id="cfg-fee" type="number" step="0.5" style="max-width:160px">
-          <span class="mini">€</span>
+    <div id="receipt-preview">
+        <div class="receipt-header">RISTORANTE PIZZERIA<br>COMANDA D'ASPORTO</div>
+        <div id="order-content">
+            <p style="text-align:center; color:#999;">Inserisci un ordine per generare lo scontrino</p>
         </div>
-      </div>
-      <div>
-        <h3 style="margin:0 0 10px">🖨️ Modalità di stampa</h3>
-        <label>Cosa stampare quando premi STAMPA</label>
-        <select id="cfg-printmode" style="width:100%">
-          <option value="CUCINA">Solo comanda cucina</option>
-          <option value="CLIENTE">Solo ricevuta cliente</option>
-          <option value="ENTRAMBE">Entrambe (cucina + cliente)</option>
-        </select>
-        <div class="mini" style="margin-top:8px">
-          Se scegli “Entrambe”, stampa 2 blocchi uno dopo l’altro (con separatore).
-        </div>
-      </div>
+        <div class="total-line" id="order-total">Totale: € 0,00</div>
     </div>
-
-    <button class="btn btn-main" style="width:100%;margin-top:1rem" onclick="App.saveSettings()">💾 SALVA</button>
-  </div>
 </div>
 
 <script>
-const App = {
-  // ---------------- CONFIG ----------------
-  defaultConfig(){
-    return {
-      pizzas: {
-        "margherita": { price: 6.0, aliases: ["marghe","margerita","margherite"] },
-        "diavola": { price: 7.5, aliases: ["salame piccante"] },
-        "capricciosa": { price: 9.5, aliases: [] },
-        "speck e brie": { price: 10.0, aliases: ["speck brie"] },
-        "salsiccia porcini e grana": { price: 12.5, aliases: ["salsiccia porcini grana"] },
-        "profumo di langa": { price: 11.5, aliases: ["profumo langa","langa"] },
-        "quella della suocera": { price: 11.5, aliases: ["pizza della suocera","suocera"] },
-        "salame piccante e panna": { price: 9.5, aliases: ["salame piccante panna"] },
-      },
-      doughs: {
-        "normale": { price: 0, aliases: ["classica","standard"] },
-        "integrale": { price: 1.5, aliases: [] },
-        "verace": { price: 2.0, aliases: [] },
-        "senza glutine": { price: 3.0, aliases: ["sg","gluten free","gf"] },
-      },
-      formats: {
-        "normale": { price: 0, pricing: "add", aliases: ["standard"] },
-        "grande": { price: 2.5, pricing: "add", aliases: ["maxi"] },
-        "mezzo metro": { price: 15.0, pricing: "replace", aliases: ["1/2 metro","mezzo","mezzo mt"] },
-        "schiacciata": { price: 0.0, pricing: "add", aliases: ["schiacciata"] },
-      },
-      deliveryFee: 2.0,
-      printMode: "ENTRAMBE", // CUCINA | CLIENTE | ENTRAMBE
-      draftRaw: ""
-    };
-  },
-  config:null,
-  order:null,
-  view:"CUCINA", // CUCINA | CLIENTE | DEBUG
+    // --- CONFIGURAZIONE ---
+    const API_KEY = "INSERISCI_QUI_LA_TUA_API_KEY"; 
+    
+    // Listino Prezzi per l'IA (Modificalo come preferisci)
+    const LISTINO = `
+        Pizze: Margherita 6€, Diavola 7.50€, Capricciosa 8.50€, Bufala 8€, Napoli 7€.
+        Bevande: Coca 33cl 2.50€, Birra 3.50€, Acqua 1.50€, Coca 1.5L 4€.
+        Extra: Consegna 2€, Doppia Mozzarella 1.50€, Ingredienti extra 1€.
+        Impasti: Integrale 1.50€, Senza Glutine 2€.
+    `;
 
-  // ---------------- UTILS ----------------
-  $(s){ return document.querySelector(s); },
-  $$(s){ return Array.from(document.querySelectorAll(s)); },
-  safe(s){ return String(s ?? "").replace(/[\u0000-\u001F\u007F]/g,"").trim(); },
-  norm(s){
-    let t=this.safe(s).toLowerCase();
-    t=t.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-    t=t.replace(/[•·\t]/g," ");
-    t=t.replace(/\s+/g," ").trim();
-    return t;
-  },
-  money(v){ return (Number(v||0)).toFixed(2); },
-  moneyIt(v){ return `€ ${this.money(v).replace(".",",")}`; },
-  esc(s){
-    return this.safe(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#39;");
-  },
-  jsonParse(s,f){ try{return JSON.parse(s);}catch{return f;} },
+    async function analyzeOrderWithAI() {
+        const text = document.getElementById('wa-input').value;
+        if (!text) return alert("Incolla prima il testo!");
 
-  // ---------------- INIT ----------------
-  load(){
-    const saved=localStorage.getItem("commander_v15_cfg");
-    this.config = saved ? this.jsonParse(saved, this.defaultConfig()) : this.defaultConfig();
-    if(this.config.draftRaw) this.$("#raw-input").value=this.config.draftRaw;
+        document.getElementById('loader').style.display = "block";
+        const contentDiv = document.getElementById('order-content');
 
-    setInterval(()=>{ const el=this.$("#clock"); if(el) el.textContent=new Date().toLocaleString(); },1000);
+        const prompt = `
+            Sei un assistente di una pizzeria. Analizza questo messaggio WhatsApp: "${text}"
+            Usa questo listino prezzi: ${LISTINO}.
+            
+            Estrai i dati e restituisci SOLO un oggetto JSON valido. 
+            Calcola i totali includendo aggiunte o costi di consegna se menzionati.
+            Se una pizza è "senza" qualcosa, scrivilo nel nome ma non cambiare il prezzo base.
+            Se non trovi un prezzo nel listino, stima un prezzo medio di 7€.
 
-    document.addEventListener("keydown",(e)=>{
-      const ta=this.$("#raw-input");
-      if(e.key==="Enter" && (e.ctrlKey||e.metaKey) && document.activeElement===ta){ e.preventDefault(); this.process(); }
-      if(e.key==="Escape") this.closeModals();
-      // Ctrl/Cmd+P -> stampa usando modalità
-      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="p"){ e.preventDefault(); this.printNow(); }
-    });
+            Formato JSON richiesto:
+            {
+              "items": [
+                {"qty": 1, "desc": "MARGHERITA (Ben cotta)", "prezzo": 6.00},
+                {"qty": 1, "desc": "DIAVOLA (Senza olive)", "prezzo": 7.50}
+              ],
+              "note_consegna": "Via Roma 12, ore 20:30",
+              "totale": 13.50
+            }
+        `;
 
-    this.$("#raw-input").addEventListener("input",()=>{
-      this.config.draftRaw=this.$("#raw-input").value;
-      localStorage.setItem("commander_v15_cfg", JSON.stringify(this.config));
-    });
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
 
-    this.updatePills();
-  },
+            const data = await response.json();
+            let aiText = data.candidates[0].content.parts[0].text;
+            
+            // Pulizia da eventuali blocchi di codice markdown
+            aiText = aiText.replace(/```json|```/g, "").trim();
+            const order = JSON.parse(aiText);
 
-  // ---------------- PREPROCESS WHATSAPP ----------------
-  parseTime(text){
-    const t=this.norm(text);
-    const m=t.match(/(?:alle|per le|ore|h)?\s*(\d{1,2})[:.](\d{2})/i);
-    if(!m) return null;
-    const hh=parseInt(m[1],10), mm=parseInt(m[2],10);
-    if(!Number.isFinite(hh)||!Number.isFinite(mm)||hh<0||hh>23||mm<0||mm>59) return null;
-    return `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`;
-  },
-  parsePhone(text){
-    const t=this.safe(text).replace(/\s+/g,"");
-    const m=t.match(/(?:\+39)?(\d{9,11})/);
-    return m ? m[1] : null;
-  },
-  isTimeOnlyLine(l){ return /^\d{1,2}[:.]\d{2}$/.test(this.norm(l)); },
-  isDateTimeLine(l){ return /^\d{1,2}\/\d{1,2}\/\d{2,4},?\s+\d{1,2}[:.]\d{2}/.test(this.norm(l)); },
-
-  isAddressish(n){
-    return (/\b(via|v\.|viale|piazza|p\.zza|corso|c\.so|largo|vicolo|strada|st\.|localita|loc\.|n\.|numero)\b/.test(n) && /\b\d{1,4}\b/.test(n));
-  },
-  isDeliveryText(n){ return /\b(consegna|domicilio|a domicilio|delivery)\b/.test(n); },
-  isPickupText(n){ return /\b(pass(o|a) a prender|ritiro|vengo io|vengo a prender|porto via)\b/.test(n); },
-
-  preprocessRaw(raw){
-    const r=this.safe(raw).replace(/\r/g,"");
-    if(!r) return { cleaned:"", debug:{ steps:[] } };
-    let lines=r.split("\n").map(x=>this.safe(x)).filter(x=>x.length>0);
-
-    const dbg={ steps:[] };
-
-    const isMeta=(l)=>{
-      const n=this.norm(l);
-      return (
-        n.includes("messaggio eliminato") ||
-        n.includes("hai eliminato") ||
-        n.includes("ha eliminato") ||
-        n.includes("crittografia end-to-end") ||
-        n.includes("i messaggi e le chiamate sono protetti") ||
-        n.includes("modificato") ||
-        n.startsWith("—") ||
-        n==="."||n===".."||n==="..." ||
-        this.isDateTimeLine(l)
-      );
-    };
-
-    lines = lines.filter(l=>!isMeta(l));
-
-    // Join “le/alle/ore/per” + time
-    const joined=[];
-    for(let i=0;i<lines.length;i++){
-      const cur=lines[i];
-      const n=this.norm(cur);
-
-      if((n==="le"||n==="alle"||n==="ore"||n==="per") && i<lines.length-1){
-        const nx=lines[i+1];
-        if(this.parseTime(nx)){
-          joined.push(`${cur} ${nx}`);
-          i++;
-          continue;
+            displayOrder(order);
+        } catch (error) {
+            console.error(error);
+            alert("Errore durante l'analisi. Controlla l'API Key o il formato del messaggio.");
+        } finally {
+            document.getElementById('loader').style.display = "none";
         }
-      }
-
-      // drop pure timestamps
-      if(this.isTimeOnlyLine(cur)) continue;
-
-      // join address fragments (Bagnolo / Mella, ecc.)
-      if(joined.length>0){
-        const prev=joined[joined.length-1];
-        const pn=this.norm(prev);
-        const looksAddr = this.isAddressish(pn) || /,\s*$/.test(prev) || /\b\d{1,4}\b/.test(pn) || /\b(bagnolo)\b/.test(pn);
-        const curIsShort = /^[A-Za-zÀ-ÿ'’.-]{2,18}$/.test(cur) && !/\d/.test(cur);
-        if(looksAddr && curIsShort){
-          joined[joined.length-1] = `${prev} ${cur}`;
-          continue;
-        }
-      }
-
-      joined.push(cur);
     }
 
-    dbg.steps.push({ after_join: joined.slice(0,80) });
+    function displayOrder(order) {
+        const contentDiv = document.getElementById('order-content');
+        let html = "";
 
-    // If whole chat pasted: pick best block by scoring
-    const scoreBlock=(arr)=>{
-      const txt=this.norm(arr.join(" "));
-      let s=0;
-      if(this.parseTime(txt)) s+=5;
-      if(/\b(nome:|indirizzo:|tel:|telefono:)\b/.test(txt)) s+=7;
-      if(this.isDeliveryText(txt)||this.isPickupText(txt)) s+=4;
-      if(this.isAddressish(txt)) s+=7;
-      if(/\b\d+\s*x?\s*[a-zà-ÿ]/.test(txt)) s+=6;
-      if(/\bpizza|pizze\b/.test(txt)) s+=4;
-      if(/\b(ok|perfetto|arrivo|va bene|confermato)\b/.test(txt)) s-=3;
-      return s;
-    };
-
-    // single block for now (WhatsApp paste often is contiguous); if you want, you can split on “—” markers later.
-    const best=joined;
-    const bestScore=scoreBlock(best);
-
-    // Final cleanup: remove lonely noise tokens
-    const noiseSingles=new Set(["le","alle","ore","per"]);
-    const finalLines=[];
-    for(const l of best){
-      const n=this.norm(l);
-      if(this.isTimeOnlyLine(l)) continue;
-      if(noiseSingles.has(n)) continue;
-      finalLines.push(l);
-    }
-
-    dbg.steps.push({ finalLines: finalLines.slice(0,120), bestScore });
-
-    return { cleaned: finalLines.join("\n"), debug: dbg };
-  },
-
-  // ---------------- MATCHING (alias + contains) ----------------
-  expandAliases(mapObj){
-    const out=[];
-    for(const [k,v] of Object.entries(mapObj||{})){
-      out.push({ key:k, term:k });
-      const als=Array.isArray(v?.aliases)?v.aliases:[];
-      for(const a of als) out.push({ key:k, term:a });
-    }
-    out.sort((a,b)=>this.norm(b.term).length-this.norm(a.term).length);
-    return out;
-  },
-  detectByContains(textNorm, mapObj){
-    const dict=this.expandAliases(mapObj);
-    for(const e of dict){
-      const term=this.norm(e.term);
-      if(term && textNorm.includes(term)) return e.key;
-    }
-    return null;
-  },
-  detectPizza(t){ return this.detectByContains(t, this.config.pizzas); },
-  detectDough(t){ return this.detectByContains(t, this.config.doughs); },
-  detectFormat(t){ return this.detectByContains(t, this.config.formats); },
-
-  parseQtyLine(n){
-    let m=n.match(/^(?:n\.?\s*)?(\d{1,2})\s*x?\s+(.*)$/i);
-    if(!m) m=n.match(/^x\s*(\d{1,2})\s+(.*)$/i);
-    if(!m) m=n.match(/^(\d{1,2})x\s*(.*)$/i);
-    if(!m) return null;
-    const qty=Math.max(1,parseInt(m[1],10));
-    const text=(m[2]||"").trim();
-    return { qty, text };
-  },
-
-  // ---------------- LINE CLASSIFIER (PROBABILITY-LIKE) ----------------
-  classifyLine(line){
-    const raw=this.safe(line);
-    const n=this.norm(raw);
-
-    const scores = { ITEM:0, ADDRESS:0, NAME:0, TIME:0, MODE:0, NOTE:0, NOISE:0 };
-
-    // TIME
-    if(this.parseTime(n)) scores.TIME += 80;
-    if(/\b(stasera|domani|oggi)\b/.test(n) && this.parseTime(n)) scores.TIME += 15;
-
-    // MODE
-    if(this.isDeliveryText(n)) scores.MODE += 60;
-    if(this.isPickupText(n)) scores.MODE += 60;
-    if(/\b(consegna|domicilio|ritiro)\b/.test(n)) scores.MODE += 15;
-
-    // ADDRESS
-    if(this.isAddressish(n)) scores.ADDRESS += 85;
-    if(/\b(citofono|interno|int\.|scala|piano|campanello)\b/.test(n)) scores.ADDRESS += 35;
-    if(/\b(bagnolo|mella)\b/.test(n) && /\bvia\b/.test(n)) scores.ADDRESS += 15;
-    if(/\b(via|viale|piazza|corso|largo|vicolo|strada)\b/.test(n)) scores.ADDRESS += 20;
-    if(/\b\d{1,4}\b/.test(n) && /\b(via|viale|piazza|corso|n\.|numero)\b/.test(n)) scores.ADDRESS += 15;
-
-    // NAME
-    if(n.startsWith("nome:")) scores.NAME += 95;
-    // all caps short line => likely name/place
-    const allCaps = raw===raw.toUpperCase() && /[A-Z]/.test(raw) && raw.length<=34;
-    if(allCaps) scores.NAME += 35;
-    // "Cognome Nome" common pattern: 2 words, letters only
-    if(/^[a-zà-ÿ'’.-]{2,20}\s+[a-zà-ÿ'’.-]{2,20}$/.test(n) && !this.isAddressish(n)) scores.NAME += 12;
-
-    // NOTE
-    if(/\b(tagliat|note|grazie|attendo|conferma|totale)\b/.test(n)) scores.NOTE += 45;
-
-    // ITEM
-    const ql=this.parseQtyLine(n);
-    if(ql) scores.ITEM += 55;
-    if(/\bpizza|pizze\b/.test(n)) scores.ITEM += 18;
-    if(this.detectPizza(n)) scores.ITEM += 35;
-    if(this.detectDough(n)) scores.ITEM += 18;
-    if(this.detectFormat(n)) scores.ITEM += 18;
-    if(/\bmet(a|à)\b/.test(n) || /\bdue gusti\b|\b3 gusti\b/.test(n)) scores.ITEM += 12;
-
-    // NOISE / greetings / boilerplate
-    if(/\b(buongiorno|buonasera|ciao|salve)\b/.test(n)) scores.NOISE += 55;
-    if(/\b(vorrei|volevo|ordinare|prenotare)\b/.test(n) && !ql) scores.NOISE += 30;
-    if(this.isDateTimeLine(raw) || this.isTimeOnlyLine(raw)) scores.NOISE += 60;
-    if(n.length<=2) scores.NOISE += 60;
-
-    // Special: declaration line "2 pizze a domicilio" => not an item, but MODE/declaredCount
-    if(/^(\d{1,2})\s+(pizze?|pizza)\b/.test(n)) {
-      scores.ITEM -= 60;
-      scores.MODE += 40;
-      scores.NOTE += 10;
-    }
-
-    // pick best label
-    const entries=Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-    const [label,score]=entries[0];
-    const confidence=Math.min(0.99, Math.max(0.05, score/100)); // pseudo-confidence
-    return { label, score, confidence, scores };
-  },
-
-  // ---------------- PRICING ----------------
-  computeLine(it){
-    const qty=Math.max(1, parseInt(it.qty||1,10));
-    const dough=this.config.doughs[it.doughKey||"normale"] || {price:0};
-    const fmt=this.config.formats[it.formatKey||"normale"] || {price:0,pricing:"add"};
-
-    // base price: max of flavors (future-proof)
-    const basePrices=(it.flavors||[]).map(f=>{
-      if(f.baseKey && this.config.pizzas[f.baseKey]) return Number(this.config.pizzas[f.baseKey].price||0);
-      return 0;
-    });
-    const base=basePrices.length?Math.max(...basePrices):0;
-
-    let unit=0;
-    if(fmt.pricing==="replace") unit = Number(fmt.price||0) + Number(dough.price||0);
-    else unit = base + Number(dough.price||0) + Number(fmt.price||0);
-
-    return { unit, total: unit*qty };
-  },
-  computeOrder(o){
-    let sub=0;
-    let qty=0;
-    for(const it of o.items){ sub += this.computeLine(it).total; qty += (it.qty||0); }
-    const fee = (o.mode==="CONSEGNA") ? Number(this.config.deliveryFee||0) : 0;
-    return { subtotal: sub, fee, total: sub+fee, qty };
-  },
-
-  // ---------------- CORE PARSER (SUPER) ----------------
-  process(){
-    const raw=this.$("#raw-input").value;
-    const pre=this.preprocessRaw(raw);
-    const cleaned=pre.cleaned;
-
-    const lines=cleaned.split("\n").map(x=>this.safe(x)).filter(Boolean);
-
-    const o={
-      customer:"—",
-      phone:"",
-      time:"ASAP",
-      address:"",
-      mode:"—",
-      declaredCount:null,
-      globalNote:"",
-      items:[],
-      debug:{ pre, lines, classified:[] },
-      quality:{ score:100, label:"ALTA", issues:[] }
-    };
-
-    const issues=o.quality.issues;
-    const addIssue=(m)=>issues.push(m);
-
-    // CLASSIFY ALL LINES
-    const classified = lines.map(l=>{
-      const c=this.classifyLine(l);
-      return { line:l, ...c };
-    });
-    o.debug.classified = classified;
-
-    // PASS A: Extract strong fields (labeled first)
-    for(const {line} of classified){
-      const n=this.norm(line);
-
-      const t=this.parseTime(n);
-      if(t) o.time=t;
-
-      const ph=this.parsePhone(line);
-      if(ph) o.phone=ph;
-
-      if(n.startsWith("nome:")){
-        const v=line.split(":").slice(1).join(":").trim();
-        if(v) o.customer=v;
-      }
-      if(n.startsWith("indirizzo:")){
-        const v=line.split(":").slice(1).join(":").trim();
-        if(v){ o.address=v; o.mode="CONSEGNA"; }
-      }
-      if(n.startsWith("tel:")||n.startsWith("telefono:")){
-        const ph2=this.parsePhone(line);
-        if(ph2) o.phone=ph2;
-      }
-    }
-
-    // PASS B: Mode/address from best candidates
-    // Mode: if any line classified MODE with decent score
-    const modeLines = classified.filter(x=>x.label==="MODE" && x.score>=45);
-    if(modeLines.some(x=>this.isDeliveryText(this.norm(x.line)))) o.mode="CONSEGNA";
-    if(modeLines.some(x=>this.isPickupText(this.norm(x.line)))) o.mode="RITIRO";
-
-    // Address: pick the highest scoring ADDRESS line
-    if(!o.address){
-      const addrCand = classified
-        .filter(x=>x.label==="ADDRESS" && x.score>=45)
-        .sort((a,b)=>b.score-a.score);
-      if(addrCand[0]) o.address = addrCand[0].line;
-    }
-
-    // PASS C: declaredCount (e.g. “2 pizze a domicilio”)
-    for(const {line} of classified){
-      const n=this.norm(line);
-      const m=n.match(/^(\d{1,2})\s+(pizze?|pizza)\b/);
-      if(m){
-        const q=parseInt(m[1],10);
-        if(Number.isFinite(q) && q>0) o.declaredCount=q;
-      }
-    }
-
-    // PASS D: customer fallback (best NAME-like line not greeting/not address/not item)
-    if(o.customer==="—"){
-      const nameCand = classified
-        .filter(x=>x.label==="NAME" && x.score>=22)
-        .filter(x=>{
-          const n=this.norm(x.line);
-          if(/\b(buongiorno|buonasera|ciao|salve)\b/.test(n)) return false;
-          if(this.isAddressish(n)) return false;
-          if(this.parseQtyLine(n)) return false;
-          if(this.parseTime(n)) return false;
-          return true;
-        })
-        .sort((a,b)=>b.score-a.score);
-      if(nameCand[0]) o.customer = nameCand[0].line.replace(/^nome:\s*/i,"").trim() || "—";
-    }
-
-    // If address exists but mode unknown -> consegna
-    if(o.address && o.mode==="—") o.mode="CONSEGNA";
-    if(o.mode==="—") o.mode="RITIRO";
-
-    // PASS E: Notes (merge NOTE lines)
-    const noteLines = classified
-      .filter(x=>x.label==="NOTE" && x.score>=35)
-      .map(x=>x.line);
-    if(noteLines.length){
-      // compress
-      const compact = noteLines
-        .map(x=>this.safe(x))
-        .filter(Boolean)
-        .slice(0,3)
-        .join(" | ");
-      o.globalNote = compact.toUpperCase();
-    }
-
-    // PASS F: Items = ONLY from lines with ITEM label and with qty pattern
-    for(const {line,label,score} of classified){
-      if(label!=="ITEM") continue;
-      if(score<35) continue;
-
-      const n=this.norm(line);
-      const ql=this.parseQtyLine(n);
-      if(!ql) continue;
-
-      // guardrails: avoid “per le 19:30”
-      if(/\b(per|alle|le|ore)\b\s*\d{1,2}[:.]\d{2}\b/.test(n)) continue;
-
-      // If it is the declaration “2 pizze …” do not add as item
-      if(/^(\d{1,2})\s+(pizze?|pizza)\b/.test(n)) continue;
-
-      // Determine dough/format
-      let doughKey = this.detectDough(n) || "normale";
-      let formatKey = this.detectFormat(n) || "normale";
-
-      // Force detect common patterns even if alias not set
-      if(/\b(senza glutine|gluten free|\bgf\b|\bsg\b)\b/.test(n) && this.config.doughs["senza glutine"]) doughKey="senza glutine";
-      if(/\bmezzo metro\b|\b1\/2 metro\b|\bmezzo mt\b/.test(n) && this.config.formats["mezzo metro"]) formatKey="mezzo metro";
-      if(/\bgrande\b/.test(n) && this.config.formats["grande"]) formatKey="grande";
-      if(/\bschiacciata\b/.test(n) && this.config.formats["schiacciata"]) formatKey="schiacciata";
-
-      // Pizza name detection (catalog)
-      const textNorm=this.norm(ql.text);
-      const pKey=this.detectPizza(textNorm);
-
-      if(!pKey){
-        // STRICT: if not in catalog, keep as custom ONLY if it looks like a pizza description (not locality noise)
-        if(textNorm.length<=3) continue;
-        if(/^(bagnolo|mella|le)$/.test(textNorm)) continue;
-
-        o.items.push({
-          qty: ql.qty,
-          doughKey,
-          formatKey,
-          flavors:[{ baseKey:null, label: ql.text.toUpperCase(), unrecognized:true }],
-          notes:"⚠️ NON IN CATALOGO"
+        order.items.forEach(item => {
+            html += `
+                <div class="item-line">
+                    <span>${item.qty}x ${item.desc.toUpperCase()}</span>
+                    <span>€ ${item.prezzo.toFixed(2)}</span>
+                </div>
+            `;
         });
-        addIssue(`Pizza non riconosciuta: "${line}" (aggiungila come pizza o alias).`);
-        continue;
-      }
 
-      o.items.push({
-        qty: ql.qty,
-        doughKey,
-        formatKey,
-        flavors:[{ baseKey:pKey, label:pKey.toUpperCase() }],
-        notes:""
-      });
+        if (order.note_consegna) {
+            html += `<div class="details" style="margin-top:10px; border-top: 1px solid #eee; padding-top:5px;">
+                        📍 ${order.note_consegna}
+                     </div>`;
+        }
+
+        contentDiv.innerHTML = html;
+        document.getElementById('order-total').innerText = "Totale: € " + order.totale.toFixed(2).replace('.', ',');
     }
-
-    // VALIDATION / QUALITY
-    if(o.items.length===0){
-      addIssue("Nessun articolo trovato. Usa righe tipo: '1 margherita', '2 diavola'.");
-      o.quality.score=40;
-      o.quality.label="BASSA";
-    }else{
-      const found=o.items.reduce((a,it)=>a+(it.qty||0),0);
-      if(o.declaredCount!=null && found!==o.declaredCount){
-        addIssue(`Quantità dichiarata ${o.declaredCount}, trovate ${found}. Verifica (riga mancante o testo spezzato).`);
-        o.quality.score=Math.max(55, o.quality.score-15);
-      }
-      const penalty = Math.min(70, issues.length*9);
-      o.quality.score = Math.max(0, 100-penalty);
-      o.quality.label = (o.quality.score>=85) ? "ALTA" : (o.quality.score>=60) ? "MEDIA" : "BASSA";
-    }
-
-    this.order=o;
-    this.renderWarnings();
-    this.render();
-  },
-
-  // ---------------- OUTPUT BUILDERS ----------------
-  buildKitchen(o){
-    const sums=this.computeOrder(o);
-    const now=new Date();
-    const dt=`${now.toLocaleDateString()} ${now.toLocaleTimeString().slice(0,5)}`;
-
-    let s="";
-    s += "===============================\n";
-    s += "          COMANDA CUCINA\n";
-    s += "===============================\n";
-    s += `Ora:     ${dt}\n`;
-    s += `Orario:  ${o.time}\n`;
-    s += `Tipo:    ${o.mode}\n`;
-    s += `Cliente: ${this.safe(o.customer)}\n`;
-    if(o.address) s += `Indir:   ${this.safe(o.address)}\n`;
-    if(o.globalNote) s += `Note:    ${this.safe(o.globalNote)}\n`;
-    s += "-------------------------------\n";
-    s += "ARTICOLI:\n";
-
-    for(const it of o.items){
-      const name = (it.flavors?.[0]?.baseKey) ? it.flavors[0].baseKey : (it.flavors?.[0]?.label || "CUSTOM");
-      const dough = it.doughKey && it.doughKey!=="normale" ? ` [IMP: ${it.doughKey}]` : "";
-      const fmt = it.formatKey && it.formatKey!=="normale" ? ` [FORM: ${it.formatKey}]` : "";
-      s += `${String(it.qty).padStart(2," ")}  ${name.toUpperCase()}\n`;
-      if(dough || fmt) s += `    ${dough}${fmt}\n`;
-      if(it.notes) s += `    ${it.notes}\n`;
-    }
-
-    s += "-------------------------------\n";
-    s += `Totale pizze: ${sums.qty}`;
-    if(o.declaredCount!=null) s += ` (dichiarate: ${o.declaredCount})`;
-    s += "\n";
-    if(o.declaredCount!=null && o.declaredCount!==sums.qty){
-      s += `⚠ dichiarate ${o.declaredCount} / trovate ${sums.qty}\n`;
-    }
-    s += "===============================\n\n\n";
-    return s;
-  },
-
-  buildCustomer(o){
-    const sums=this.computeOrder(o);
-    const now=new Date();
-    const dt=`${now.toLocaleDateString()} ${now.toLocaleTimeString().slice(0,5)}`;
-
-    let s="";
-    s += "===============================\n";
-    s += "         RICEVUTA CLIENTE\n";
-    s += "===============================\n";
-    s += `Ora:     ${dt}\n`;
-    s += `Orario:  ${o.time}\n`;
-    s += `Tipo:    ${o.mode}\n`;
-    s += `Cliente: ${this.safe(o.customer)}\n`;
-    if(o.phone) s += `Tel:     ${o.phone}\n`;
-    if(o.address) s += `Indir:   ${this.safe(o.address)}\n`;
-    if(o.globalNote) s += `Note:    ${this.safe(o.globalNote)}\n`;
-    s += "-------------------------------\n";
-
-    for(const it of o.items){
-      const name = (it.flavors?.[0]?.baseKey) ? it.flavors[0].baseKey : (it.flavors?.[0]?.label || "CUSTOM");
-      const calc=this.computeLine(it);
-
-      s += `${it.qty} x ${name.toUpperCase()}\n`;
-      if(it.doughKey && it.doughKey!=="normale") s += `   Impasto: ${it.doughKey}\n`;
-      if(it.formatKey && it.formatKey!=="normale") s += `   Formato: ${it.formatKey}\n`;
-      if(it.notes) s += `   ${it.notes}\n`;
-      s += `   ${this.money(calc.unit)}€ -> ${this.money(calc.total)}€\n`;
-      s += "-------------------------------\n";
-    }
-
-    if(o.mode==="CONSEGNA"){
-      s += `CONSEGNA: ${this.money(sums.fee)}€\n`;
-    }
-    s += `TOTALE:   ${this.money(sums.total)}€\n`;
-    if(o.quality.issues?.length){
-      s += `⚠ Avvisi: ${o.quality.issues.length} (controlla catalogo/alias)\n`;
-    }
-    s += "===============================\n\n\n";
-    return s;
-  },
-
-  buildBoth(o){
-    return this.buildKitchen(o) + "--------------- CUT --------------\n\n" + this.buildCustomer(o);
-  },
-
-  // ---------------- RENDER ----------------
-  setView(v){
-    this.view=v;
-    this.$$("#tab-k,#tab-c,#tab-d").forEach(x=>x.classList.remove("active"));
-    if(v==="CUCINA") this.$("#tab-k").classList.add("active");
-    if(v==="CLIENTE") this.$("#tab-c").classList.add("active");
-    if(v==="DEBUG") this.$("#tab-d").classList.add("active");
-    this.render();
-  },
-
-  updatePills(){
-    const set=(id,val)=>{ const el=this.$(id); if(el) el.textContent=val; };
-    if(!this.order){
-      set("#pill-mode","—"); set("#pill-time","—"); set("#pill-customer","—"); set("#pill-qty","0");
-      set("#pill-total", this.moneyIt(0)); set("#pill-q","—");
-      return;
-    }
-    const sums=this.computeOrder(this.order);
-    set("#pill-mode", this.order.mode);
-    set("#pill-time", this.order.time);
-    set("#pill-customer", (this.order.customer||"—").toUpperCase());
-    set("#pill-qty", String(sums.qty));
-    set("#pill-total", this.moneyIt(sums.total));
-    set("#pill-q", this.order.quality.label);
-  },
-
-  renderWarnings(){
-    const box=this.$("#parse-warnings");
-    if(!this.order){ box.innerHTML=""; return; }
-    const issues=this.order.quality.issues||[];
-    if(issues.length===0){
-      box.innerHTML=`<div class="okbox">✅ Parsing pulito: estratti solo dati comanda.</div>`;
-      return;
-    }
-    box.innerHTML = `
-      <div class="warnbox">
-        <b>⚠️ Avvisi (${issues.length})</b>
-        <ul style="margin:8px 0 0 18px">
-          ${issues.slice(0,10).map(x=>`<li>${this.esc(x)}</li>`).join("")}
-        </ul>
-        ${issues.length>10 ? `<div class="mini" style="margin-top:6px">+${issues.length-10} altri…</div>` : ""}
-      </div>`;
-  },
-
-  render(){
-    const out=this.$("#output");
-    if(!this.order){ out.textContent="Pronto..."; this.updatePills(); return; }
-
-    if(this.view==="DEBUG"){
-      const dbg={
-        extracted:{
-          customer:this.order.customer, phone:this.order.phone, time:this.order.time, mode:this.order.mode, address:this.order.address,
-          declaredCount:this.order.declaredCount, note:this.order.globalNote
-        },
-        items:this.order.items,
-        quality:this.order.quality,
-        classified:this.order.debug.classified.map(x=>({
-          label:x.label, score:x.score, conf:Number(x.confidence.toFixed(2)), line:x.line
-        })),
-        preprocess:this.order.debug.pre.debug.steps
-      };
-      out.textContent=JSON.stringify(dbg,null,2);
-      this.updatePills();
-      return;
-    }
-
-    if(this.view==="CUCINA") out.textContent=this.buildKitchen(this.order);
-    if(this.view==="CLIENTE") out.textContent=this.buildCustomer(this.order);
-
-    this.updatePills();
-  },
-
-  // ---------------- PRINT MODE (SETTINGS) ----------------
-  printNow(){
-    if(!this.order){ alert("Analizza prima un ordine."); return; }
-
-    const mode=this.config.printMode || "ENTRAMBE";
-    const out=this.$("#output");
-    const prevView=this.view;
-    const prevText=out.textContent;
-
-    let toPrint="";
-    if(mode==="CUCINA") toPrint=this.buildKitchen(this.order);
-    if(mode==="CLIENTE") toPrint=this.buildCustomer(this.order);
-    if(mode==="ENTRAMBE") toPrint=this.buildBoth(this.order);
-
-    // Show exactly what will be printed
-    out.textContent=toPrint;
-
-    // Print and restore after
-    setTimeout(()=>{
-      window.print();
-      setTimeout(()=>{
-        out.textContent=prevText;
-        this.setView(prevView);
-      }, 250);
-    }, 50);
-  },
-
-  async copyOut(){
-    const t=this.$("#output").textContent||"";
-    try{ await navigator.clipboard.writeText(t); alert("Copiato!"); }
-    catch{
-      const ta=document.createElement("textarea");
-      ta.value=t; document.body.appendChild(ta); ta.select();
-      document.execCommand("copy"); ta.remove(); alert("Copiato!");
-    }
-  },
-
-  // ---------------- SETTINGS UI ----------------
-  openSettings(){ this.renderSettings(); this.$("#modal-settings").classList.add("open"); },
-  closeModals(){ this.$$(".modal").forEach(m=>m.classList.remove("open")); },
-  backdropClose(e){ if(e.target.classList.contains("modal")) this.closeModals(); },
-
-  renderSettings(){
-    const p=this.$("#cfg-pizzas"), d=this.$("#cfg-doughs"), f=this.$("#cfg-formats");
-    p.innerHTML=""; d.innerHTML=""; f.innerHTML="";
-
-    // PIZZE
-    for(const [k,obj] of Object.entries(this.config.pizzas)){
-      const row=document.createElement("div");
-      row.className="cfg-row";
-      row.innerHTML=`
-        <input value="${this.esc(k)}" readonly>
-        <input type="number" step="0.5" value="${this.esc(obj.price)}">
-        <input value="${this.esc((obj.aliases||[]).join(","))}" placeholder="alias,alias...">
-        <button class="btn btn-danger" style="padding:0 8px">X</button>
-      `;
-      row.children[1].addEventListener("change",(e)=>{
-        const n=parseFloat(e.target.value); this.config.pizzas[k].price=Number.isFinite(n)?n:0;
-      });
-      row.children[2].addEventListener("change",(e)=>{
-        const als=this.norm(e.target.value).split(",").map(x=>x.trim()).filter(Boolean);
-        this.config.pizzas[k].aliases=als;
-      });
-      row.children[3].addEventListener("click",()=>{ delete this.config.pizzas[k]; this.renderSettings(); });
-      p.appendChild(row);
-    }
-
-    // IMPASTI (sempre add)
-    for(const [k,obj] of Object.entries(this.config.doughs)){
-      const row=document.createElement("div");
-      row.className="cfg-row";
-      row.innerHTML=`
-        <input value="${this.esc(k)}" readonly>
-        <input type="number" step="0.5" value="${this.esc(obj.price)}">
-        <input value="${this.esc((obj.aliases||[]).join(","))}" placeholder="alias,alias...">
-        <button class="btn btn-danger" style="padding:0 8px">X</button>
-      `;
-      row.children[1].addEventListener("change",(e)=>{
-        const n=parseFloat(e.target.value); this.config.doughs[k].price=Number.isFinite(n)?n:0;
-      });
-      row.children[2].addEventListener("change",(e)=>{
-        const als=this.norm(e.target.value).split(",").map(x=>x.trim()).filter(Boolean);
-        this.config.doughs[k].aliases=als;
-      });
-      row.children[3].addEventListener("click",()=>{ delete this.config.doughs[k]; this.renderSettings(); });
-      d.appendChild(row);
-    }
-
-    // FORMATI (add/replace)
-    for(const [k,obj] of Object.entries(this.config.formats)){
-      const row=document.createElement("div");
-      row.className="cfg-row2";
-      row.innerHTML=`
-        <input value="${this.esc(k)}" readonly>
-        <input type="number" step="0.5" value="${this.esc(obj.price)}">
-        <select>
-          <option value="add" ${obj.pricing==="add"?"selected":""}>ADD</option>
-          <option value="replace" ${obj.pricing==="replace"?"selected":""}>REPLACE</option>
-        </select>
-        <input value="${this.esc((obj.aliases||[]).join(","))}" placeholder="alias,alias...">
-        <button class="btn btn-danger" style="padding:0 8px">X</button>
-      `;
-      row.children[1].addEventListener("change",(e)=>{
-        const n=parseFloat(e.target.value); this.config.formats[k].price=Number.isFinite(n)?n:0;
-      });
-      row.children[2].addEventListener("change",(e)=>{ this.config.formats[k].pricing=e.target.value; });
-      row.children[3].addEventListener("change",(e)=>{
-        const als=this.norm(e.target.value).split(",").map(x=>x.trim()).filter(Boolean);
-        this.config.formats[k].aliases=als;
-      });
-      row.children[4].addEventListener("click",()=>{ delete this.config.formats[k]; this.renderSettings(); });
-      f.appendChild(row);
-    }
-
-    this.$("#cfg-fee").value = Number(this.config.deliveryFee||0);
-    this.$("#cfg-printmode").value = this.config.printMode || "ENTRAMBE";
-  },
-
-  addPizza(){
-    const name=prompt("Nome pizza:");
-    if(!name) return;
-    const key=this.norm(name);
-    const price=parseFloat(prompt("Prezzo:", "0")||"0");
-    const aliasesRaw=prompt("Alias (virgola):","")||"";
-    const als=this.norm(aliasesRaw).split(",").map(x=>x.trim()).filter(Boolean);
-    this.config.pizzas[key]={price:Number.isFinite(price)?price:0,aliases:als};
-    this.renderSettings();
-  },
-  addDough(){
-    const name=prompt("Nome impasto:");
-    if(!name) return;
-    const key=this.norm(name);
-    const price=parseFloat(prompt("Sovrapprezzo impasto (add):", "0")||"0");
-    const aliasesRaw=prompt("Alias (virgola):","")||"";
-    const als=this.norm(aliasesRaw).split(",").map(x=>x.trim()).filter(Boolean);
-    this.config.doughs[key]={price:Number.isFinite(price)?price:0,aliases:als};
-    this.renderSettings();
-  },
-  addFormat(){
-    const name=prompt("Nome formato:");
-    if(!name) return;
-    const key=this.norm(name);
-    const price=parseFloat(prompt("Prezzo formato:", "0")||"0");
-    const pricing=prompt("Tipo prezzo: add / replace", "add")||"add";
-    const aliasesRaw=prompt("Alias (virgola):","")||"";
-    const als=this.norm(aliasesRaw).split(",").map(x=>x.trim()).filter(Boolean);
-    this.config.formats[key]={price:Number.isFinite(price)?price:0,pricing:(pricing==="replace"?"replace":"add"),aliases:als};
-    this.renderSettings();
-  },
-
-  saveSettings(){
-    const fee=parseFloat(this.$("#cfg-fee").value);
-    this.config.deliveryFee = Number.isFinite(fee)?fee:0;
-    this.config.printMode = this.$("#cfg-printmode").value || "ENTRAMBE";
-    localStorage.setItem("commander_v15_cfg", JSON.stringify(this.config));
-    this.closeModals();
-    if(this.order) this.render();
-  },
-  resetConfig(){
-    if(!confirm("Reset totale configurazione?")) return;
-    this.config=this.defaultConfig();
-    localStorage.setItem("commander_v15_cfg", JSON.stringify(this.config));
-    this.renderSettings();
-    if(this.order) this.render();
-  },
-
-  // ---------------- EXPORT / CLOSURE ----------------
-  exportBackup(){
-    const blob=new Blob([JSON.stringify(this.config,null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");
-    a.href=url; a.download=`commander_v15_backup_${new Date().toISOString().slice(0,10)}.json`;
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  },
-  nightClosure(){
-    if(!confirm("Chiusura: pulisco input + ordine?")) return;
-    this.order=null;
-    this.$("#raw-input").value="";
-    this.config.draftRaw="";
-    localStorage.setItem("commander_v15_cfg", JSON.stringify(this.config));
-    this.$("#output").textContent="Pronto...";
-    this.$("#parse-warnings").innerHTML="";
-    this.updatePills();
-    alert("Chiusura completata.");
-  },
-
-  // ---------------- DEMO / CLEAR ----------------
-  clearAll(){
-    this.order=null;
-    this.$("#raw-input").value="";
-    this.$("#output").textContent="Pronto...";
-    this.$("#parse-warnings").innerHTML="";
-    this.config.draftRaw="";
-    localStorage.setItem("commander_v15_cfg", JSON.stringify(this.config));
-    this.updatePills();
-  },
-
-  demoAll(){
-    this.$("#raw-input").value =
-`Buongiorno, volevo ordinare per stasera alle 20:15
-
-1 Margherita verace
-1 capricciosa integrale schiacciata
-1 salame piccante e panna schiacciata grande
-
-In Via Padre Marcolini 5
-Picari Erjon
-320712252
-`;
-  }
-};
-
-App.load();
 </script>
+
 </body>
 </html>
