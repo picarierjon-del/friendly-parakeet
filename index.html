@@ -3,103 +3,109 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-  <title>Gestionale WhatsApp | Pro Edition</title>
+  <title>Gestionale WhatsApp → Comande</title>
   <style>
-    :root {
-      --bg: #0b1220; --text: #e5e7eb; --muted: #9ca3af; --border: rgba(255,255,255,.10);
-      --accent: #60a5fa; --ok: #34d399; --warn: #fbbf24; --danger: #fb7185;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --sans: -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif; --radius: 16px;
+    :root{
+      --bg:#0b1220; --text:#e5e7eb; --muted:#9ca3af; --border:rgba(255,255,255,.10);
+      --accent:#60a5fa; --ok:#34d399; --warn:#fbbf24; --danger:#fb7185;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif; --radius:16px;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: var(--sans); background: linear-gradient(180deg, #070b14, var(--bg)); color: var(--text); min-height: 100vh; }
-    .app { max-width: 980px; margin: 0 auto; padding: 14px 14px 100px; }
-    
-    /* Topbar */
-    .topbar { 
-      display: flex; align-items: center; justify-content: space-between; gap: 10px; position: sticky; top: 0; z-index: 5;
-      background: rgba(7, 11, 20, 0.75); backdrop-filter: blur(12px); padding: 12px 16px; border-bottom: 1px solid var(--border);
-      border-radius: 0 0 18px 18px; margin-bottom: 16px;
-    }
-    .title h1 { font-size: 16px; margin: 0; font-weight: 800; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .title .sub { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    
-    /* Layout */
-    .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media(min-width: 860px) { .grid { grid-template-columns: 1.05fr 0.95fr; } }
-    
-    .card { border: 1px solid var(--border); border-radius: var(--radius); background: rgba(255,255,255,0.03); overflow: hidden; height: fit-content; }
-    .cardhead { padding: 12px 16px; background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-    .cardhead h2 { margin: 0; font-size: 13px; font-weight: 700; color: var(--accent); }
-    .cardbody { padding: 16px; }
-
-    textarea { width: 100%; min-height: 280px; background: rgba(0,0,0,0.3); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 14px; font-size: 14px; outline: none; transition: 0.2s; }
-    textarea:focus { border-color: var(--accent); background: rgba(0,0,0,0.4); }
-    
-    .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-    .btn { border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--text); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn.primary { background: var(--accent); color: #000; border: none; }
-    .btn.danger { border-color: var(--danger); color: var(--danger); background: rgba(251, 113, 133, 0.05); }
-    .btn:active { transform: scale(0.97); }
-
-    .tabs { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 10px; }
-    .tab { padding: 6px 12px; font-size: 12px; font-weight: 700; border-radius: 7px; cursor: pointer; color: var(--muted); border: none; background: none; }
-    .tab.active { background: var(--accent); color: #000; }
-
-    .out { font-family: var(--mono); white-space: pre-wrap; font-size: 13px; background: #000; border-radius: 12px; padding: 16px; min-height: 280px; border: 1px solid var(--border); color: #adbac7; }
-    .pill { font-size: 10px; color: var(--muted); border: 1px solid var(--border); padding: 2px 8px; border-radius: 20px; font-weight: 700; }
-    .iconbtn { background: none; border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 8px; cursor: pointer; }
-
-    /* Bottom Bar */
-    .bottombar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(7, 11, 20, 0.9); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 12px 20px; z-index: 6; }
-    .bottomwrap { max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .stat { font-size: 13px; font-weight: 800; }
-    .stat span { color: var(--accent); }
-
-    /* Modal */
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: flex-end; justify-content: center; z-index: 100; }
-    .modal.open { display: flex; }
-    .sheet { width: min(980px, 100%); background: var(--bg); border: 1px solid var(--border); border-radius: 24px 24px 0 0; padding: 24px; max-height: 90vh; overflow: auto; }
-    .section { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
-    .section h4 { margin: 0 0 12px; font-size: 12px; text-transform: uppercase; color: var(--accent); letter-spacing: 1px; }
-    
-    label { display: block; margin-bottom: 12px; font-size: 12px; color: var(--muted); }
-    input, select { width: 100%; background: #000; color: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 4px; }
-
-    @media print {
-      body { background: #fff; color: #000; }
-      .topbar, .bottombar, .no-print, .modal, .btnrow { display: none !important; }
-      .app { padding: 0; }
-      .grid { display: block; }
-      .card { border: none; }
-      .out { border: none; background: none; color: #000; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--sans);background:linear-gradient(180deg,#070b14,var(--bg));color:var(--text)}
+    .app{max-width:980px;margin:0 auto;padding:14px 14px 90px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;
+      background:rgba(7,11,20,.75);backdrop-filter: blur(10px);padding:12px 10px;border-bottom:1px solid var(--border);
+      border-radius:0 0 18px 18px;}
+    .title{display:flex;flex-direction:column;gap:2px}
+    .title h1{font-size:16px;margin:0;font-weight:800}
+    .title .sub{font-size:12px;color:var(--muted)}
+    .iconbtn{border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);
+      border-radius:12px;padding:10px 12px;font-size:16px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:4px 10px;border-radius:999px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+    @media(min-width:860px){.grid{grid-template-columns:1.05fr .95fr}}
+    .card{border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+      box-shadow:0 8px 30px rgba(0,0,0,.25);overflow:hidden}
+    .cardhead{padding:12px 12px 10px;background:rgba(255,255,255,.04);border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .cardhead h2{margin:0;font-size:14px}
+    .cardbody{padding:12px}
+    textarea{width:100%;min-height:260px;background:rgba(0,0,0,.25);color:var(--text);border:1px solid var(--border);
+      border-radius:14px;padding:12px;font-size:15px;outline:none}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);border-radius:14px;padding:12px 14px;
+      font-size:15px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .btn.primary{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15)}
+    .btn.danger{border-color:rgba(251,113,133,.55);background:rgba(251,113,133,.12)}
+    .hint{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.35}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text);border-radius:999px;padding:8px 12px;
+      font-size:13px;cursor:pointer}
+    .tab.active{border-color:rgba(96,165,250,.65);background:rgba(96,165,250,.16)}
+    .out{font-family:var(--mono);white-space:pre-wrap;line-height:1.25;font-size:13px;background:rgba(0,0,0,.22);
+      border:1px solid var(--border);border-radius:14px;padding:12px;min-height:260px}
+    .status{margin-top:10px;font-size:12px;color:var(--muted)}
+    .status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.err{color:var(--danger)}
+    .bottombar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:rgba(7,11,20,.85);backdrop-filter: blur(12px);
+      border-top:1px solid var(--border);padding:10px 14px}
+    .bottomwrap{max-width:980px;margin:0 auto;display:flex;gap:10px;justify-content:space-between;align-items:center}
+    .bottomwrap .mini{font-size:12px;color:var(--muted)}
+    .modal{position:fixed;inset:0;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);z-index:10}
+    .modal.open{display:flex}
+    .sheet{width:min(980px,100%);background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
+      border:1px solid var(--border);border-radius:20px 20px 0 0;padding:14px;max-height:86vh;overflow:auto}
+    .sheethead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .sheethead h3{margin:0;font-size:15px}
+    .section{border:1px solid var(--border);border-radius:16px;background:rgba(0,0,0,.18);padding:12px;margin:10px 0}
+    .section h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:700}
+    .formgrid{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:720px){.formgrid{grid-template-columns:1fr 1fr}}
+    label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+    input, select{width:100%;background:rgba(0,0,0,.22);color:var(--text);border:1px solid var(--border);border-radius:12px;
+      padding:10px 12px;font-size:14px;outline:none}
+    .jsonarea{min-height:300px;font-family:var(--mono);font-size:13px}
+    @media print{
+      .topbar,.bottombar,.no-print,.modal{display:none !important}
+      body{background:#fff;color:#000}
+      .app{padding:0;max-width:none}
+      .card{border:none;box-shadow:none;background:none}
+      .out{border:none;background:none}
     }
   </style>
 </head>
 <body>
-
   <div class="app">
     <div class="topbar">
       <div class="title">
-        <h1>WA Order Manager</h1>
-        <div class="sub" id="dayBadge">Inizializzazione...</div>
+        <h1>Gestionale WhatsApp → Comande</h1>
+        <div class="sub">Parsing “leggenda”: In Via…, mezzo metro (1/2/3 gusti), formati (schiacciata/verace), note (tagliate), Ritiro “passo a prenderle”.</div>
       </div>
-      <button id="openSettings" class="iconbtn">⚙️</button>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span id="dayBadge" class="pill">—</span>
+        <button id="openSettings" class="iconbtn" aria-label="Impostazioni">⚙️</button>
+      </div>
     </div>
 
     <div class="grid">
       <div class="card">
         <div class="cardhead">
-          <h2>Input Ordine</h2>
-          <span class="pill" id="extractBadge">Auto-Detect</span>
+          <h2>Input WhatsApp</h2>
+          <span class="pill" id="extractBadge">Estrazione: auto</span>
         </div>
         <div class="cardbody">
-          <textarea id="input" placeholder="Incolla l'ordine qui..."></textarea>
+          <textarea id="input" placeholder="Incolla qui l’ordine (anche tutta la chat)."></textarea>
           <div class="btnrow no-print">
-            <button id="gen" class="btn primary">Genera ✨</button>
+            <button id="gen" class="btn primary">Genera</button>
             <button id="copy" class="btn">Copia</button>
             <button id="print" class="btn">Stampa</button>
-            <button id="closeDay" class="btn danger">Nuovo Giorno</button>
+            <button id="closeDay" class="btn danger">Chiusura serale</button>
+          </div>
+          <div class="hint">
+            ✅ “In Via …” riconosciuto come indirizzo<br/>
+            ✅ “grande / mezzo metro / schiacciata / verace” diventano FORMATO/SIZE (non articoli)<br/>
+            ✅ “passo a prenderle / vengo a prenderle” ⇒ <b>RITIRO</b><br/>
+            ✅ “due gusti / tre gusti” ⇒ una sola pizza con dettagli per gusto
           </div>
         </div>
       </div>
@@ -107,16 +113,16 @@
       <div class="card">
         <div class="cardhead">
           <div class="tabs no-print">
-            <button class="tab active" data-view="kitchen">Cucina</button>
-            <button class="tab" data-view="receipt">Ricevuta</button>
-            <button class="tab" data-view="debug">Debug</button>
+            <div class="tab active" data-view="kitchen">Comanda cucina</div>
+            <div class="tab" data-view="receipt">Ricevuta cliente</div>
+            <div class="tab" data-view="debug">Debug</div>
           </div>
         </div>
         <div class="cardbody">
-          <div id="outKitchen" class="out">In attesa...</div>
-          <div id="outReceipt" class="out" style="display:none">In attesa...</div>
-          <div id="outDebug" class="out" style="display:none">In attesa...</div>
-          <div id="status" class="status no-print" style="margin-top:10px; font-size:11px;"></div>
+          <div id="outKitchen" class="out">—</div>
+          <div id="outReceipt" class="out" style="display:none">—</div>
+          <div id="outDebug" class="out" style="display:none">—</div>
+          <div id="status" class="status no-print"></div>
         </div>
       </div>
     </div>
@@ -124,206 +130,699 @@
 
   <div class="bottombar no-print">
     <div class="bottomwrap">
-      <div class="stat">Totale: <span id="totalMini">€ 0.00</span></div>
-      <div class="stat">Articoli: <span id="qtyMini">0</span></div>
-      <div class="stat" id="printModeMini" style="font-size:11px; color:var(--muted)">Stampa: Both</div>
+      <div class="mini" id="printModeMini">Stampa: entrambe</div>
+      <div class="mini" id="totalMini">Totale: —</div>
     </div>
   </div>
 
-  <div id="modal" class="modal no-print">
+  <div id="modal" class="modal no-print" role="dialog" aria-modal="true">
     <div class="sheet">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 style="margin:0">Configurazione</h3>
-        <button id="closeSettings" class="iconbtn">✕</button>
+      <div class="sheethead">
+        <h3>Impostazioni</h3>
+        <button id="closeSettings" class="iconbtn" aria-label="Chiudi">✕</button>
       </div>
 
       <div class="section">
-        <h4>Parametri Generali</h4>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <label>Costo Consegna<input id="deliveryFee" type="number" step="0.5"></label>
-          <label>Pizza Base Custom<select id="fallbackBasePizza"></select></label>
+        <h4>Stampa</h4>
+        <div class="formgrid">
+          <label>
+            Modalità stampa
+            <select id="printMode">
+              <option value="both">Entrambe (cucina + ricevuta)</option>
+              <option value="kitchen">Solo comanda cucina</option>
+              <option value="receipt">Solo ricevuta cliente</option>
+            </select>
+          </label>
+          <label>
+            Costo consegna (se CONSEGNA)
+            <input id="deliveryFee" inputmode="decimal" placeholder="0.00" />
+          </label>
         </div>
-        <label>Modalità Stampa
-          <select id="printMode">
-            <option value="both">Entrambe (Cucina + Ricevuta)</option>
-            <option value="kitchen">Solo Cucina</option>
-            <option value="receipt">Solo Ricevuta</option>
-          </select>
-        </label>
       </div>
 
       <div class="section">
-        <h4>Catalogo JSON</h4>
-        <textarea id="catalog" style="min-height:200px; font-family:var(--mono); font-size:12px;"></textarea>
+        <h4>Default</h4>
+        <div class="formgrid">
+          <label>
+            Pizza base per “custom” (se nome non trovato)
+            <select id="fallbackBasePizza"></select>
+          </label>
+          <label>
+            Default formato/size (se cliente scrive solo “due gusti/tre gusti”)
+            <select id="fallbackSize"></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h4>Catalogo (JSON)</h4>
+        <div class="hint">Aggiungi prezzi a <b>sizes</b> (grande/mezzo metro) e <b>formats</b> (schiacciata/verace).</div>
+        <textarea id="catalog" class="jsonarea" spellcheck="false"></textarea>
         <div class="btnrow">
-          <button id="saveCatalog" class="btn primary">Salva</button>
-          <button id="resetCatalog" class="btn">Reset</button>
+          <button id="saveCatalog" class="btn primary">Salva catalogo</button>
+          <button id="resetCatalog" class="btn">Ripristina esempio</button>
+          <button id="exportCatalog" class="btn">Export</button>
+          <button id="importCatalog" class="btn">Import</button>
         </div>
+        <div id="catStatus" class="status"></div>
       </div>
     </div>
   </div>
 
 <script>
-// --- LOGICA CORE ---
-const LS = { catalog:"wa_cat_v5", settings:"wa_set_v5", lastDay:"wa_day_v5" };
+const LS = { catalog:"wa_gestionale_catalog_v6", settings:"wa_gestionale_settings_v6", lastDay:"wa_gestionale_lastday_v6" };
 
 const SAMPLE_CATALOG = {
   currency:"€",
-  pizzas:{ "margherita":6.00, "diavola":7.50, "prosciutto":7.50, "salame piccante":7.50, "salsiccia porcini e grana":9.50 },
+  pizzas:{
+    "margherita":6.00,
+    "capricciosa":8.50,
+    "salame piccante":7.50
+  },
   drinks:{ "coca cola 33":2.50, "acqua 0.5":1.50, "birra 33":3.50 },
-  extras:{ "speck":1.50, "brie":1.50, "porcini":2.00, "grana":1.00, "cipolla":0.80 },
+  extras:{
+    "speck":1.50, "brie":1.50, "prosciutto cotto":1.80, "gorgonzola":1.80, "crudo di parma":2.50,
+    "panna":1.20, "cipolle":0.80, "verdure grigliate":1.50, "mozzarella senza lattosio":1.50
+  },
   doughs:{ "classico":0.00, "integrale":1.00, "senza glutine":3.00 },
-  sizes:{ "normale":0.00, "baby":-1.00, "maxi":2.00 },
-  aliases:{ "marg":"margherita", "coca":"coca cola 33", "sg":"senza glutine", "s.g.":"senza glutine" }
+  sizes:{
+    "normale":0.00,
+    "grande":0.00,
+    "mezzo metro":0.00
+  },
+  formats:{
+    "tonda":0.00,
+    "schiacciata":0.00,
+    "verace":0.00
+  },
+  aliases:{
+    "marg":"margherita",
+    "sg":"senza glutine","s.g.":"senza glutine","senza glutine":"senza glutine",
+    "mezzo-metro":"mezzo metro","mezzometro":"mezzo metro"
+  }
 };
 
-const DEFAULT_SETTINGS = { printMode:"both", deliveryFee:0, halfHalfPricing:"max", halfHalfExtras:"full", fallbackBasePizza:"margherita" };
+const DEFAULT_SETTINGS = {
+  printMode:"both",
+  deliveryFee:0.00,
+  fallbackBasePizza:"margherita",
+  fallbackSize:"normale"
+};
 
-let CATALOG = JSON.parse(localStorage.getItem(LS.catalog)) || structuredClone(SAMPLE_CATALOG);
-let SETTINGS = JSON.parse(localStorage.getItem(LS.settings)) || structuredClone(DEFAULT_SETTINGS);
+function todayKey(){const d=new Date();const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;}
+function nowStr(){const d=new Date();const p=n=>String(n).padStart(2,'0');return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;}
+function normalizeTime(t){const m=t.match(/(\d{1,2})[.:](\d{2})/); if(!m) return ""; return `${String(Number(m[1])).padStart(2,'0')}:${m[2]}`;}
+function stripChatNoise(line){return line.replace(/\s+\d{1,2}:\d{2}\s*$/,'').trim();}
+function safeLower(s){return (s||"").toLowerCase();}
+function normSpaces(s){return (s||"").replace(/\s+/g,' ').trim();}
+function money(n){return (Math.round((n+Number.EPSILON)*100)/100).toFixed(2);}
 
-// --- FUNZIONI DI SUPPORTO ---
-function safeLower(s){ return (s||"").toLowerCase().trim(); }
-function money(n){ return n.toFixed(2); }
+function setStatus(msg,type=""){const el=document.getElementById("status"); el.className="status no-print "+(type==="ok"?"ok":type==="warn"?"warn":type==="err"?"err":""); el.textContent=msg||"";}
+function setCatStatus(msg,type=""){const el=document.getElementById("catStatus"); el.className="status "+(type==="ok"?"ok":type==="warn"?"warn":type==="err"?"err":""); el.textContent=msg||"";}
+function ensureDaily(){const t=todayKey();document.getElementById("dayBadge").textContent=`Giorno: ${t}`;const last=localStorage.getItem(LS.lastDay);if(last!==t){localStorage.setItem(LS.lastDay,t);setStatus("Nuovo giorno: pronto.","ok");}}
 
-function parseOrder(rawText) {
-  // 1. Estrazione blocco utile (Logica Stop Phrases)
-  const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
-  let o = { name:"", address:"", items:[], total:0, qty:0, mode:"RITIRO", time:"" };
+function loadCatalog(){const s=localStorage.getItem(LS.catalog); if(s){try{return JSON.parse(s);}catch{}} return structuredClone(SAMPLE_CATALOG);}
+function saveCatalog(obj){localStorage.setItem(LS.catalog, JSON.stringify(obj,null,2));}
+function loadSettings(){const s=localStorage.getItem(LS.settings); if(s){try{return {...DEFAULT_SETTINGS, ...JSON.parse(s)};}catch{}} return structuredClone(DEFAULT_SETTINGS);}
+function saveSettings(obj){localStorage.setItem(LS.settings, JSON.stringify(obj,null,2));}
 
-  // 2. Metadati veloci
-  const textAll = rawText.toLowerCase();
-  if(/\b(consegna|via|viale|piazza)\b/.test(textAll)) o.mode = "CONSEGNA";
-  const tm = rawText.match(/(\d{1,2})[.:](\d{2})/);
-  if(tm) o.time = tm[0];
+function resolveAlias(cat,raw){
+  const k=normSpaces(safeLower(raw));
+  if(cat.aliases && cat.aliases[k]) return cat.aliases[k];
+  return k;
+}
 
-  lines.forEach(line => {
-    const l = safeLower(line);
-    
-    // Esclusione nomi ALL CAPS (Clienti) dagli articoli
-    const isAllCaps = line === line.toUpperCase() && /[A-Z]/.test(line) && line.length > 4;
-    
-    // Riconoscimento articoli (Qty + Testo)
-    const m = line.match(/^(\d+)\s+(.+)$/);
-    if(m && !isAllCaps) {
-      const q = parseInt(m[1]);
-      let txt = m[2].toLowerCase();
-      
-      // Risoluzione Alias & Prezzi
-      let baseKey = CATALOG.aliases[txt] || txt;
-      let price = 0;
-      let found = false;
+/* ====== EXTRACTION (unchanged, light) ====== */
+function extractLikelyOrderText(raw){
+  return { text:(raw||"").replace(/\r/g,"").trim(), mode:"raw" };
+}
 
-      // Cerca in Pizze
-      for(let p in CATALOG.pizzas) {
-        if(txt.includes(p)) { price = CATALOG.pizzas[p]; baseKey = p; found = true; break; }
-      }
-      // Se non trovata e c'è un impasto speciale, usa la fallback base
-      if(!found && (txt.includes("senza glutine") || txt.includes("sg"))) {
-         price = CATALOG.pizzas[SETTINGS.fallbackBasePizza] || 0;
-         baseKey = SETTINGS.fallbackBasePizza;
-         found = true;
-      }
+/* ====== CLASSIFIERS ====== */
+function isStandaloneTime(line){ return /^\d{1,2}[:.]\d{2}$/.test(line.trim()); }
+function looksLikeAddressLine(line){
+  const l=safeLower(line).trim();
+  if(/^indirizzo\s*:/.test(l)) return true;
+  // NEW: "in via ..." accepted
+  if(/^in\s+(via|viale|piazza|corso|strada)\b/.test(l)) return true;
+  return /^(via|viale|piazza|corso|strada|v\.|p\.|c\.so)\b/.test(l);
+}
+function cleanAddress(line){
+  return normSpaces(line.replace(/^indirizzo\s*:\s*/i,"").replace(/^in\s+/i,""));
+}
+function looksLikeDetailsLine(line){
+  const l=safeLower(line);
+  return /\b(scala|interno|int\.|int\b|citofono|piano|appartamento|palazzina)\b/.test(l);
+}
+function looksLikeNoteLine(line){
+  const l=safeLower(line);
+  return /\b(tagliate|tagliata|spicchi|ben\s+cotta|poco\s+cotta)\b/.test(l);
+}
+function looksLikeGreetingOrMeta(line){
+  const l=safeLower(line);
+  if(/^(ciao|buonasera|buongiorno|salve)\b/.test(l)) return true;
+  if(/\bvolevo ordinare\b/.test(l)) return true;
+  if(/\bstasera\b/.test(l)) return true;
+  return false;
+}
+function extractQtyAndText(line){
+  let m=line.match(/^(\d+)\s+(.+)$/);
+  if(m) return {qty:Number(m[1]), text:m[2].trim()};
+  m=line.match(/^(.+?)\s*[x×]\s*(\d+)$/i);
+  if(m) return {qty:Number(m[2]), text:m[1].trim()};
+  return {qty:1, text:line.trim()};
+}
+function detectPickupDelivery(text){
+  const t=safeLower(text);
+  const hasPickup = /\b(ritiro|asporto|take away|takeaway|passo a prender|vengo a prender|passo a ritir|vengo a ritir)\b/.test(t);
+  const hasDelivery = /\b(consegna|domicilio|a casa|delivery)\b/.test(t);
+  if(hasPickup && !hasDelivery) return "RITIRO";
+  if(hasDelivery && !hasPickup) return "CONSEGNA";
+  if(hasDelivery && hasPickup) return "CONSEGNA/RITIRO";
+  return "";
+}
+function detectPhone(line){
+  const pm=line.match(/(\+?\d[\d\s\-]{6,}\d)/);
+  if(!pm) return "";
+  return pm[1].replace(/[^\d+]/g,'');
+}
+function looksLikePersonName(line){
+  // Title Case / words with initial caps; no digits; not an address; not a pizza line.
+  const s=normSpaces(line);
+  if(!s || s.length<3) return false;
+  if(/\d/.test(s)) return false;
+  if(looksLikeAddressLine(s)) return false;
+  const words=s.split(" ");
+  if(words.length<2 || words.length>4) return false;
+  if(words.some(w=>w.length<2)) return false;
+  // at least one capital start (Picari Erjon)
+  const cap = words.filter(w=>/^[A-ZÀÈÉÌÒÙ][a-zàèéìòù'’-]+$/.test(w)).length;
+  return cap>=2;
+}
 
-      // Extra
-      if(txt.includes("senza glutine") || txt.includes("sg")) price += CATALOG.doughs["senza glutine"];
-      
-      // Calcolo finali
-      o.items.push({ qty: q, label: line.replace(/^\d+\s+/, ""), price: price, sub: price * q });
-      o.total += price * q;
-      o.qty += q;
-    } else {
-      // Se non è articolo, prova a mappare indirizzo o nome
-      if(/\b(via|viale|piazza)\b/.test(l)) o.address = line;
-      else if(isAllCaps && !o.name) o.name = line;
+/* ====== FORMAT/SIZE/DOUGH ====== */
+function detectDough(cat, text){
+  if(/\b(senza\s+glutine|sg|s\.g\.)\b/i.test(text)) return "senza glutine";
+  const lower=safeLower(text);
+  for(const d of Object.keys(cat.doughs||{})){
+    if(d==="senza glutine") continue;
+    if(lower.includes(safeLower(d))) return d;
+  }
+  return "classico";
+}
+function detectSize(cat, text, fallback){
+  let lower=safeLower(text);
+  lower=lower.replace(/mezzo[\s-]?metro/g,"mezzo metro");
+  for(const s of Object.keys(cat.sizes||{})){
+    if(s==="normale") continue;
+    if(lower.includes(safeLower(s))) return s;
+  }
+  return fallback || "normale";
+}
+function detectFormat(cat, text){
+  const lower=safeLower(text);
+  for(const f of Object.keys(cat.formats||{})){
+    if(f==="tonda") continue;
+    if(lower.includes(safeLower(f))) return f;
+  }
+  return "tonda";
+}
+
+/* ====== PIZZA NAME ====== */
+function findPizzaName(cat, text){
+  let t=normSpaces(safeLower(text))
+    .replace(/\b(senza\s+glutine|sg|s\.g\.)\b/g,'')
+    .replace(/\b(impasto|formato|pizza|pizze)\b/g,'')
+    .replace(/\b(mezzo\s*metro|grande|schiacciata|verace)\b/g,'')
+    .replace(/\+.*$/g,'')
+    .trim();
+
+  const keys=Object.keys(cat.pizzas||{}).sort((a,b)=>b.length-a.length);
+  for(const k of keys){ if(t.includes(safeLower(k))) return k; }
+
+  const alias=resolveAlias(cat, t);
+  if(cat.pizzas && cat.pizzas[alias] != null) return alias;
+
+  return t || text.trim();
+}
+
+/* ====== EXTRAS (safe) ====== */
+function parseExtras(cat, text){
+  // Remove dough keywords before scanning
+  let t=text.replace(/\bsenza\s+glutine\b/ig," ").replace(/\bsg\b/ig," ").replace(/\bs\.g\.\b/ig," ");
+  const lower=safeLower(t);
+
+  // explicit removals
+  const removals=[];
+  const senza=[...t.matchAll(/\bsenza\s+([a-zàèéìòù0-9'\- ]{2,})/gi)].map(m=>normSpaces(m[1]));
+  for(const s of senza){ removals.push(resolveAlias(cat,s)); }
+
+  // explicit extras: "+x", "più x"
+  const extras=[];
+  const plus=[...t.matchAll(/(?:^|\s)(?:\+|pi[ùu])\s*([a-zàèéìòù0-9'\- ]{2,})/gi)].map(m=>normSpaces(m[1]));
+  for(const p of plus){ extras.push(resolveAlias(cat,p)); }
+
+  // implicit extras: if an extras keyword is present as whole word
+  for(const ex of Object.keys(cat.extras||{})){
+    const exL=safeLower(ex);
+    if(new RegExp(`\\b${exL.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`).test(lower)){
+      if(removals.some(r=>safeLower(r)===exL)) continue;
+      if(!extras.some(e=>safeLower(e)===exL)) extras.push(ex);
     }
-  });
-
-  if(o.mode === "CONSEGNA") o.total += Number(SETTINGS.deliveryFee);
-  return o;
+  }
+  return {extrasFull:[...new Set(extras)], removals:[...new Set(removals)]};
 }
 
-// --- RENDERERS ---
-function renderKitchen(o) {
-  let res = `--- COMANDA CUCINA ---\nORA: ${o.time || '--:--'} | ${o.mode}\nCLIENTE: ${o.name || 'N.D.'}\nIND: ${o.address || 'ASPORTO'}\n----------------------\n`;
-  o.items.forEach(i => res += `${i.qty}x ${i.label.toUpperCase()}\n`);
-  res += `----------------------\nTOTALE PIZZE: ${o.qty}`;
-  return res;
+/* ====== GUSTI PARSER ======
+   - "mezzo metro due gusti ..." => 1 pizza "2 gusti" con dettagli (non 2 pizze)
+   - "3 gusti ..." idem
+*/
+function parseGustiLine(line){
+  const l=safeLower(line).replace(/mezzo[\s-]?metro/g,"mezzo metro");
+  const m=l.match(/\b(\d+)\s*(?:gust[oi]|gusto|gusti)\b/);
+  if(m) return Number(m[1]);
+  if(/\bdue\s+gust/i.test(l)) return 2;
+  if(/\btre\s+gust/i.test(l)) return 3;
+  if(/\bun\s+gust/i.test(l)) return 1;
+  return 0;
+}
+function splitTwoGusti(text){
+  // tries to split by "metà ... e metà ..."
+  const parts = text.split(/\bmet[àa]\b/ig).map(s=>normSpaces(s)).filter(Boolean);
+  // Usually: ["due gusti", "margherita con prosciutto cotto e", "margherita con gorgonzola ..."]
+  if(parts.length>=3){
+    const a = parts[1].replace(/\be\b$/i,"").trim();
+    const b = parts[2].trim();
+    return [a,b];
+  }
+  return null;
 }
 
-function renderReceipt(o) {
-  let res = `--- RICEVUTA CLIENTE ---\n`;
-  o.items.forEach(i => res += `${i.qty} x ${i.label} -> €${money(i.sub)}\n`);
-  if(o.mode === "CONSEGNA") res += `Consegna: €${money(Number(SETTINGS.deliveryFee))}\n`;
-  res += `----------------------\nTOTALE: €${money(o.total)}`;
-  return res;
+/* ====== PRICING ====== */
+function extrasSum(cat, extras){
+  return (extras||[]).reduce((acc, ex)=>{
+    const k=resolveAlias(cat, ex);
+    const p=(cat.extras && cat.extras[k]!=null)?Number(cat.extras[k]):0;
+    return acc+p;
+  },0);
+}
+function pricePizza(cat, pizzaKey, doughKey, sizeKey, formatKey, extrasFull){
+  const baseKnown=(cat.pizzas && cat.pizzas[pizzaKey]!=null);
+  const base=baseKnown?Number(cat.pizzas[pizzaKey]):0;
+  const dough=(cat.doughs && cat.doughs[doughKey]!=null)?Number(cat.doughs[doughKey]):0;
+  const size=(cat.sizes && cat.sizes[sizeKey]!=null)?Number(cat.sizes[sizeKey]):0;
+  const fmt=(cat.formats && cat.formats[formatKey]!=null)?Number(cat.formats[formatKey]):0;
+  const ex=extrasSum(cat, extrasFull);
+  return { unit: base + dough + size + fmt + ex, known: baseKnown };
 }
 
-// --- UI HANDLERS ---
-function init() {
-  const d = new Date();
-  document.getElementById("dayBadge").textContent = d.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
-  document.getElementById("catalog").value = JSON.stringify(CATALOG, null, 2);
-  document.getElementById("deliveryFee").value = SETTINGS.deliveryFee;
-  
-  // Popola select fallback
-  const sel = document.getElementById("fallbackBasePizza");
-  Object.keys(CATALOG.pizzas).forEach(p => {
-    let opt = new Option(p, p);
-    if(p === SETTINGS.fallbackBasePizza) opt.selected = true;
-    sel.add(opt);
-  });
+/* ====== PARSE ORDER (legend) ====== */
+function parseOrder(cat, settings, rawText){
+  const extracted = extractLikelyOrderText(rawText);
+  document.getElementById("extractBadge").textContent = "Estrazione: testo";
+
+  const text = extracted.text || "";
+  const lines = text.split("\n").map(x=>stripChatNoise(x).trim()).filter(Boolean);
+
+  let name="", address="", phone="", desiredTime="", details="";
+  let mode = detectPickupDelivery(text);
+
+  // 1) time (also "alle 20:15")
+  for(const ln of lines){
+    const tm=ln.match(/\b(?:alle|per\s*le|ore)\s*(\d{1,2}[.:]\d{2})\b/i) || ln.match(/\b(\d{1,2}[.:]\d{2})\b/);
+    if(tm){ desiredTime=normalizeTime(tm[1]); break; }
+  }
+
+  // 2) address
+  for(const ln of lines){
+    if(looksLikeAddressLine(ln)){
+      address = cleanAddress(ln);
+      break;
+    }
+  }
+
+  // 3) phone & name (often at end)
+  for(const ln of lines){
+    const ph=detectPhone(ln);
+    if(ph) phone=ph;
+  }
+  // pick best candidate name: last person-like line that is not address and not item qty
+  for(let i=lines.length-1;i>=0;i--){
+    const ln=lines[i];
+    if(looksLikePersonName(ln) && !/^\d+\s+/.test(ln)){
+      name = normSpaces(ln);
+      break;
+    }
+  }
+
+  // 4) notes/details
+  for(const ln of lines){
+    if(looksLikeDetailsLine(ln) && !details) details = normSpaces(ln);
+    if(looksLikeNoteLine(ln)){
+      details = details ? `${details} | ${normSpaces(ln)}` : normSpaces(ln);
+    }
+  }
+
+  // 5) detect default size context (mezzo metro) if mentioned anywhere
+  let defaultSize = settings.fallbackSize || "normale";
+  if(/\bmezzo[\s-]?metro\b/i.test(text)) defaultSize = "mezzo metro";
+
+  const items=[];
+  for(const ln0 of lines){
+    const ln=ln0.trim();
+    const l=safeLower(ln);
+
+    if(!ln) continue;
+    if(isStandaloneTime(ln)) continue;
+    if(looksLikeGreetingOrMeta(ln)) continue;
+
+    // ignore fields already extracted
+    if(phone && ln.replace(/\D/g,'') === phone.replace(/\D/g,'')) continue;
+    if(name && safeLower(ln)===safeLower(name)) continue;
+    if(address && safeLower(cleanAddress(ln))===safeLower(address) && looksLikeAddressLine(ln)) continue;
+
+    // ignore pure notes
+    if(looksLikeNoteLine(ln) && !/^\d+\s+/.test(ln)) continue;
+    if(looksLikeDetailsLine(ln) && !/^\d+\s+/.test(ln)) continue;
+
+    // drinks
+    const {qty, text:itemTextRaw} = extractQtyAndText(ln);
+    if(!itemTextRaw) continue;
+
+    // gusti lines
+    const gustiN = parseGustiLine(itemTextRaw);
+    const hasMezzoMetro = /\bmezzo[\s-]?metro\b/i.test(itemTextRaw);
+    const sizeKey = detectSize(cat, itemTextRaw, hasMezzoMetro ? "mezzo metro" : defaultSize);
+    const formatKey = detectFormat(cat, itemTextRaw);
+    const doughKey = detectDough(cat, itemTextRaw);
+
+    if(gustiN>0){
+      // Special handling for 2 gusti with metà/ metà
+      let note = normSpaces(itemTextRaw.replace(/\b\d+\s*gust[oi]\b/ig,"").replace(/\bdue\s+gusti\b/ig,"").replace(/\btre\s+gusti\b/ig,"").replace(/\bun\s+gusto\b/ig,""));
+      let perGusto = [];
+      if(gustiN===2){
+        const sp = splitTwoGusti(note);
+        if(sp){
+          perGusto = sp.map(s=>s.replace(/\be\b$/i,"").trim()).filter(Boolean);
+        }
+      }
+      const basePizza = settings.fallbackBasePizza;
+      const {extrasFull, removals} = parseExtras(cat, note);
+      const pr = pricePizza(cat, basePizza, doughKey, sizeKey, formatKey, extrasFull);
+
+      items.push({
+        kind:"pizza",
+        qty,
+        pizzaKey: basePizza,
+        doughKey, sizeKey, formatKey,
+        gusti: gustiN,
+        gustiNotes: perGusto,
+        extrasFull, removals,
+        unitPrice: pr.unit,
+        lineTotal: pr.unit*qty,
+        priceKnown: pr.known,
+        glutenFree: doughKey==="senza glutine",
+        freeText: note
+      });
+      continue;
+    }
+
+    // Normal pizza lines (starting with qty usually)
+    if(/^\d+\s+/.test(ln)){
+      const pizzaKeyCand = findPizzaName(cat, itemTextRaw);
+      const known = (cat.pizzas && cat.pizzas[pizzaKeyCand]!=null);
+      const pizzaKey = known ? pizzaKeyCand : (settings.fallbackBasePizza || pizzaKeyCand);
+      const {extrasFull, removals} = parseExtras(cat, itemTextRaw);
+      const pr = pricePizza(cat, pizzaKey, doughKey, sizeKey, formatKey, extrasFull);
+
+      items.push({
+        kind:"pizza",
+        qty,
+        pizzaKey,
+        doughKey, sizeKey, formatKey,
+        extrasFull, removals,
+        unitPrice: pr.unit,
+        lineTotal: pr.unit*qty,
+        priceKnown: pr.known,
+        glutenFree: doughKey==="senza glutine",
+        freeText: known ? "" : itemTextRaw
+      });
+      continue;
+    }
+  }
+
+  const computedPizzas = items.filter(i=>i.kind==="pizza").reduce((a,i)=>a+i.qty,0);
+  let total = items.reduce((a,i)=>a+i.lineTotal,0);
+  const addDelivery = (mode==="CONSEGNA");
+  const delFee = addDelivery ? Number(settings.deliveryFee||0) : 0;
+  if(delFee>0) total += delFee;
+
+  return { extractedText:text, name, phone, address, details, desiredTime, mode, items, computedPizzas, total, deliveryFee:delFee, defaultSize };
 }
 
-document.getElementById("gen").onclick = () => {
-  const order = parseOrder(document.getElementById("input").value);
-  document.getElementById("outKitchen").textContent = renderKitchen(order);
-  document.getElementById("outReceipt").textContent = renderReceipt(order);
-  document.getElementById("totalMini").textContent = `€ ${money(order.total)}`;
-  document.getElementById("qtyMini").textContent = order.qty;
-  
-  // Debug info
-  document.getElementById("outDebug").textContent = JSON.stringify(order, null, 2);
-};
+/* ====== OUTPUT ====== */
+function fmtKitchen(cat, o){
+  const sep="--------------------------------";
+  const head=[
+    "================================",
+    "          COMANDA CUCINA        ",
+    "================================",
+    `Ora: ${nowStr()}`,
+    o.desiredTime ? `Orario: ${o.desiredTime}` : "Orario: —",
+    `Tipo: ${o.mode || "—"}`,
+    o.name ? `Cliente: ${o.name}` : "Cliente: —",
+    o.phone ? `Tel: ${o.phone}` : "",
+    o.address ? `Indirizzo: ${o.address}` : "Indirizzo: —",
+    o.details ? `Note: ${o.details}` : "",
+    sep,
+    "ARTICOLI:"
+  ].filter(Boolean);
 
-document.getElementById("openSettings").onclick = () => document.getElementById("modal").classList.add("open");
-document.getElementById("closeSettings").onclick = () => document.getElementById("modal").classList.remove("open");
+  const body=(o.items.length?o.items:[]).map(it=>{
+    const gf = it.glutenFree ? "  !!! SENZA GLUTINE !!!" : "";
+    const size = (it.sizeKey && it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
+    const fmt  = (it.formatKey && it.formatKey!=="tonda") ? ` <${it.formatKey}>` : "";
+    const dough= (it.doughKey && it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
+    const exF = (it.extrasFull?.length) ? ` +${it.extrasFull.join(", ")}` : "";
+    const rem = (it.removals?.length) ? ` -${it.removals.join(", ")}` : "";
+    const gusti = it.gusti ? ` [${it.gusti} gusti]` : "";
+    const gustiNote = (it.gustiNotes?.length) ? `\n     → ${it.gustiNotes.join(" | ")}` : (it.gusti && it.freeText ? `\n     → ${it.freeText}` : "");
+    return `${String(it.qty).padStart(2,' ')}  ${it.pizzaKey}${gusti}${size}${fmt}${dough}${exF}${rem}${gf}${gustiNote}`;
+  }).join("\n");
 
-document.getElementById("saveCatalog").onclick = () => {
-  try {
-    CATALOG = JSON.parse(document.getElementById("catalog").value);
-    SETTINGS.deliveryFee = document.getElementById("deliveryFee").value;
-    SETTINGS.fallbackBasePizza = document.getElementById("fallbackBasePizza").value;
-    SETTINGS.printMode = document.getElementById("printMode").value;
-    
-    localStorage.setItem(LS.catalog, JSON.stringify(CATALOG));
-    localStorage.setItem(LS.settings, JSON.stringify(SETTINGS));
-    alert("Salvato correttamente!");
-    location.reload();
-  } catch(e) { alert("Errore nel JSON!"); }
-};
+  const foot=[sep, `Totale pizze: ${o.computedPizzas}`, "================================"];
+  return [...head, body||"—", ...foot].join("\n");
+}
+function fmtReceipt(cat, o){
+  const cur=cat.currency||"€";
+  const sep="--------------------------------";
+  const lines=[];
+  let missing=0;
 
-document.getElementById("copy").onclick = () => {
-  const activeTab = document.querySelector(".tab.active").getAttribute("data-view");
-  const text = activeTab === "kitchen" ? document.getElementById("outKitchen").textContent : document.getElementById("outReceipt").textContent;
-  navigator.clipboard.writeText(text);
-  document.getElementById("status").textContent = "Copiato!";
-};
+  lines.push("================================");
+  lines.push("         RICEVUTA CLIENTE       ");
+  lines.push("================================");
+  lines.push(`Ora: ${nowStr()}`);
+  if(o.desiredTime) lines.push(`Orario: ${o.desiredTime}`);
+  lines.push(`Tipo: ${o.mode || "—"}`);
+  if(o.name) lines.push(`Cliente: ${o.name}`);
+  if(o.phone) lines.push(`Tel: ${o.phone}`);
+  if(o.address) lines.push(`Indirizzo: ${o.address}`);
+  if(o.details) lines.push(`Note: ${o.details}`);
+  lines.push(sep);
 
-document.getElementById("print").onclick = () => window.print();
+  for(const it of o.items){
+    const size = (it.sizeKey && it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
+    const fmt  = (it.formatKey && it.formatKey!=="tonda") ? ` <${it.formatKey}>` : "";
+    const dough= (it.doughKey && it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
+    const exF = (it.extrasFull?.length) ? ` +${it.extrasFull.join(", ")}` : "";
+    const rem = (it.removals?.length) ? ` -${it.removals.join(", ")}` : "";
+    const gusti = it.gusti ? ` [${it.gusti} gusti]` : "";
 
-document.querySelectorAll(".tab").forEach(t => {
-  t.onclick = () => {
-    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
-    t.classList.add("active");
-    const v = t.getAttribute("data-view");
-    document.getElementById("outKitchen").style.display = (v === "kitchen" ? "block" : "none");
-    document.getElementById("outReceipt").style.display = (v === "receipt" ? "block" : "none");
-    document.getElementById("outDebug").style.display = (v === "debug" ? "block" : "none");
-  };
+    lines.push(`${it.qty} x ${it.pizzaKey}${gusti}${size}${fmt}${dough}${exF}${rem}`);
+    if(!it.priceKnown){missing++; lines.push(`   ⚠️ PREZZO NON TROVATO`);}
+    else lines.push(`   ${money(it.unitPrice)}${cur} -> ${money(it.lineTotal)}${cur}`);
+    if(it.gustiNotes?.length) lines.push(`   → ${it.gustiNotes.join(" | ")}`);
+    else if(it.gusti && it.freeText) lines.push(`   → ${it.freeText}`);
+    lines.push(sep);
+  }
+
+  if(o.deliveryFee && o.deliveryFee>0){
+    lines.push(`CONSEGNA`);
+    lines.push(`   ${money(o.deliveryFee)}${cur}`);
+    lines.push(sep);
+  }
+
+  lines.push(`TOTALE: ${money(o.total)}${cur}`);
+  if(missing>0) lines.push(`⚠️ ${missing} riga/e senza prezzo: aggiorna il catalogo.`);
+  lines.push("================================");
+  return lines.join("\n");
+}
+
+/* ====== UI ====== */
+let CATALOG = loadCatalog();
+let SETTINGS = loadSettings();
+
+function setCatalogTextarea(){ document.getElementById("catalog").value = JSON.stringify(CATALOG,null,2); }
+function refreshOptions(){
+  const psel=document.getElementById("fallbackBasePizza");
+  psel.innerHTML="";
+  for(const k of Object.keys(CATALOG.pizzas||{}).sort()){ const o=document.createElement("option"); o.value=k; o.textContent=k; psel.appendChild(o); }
+  if(!SETTINGS.fallbackBasePizza || !(SETTINGS.fallbackBasePizza in (CATALOG.pizzas||{}))){
+    SETTINGS.fallbackBasePizza = ("margherita" in (CATALOG.pizzas||{})) ? "margherita" : (Object.keys(CATALOG.pizzas||{})[0]||"margherita");
+  }
+  psel.value=SETTINGS.fallbackBasePizza;
+
+  const ssel=document.getElementById("fallbackSize");
+  ssel.innerHTML="";
+  for(const k of Object.keys(CATALOG.sizes||{}).sort()){ const o=document.createElement("option"); o.value=k; o.textContent=k; ssel.appendChild(o); }
+  if(!SETTINGS.fallbackSize || !(SETTINGS.fallbackSize in (CATALOG.sizes||{}))){
+    SETTINGS.fallbackSize = ("normale" in (CATALOG.sizes||{})) ? "normale" : (Object.keys(CATALOG.sizes||{})[0]||"normale");
+  }
+  ssel.value=SETTINGS.fallbackSize;
+
+  document.getElementById("printMode").value=SETTINGS.printMode;
+  document.getElementById("deliveryFee").value=money(Number(SETTINGS.deliveryFee||0));
+  document.getElementById("printModeMini").textContent = `Stampa: ${SETTINGS.printMode==="both"?"entrambe":SETTINGS.printMode==="kitchen"?"solo cucina":"solo ricevuta"}`;
+}
+function applySettingsFromUI(){
+  SETTINGS.printMode=document.getElementById("printMode").value;
+  SETTINGS.deliveryFee=Number(String(document.getElementById("deliveryFee").value).replace(",",".")||0);
+  SETTINGS.fallbackBasePizza=document.getElementById("fallbackBasePizza").value || SETTINGS.fallbackBasePizza;
+  SETTINGS.fallbackSize=document.getElementById("fallbackSize").value || SETTINGS.fallbackSize;
+  saveSettings(SETTINGS);
+  refreshOptions();
+}
+function renderAll(){
+  ensureDaily();
+  const raw=document.getElementById("input").value||"";
+  if(!raw.trim()){
+    document.getElementById("outKitchen").textContent="—";
+    document.getElementById("outReceipt").textContent="—";
+    document.getElementById("outDebug").textContent="—";
+    document.getElementById("totalMini").textContent="Totale: —";
+    setStatus("");
+    return;
+  }
+  const order=parseOrder(CATALOG, SETTINGS, raw);
+  document.getElementById("outKitchen").textContent=fmtKitchen(CATALOG, order);
+  document.getElementById("outReceipt").textContent=fmtReceipt(CATALOG, order);
+
+  const dbg=[];
+  dbg.push("=== DEBUG ===");
+  dbg.push(`Nome: ${order.name||"—"}`);
+  dbg.push(`Tel: ${order.phone||"—"}`);
+  dbg.push(`Indirizzo: ${order.address||"—"}`);
+  dbg.push(`Note: ${order.details||"—"}`);
+  dbg.push(`Orario: ${order.desiredTime||"—"}`);
+  dbg.push(`Tipo: ${order.mode||"—"}`);
+  dbg.push(`Default size: ${order.defaultSize||"—"}`);
+  dbg.push(`Base custom: ${SETTINGS.fallbackBasePizza||"—"}`);
+  dbg.push(`Totale: ${money(order.total)}${CATALOG.currency||"€"}`);
+  document.getElementById("outDebug").textContent=dbg.join("\n");
+
+  document.getElementById("totalMini").textContent=`Totale: ${money(order.total)}${CATALOG.currency||"€"}`;
+  setStatus("Generato (leggenda).","ok");
+}
+async function copyOutput(){
+  const k=document.getElementById("outKitchen").textContent||"";
+  const r=document.getElementById("outReceipt").textContent||"";
+  let out="";
+  if(SETTINGS.printMode==="both") out=k+"\n\n"+r;
+  else if(SETTINGS.printMode==="kitchen") out=k;
+  else out=r;
+  if(!out.trim()||out.trim()==="—") return;
+  try{ await navigator.clipboard.writeText(out); setStatus("Copiato.","ok"); }catch{ setStatus("Copia non disponibile.","warn"); }
+}
+function printNow(){
+  const kitchen=document.getElementById("outKitchen");
+  const receipt=document.getElementById("outReceipt");
+  const prevK=kitchen.style.display, prevR=receipt.style.display;
+  if(SETTINGS.printMode==="kitchen"){ kitchen.style.display="block"; receipt.style.display="none"; }
+  else if(SETTINGS.printMode==="receipt"){ kitchen.style.display="none"; receipt.style.display="block"; }
+  else { kitchen.style.display="block"; receipt.style.display="block"; }
+  window.print();
+  kitchen.style.display=prevK; receipt.style.display=prevR;
+}
+function closeDay(){
+  document.getElementById("input").value="";
+  document.getElementById("outKitchen").textContent="—";
+  document.getElementById("outReceipt").textContent="—";
+  document.getElementById("outDebug").textContent="—";
+  document.getElementById("totalMini").textContent="Totale: —";
+  localStorage.setItem(LS.lastDay, todayKey());
+  setStatus("Chiusura serale: pulito.","ok");
+}
+
+/* modal */
+const modal=document.getElementById("modal");
+document.getElementById("openSettings").addEventListener("click",()=>modal.classList.add("open"));
+document.getElementById("closeSettings").addEventListener("click",()=>modal.classList.remove("open"));
+modal.addEventListener("click",(e)=>{ if(e.target===modal) modal.classList.remove("open"); });
+
+/* catalog */
+document.getElementById("saveCatalog").addEventListener("click",()=>{
+  try{
+    const obj=JSON.parse(document.getElementById("catalog").value);
+    obj.pizzas ||= {}; obj.drinks ||= {}; obj.extras ||= {}; obj.doughs ||= {}; obj.sizes ||= {}; obj.formats ||= {}; obj.aliases ||= {};
+    CATALOG=obj; saveCatalog(CATALOG);
+    setCatStatus("Catalogo salvato.","ok");
+    refreshOptions();
+    renderAll();
+  }catch{ setCatStatus("Errore JSON.","warn"); }
+});
+document.getElementById("resetCatalog").addEventListener("click",()=>{
+  CATALOG=structuredClone(SAMPLE_CATALOG); saveCatalog(CATALOG);
+  setCatalogTextarea();
+  setCatStatus("Ripristinato esempio.","ok");
+  refreshOptions();
+  renderAll();
+});
+document.getElementById("exportCatalog").addEventListener("click", async ()=>{
+  try{ await navigator.clipboard.writeText(JSON.stringify(CATALOG,null,2)); setCatStatus("Export copiato.","ok"); }
+  catch{ setCatStatus("Export non riuscito.","warn"); }
+});
+document.getElementById("importCatalog").addEventListener("click",()=>{
+  const pasted=prompt("Incolla JSON catalogo:");
+  if(!pasted) return;
+  try{
+    CATALOG=JSON.parse(pasted); saveCatalog(CATALOG);
+    setCatalogTextarea();
+    setCatStatus("Import OK.","ok");
+    refreshOptions();
+    renderAll();
+  }catch{ setCatStatus("Import fallito.","warn"); }
 });
 
-init();
+/* settings */
+document.getElementById("printMode").addEventListener("change",applySettingsFromUI);
+document.getElementById("deliveryFee").addEventListener("change",applySettingsFromUI);
+document.getElementById("fallbackBasePizza").addEventListener("change",applySettingsFromUI);
+document.getElementById("fallbackSize").addEventListener("change",applySettingsFromUI);
+
+/* tabs */
+for(const t of document.querySelectorAll(".tab")){
+  t.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    const view=t.getAttribute("data-view");
+    document.getElementById("outKitchen").style.display=(view==="kitchen")?"block":"none";
+    document.getElementById("outReceipt").style.display=(view==="receipt")?"block":"none";
+    document.getElementById("outDebug").style.display=(view==="debug")?"block":"none";
+  });
+}
+
+/* buttons */
+document.getElementById("gen").addEventListener("click",renderAll);
+document.getElementById("copy").addEventListener("click",copyOutput);
+document.getElementById("print").addEventListener("click",printNow);
+document.getElementById("closeDay").addEventListener("click",closeDay);
+
+/* init */
+CATALOG=loadCatalog();
+SETTINGS=loadSettings();
+setCatalogTextarea();
+refreshOptions();
+ensureDaily();
 </script>
 </body>
 </html>
