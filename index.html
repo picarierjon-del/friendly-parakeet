@@ -22,6 +22,7 @@
     .title .sub{font-size:12px;color:var(--muted)}
     .iconbtn{border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);
       border-radius:12px;padding:10px 12px;font-size:16px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .iconbtn:active{transform:scale(.99)}
     .pill{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:4px 10px;border-radius:999px}
     .grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
     @media(min-width:860px){.grid{grid-template-columns:1.05fr .95fr}}
@@ -38,6 +39,7 @@
       font-size:15px;cursor:pointer;-webkit-tap-highlight-color:transparent}
     .btn.primary{border-color:rgba(96,165,250,.6);background:rgba(96,165,250,.15)}
     .btn.danger{border-color:rgba(251,113,133,.55);background:rgba(251,113,133,.12)}
+    .btn:active{transform:scale(.99)}
     .hint{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.35}
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
     .tab{border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text);border-radius:999px;padding:8px 12px;
@@ -57,6 +59,7 @@
       border:1px solid var(--border);border-radius:20px 20px 0 0;padding:14px;max-height:86vh;overflow:auto}
     .sheethead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
     .sheethead h3{margin:0;font-size:15px}
+    .close{font-size:16px}
     .section{border:1px solid var(--border);border-radius:16px;background:rgba(0,0,0,.18);padding:12px;margin:10px 0}
     .section h4{margin:0 0 10px;font-size:13px;color:var(--muted);font-weight:700}
     .formgrid{display:grid;grid-template-columns:1fr;gap:10px}
@@ -64,10 +67,11 @@
     label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
     input, select{width:100%;background:rgba(0,0,0,.22);color:var(--text);border:1px solid var(--border);border-radius:12px;
       padding:10px 12px;font-size:14px;outline:none}
+    .tinybtn{padding:10px 12px;border-radius:12px}
     .jsonarea{min-height:300px;font-family:var(--mono);font-size:13px}
     @media print{
-      .topbar,.bottombar,.no-print,.modal{display:none !important}
       body{background:#fff;color:#000}
+      .topbar,.bottombar,.no-print,.modal{display:none !important}
       .app{padding:0;max-width:none}
       .card{border:none;box-shadow:none;background:none}
       .out{border:none;background:none}
@@ -79,7 +83,7 @@
     <div class="topbar">
       <div class="title">
         <h1>Gestionale WhatsApp → Comande</h1>
-        <div class="sub">Parsing “leggenda”: In Via…, mezzo metro (1/2/3 gusti), formati (schiacciata/verace), note (tagliate), Ritiro “passo a prenderle”.</div>
+        <div class="sub">Parsing “super top”: niente nomi cliente tra gli articoli + gestione “custom” (es. “senza glutine speck e brie”).</div>
       </div>
       <div style="display:flex;gap:10px;align-items:center">
         <span id="dayBadge" class="pill">—</span>
@@ -95,17 +99,18 @@
         </div>
         <div class="cardbody">
           <textarea id="input" placeholder="Incolla qui l’ordine (anche tutta la chat)."></textarea>
+
           <div class="btnrow no-print">
             <button id="gen" class="btn primary">Genera</button>
             <button id="copy" class="btn">Copia</button>
             <button id="print" class="btn">Stampa</button>
             <button id="closeDay" class="btn danger">Chiusura serale</button>
           </div>
+
           <div class="hint">
-            ✅ “In Via …” riconosciuto come indirizzo<br/>
-            ✅ “grande / mezzo metro / schiacciata / verace” diventano FORMATO/SIZE (non articoli)<br/>
-            ✅ “passo a prenderle / vengo a prenderle” ⇒ <b>RITIRO</b><br/>
-            ✅ “due gusti / tre gusti” ⇒ una sola pizza con dettagli per gusto
+            ✅ FIX: il nome cliente in maiuscolo (es. “STABILE DINO”) non finisce mai negli articoli.<br/>
+            ✅ FIX: “senza glutine” è solo impasto (non “senza ingrediente”).<br/>
+            ✅ FIX: ingredienti dentro il nome pizza non vengono conteggiati come aggiunte.
           </div>
         </div>
       </div>
@@ -122,6 +127,7 @@
           <div id="outKitchen" class="out">—</div>
           <div id="outReceipt" class="out" style="display:none">—</div>
           <div id="outDebug" class="out" style="display:none">—</div>
+
           <div id="status" class="status no-print"></div>
         </div>
       </div>
@@ -139,7 +145,7 @@
     <div class="sheet">
       <div class="sheethead">
         <h3>Impostazioni</h3>
-        <button id="closeSettings" class="iconbtn" aria-label="Chiudi">✕</button>
+        <button id="closeSettings" class="iconbtn close" aria-label="Chiudi">✕</button>
       </div>
 
       <div class="section">
@@ -161,28 +167,45 @@
       </div>
 
       <div class="section">
-        <h4>Default</h4>
+        <h4>Regole “metà e metà”</h4>
         <div class="formgrid">
           <label>
-            Pizza base per “custom” (se nome non trovato)
-            <select id="fallbackBasePizza"></select>
+            Prezzo metà e metà
+            <select id="halfRule">
+              <option value="max">Prezzo più alto</option>
+              <option value="avg">Media</option>
+            </select>
           </label>
           <label>
-            Default formato/size (se cliente scrive solo “due gusti/tre gusti”)
-            <select id="fallbackSize"></select>
+            Extra su metà e metà (se non specificato “solo su metà”)
+            <select id="halfExtraRule">
+              <option value="full">Extra interi</option>
+              <option value="half">Extra 50%</option>
+            </select>
           </label>
         </div>
       </div>
 
       <div class="section">
+        <h4>Parsing “custom”</h4>
+        <div class="formgrid">
+          <label>
+            Pizza base per righe tipo “senza glutine speck e brie”
+            <select id="fallbackBasePizza"></select>
+          </label>
+        </div>
+        <div class="hint">Se il cliente scrive solo impasto + ingredienti, l’app userà questa pizza come base (poi somma gli extra).</div>
+      </div>
+
+      <div class="section">
         <h4>Catalogo (JSON)</h4>
-        <div class="hint">Aggiungi prezzi a <b>sizes</b> (grande/mezzo metro) e <b>formats</b> (schiacciata/verace).</div>
+        <div class="hint">Modifica prezzi/alias e salva. Export/Import per backup.</div>
         <textarea id="catalog" class="jsonarea" spellcheck="false"></textarea>
         <div class="btnrow">
-          <button id="saveCatalog" class="btn primary">Salva catalogo</button>
-          <button id="resetCatalog" class="btn">Ripristina esempio</button>
-          <button id="exportCatalog" class="btn">Export</button>
-          <button id="importCatalog" class="btn">Import</button>
+          <button id="saveCatalog" class="btn primary tinybtn">Salva catalogo</button>
+          <button id="resetCatalog" class="btn tinybtn">Ripristina esempio</button>
+          <button id="exportCatalog" class="btn tinybtn">Export</button>
+          <button id="importCatalog" class="btn tinybtn">Import</button>
         </div>
         <div id="catStatus" class="status"></div>
       </div>
@@ -190,43 +213,29 @@
   </div>
 
 <script>
-const LS = { catalog:"wa_gestionale_catalog_v6", settings:"wa_gestionale_settings_v6", lastDay:"wa_gestionale_lastday_v6" };
+const LS = { catalog:"wa_gestionale_catalog_v5", settings:"wa_gestionale_settings_v5", lastDay:"wa_gestionale_lastday_v5" };
 
 const SAMPLE_CATALOG = {
   currency:"€",
-  pizzas:{
-    "margherita":6.00,
-    "capricciosa":8.50,
-    "salame piccante":7.50
-  },
-  drinks:{ "coca cola 33":2.50, "acqua 0.5":1.50, "birra 33":3.50 },
-  extras:{
-    "speck":1.50, "brie":1.50, "prosciutto cotto":1.80, "gorgonzola":1.80, "crudo di parma":2.50,
-    "panna":1.20, "cipolle":0.80, "verdure grigliate":1.50, "mozzarella senza lattosio":1.50
-  },
+  pizzas:{ "margherita":6.00, "diavola":7.50, "prosciutto":7.50, "salame piccante":7.50, "salsiccia porcini e grana":9.50 },
+  drinks:{ "coca cola 33":2.50, "coca cola 1.5":4.00, "acqua 0.5":1.50, "birra 33":3.50 },
+  extras:{ "speck":1.50, "brie":1.50, "porcini":2.00, "grana":1.00, "cipolla":0.80 },
   doughs:{ "classico":0.00, "integrale":1.00, "senza glutine":3.00 },
-  sizes:{
-    "normale":0.00,
-    "grande":0.00,
-    "mezzo metro":0.00
-  },
-  formats:{
-    "tonda":0.00,
-    "schiacciata":0.00,
-    "verace":0.00
-  },
+  sizes:{ "normale":0.00, "baby":-1.00, "maxi":2.00 },
   aliases:{
     "marg":"margherita",
-    "sg":"senza glutine","s.g.":"senza glutine","senza glutine":"senza glutine",
-    "mezzo-metro":"mezzo metro","mezzometro":"mezzo metro"
+    "coca":"coca cola 33","cocacola":"coca cola 33","coca cola":"coca cola 33","coca cola 33cl":"coca cola 33",
+    "acqua":"acqua 0.5",
+    "sg":"senza glutine","s.g.":"senza glutine","senza glutine":"senza glutine"
   }
 };
 
 const DEFAULT_SETTINGS = {
   printMode:"both",
   deliveryFee:0.00,
-  fallbackBasePizza:"margherita",
-  fallbackSize:"normale"
+  halfHalfPricing:"max",
+  halfHalfExtras:"full",
+  fallbackBasePizza:"margherita"
 };
 
 function todayKey(){const d=new Date();const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;}
@@ -236,7 +245,6 @@ function stripChatNoise(line){return line.replace(/\s+\d{1,2}:\d{2}\s*$/,'').tri
 function safeLower(s){return (s||"").toLowerCase();}
 function normSpaces(s){return (s||"").replace(/\s+/g,' ').trim();}
 function money(n){return (Math.round((n+Number.EPSILON)*100)/100).toFixed(2);}
-
 function setStatus(msg,type=""){const el=document.getElementById("status"); el.className="status no-print "+(type==="ok"?"ok":type==="warn"?"warn":type==="err"?"err":""); el.textContent=msg||"";}
 function setCatStatus(msg,type=""){const el=document.getElementById("catStatus"); el.className="status "+(type==="ok"?"ok":type==="warn"?"warn":type==="err"?"err":""); el.textContent=msg||"";}
 function ensureDaily(){const t=todayKey();document.getElementById("dayBadge").textContent=`Giorno: ${t}`;const last=localStorage.getItem(LS.lastDay);if(last!==t){localStorage.setItem(LS.lastDay,t);setStatus("Nuovo giorno: pronto.","ok");}}
@@ -246,44 +254,113 @@ function saveCatalog(obj){localStorage.setItem(LS.catalog, JSON.stringify(obj,nu
 function loadSettings(){const s=localStorage.getItem(LS.settings); if(s){try{return {...DEFAULT_SETTINGS, ...JSON.parse(s)};}catch{}} return structuredClone(DEFAULT_SETTINGS);}
 function saveSettings(obj){localStorage.setItem(LS.settings, JSON.stringify(obj,null,2));}
 
+/* ========= EXTRACTION ========= */
+const STOP_PHRASES = [
+  "salve e grazie per averci contattato","per effettuare ordini","cognome e nome","indirizzo completo","numero di telefono",
+  "orario desiderato","elenco completo","nota bene","whatsapp viene utilizzato","i tempi di consegna stimati",
+  "l’ordine sarà considerato valido","grazie per la collaborazione","gentile cliente","la ringraziamo per il suo ordine",
+  "il suo ordine è stato correttamente ricevuto","la consegna / il ritiro è previsto","la preghiamo cortesemente",
+  "non sarà possibile rispondere","grazie per averci scelto"
+];
+function isStopLine(line){
+  const l=safeLower(line);
+  if(l.startsWith("•")||l.startsWith("- ")||l.startsWith("·")) return true;
+  for(const p of STOP_PHRASES){ if(l.includes(p)) return true; }
+  return false;
+}
+function scoreOrderBlock(block){
+  const lines=block.split("\n").map(s=>stripChatNoise(s).trim()).filter(Boolean);
+  if(!lines.length) return -999;
+  let score=0;
+  const text=safeLower(block);
+  for(const p of STOP_PHRASES){ if(text.includes(p)) score-=8; }
+  if(/\b\d{1,2}[:.]\d{2}\b/.test(text)) score+=6;
+  if(/\b(pizza|pizze)\b/.test(text)) score+=6;
+  if(/\b(domicilio|consegna|ritiro|asporto)\b/.test(text)) score+=4;
+  if(/\b(via|viale|piazza|corso)\b/.test(text)) score+=5;
+  for(const ln of lines){
+    const l=safeLower(ln);
+    if(isStopLine(ln)) score-=5;
+    if(/^\d+\s+/.test(ln)) score+=4;
+    if(/\b\d+\s*pizz[ae]\b/.test(l)) score+=4;
+    if(/^nome\s*:/.test(l)) score+=3;
+    if(/^indirizzo\s*:/.test(l)) score+=3;
+    if(/^campanello\s*:/.test(l)) score+=2;
+  }
+  if(lines.length>30) score-=3;
+  return score;
+}
+function extractLikelyOrderText(raw){
+  const normalized=raw.replace(/\r/g,"");
+  const blocks=normalized.split(/\n{2,}/g).map(b=>b.trim()).filter(Boolean);
+  if(blocks.length<=1) return {text:normalized.trim(), mode:"raw"};
+  let best={score:-9999,text:blocks[0]};
+  for(const b of blocks){ const s=scoreOrderBlock(b); if(s>best.score) best={score:s,text:b}; }
+  if(best.score<2){
+    const lines=normalized.split("\n").map(x=>stripChatNoise(x));
+    const kept=lines.filter(ln=>ln.trim() && !isStopLine(ln));
+    return {text:kept.join("\n").trim(), mode:"filtered"};
+  }
+  return {text:best.text.trim(), mode:"block"};
+}
+
+/* ========= FIELDS ========= */
+function extractLabeled(text,label){
+  const re=new RegExp(`\\b${label}\\s*:\\s*(.+)$`,"im");
+  const m=text.match(re);
+  return m?normSpaces(m[1]):"";
+}
+function looksLikeAddressLine(line){
+  const l=safeLower(line).trim();
+  if(/^indirizzo\s*:/.test(l)) return true;
+  return /^(via|viale|piazza|corso|strada|v\.|p\.|c\.so)\b/.test(l);
+}
+function looksLikeAllCapsName(line){
+  const cleaned=line.replace(/[0-9]/g,'').trim();
+  if(cleaned.length<5) return false;
+  if(!/[A-ZÀÈÉÌÒÙ]/.test(cleaned)) return false;
+  if(/^(VIA|VIALE|PIAZZA|CORSO)\b/.test(cleaned)) return false;
+  if(/[a-z]/.test(cleaned)) return false;
+  if(/^(CONSEGNA|RITIRO|ASPORTO|DOMICILIO)\b/.test(cleaned)) return false;
+  return true;
+}
+function detectPickupDelivery(text){
+  const t=safeLower(text);
+  const hasDelivery=/\b(consegna|domicilio|a casa|delivery)\b/.test(t);
+  const hasPickup=/\b(ritiro|asporto|take away|takeaway)\b/.test(t);
+  if(hasDelivery&&!hasPickup) return "CONSEGNA";
+  if(hasPickup&&!hasDelivery) return "RITIRO";
+  if(hasDelivery&&hasPickup) return "CONSEGNA/RITIRO";
+  return "";
+}
 function resolveAlias(cat,raw){
   const k=normSpaces(safeLower(raw));
   if(cat.aliases && cat.aliases[k]) return cat.aliases[k];
   return k;
 }
 
-/* ====== EXTRACTION (unchanged, light) ====== */
-function extractLikelyOrderText(raw){
-  return { text:(raw||"").replace(/\r/g,"").trim(), mode:"raw" };
-}
-
-/* ====== CLASSIFIERS ====== */
-function isStandaloneTime(line){ return /^\d{1,2}[:.]\d{2}$/.test(line.trim()); }
-function looksLikeAddressLine(line){
-  const l=safeLower(line).trim();
-  if(/^indirizzo\s*:/.test(l)) return true;
-  // NEW: "in via ..." accepted
-  if(/^in\s+(via|viale|piazza|corso|strada)\b/.test(l)) return true;
-  return /^(via|viale|piazza|corso|strada|v\.|p\.|c\.so)\b/.test(l);
-}
-function cleanAddress(line){
-  return normSpaces(line.replace(/^indirizzo\s*:\s*/i,"").replace(/^in\s+/i,""));
-}
+/* ========= DETAILS ========= */
 function looksLikeDetailsLine(line){
   const l=safeLower(line);
   return /\b(scala|interno|int\.|int\b|citofono|piano|appartamento|palazzina)\b/.test(l);
 }
-function looksLikeNoteLine(line){
-  const l=safeLower(line);
-  return /\b(tagliate|tagliata|spicchi|ben\s+cotta|poco\s+cotta)\b/.test(l);
+function normalizeDetails(line){
+  return normSpaces(line.replace(/^dettagli\s*:\s*/i,""));
 }
-function looksLikeGreetingOrMeta(line){
-  const l=safeLower(line);
-  if(/^(ciao|buonasera|buongiorno|salve)\b/.test(l)) return true;
-  if(/\bvolevo ordinare\b/.test(l)) return true;
-  if(/\bstasera\b/.test(l)) return true;
+
+/* ========= LINES FILTER ========= */
+function isStandaloneTime(line){ return /^\d{1,2}[:.]\d{2}$/.test(line.trim()); }
+function isJunkLine(line){
+  const l=safeLower(line.trim());
+  if(!l) return true;
+  if(isStandaloneTime(l)) return true;
+  if(l==="le"||l==="per"||l==="alle"||l==="al"||l==="alla") return true;
+  if(/^grazie!?$/.test(l)) return true;
+  if(/\battendo\b/.test(l) || /\bconferma\b/.test(l)) return true;
   return false;
 }
+
+/* ========= ITEMS ========= */
 function extractQtyAndText(line){
   let m=line.match(/^(\d+)\s+(.+)$/);
   if(m) return {qty:Number(m[1]), text:m[2].trim()};
@@ -291,35 +368,16 @@ function extractQtyAndText(line){
   if(m) return {qty:Number(m[2]), text:m[1].trim()};
   return {qty:1, text:line.trim()};
 }
-function detectPickupDelivery(text){
-  const t=safeLower(text);
-  const hasPickup = /\b(ritiro|asporto|take away|takeaway|passo a prender|vengo a prender|passo a ritir|vengo a ritir)\b/.test(t);
-  const hasDelivery = /\b(consegna|domicilio|a casa|delivery)\b/.test(t);
-  if(hasPickup && !hasDelivery) return "RITIRO";
-  if(hasDelivery && !hasPickup) return "CONSEGNA";
-  if(hasDelivery && hasPickup) return "CONSEGNA/RITIRO";
-  return "";
+function parseHalfHalf(text){
+  const t=normSpaces(text);
+  if(!/met[àa]\s*e\s*met[àa]/i.test(t) && !/\bmezza\s+e\s+mezza\b/i.test(t) && !/\b1\/2\b/.test(t)) return null;
+  let rest=t;
+  const mm=t.match(/(met[àa]\s*e\s*met[àa]|mezza\s+e\s+mezza|1\/2)\s*(.+)$/i);
+  if(mm) rest=mm[2].trim();
+  const parts=rest.split(/\s*\/\s*|\s*\+\s*|\s+e\s+/i).map(s=>s.trim()).filter(Boolean);
+  if(parts.length>=2) return {a:parts[0], b:parts[1]};
+  return null;
 }
-function detectPhone(line){
-  const pm=line.match(/(\+?\d[\d\s\-]{6,}\d)/);
-  if(!pm) return "";
-  return pm[1].replace(/[^\d+]/g,'');
-}
-function looksLikePersonName(line){
-  // Title Case / words with initial caps; no digits; not an address; not a pizza line.
-  const s=normSpaces(line);
-  if(!s || s.length<3) return false;
-  if(/\d/.test(s)) return false;
-  if(looksLikeAddressLine(s)) return false;
-  const words=s.split(" ");
-  if(words.length<2 || words.length>4) return false;
-  if(words.some(w=>w.length<2)) return false;
-  // at least one capital start (Picari Erjon)
-  const cap = words.filter(w=>/^[A-ZÀÈÉÌÒÙ][a-zàèéìòù'’-]+$/.test(w)).length;
-  return cap>=2;
-}
-
-/* ====== FORMAT/SIZE/DOUGH ====== */
 function detectDough(cat, text){
   if(/\b(senza\s+glutine|sg|s\.g\.)\b/i.test(text)) return "senza glutine";
   const lower=safeLower(text);
@@ -329,30 +387,19 @@ function detectDough(cat, text){
   }
   return "classico";
 }
-function detectSize(cat, text, fallback){
-  let lower=safeLower(text);
-  lower=lower.replace(/mezzo[\s-]?metro/g,"mezzo metro");
+function detectSize(cat, text){
+  const lower=safeLower(text);
   for(const s of Object.keys(cat.sizes||{})){
     if(s==="normale") continue;
     if(lower.includes(safeLower(s))) return s;
   }
-  return fallback || "normale";
+  return "normale";
 }
-function detectFormat(cat, text){
-  const lower=safeLower(text);
-  for(const f of Object.keys(cat.formats||{})){
-    if(f==="tonda") continue;
-    if(lower.includes(safeLower(f))) return f;
-  }
-  return "tonda";
-}
-
-/* ====== PIZZA NAME ====== */
 function findPizzaName(cat, text){
   let t=normSpaces(safeLower(text))
+    .replace(/\b(met[àa]\s*e\s*met[àa]|mezza\s+e\s+mezza|1\/2)\b/g,'')
     .replace(/\b(senza\s+glutine|sg|s\.g\.)\b/g,'')
     .replace(/\b(impasto|formato|pizza|pizze)\b/g,'')
-    .replace(/\b(mezzo\s*metro|grande|schiacciata|verace)\b/g,'')
     .replace(/\+.*$/g,'')
     .trim();
 
@@ -364,60 +411,94 @@ function findPizzaName(cat, text){
 
   return t || text.trim();
 }
+function isDrinkLine(cat, text){
+  const t=normSpaces(safeLower(text));
+  const alias=resolveAlias(cat, t);
+  if(cat.drinks && cat.drinks[alias] != null) return alias;
+  for(const k of Object.keys(cat.drinks||{})){
+    if(t.includes(safeLower(k))) return k;
+  }
+  return "";
+}
 
-/* ====== EXTRAS (safe) ====== */
-function parseExtras(cat, text){
-  // Remove dough keywords before scanning
-  let t=text.replace(/\bsenza\s+glutine\b/ig," ").replace(/\bsg\b/ig," ").replace(/\bs\.g\.\b/ig," ");
-  const lower=safeLower(t);
+/* ========= INLINE "X pizze ..." ========= */
+const INLINE_BAD_NAMES = new Set(["a domicilio","domicilio","consegna","ritiro","asporto","take away","takeaway"]);
+function findInlinePizzaStatements(cat, text){
+  const out=[];
+  const re=/\b(\d{1,2})\s*pizz[ae]\s+([a-zàèéìòù0-9'\- ]{2,})(?=,|\b(a|per|al|alla|alle|a\s+domicilio|domicilio|ritiro|asporto|consegna)\b|$)/gi;
+  let m;
+  while((m=re.exec(text))!==null){
+    const qty=Number(m[1]);
+    const nameRaw=normSpaces(m[2]);
+    if(!nameRaw) continue;
+    const nr=safeLower(nameRaw);
+    if(INLINE_BAD_NAMES.has(nr)) continue;
+    if(nr.length<=2) continue;
+    const nameKey=findPizzaName(cat, nameRaw);
+    out.push({qty, nameKey});
+  }
+  return out;
+}
 
-  // explicit removals
-  const removals=[];
-  const senza=[...t.matchAll(/\bsenza\s+([a-zàèéìòù0-9'\- ]{2,})/gi)].map(m=>normSpaces(m[1]));
-  for(const s of senza){ removals.push(resolveAlias(cat,s)); }
+/* ========= EXTRAS PARSER "TOP" =========
+   - "senza glutine" viene tolto prima (così non finisce in "senza <ingrediente>")
+   - extra impliciti SOLO su righe custom (es. dopo "senza glutine ..." o se pizza non trovata)
+*/
+function parseExtrasAndRemovals(cat, text, allowImplicit){
+  let t = text;
 
-  // explicit extras: "+x", "più x"
-  const extras=[];
-  const plus=[...t.matchAll(/(?:^|\s)(?:\+|pi[ùu])\s*([a-zàèéìòù0-9'\- ]{2,})/gi)].map(m=>normSpaces(m[1]));
-  for(const p of plus){ extras.push(resolveAlias(cat,p)); }
+  // 1) remove the dough phrase completely before other parsing
+  t = t.replace(/\bsenza\s+glutine\b/ig, " ").replace(/\bsg\b/ig," ").replace(/\bs\.g\.\b/ig," ");
 
-  // implicit extras: if an extras keyword is present as whole word
-  for(const ex of Object.keys(cat.extras||{})){
-    const exL=safeLower(ex);
-    if(new RegExp(`\\b${exL.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`).test(lower)){
-      if(removals.some(r=>safeLower(r)===exL)) continue;
-      if(!extras.some(e=>safeLower(e)===exL)) extras.push(ex);
+  const extrasFull=[], extrasHalf=[], removals=[];
+  const markHalf = (s)=>extrasHalf.push(resolveAlias(cat, s));
+  const markFull = (s)=>extrasFull.push(resolveAlias(cat, s));
+
+  // + ingredient [solo su metà]
+  const plusHalf = [...t.matchAll(/(?:^|\s)\+\s*([a-zàèéìòù0-9'\- ]{2,}?)\s*(?:solo\s+su\s+met[àa]|su\s+met[àa]|solo\s+su\s+mezza|su\s+mezza)\b/gi)]
+    .map(m=>normSpaces(m[1]));
+  plusHalf.forEach(markHalf);
+
+  const plus = [...t.matchAll(/(?:^|\s)\+\s*([a-zàèéìòù0-9'\- ]{2,})/gi)]
+    .map(m=>normSpaces(m[1]));
+  plus.forEach(p=>{
+    if(plusHalf.some(h=>resolveAlias(cat,h)===resolveAlias(cat,p))) return;
+    markFull(p);
+  });
+
+  // - ingredient
+  const minus = [...t.matchAll(/(?:^|\s)-\s*([a-zàèéìòù0-9'\- ]{2,})/gi)].map(m=>normSpaces(m[1]));
+  minus.forEach(s=>removals.push(resolveAlias(cat, s)));
+
+  // "senza <ingrediente>" (MAI per glutine, già rimosso sopra)
+  const senza = [...t.matchAll(/\bsenza\s+([a-zàèéìòù0-9'\- ]{2,})/gi)].map(m=>normSpaces(m[1]));
+  senza.forEach(s=>removals.push(resolveAlias(cat, s)));
+
+  // "con <ingredienti>" => full extras
+  const con = [...t.matchAll(/\bcon\s+([a-zàèéìòù0-9'\- ,]+)$/gi)].map(m=>normSpaces(m[1]));
+  con.forEach(c=>{
+    c.split(/\s+e\s+|,/i).map(x=>normSpaces(x)).filter(Boolean).forEach(x=>markFull(x));
+  });
+
+  // implicit extras ONLY when allowImplicit === true
+  if(allowImplicit){
+    const lower=safeLower(t);
+    for(const ex of Object.keys(cat.extras||{})){
+      const exL=safeLower(ex);
+      if(lower.includes(exL)){
+        // do not add if explicitly removed
+        if(new RegExp(`\\bsenza\\s+${exL.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`).test(lower)) continue;
+        const already = extrasFull.includes(ex) || extrasHalf.includes(ex);
+        if(!already) markFull(ex);
+      }
     }
   }
-  return {extrasFull:[...new Set(extras)], removals:[...new Set(removals)]};
+
+  const uniq = arr => [...new Set(arr)];
+  return { extrasFull: uniq(extrasFull), extrasHalf: uniq(extrasHalf), removals: uniq(removals) };
 }
 
-/* ====== GUSTI PARSER ======
-   - "mezzo metro due gusti ..." => 1 pizza "2 gusti" con dettagli (non 2 pizze)
-   - "3 gusti ..." idem
-*/
-function parseGustiLine(line){
-  const l=safeLower(line).replace(/mezzo[\s-]?metro/g,"mezzo metro");
-  const m=l.match(/\b(\d+)\s*(?:gust[oi]|gusto|gusti)\b/);
-  if(m) return Number(m[1]);
-  if(/\bdue\s+gust/i.test(l)) return 2;
-  if(/\btre\s+gust/i.test(l)) return 3;
-  if(/\bun\s+gust/i.test(l)) return 1;
-  return 0;
-}
-function splitTwoGusti(text){
-  // tries to split by "metà ... e metà ..."
-  const parts = text.split(/\bmet[àa]\b/ig).map(s=>normSpaces(s)).filter(Boolean);
-  // Usually: ["due gusti", "margherita con prosciutto cotto e", "margherita con gorgonzola ..."]
-  if(parts.length>=3){
-    const a = parts[1].replace(/\be\b$/i,"").trim();
-    const b = parts[2].trim();
-    return [a,b];
-  }
-  return null;
-}
-
-/* ====== PRICING ====== */
+/* ========= PRICING ========= */
 function extrasSum(cat, extras){
   return (extras||[]).reduce((acc, ex)=>{
     const k=resolveAlias(cat, ex);
@@ -425,161 +506,217 @@ function extrasSum(cat, extras){
     return acc+p;
   },0);
 }
-function pricePizza(cat, pizzaKey, doughKey, sizeKey, formatKey, extrasFull){
+function pricePizza(cat, pizzaKey, doughKey, sizeKey, extrasFull, extrasHalf){
   const baseKnown=(cat.pizzas && cat.pizzas[pizzaKey]!=null);
   const base=baseKnown?Number(cat.pizzas[pizzaKey]):0;
   const dough=(cat.doughs && cat.doughs[doughKey]!=null)?Number(cat.doughs[doughKey]):0;
   const size=(cat.sizes && cat.sizes[sizeKey]!=null)?Number(cat.sizes[sizeKey]):0;
-  const fmt=(cat.formats && cat.formats[formatKey]!=null)?Number(cat.formats[formatKey]):0;
-  const ex=extrasSum(cat, extrasFull);
-  return { unit: base + dough + size + fmt + ex, known: baseKnown };
+
+  const exFull = extrasSum(cat, extrasFull);
+  const exHalf = extrasSum(cat, extrasHalf) / 2; // explicit half
+  return { unit: base + dough + size + exFull + exHalf, known: baseKnown };
+}
+function priceHalfHalf(cat, aKey, bKey, doughKey, sizeKey, extrasFull, extrasHalf, settings){
+  const aKnown=(cat.pizzas && cat.pizzas[aKey]!=null);
+  const bKnown=(cat.pizzas && cat.pizzas[bKey]!=null);
+  const a=aKnown?Number(cat.pizzas[aKey]):0;
+  const b=bKnown?Number(cat.pizzas[bKey]):0;
+
+  const base=(settings.halfHalfPricing==="avg")?((a+b)/2):Math.max(a,b);
+  const dough=(cat.doughs && cat.doughs[doughKey]!=null)?Number(cat.doughs[doughKey]):0;
+  const size=(cat.sizes && cat.sizes[sizeKey]!=null)?Number(cat.sizes[sizeKey]):0;
+
+  let exFull = extrasSum(cat, extrasFull);
+  if(settings.halfHalfExtras==="half") exFull = exFull/2;
+  const exHalf = extrasSum(cat, extrasHalf)/2;
+
+  return { unit: base + dough + size + exFull + exHalf, known: (aKnown || bKnown) };
 }
 
-/* ====== PARSE ORDER (legend) ====== */
+/* ========= PARSE ORDER ========= */
 function parseOrder(cat, settings, rawText){
   const extracted = extractLikelyOrderText(rawText);
-  document.getElementById("extractBadge").textContent = "Estrazione: testo";
+  document.getElementById("extractBadge").textContent =
+    extracted.mode==="block" ? "Estrazione: blocco ordine" :
+    extracted.mode==="filtered" ? "Estrazione: filtrata" :
+    "Estrazione: testo unico";
 
   const text = extracted.text || "";
-  const lines = text.split("\n").map(x=>stripChatNoise(x).trim()).filter(Boolean);
+  let lines = text.replace(/\r/g,"").split("\n").map(l=>stripChatNoise(l).trim()).filter(Boolean);
 
-  let name="", address="", phone="", desiredTime="", details="";
+  let name = extractLabeled(text,"Nome");
+  let address = extractLabeled(text,"Indirizzo");
+  let bell = extractLabeled(text,"Campanello");
+  let details = extractLabeled(text,"Dettagli");
+
+  let phone="", desiredTime="", requestedTotal=null;
   let mode = detectPickupDelivery(text);
 
-  // 1) time (also "alle 20:15")
-  for(const ln of lines){
-    const tm=ln.match(/\b(?:alle|per\s*le|ore)\s*(\d{1,2}[.:]\d{2})\b/i) || ln.match(/\b(\d{1,2}[.:]\d{2})\b/);
-    if(tm){ desiredTime=normalizeTime(tm[1]); break; }
-  }
-
-  // 2) address
-  for(const ln of lines){
-    if(looksLikeAddressLine(ln)){
-      address = cleanAddress(ln);
-      break;
+  // pass 1: fields
+  for(const line of lines){
+    if(!phone){
+      const pm=line.match(/(\+?\d[\d\s\-]{6,}\d)/);
+      if(pm) phone=pm[1].replace(/[^\d+]/g,'');
+    }
+    if(!desiredTime){
+      const tm=line.match(/(?:per\s*le\s*)?(\d{1,2}[.:]\d{2})/i);
+      if(tm) desiredTime=normalizeTime(tm[1]);
+    }
+    if(requestedTotal===null){
+      const qm=safeLower(line).match(/\b(\d{1,2})\s*pizz[ae]\b/);
+      if(qm) requestedTotal=Number(qm[1]);
+    }
+    if(!address && looksLikeAddressLine(line)){
+      address=line.replace(/^indirizzo\s*:\s*/i,"").trim();
+    }
+    if(!name && looksLikeAllCapsName(line)){
+      name=line.trim();
+    }
+    if(!details && looksLikeDetailsLine(line) && !/^campanello\s*:/.test(safeLower(line))){
+      details=normalizeDetails(line);
     }
   }
 
-  // 3) phone & name (often at end)
-  for(const ln of lines){
-    const ph=detectPhone(ln);
-    if(ph) phone=ph;
-  }
-  // pick best candidate name: last person-like line that is not address and not item qty
-  for(let i=lines.length-1;i>=0;i--){
-    const ln=lines[i];
-    if(looksLikePersonName(ln) && !/^\d+\s+/.test(ln)){
-      name = normSpaces(ln);
-      break;
+  // merge address continuation (Bagnolo / Mella, scala/int...)
+  const merged=[];
+  for(let i=0;i<lines.length;i++){
+    const cur=lines[i];
+    const next=lines[i+1];
+    merged.push(cur);
+    if(!next) continue;
+
+    const curIsAddr = looksLikeAddressLine(cur) || /^indirizzo\s*:/.test(safeLower(cur));
+    const nextIsShort = next.split(/\s+/).length <= 4 && next.length <= 24;
+    const nextLooksLikeItem = /^\d+\s+/.test(next);
+    const nextIsTime = isStandaloneTime(next);
+    const nextIsDetails = looksLikeDetailsLine(next);
+    const nextIsCityFragment = nextIsShort && /^[a-zàèéìòù]+$/i.test(next) && !nextLooksLikeItem;
+
+    if(curIsAddr && !nextIsTime && !nextLooksLikeItem && (nextIsCityFragment || nextIsDetails)){
+      if(nextIsDetails){
+        details = details ? `${details} | ${normalizeDetails(next)}` : normalizeDetails(next);
+      } else {
+        address = address ? `${address} ${next}` : next;
+      }
+      i++;
     }
   }
-
-  // 4) notes/details
-  for(const ln of lines){
-    if(looksLikeDetailsLine(ln) && !details) details = normSpaces(ln);
-    if(looksLikeNoteLine(ln)){
-      details = details ? `${details} | ${normSpaces(ln)}` : normSpaces(ln);
-    }
-  }
-
-  // 5) detect default size context (mezzo metro) if mentioned anywhere
-  let defaultSize = settings.fallbackSize || "normale";
-  if(/\bmezzo[\s-]?metro\b/i.test(text)) defaultSize = "mezzo metro";
+  lines = merged;
 
   const items=[];
-  for(const ln0 of lines){
-    const ln=ln0.trim();
-    const l=safeLower(ln);
 
-    if(!ln) continue;
-    if(isStandaloneTime(ln)) continue;
-    if(looksLikeGreetingOrMeta(ln)) continue;
+  // inline "3 pizze margherita"
+  const inline = findInlinePizzaStatements(cat, text);
+  for(const it of inline){
+    const pr = pricePizza(cat, it.nameKey, "classico", "normale", [], []);
+    items.push({
+      kind:"pizza", qty:it.qty, halfHalf:false, pizzaKey:it.nameKey,
+      doughKey:"classico", sizeKey:"normale",
+      extrasFull:[], extrasHalf:[], removals:[],
+      glutenFree:false,
+      unitPrice:pr.unit, lineTotal:pr.unit*it.qty,
+      priceKnown:pr.known
+    });
+  }
 
-    // ignore fields already extracted
-    if(phone && ln.replace(/\D/g,'') === phone.replace(/\D/g,'')) continue;
-    if(name && safeLower(ln)===safeLower(name)) continue;
-    if(address && safeLower(cleanAddress(ln))===safeLower(address) && looksLikeAddressLine(ln)) continue;
+  // per-line parsing
+  for(const line0 of lines){
+    const line=line0.trim();
+    const l=safeLower(line);
 
-    // ignore pure notes
-    if(looksLikeNoteLine(ln) && !/^\d+\s+/.test(ln)) continue;
-    if(looksLikeDetailsLine(ln) && !/^\d+\s+/.test(ln)) continue;
+    if(isJunkLine(line)) continue;
+    if(/^(ciao|buonasera|buongiorno|salve)\b/.test(l)) continue;
+    if(/^nome\s*:/.test(l)) continue;
+    if(/^indirizzo\s*:/.test(l)) continue;
+    if(/^campanello\s*:/.test(l)) continue;
+    if(/^dettagli\s*:/.test(l)) continue;
+    if(isStopLine(line)) continue;
+    if(looksLikeDetailsLine(line) && !/^\d+\s+/.test(line)) continue;
+    if(looksLikeAddressLine(line) && !/^\d+\s+/.test(line)) continue;
+
+    // IMPORTANT: the all-caps client name must NEVER be an item
+    if(name && looksLikeAllCapsName(line) && safeLower(line) === safeLower(name)) continue;
+
+    // Skip "vorrei ordinare... pizze..." lines (handled inline)
+    if(/\bvorrei\b/.test(l) && /\bpizz[ae]\b/.test(l)) continue;
+
+    // Skip lines that are just mode words
+    if(/^(consegna|domicilio|ritiro|asporto)\b/.test(l) && l.split(" ").length<=2) continue;
+
+    const {qty, text:itemTextRaw} = extractQtyAndText(line);
+    if(isJunkLine(itemTextRaw) || isStandaloneTime(itemTextRaw)) continue;
 
     // drinks
-    const {qty, text:itemTextRaw} = extractQtyAndText(ln);
-    if(!itemTextRaw) continue;
-
-    // gusti lines
-    const gustiN = parseGustiLine(itemTextRaw);
-    const hasMezzoMetro = /\bmezzo[\s-]?metro\b/i.test(itemTextRaw);
-    const sizeKey = detectSize(cat, itemTextRaw, hasMezzoMetro ? "mezzo metro" : defaultSize);
-    const formatKey = detectFormat(cat, itemTextRaw);
-    const doughKey = detectDough(cat, itemTextRaw);
-
-    if(gustiN>0){
-      // Special handling for 2 gusti with metà/ metà
-      let note = normSpaces(itemTextRaw.replace(/\b\d+\s*gust[oi]\b/ig,"").replace(/\bdue\s+gusti\b/ig,"").replace(/\btre\s+gusti\b/ig,"").replace(/\bun\s+gusto\b/ig,""));
-      let perGusto = [];
-      if(gustiN===2){
-        const sp = splitTwoGusti(note);
-        if(sp){
-          perGusto = sp.map(s=>s.replace(/\be\b$/i,"").trim()).filter(Boolean);
-        }
-      }
-      const basePizza = settings.fallbackBasePizza;
-      const {extrasFull, removals} = parseExtras(cat, note);
-      const pr = pricePizza(cat, basePizza, doughKey, sizeKey, formatKey, extrasFull);
-
-      items.push({
-        kind:"pizza",
-        qty,
-        pizzaKey: basePizza,
-        doughKey, sizeKey, formatKey,
-        gusti: gustiN,
-        gustiNotes: perGusto,
-        extrasFull, removals,
-        unitPrice: pr.unit,
-        lineTotal: pr.unit*qty,
-        priceKnown: pr.known,
-        glutenFree: doughKey==="senza glutine",
-        freeText: note
-      });
+    const drinkKey = isDrinkLine(cat, itemTextRaw);
+    if(drinkKey){
+      const known=(cat.drinks && cat.drinks[drinkKey]!=null);
+      const unit=known?Number(cat.drinks[drinkKey]):0;
+      items.push({kind:"drink", qty, label:drinkKey, unitPrice:unit, lineTotal:unit*qty, priceKnown:known});
       continue;
     }
 
-    // Normal pizza lines (starting with qty usually)
-    if(/^\d+\s+/.test(ln)){
-      const pizzaKeyCand = findPizzaName(cat, itemTextRaw);
-      const known = (cat.pizzas && cat.pizzas[pizzaKeyCand]!=null);
-      const pizzaKey = known ? pizzaKeyCand : (settings.fallbackBasePizza || pizzaKeyCand);
-      const {extrasFull, removals} = parseExtras(cat, itemTextRaw);
-      const pr = pricePizza(cat, pizzaKey, doughKey, sizeKey, formatKey, extrasFull);
+    // pizzas
+    const doughKey = detectDough(cat, itemTextRaw);
+    const sizeKey  = detectSize(cat, itemTextRaw);
+    const half = parseHalfHalf(itemTextRaw);
 
+    // determine pizza name first (for "implicit extras" decision)
+    const pizzaCandidate = half ? null : findPizzaName(cat, itemTextRaw);
+    const pizzaKnown = pizzaCandidate ? (cat.pizzas && cat.pizzas[pizzaCandidate]!=null) : false;
+
+    // allow implicit extras ONLY when:
+    // - pizza is unknown (custom) OR
+    // - the line starts with dough keyword (e.g., "senza glutine ...")
+    const allowImplicit = !pizzaKnown || /^\s*(senza\s+glutine|sg|s\.g\.)\b/i.test(itemTextRaw) || /\bcon\s+/i.test(itemTextRaw);
+
+    const {extrasFull, extrasHalf, removals} = parseExtrasAndRemovals(cat, itemTextRaw, allowImplicit);
+
+    if(half){
+      const aKey = findPizzaName(cat, half.a);
+      const bKey = findPizzaName(cat, half.b);
+      const pr = priceHalfHalf(cat, aKey, bKey, doughKey, sizeKey, extrasFull, extrasHalf, settings);
       items.push({
-        kind:"pizza",
-        qty,
-        pizzaKey,
-        doughKey, sizeKey, formatKey,
-        extrasFull, removals,
-        unitPrice: pr.unit,
-        lineTotal: pr.unit*qty,
-        priceKnown: pr.known,
+        kind:"pizza", qty, halfHalf:true, aKey, bKey,
+        doughKey, sizeKey, extrasFull, extrasHalf, removals,
         glutenFree: doughKey==="senza glutine",
-        freeText: known ? "" : itemTextRaw
+        unitPrice:pr.unit, lineTotal:pr.unit*qty,
+        priceKnown:pr.known
       });
-      continue;
+    } else {
+      let pizzaKey = pizzaCandidate;
+
+      // SUPER IMPORTANT: if pizza is unknown but we have extras, treat it as "base pizza" + extras
+      if(!pizzaKnown){
+        const base = settings.fallbackBasePizza;
+        if(base && cat.pizzas && cat.pizzas[base]!=null){
+          // If the line looks like "custom" (dough + ingredients), use base
+          pizzaKey = base;
+        }
+      }
+
+      const pr = pricePizza(cat, pizzaKey, doughKey, sizeKey, extrasFull, extrasHalf);
+      items.push({
+        kind:"pizza", qty, halfHalf:false, pizzaKey,
+        doughKey, sizeKey, extrasFull, extrasHalf, removals,
+        glutenFree: doughKey==="senza glutine",
+        unitPrice:pr.unit, lineTotal:pr.unit*qty,
+        priceKnown:pr.known
+      });
     }
   }
 
   const computedPizzas = items.filter(i=>i.kind==="pizza").reduce((a,i)=>a+i.qty,0);
   let total = items.reduce((a,i)=>a+i.lineTotal,0);
-  const addDelivery = (mode==="CONSEGNA");
+
+  const addDelivery = (mode==="CONSEGNA") || (mode.includes("CONSEGNA") && !mode.includes("/"));
   const delFee = addDelivery ? Number(settings.deliveryFee||0) : 0;
   if(delFee>0) total += delFee;
 
-  return { extractedText:text, name, phone, address, details, desiredTime, mode, items, computedPizzas, total, deliveryFee:delFee, defaultSize };
+  return { extractedMode:extracted.mode, extractedText:text, name, phone, address, bell, details,
+           desiredTime, requestedTotal, computedPizzas, mode, items, total, deliveryFee:delFee };
 }
 
-/* ====== OUTPUT ====== */
+/* ========= OUTPUT ========= */
 function fmtKitchen(cat, o){
   const sep="--------------------------------";
   const head=[
@@ -592,26 +729,35 @@ function fmtKitchen(cat, o){
     o.name ? `Cliente: ${o.name}` : "Cliente: —",
     o.phone ? `Tel: ${o.phone}` : "",
     o.address ? `Indirizzo: ${o.address}` : "Indirizzo: —",
-    o.details ? `Note: ${o.details}` : "",
+    o.bell ? `Campanello: ${o.bell}` : "",
+    o.details ? `Dettagli: ${o.details}` : "",
     sep,
     "ARTICOLI:"
   ].filter(Boolean);
 
   const body=(o.items.length?o.items:[]).map(it=>{
+    if(it.kind==="drink"){
+      return `${String(it.qty).padStart(2,' ')}  BIBITA  ${it.label}`;
+    }
     const gf = it.glutenFree ? "  !!! SENZA GLUTINE !!!" : "";
-    const size = (it.sizeKey && it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
-    const fmt  = (it.formatKey && it.formatKey!=="tonda") ? ` <${it.formatKey}>` : "";
-    const dough= (it.doughKey && it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
+    const size = (it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
+    const dough = (it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
     const exF = (it.extrasFull?.length) ? ` +${it.extrasFull.join(", ")}` : "";
+    const exH = (it.extrasHalf?.length) ? ` +${it.extrasHalf.map(x=>`${x}(½)`).join(", ")}` : "";
     const rem = (it.removals?.length) ? ` -${it.removals.join(", ")}` : "";
-    const gusti = it.gusti ? ` [${it.gusti} gusti]` : "";
-    const gustiNote = (it.gustiNotes?.length) ? `\n     → ${it.gustiNotes.join(" | ")}` : (it.gusti && it.freeText ? `\n     → ${it.freeText}` : "");
-    return `${String(it.qty).padStart(2,' ')}  ${it.pizzaKey}${gusti}${size}${fmt}${dough}${exF}${rem}${gf}${gustiNote}`;
+    const name = it.halfHalf ? `½ ${it.aKey} / ½ ${it.bKey}` : it.pizzaKey;
+    return `${String(it.qty).padStart(2,' ')}  ${name}${size}${dough}${exF}${exH}${rem}${gf}`;
   }).join("\n");
 
-  const foot=[sep, `Totale pizze: ${o.computedPizzas}`, "================================"];
+  const warn=(o.requestedTotal!==null && o.computedPizzas && o.requestedTotal!==o.computedPizzas)
+    ? `⚠️ dichiarate ${o.requestedTotal} / trovate ${o.computedPizzas}` : "";
+
+  const foot=[sep, `Totale pizze: ${o.computedPizzas}` + (o.requestedTotal!==null?` (dichiarate: ${o.requestedTotal})`:""), warn, "================================"]
+    .filter(Boolean);
+
   return [...head, body||"—", ...foot].join("\n");
 }
+
 function fmtReceipt(cat, o){
   const cur=cat.currency||"€";
   const sep="--------------------------------";
@@ -627,22 +773,29 @@ function fmtReceipt(cat, o){
   if(o.name) lines.push(`Cliente: ${o.name}`);
   if(o.phone) lines.push(`Tel: ${o.phone}`);
   if(o.address) lines.push(`Indirizzo: ${o.address}`);
-  if(o.details) lines.push(`Note: ${o.details}`);
+  if(o.bell) lines.push(`Campanello: ${o.bell}`);
+  if(o.details) lines.push(`Dettagli: ${o.details}`);
   lines.push(sep);
 
   for(const it of o.items){
-    const size = (it.sizeKey && it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
-    const fmt  = (it.formatKey && it.formatKey!=="tonda") ? ` <${it.formatKey}>` : "";
-    const dough= (it.doughKey && it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
+    if(it.kind==="drink"){
+      lines.push(`${it.qty} x ${it.label}`);
+      if(!it.priceKnown){missing++; lines.push(`   ⚠️ PREZZO NON TROVATO`);}
+      else lines.push(`   ${money(it.unitPrice)}${cur} -> ${money(it.lineTotal)}${cur}`);
+      lines.push(sep);
+      continue;
+    }
+    const name = it.halfHalf ? `½ ${it.aKey} / ½ ${it.bKey}` : it.pizzaKey;
+    const gf = it.glutenFree ? " [SENZA GLUTINE]" : "";
+    const size = (it.sizeKey!=="normale") ? ` (${it.sizeKey})` : "";
+    const dough = (it.doughKey!=="classico") ? ` {${it.doughKey}}` : "";
     const exF = (it.extrasFull?.length) ? ` +${it.extrasFull.join(", ")}` : "";
+    const exH = (it.extrasHalf?.length) ? ` +${it.extrasHalf.map(x=>`${x}(½)`).join(", ")}` : "";
     const rem = (it.removals?.length) ? ` -${it.removals.join(", ")}` : "";
-    const gusti = it.gusti ? ` [${it.gusti} gusti]` : "";
 
-    lines.push(`${it.qty} x ${it.pizzaKey}${gusti}${size}${fmt}${dough}${exF}${rem}`);
+    lines.push(`${it.qty} x ${name}${size}${dough}${gf}${exF}${exH}${rem}`);
     if(!it.priceKnown){missing++; lines.push(`   ⚠️ PREZZO NON TROVATO`);}
     else lines.push(`   ${money(it.unitPrice)}${cur} -> ${money(it.lineTotal)}${cur}`);
-    if(it.gustiNotes?.length) lines.push(`   → ${it.gustiNotes.join(" | ")}`);
-    else if(it.gusti && it.freeText) lines.push(`   → ${it.freeText}`);
     lines.push(sep);
   }
 
@@ -658,40 +811,50 @@ function fmtReceipt(cat, o){
   return lines.join("\n");
 }
 
-/* ====== UI ====== */
+/* ========= UI ========= */
 let CATALOG = loadCatalog();
 let SETTINGS = loadSettings();
 
+function refreshFallbackOptions(){
+  const sel = document.getElementById("fallbackBasePizza");
+  sel.innerHTML = "";
+  const keys = Object.keys(CATALOG.pizzas||{}).sort((a,b)=>a.localeCompare(b));
+  for(const k of keys){
+    const opt = document.createElement("option");
+    opt.value = k; opt.textContent = k;
+    sel.appendChild(opt);
+  }
+  if(keys.length && (!SETTINGS.fallbackBasePizza || !keys.includes(SETTINGS.fallbackBasePizza))){
+    SETTINGS.fallbackBasePizza = keys.includes("margherita") ? "margherita" : keys[0];
+    saveSettings(SETTINGS);
+  }
+  sel.value = SETTINGS.fallbackBasePizza;
+}
+
+function refreshSettingsUI(){
+  document.getElementById("printMode").value = SETTINGS.printMode;
+  document.getElementById("deliveryFee").value = money(Number(SETTINGS.deliveryFee||0));
+  document.getElementById("halfRule").value = SETTINGS.halfHalfPricing;
+  document.getElementById("halfExtraRule").value = SETTINGS.halfHalfExtras;
+
+  const pm = SETTINGS.printMode==="both"?"entrambe":SETTINGS.printMode==="kitchen"?"solo cucina":"solo ricevuta";
+  document.getElementById("printModeMini").textContent = `Stampa: ${pm}`;
+
+  refreshFallbackOptions();
+}
+
 function setCatalogTextarea(){ document.getElementById("catalog").value = JSON.stringify(CATALOG,null,2); }
-function refreshOptions(){
-  const psel=document.getElementById("fallbackBasePizza");
-  psel.innerHTML="";
-  for(const k of Object.keys(CATALOG.pizzas||{}).sort()){ const o=document.createElement("option"); o.value=k; o.textContent=k; psel.appendChild(o); }
-  if(!SETTINGS.fallbackBasePizza || !(SETTINGS.fallbackBasePizza in (CATALOG.pizzas||{}))){
-    SETTINGS.fallbackBasePizza = ("margherita" in (CATALOG.pizzas||{})) ? "margherita" : (Object.keys(CATALOG.pizzas||{})[0]||"margherita");
-  }
-  psel.value=SETTINGS.fallbackBasePizza;
 
-  const ssel=document.getElementById("fallbackSize");
-  ssel.innerHTML="";
-  for(const k of Object.keys(CATALOG.sizes||{}).sort()){ const o=document.createElement("option"); o.value=k; o.textContent=k; ssel.appendChild(o); }
-  if(!SETTINGS.fallbackSize || !(SETTINGS.fallbackSize in (CATALOG.sizes||{}))){
-    SETTINGS.fallbackSize = ("normale" in (CATALOG.sizes||{})) ? "normale" : (Object.keys(CATALOG.sizes||{})[0]||"normale");
-  }
-  ssel.value=SETTINGS.fallbackSize;
-
-  document.getElementById("printMode").value=SETTINGS.printMode;
-  document.getElementById("deliveryFee").value=money(Number(SETTINGS.deliveryFee||0));
-  document.getElementById("printModeMini").textContent = `Stampa: ${SETTINGS.printMode==="both"?"entrambe":SETTINGS.printMode==="kitchen"?"solo cucina":"solo ricevuta"}`;
-}
 function applySettingsFromUI(){
-  SETTINGS.printMode=document.getElementById("printMode").value;
-  SETTINGS.deliveryFee=Number(String(document.getElementById("deliveryFee").value).replace(",",".")||0);
-  SETTINGS.fallbackBasePizza=document.getElementById("fallbackBasePizza").value || SETTINGS.fallbackBasePizza;
-  SETTINGS.fallbackSize=document.getElementById("fallbackSize").value || SETTINGS.fallbackSize;
+  SETTINGS.printMode = document.getElementById("printMode").value;
+  SETTINGS.deliveryFee = Number(String(document.getElementById("deliveryFee").value).replace(",",".")||0);
+  SETTINGS.halfHalfPricing = document.getElementById("halfRule").value;
+  SETTINGS.halfHalfExtras = document.getElementById("halfExtraRule").value;
+  SETTINGS.fallbackBasePizza = document.getElementById("fallbackBasePizza").value || SETTINGS.fallbackBasePizza;
   saveSettings(SETTINGS);
-  refreshOptions();
+  refreshSettingsUI();
 }
+
 function renderAll(){
   ensureDaily();
   const raw=document.getElementById("input").value||"";
@@ -700,29 +863,38 @@ function renderAll(){
     document.getElementById("outReceipt").textContent="—";
     document.getElementById("outDebug").textContent="—";
     document.getElementById("totalMini").textContent="Totale: —";
-    setStatus("");
+    setStatus("","");
     return;
   }
   const order=parseOrder(CATALOG, SETTINGS, raw);
+
   document.getElementById("outKitchen").textContent=fmtKitchen(CATALOG, order);
   document.getElementById("outReceipt").textContent=fmtReceipt(CATALOG, order);
 
   const dbg=[];
   dbg.push("=== DEBUG ===");
-  dbg.push(`Nome: ${order.name||"—"}`);
-  dbg.push(`Tel: ${order.phone||"—"}`);
-  dbg.push(`Indirizzo: ${order.address||"—"}`);
-  dbg.push(`Note: ${order.details||"—"}`);
-  dbg.push(`Orario: ${order.desiredTime||"—"}`);
-  dbg.push(`Tipo: ${order.mode||"—"}`);
-  dbg.push(`Default size: ${order.defaultSize||"—"}`);
-  dbg.push(`Base custom: ${SETTINGS.fallbackBasePizza||"—"}`);
-  dbg.push(`Totale: ${money(order.total)}${CATALOG.currency||"€"}`);
+  dbg.push(`Estrazione: ${order.extractedMode}`);
+  dbg.push("");
+  dbg.push("--- TESTO ESTRATTO ---");
+  dbg.push(order.extractedText || "—");
+  dbg.push("");
+  dbg.push("--- CAMPI ---");
+  dbg.push(`Nome: ${order.name || "—"}`);
+  dbg.push(`Tel: ${order.phone || "—"}`);
+  dbg.push(`Indirizzo: ${order.address || "—"}`);
+  dbg.push(`Campanello: ${order.bell || "—"}`);
+  dbg.push(`Dettagli: ${order.details || "—"}`);
+  dbg.push(`Orario: ${order.desiredTime || "—"}`);
+  dbg.push(`Tipo: ${order.mode || "—"}`);
+  dbg.push(`Base custom: ${SETTINGS.fallbackBasePizza || "—"}`);
+  dbg.push(`Totale pizze: ${order.computedPizzas} (dichiarate: ${order.requestedTotal ?? "—"})`);
+  dbg.push(`Totale: ${money(order.total)}${CATALOG.currency || "€"}`);
   document.getElementById("outDebug").textContent=dbg.join("\n");
 
   document.getElementById("totalMini").textContent=`Totale: ${money(order.total)}${CATALOG.currency||"€"}`;
-  setStatus("Generato (leggenda).","ok");
+  setStatus("Generato (parsing super top).","ok");
 }
+
 async function copyOutput(){
   const k=document.getElementById("outKitchen").textContent||"";
   const r=document.getElementById("outReceipt").textContent||"";
@@ -731,15 +903,18 @@ async function copyOutput(){
   else if(SETTINGS.printMode==="kitchen") out=k;
   else out=r;
   if(!out.trim()||out.trim()==="—") return;
-  try{ await navigator.clipboard.writeText(out); setStatus("Copiato.","ok"); }catch{ setStatus("Copia non disponibile.","warn"); }
+  try{ await navigator.clipboard.writeText(out); setStatus("Copiato negli appunti.","ok"); }
+  catch{ setStatus("Copia automatica non disponibile: copia manualmente.","warn"); }
 }
 function printNow(){
   const kitchen=document.getElementById("outKitchen");
   const receipt=document.getElementById("outReceipt");
   const prevK=kitchen.style.display, prevR=receipt.style.display;
+
   if(SETTINGS.printMode==="kitchen"){ kitchen.style.display="block"; receipt.style.display="none"; }
   else if(SETTINGS.printMode==="receipt"){ kitchen.style.display="none"; receipt.style.display="block"; }
   else { kitchen.style.display="block"; receipt.style.display="block"; }
+
   window.print();
   kitchen.style.display=prevK; receipt.style.display=prevR;
 }
@@ -753,53 +928,57 @@ function closeDay(){
   setStatus("Chiusura serale: pulito.","ok");
 }
 
-/* modal */
+/* ========= MODAL ========= */
 const modal=document.getElementById("modal");
 document.getElementById("openSettings").addEventListener("click",()=>modal.classList.add("open"));
 document.getElementById("closeSettings").addEventListener("click",()=>modal.classList.remove("open"));
 modal.addEventListener("click",(e)=>{ if(e.target===modal) modal.classList.remove("open"); });
 
-/* catalog */
+/* ========= CATALOG ACTIONS ========= */
 document.getElementById("saveCatalog").addEventListener("click",()=>{
   try{
     const obj=JSON.parse(document.getElementById("catalog").value);
-    obj.pizzas ||= {}; obj.drinks ||= {}; obj.extras ||= {}; obj.doughs ||= {}; obj.sizes ||= {}; obj.formats ||= {}; obj.aliases ||= {};
+    if(!obj || typeof obj!=="object") throw new Error("Invalid");
+    obj.pizzas ||= {}; obj.drinks ||= {}; obj.extras ||= {}; obj.doughs ||= {}; obj.sizes ||= {}; obj.aliases ||= {};
     CATALOG=obj; saveCatalog(CATALOG);
-    setCatStatus("Catalogo salvato.","ok");
-    refreshOptions();
+    setCatStatus("Catalogo salvato.","ok"); setStatus("Catalogo aggiornato.","ok");
+    setCatalogTextarea();
+    refreshSettingsUI();
     renderAll();
-  }catch{ setCatStatus("Errore JSON.","warn"); }
+  }catch{ setCatStatus("Errore JSON: controlla virgole/virgolette.","warn"); }
 });
 document.getElementById("resetCatalog").addEventListener("click",()=>{
-  CATALOG=structuredClone(SAMPLE_CATALOG); saveCatalog(CATALOG);
-  setCatalogTextarea();
+  CATALOG=structuredClone(SAMPLE_CATALOG);
+  setCatalogTextarea(); saveCatalog(CATALOG);
   setCatStatus("Ripristinato esempio.","ok");
-  refreshOptions();
+  refreshSettingsUI();
   renderAll();
 });
 document.getElementById("exportCatalog").addEventListener("click", async ()=>{
-  try{ await navigator.clipboard.writeText(JSON.stringify(CATALOG,null,2)); setCatStatus("Export copiato.","ok"); }
-  catch{ setCatStatus("Export non riuscito.","warn"); }
+  const text=JSON.stringify(CATALOG,null,2);
+  try{ await navigator.clipboard.writeText(text); setCatStatus("Export: copiato negli appunti.","ok"); }
+  catch{ setCatStatus("Export non riuscito: copia manualmente.","warn"); }
 });
 document.getElementById("importCatalog").addEventListener("click",()=>{
-  const pasted=prompt("Incolla JSON catalogo:");
+  const pasted=prompt("Incolla qui il JSON del catalogo (Import):");
   if(!pasted) return;
   try{
-    CATALOG=JSON.parse(pasted); saveCatalog(CATALOG);
-    setCatalogTextarea();
-    setCatStatus("Import OK.","ok");
-    refreshOptions();
+    const obj=JSON.parse(pasted);
+    CATALOG=obj; setCatalogTextarea(); saveCatalog(CATALOG);
+    setCatStatus("Import riuscito.","ok");
+    refreshSettingsUI();
     renderAll();
-  }catch{ setCatStatus("Import fallito.","warn"); }
+  }catch{ setCatStatus("Import fallito: JSON non valido.","warn"); }
 });
 
-/* settings */
-document.getElementById("printMode").addEventListener("change",applySettingsFromUI);
-document.getElementById("deliveryFee").addEventListener("change",applySettingsFromUI);
-document.getElementById("fallbackBasePizza").addEventListener("change",applySettingsFromUI);
-document.getElementById("fallbackSize").addEventListener("change",applySettingsFromUI);
+/* ========= SETTINGS INPUTS ========= */
+document.getElementById("printMode").addEventListener("change",()=>applySettingsFromUI());
+document.getElementById("deliveryFee").addEventListener("change",()=>applySettingsFromUI());
+document.getElementById("halfRule").addEventListener("change",()=>applySettingsFromUI());
+document.getElementById("halfExtraRule").addEventListener("change",()=>applySettingsFromUI());
+document.getElementById("fallbackBasePizza").addEventListener("change",()=>applySettingsFromUI());
 
-/* tabs */
+/* ========= TABS ========= */
 for(const t of document.querySelectorAll(".tab")){
   t.addEventListener("click",()=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
@@ -811,17 +990,17 @@ for(const t of document.querySelectorAll(".tab")){
   });
 }
 
-/* buttons */
+/* ========= BUTTONS ========= */
 document.getElementById("gen").addEventListener("click",renderAll);
 document.getElementById("copy").addEventListener("click",copyOutput);
 document.getElementById("print").addEventListener("click",printNow);
 document.getElementById("closeDay").addEventListener("click",closeDay);
 
-/* init */
-CATALOG=loadCatalog();
-SETTINGS=loadSettings();
+/* ========= INIT ========= */
+let CATALOG = loadCatalog();
+let SETTINGS = loadSettings();
 setCatalogTextarea();
-refreshOptions();
+refreshSettingsUI();
 ensureDaily();
 </script>
 </body>
