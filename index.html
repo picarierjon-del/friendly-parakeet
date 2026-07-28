@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hybrid PT Ultra - Guided Coach Edition</title>
+  <meta name="theme-color" content="#0f172a">
+  <title>Hybrid PT Ultra - Smart Coach Edition</title>
   <style>
     :root {
       --bg-dark: #0f172a;
       --card-bg: #1e293b;
+      --card-soft: #111c30;
       --accent-green: #10b981;
       --accent-blue: #3b82f6;
       --accent-red: #ef4444;
@@ -25,8 +27,10 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      background-color: var(--bg-dark);
+      background: radial-gradient(circle at top, #172554 0%, var(--bg-dark) 34%, #080d19 100%);
       color: var(--text-main);
       display: flex;
       justify-content: center;
@@ -34,66 +38,77 @@
       padding: 12px;
     }
 
+    button, input, select { touch-action: manipulation; }
+
     .container {
       width: 100%;
       max-width: 500px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      padding-bottom: 40px;
+      padding-bottom: 48px;
     }
 
     .card {
-      background-color: var(--card-bg);
-      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.96);
+      border-radius: 18px;
       padding: 18px;
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+      backdrop-filter: blur(10px);
     }
 
-    h1 { font-size: 1.4rem; text-align: center; font-weight: 800; }
-    h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    h1 { font-size: 1.35rem; text-align: center; font-weight: 900; letter-spacing: .02em; }
+    h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; }
     .subtitle { text-align: center; color: var(--text-sub); font-size: 0.8rem; margin-bottom: 12px; }
 
     .badge {
       display: inline-block;
       padding: 4px 10px;
       border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: 0.72rem;
+      font-weight: 800;
       text-transform: uppercase;
     }
-    .badge-level { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
-    .badge-hell { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+    .badge-level { background: rgba(59, 130, 246, 0.2); color: #7db5ff; border: 1px solid var(--accent-blue); }
+    .badge-hell { background: rgba(239, 68, 68, 0.2); color: #ff8b8b; border: 1px solid var(--accent-red); }
 
     .btn {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       border: none;
-      border-radius: 10px;
-      font-weight: 700;
+      border-radius: 12px;
+      font-weight: 800;
       font-size: 0.95rem;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      transition: transform 0.1s, opacity 0.2s;
+      transition: transform 0.1s, opacity 0.2s, filter 0.2s;
     }
+
     .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
     .btn-primary { background: var(--accent-blue); color: white; }
     .btn-success { background: var(--accent-green); color: white; }
-    .btn-hell { background: linear-gradient(135deg, #ef4444, #991b1b); color: white; box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
-    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-sub); }
+    .btn-warning { background: var(--accent-gold); color: #111827; }
+    .btn-danger { background: var(--accent-red); color: white; }
+    .btn-hell { background: linear-gradient(135deg, #ef4444, #991b1b); color: white; box-shadow: 0 0 14px rgba(239, 68, 68, 0.35); }
+    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: #cbd5e1; }
+    .btn-small { padding: 9px; font-size: .8rem; }
+
+    .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .input-group { margin-bottom: 12px; }
-    .input-group label { display: block; font-size: 0.8rem; color: var(--text-sub); margin-bottom: 4px; }
+    .input-group label { display: block; font-size: 0.8rem; color: var(--text-sub); margin-bottom: 5px; }
     .input-group input, .input-group select {
       width: 100%;
-      padding: 10px;
+      padding: 11px;
       background: #0f172a;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 9px;
       color: var(--text-main);
       font-size: 0.95rem;
       outline: none;
@@ -101,19 +116,22 @@
 
     .exercise-item {
       background: #0f172a;
-      border-radius: 12px;
+      border-radius: 13px;
       padding: 12px;
       margin-bottom: 12px;
       border: 1px solid var(--border-color);
     }
+
     .exercise-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      gap: 10px;
+      align-items: flex-start;
       margin-bottom: 8px;
     }
-    .exercise-name { font-weight: 700; font-size: 0.95rem; }
-    .exercise-meta { font-size: 0.8rem; color: var(--accent-green); font-weight: 700; }
+
+    .exercise-name { font-weight: 800; font-size: 0.94rem; }
+    .exercise-meta { font-size: 0.76rem; color: var(--accent-green); font-weight: 800; text-align: right; }
 
     .set-row {
       display: flex;
@@ -121,189 +139,289 @@
       align-items: center;
       margin-bottom: 6px;
     }
-    .set-label { font-size: 0.75rem; color: var(--text-sub); width: 50px; }
+
+    .set-label { font-size: 0.75rem; color: var(--text-sub); width: 52px; }
     .set-input {
       flex: 1;
-      padding: 6px;
+      padding: 7px;
       background: #1e293b;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
+      border-radius: 7px;
       color: white;
       text-align: center;
       font-size: 0.85rem;
     }
 
-    /* GUIDED WORKOUT OVERLAY / VIEW */
-    .guided-container {
-      text-align: center;
-      padding: 10px;
-    }
-    .guided-step-counter {
-      font-size: 0.75rem;
-      color: var(--accent-gold);
-      text-transform: uppercase;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .guided-ex-name {
-      font-size: 1.3rem;
-      font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .guided-target {
-      font-size: 1rem;
-      color: var(--accent-green);
-      margin-bottom: 20px;
-      font-weight: 700;
-    }
-    .guided-timer-box {
-      background: #0f172a;
-      border: 2px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-    .guided-timer-title {
-      font-size: 0.8rem;
-      color: var(--text-sub);
-      margin-bottom: 8px;
-    }
-    .timer-display {
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--accent-gold);
-      font-mono: monospace;
-    }
-
     .coach-box {
       background: rgba(59, 130, 246, 0.1);
       border: 1px solid var(--accent-blue);
-      border-radius: 10px;
-      padding: 10px 12px;
+      border-radius: 11px;
+      padding: 11px 12px;
       font-size: 0.8rem;
-      line-height: 1.4;
-      color: #93c5fd;
+      line-height: 1.45;
+      color: #bfdbfe;
       margin-bottom: 14px;
     }
 
     .hell-theme {
       border-color: var(--accent-red) !important;
-      background: linear-gradient(180deg, #1e293b 0%, #2a0808 100%);
+      background: linear-gradient(180deg, rgba(30,41,59,.97) 0%, rgba(42,8,8,.97) 100%);
     }
 
+    .runner-card {
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .runner-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+    }
+
+    .phase-label {
+      text-align: center;
+      color: var(--accent-gold);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    .runner-exercise {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-top: 10px;
+      line-height: 1.1;
+    }
+
+    .runner-set {
+      text-align: center;
+      color: var(--text-sub);
+      margin-top: 7px;
+      font-size: .9rem;
+    }
+
+    .big-counter {
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      margin: 24px auto 12px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle, #1e293b 45%, #111827 100%);
+      border: 8px solid var(--accent-blue);
+      box-shadow: 0 0 35px rgba(59,130,246,.2), inset 0 0 22px rgba(0,0,0,.4);
+      text-align: center;
+      will-change: transform;
+    }
+
+    .big-counter.rest { border-color: var(--accent-gold); box-shadow: 0 0 35px rgba(245,158,11,.22), inset 0 0 22px rgba(0,0,0,.4); }
+    .big-counter.done { border-color: var(--accent-green); }
+    .counter-main { font-size: 4.2rem; font-weight: 950; line-height: .95; }
+    .counter-unit { color: var(--text-sub); font-size: .78rem; margin-top: 8px; text-transform: uppercase; letter-spacing: .12em; }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      border-radius: 999px;
+      background: #0f172a;
+      overflow: hidden;
+      border: 1px solid #26354b;
+      margin: 14px 0 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+      transition: width .25s linear;
+    }
+
+    .runner-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text-sub);
+      font-size: .78rem;
+      margin-bottom: 12px;
+    }
+
+    .runner-tip {
+      background: var(--card-soft);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 11px;
+      color: #cbd5e1;
+      font-size: .8rem;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .settings-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border-color);
+      font-size: .8rem;
+      color: var(--text-sub);
+    }
+
+    .toggle-row input { width: 20px; height: 20px; accent-color: var(--accent-blue); }
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
-
 <div class="container">
-
-  <!-- HEADER STATS -->
   <div class="card" id="headerCard">
-    <h1>HYBRID PT GUIDED</h1>
-    <p class="subtitle">Home Edition + Allenamento Guidato Interattivo</p>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <span class="badge badge-level" id="userLevelBadge">Non Valutato</span>
-      </div>
-      <div style="text-align: right; font-size: 0.8rem; color: var(--text-sub);">
-        Settimana: <strong id="currentWeekDisplay" style="color:var(--text-main)">1</strong> | 
-        Moltiplicatore: <strong id="multDisplay" style="color:var(--accent-green)">1.0x</strong>
+    <h1>HYBRID PT UNIFIED PRO</h1>
+    <p class="subtitle">Scheda adattiva + allenamento guidato in sequenza</p>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+      <span class="badge badge-level" id="userLevelBadge">Non Valutato</span>
+      <div style="text-align:right; font-size:.8rem; color:var(--text-sub);">
+        Settimana: <strong id="currentWeekDisplay" style="color:var(--text-main)">1</strong> |
+        Moltiplicatore: <strong id="multDisplay" style="color:var(--accent-green)">1.00x</strong>
       </div>
     </div>
   </div>
 
-  <!-- DIAGNOSTIC TEST VIEW -->
   <div class="card" id="testView">
     <h2>Test Diagnostico Iniziale</h2>
-    <p class="subtitle">Inserisci i tuoi massimali per calibrare i volumi.</p>
-    
-    <div class="input-group">
-      <label>Push-up massimi (senza pause)</label>
-      <input type="number" id="testPushups" placeholder="es. 15" min="0">
-    </div>
-    <div class="input-group">
-      <label>Squat massimi in 60s</label>
-      <input type="number" id="testSquats" placeholder="es. 30" min="0">
-    </div>
-    <div class="input-group">
-      <label>Plank isometrico (secondi)</label>
-      <input type="number" id="testPlank" placeholder="es. 45" min="0">
-    </div>
-    <div class="input-group">
-      <label>Pike Push-ups massimi (Spalle)</label>
-      <input type="number" id="testPikes" placeholder="es. 8" min="0">
-    </div>
+    <p class="subtitle">Inserisci i massimali per calibrare automaticamente volume e intensità.</p>
 
-    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera Schede & Inizia</button>
+    <div class="input-group"><label>Push-up massimi senza pause</label><input type="number" id="testPushups" placeholder="es. 15" min="0" inputmode="numeric" pattern="[0-9]*"></div>
+    <div class="input-group"><label>Squat massimi in 60 secondi</label><input type="number" id="testSquats" placeholder="es. 30" min="0" inputmode="numeric" pattern="[0-9]*"></div>
+    <div class="input-group"><label>Plank isometrico, secondi</label><input type="number" id="testPlank" placeholder="es. 45" min="0" inputmode="numeric" pattern="[0-9]*"></div>
+    <div class="input-group"><label>Trazioni o inverted row massime</label><input type="number" id="testPullups" placeholder="es. 5" min="0" inputmode="numeric" pattern="[0-9]*"></div>
+
+    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera scheda e inizia</button>
   </div>
 
-  <!-- MAIN WORKOUT VIEW -->
   <div class="card hidden" id="workoutView">
     <div class="coach-box" id="coachMessage"></div>
 
     <div class="input-group">
-      <label>Seleziona Sessione:</label>
+      <label>Seleziona sessione</label>
       <select id="daySelector" onchange="switchDay(this.value)">
         <option value="1">Giorno 1: Push & Core</option>
-        <option value="2">Giorno 2: Schiena & Gambe (No Sbarra)</option>
+        <option value="2">Giorno 2: Pull & Legs</option>
         <option value="3">Giorno 3: Full Body Conditioning</option>
       </select>
     </div>
 
-    <div id="workoutHeader" style="margin-bottom: 12px;">
+    <div id="workoutHeader" style="margin-bottom:12px;">
       <h2 id="workoutTitle">Giorno 1</h2>
-      <p id="workoutSubtitle" style="font-size:0.8rem; color:var(--text-sub)"></p>
+      <p id="workoutSubtitle" style="font-size:.8rem; color:var(--text-sub)"></p>
     </div>
 
-    <button class="btn btn-primary" style="margin-bottom: 14px; background:var(--accent-gold); color:#0f172a;" onclick="startGuidedSession()">⚡ Inizia Sessione Guidata</button>
-
-    <!-- LISTA ESERCIZI (MANUALE) -->
     <div id="exerciseList"></div>
 
-    <!-- FEEDBACK RPE -->
-    <div class="input-group" style="margin-top: 14px;">
-      <label>Valuta lo Sforzo Percepito (RPE):</label>
-      <select id="workoutRPE">
-        <option value="6">RPE 6 - Molto Facile</option>
-        <option value="7" selected>RPE 7 - Ottimale</option>
-        <option value="8">RPE 8 - Impegnativo</option>
-        <option value="9">RPE 9 - Limite</option>
-        <option value="10">RPE 10 - Cedimento Totale</option>
-      </select>
+    <div class="settings-row">
+      <div class="input-group" style="margin-bottom:0;">
+        <label>Recupero serie</label>
+        <select id="restBetweenSets">
+          <option value="45">45 secondi</option>
+          <option value="60" selected>60 secondi</option>
+          <option value="75">75 secondi</option>
+          <option value="90">90 secondi</option>
+        </select>
+      </div>
+      <div class="input-group" style="margin-bottom:0;">
+        <label>Recupero esercizi</label>
+        <select id="restBetweenExercises">
+          <option value="60">60 secondi</option>
+          <option value="75" selected>75 secondi</option>
+          <option value="90">90 secondi</option>
+          <option value="120">120 secondi</option>
+        </select>
+      </div>
     </div>
 
-    <button class="btn btn-success" onclick="completeWorkout()">Salva Sessione e Aggiorna Scheda</button>
+    <div class="toggle-row">
+      <span>Voce coach e conteggio ripetizioni</span>
+      <input type="checkbox" id="voiceEnabled" checked>
+    </div>
+
+    <button class="btn btn-primary" style="margin-top:12px;" onclick="startGuidedWorkout()">▶ Inizia allenamento guidato</button>
     <button class="btn btn-hell hidden" id="startHellBtn" style="margin-top:10px;" onclick="triggerHellWeek()">ATTIVA WEEK HELL 🔥</button>
   </div>
 
-  <!-- GUIDED WORKOUT ACTIVE VIEW (MODALE / SCHERMATA DEDICATA) -->
-  <div class="card hidden" id="guidedView">
-    <div class="guided-container">
-      <div class="guided-step-counter" id="guidedStepCounter">Esercizio 1 di 5 • Serie 1 di 4</div>
-      <div class="guided-ex-name" id="guidedExName">Nome Esercizio</div>
-      <div class="guided-target" id="guidedTarget">Target: 12 Ripetizioni</div>
+  <div class="card runner-card hidden" id="runnerView">
+    <div>
+      <div class="phase-label" id="runnerPhase">Preparati</div>
+      <div class="runner-exercise" id="runnerExercise">Push-up</div>
+      <div class="runner-set" id="runnerSet">Serie 1 di 4</div>
 
-      <div class="guided-timer-box">
-        <div class="guided-timer-title" id="guidedTimerLabel">PRONTO PER PARTIRE</div>
-        <div class="timer-display" id="guidedTimer">--:--</div>
+      <div class="big-counter" id="counterCircle">
+        <div>
+          <div class="counter-main" id="counterMain">3</div>
+          <div class="counter-unit" id="counterUnit">secondi</div>
+        </div>
       </div>
 
-      <div id="guidedActionButtons">
-        <button class="btn btn-success" id="guidedMainBtn" onclick="guidedNextAction()">Fatto! Avvia Recupero (60s)</button>
-        <button class="btn btn-outline" style="margin-top:10px;" onclick="exitGuidedSession()">Esci dalla Modalità Guidata</button>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="runner-info">
+        <span id="runnerProgressText">Esercizio 1 di 5</span>
+        <span id="runnerElapsed">00:00</span>
       </div>
+
+      <div class="runner-tip" id="runnerTip">Posizione stabile, esecuzione controllata e respirazione regolare.</div>
+    </div>
+
+    <div>
+      <div class="button-grid">
+        <button class="btn btn-warning" id="pauseBtn" onclick="togglePause()">⏸ Pausa</button>
+        <button class="btn btn-outline" onclick="skipCurrentPhase()">⏭ Salta</button>
+      </div>
+      <div class="button-grid" style="margin-top:8px;">
+        <button class="btn btn-outline btn-small" onclick="adjustCurrent(-1)">−1</button>
+        <button class="btn btn-outline btn-small" onclick="adjustCurrent(1)">+1</button>
+      </div>
+      <button class="btn btn-danger btn-small" style="margin-top:8px;" onclick="abortWorkout()">Termina allenamento</button>
     </div>
   </div>
 
-  <!-- PANNELLO CONTROLLO E RESET -->
-  <div class="card" style="text-align:center;">
-    <button class="btn btn-outline" style="font-size:0.75rem; padding:8px;" onclick="resetAllData()">Azzera Dati e Ripeti Test</button>
+  <div class="card hidden" id="summaryView">
+    <h2 style="text-align:center;">Sessione completata ✅</h2>
+    <p class="subtitle" id="summaryText"></p>
+    <div class="input-group">
+      <label>Valuta lo sforzo percepito</label>
+      <select id="workoutRPE">
+        <option value="6">RPE 6 - Molto facile</option>
+        <option value="7" selected>RPE 7 - Ottimale</option>
+        <option value="8">RPE 8 - Impegnativo</option>
+        <option value="9">RPE 9 - Quasi al limite</option>
+        <option value="10">RPE 10 - Cedimento totale</option>
+      </select>
+    </div>
+    <button class="btn btn-success" onclick="completeWorkout()">Salva sessione e aggiorna scheda</button>
   </div>
 
+  <div class="card" style="text-align:center;">
+    <button class="btn btn-outline btn-small" onclick="resetAllData()">Azzera dati e ripeti test</button>
+  </div>
 </div>
 
 <script>
+  const STORAGE_KEY = 'hybrid_pt_unified_state_v2';
   const DEFAULT_STATE = {
     level: null,
     week: 1,
@@ -311,59 +429,66 @@
     isHellWeek: false,
     multiplier: 1.0,
     testResults: {},
-    logs: {}
+    logs: {},
+    history: []
   };
 
-  let state = JSON.parse(localStorage.getItem('hybrid_pt_guided_state')) || DEFAULT_STATE;
-  
-  // Variabili di controllo sessione guidata
-  let guidedQueue = [];
-  let currentGuidedIndex = 0;
-  let guidedStateTimer = null; // 'working' o 'rest' o 'idle'
-  let guidedTimeRemaining = 0;
-  let guidedInterval = null;
+  let state = loadState();
+  let runner = null;
+  let tickInterval = null;
+  let elapsedInterval = null;
 
-  window.onload = function() {
-    renderUI();
-  };
+  function loadState() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      return stored ? { ...DEFAULT_STATE, ...stored } : { ...DEFAULT_STATE };
+    } catch {
+      return { ...DEFAULT_STATE };
+    }
+  }
 
   function saveState() {
-    localStorage.setItem('hybrid_pt_guided_state', JSON.stringify(state));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
+
+  window.addEventListener('load', renderUI);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && runner && !runner.paused) togglePause();
+  });
 
   function renderUI() {
     const headerCard = document.getElementById('headerCard');
     const testView = document.getElementById('testView');
     const workoutView = document.getElementById('workoutView');
-    const guidedView = document.getElementById('guidedView');
+    const runnerView = document.getElementById('runnerView');
+    const summaryView = document.getElementById('summaryView');
 
-    document.getElementById('currentWeekDisplay').innerText = state.week;
-    document.getElementById('multDisplay').innerText = state.multiplier.toFixed(2) + 'x';
+    runnerView.classList.add('hidden');
+    summaryView.classList.add('hidden');
+    document.getElementById('currentWeekDisplay').textContent = state.week;
+    document.getElementById('multDisplay').textContent = state.multiplier.toFixed(2) + 'x';
 
     if (!state.level) {
-      document.getElementById('userLevelBadge').innerText = "Non Valutato";
+      document.getElementById('userLevelBadge').textContent = 'Non Valutato';
       testView.classList.remove('hidden');
       workoutView.classList.add('hidden');
-      guidedView.classList.add('hidden');
       return;
     }
 
     testView.classList.add('hidden');
-    guidedView.classList.add('hidden');
     workoutView.classList.remove('hidden');
-
-    document.getElementById('daySelector').value = state.currentDay;
-    document.getElementById('userLevelBadge').innerText = state.level.toUpperCase();
+    document.getElementById('daySelector').value = String(state.currentDay);
 
     if (state.isHellWeek) {
       headerCard.classList.add('hell-theme');
       workoutView.classList.add('hell-theme');
-      document.getElementById('userLevelBadge').className = "badge badge-hell";
-      document.getElementById('userLevelBadge').innerText = "WEEK HELL 🔥";
+      document.getElementById('userLevelBadge').className = 'badge badge-hell';
+      document.getElementById('userLevelBadge').textContent = 'WEEK HELL 🔥';
     } else {
       headerCard.classList.remove('hell-theme');
       workoutView.classList.remove('hell-theme');
-      document.getElementById('userLevelBadge').className = "badge badge-level";
+      document.getElementById('userLevelBadge').className = 'badge badge-level';
+      document.getElementById('userLevelBadge').textContent = state.level.toUpperCase();
     }
 
     renderCoachMessage();
@@ -371,12 +496,17 @@
   }
 
   function processDiagnosticTest() {
-    const pushups = parseInt(document.getElementById('testPushups').value) || 0;
-    const squats = parseInt(document.getElementById('testSquats').value) || 0;
-    const plank = parseInt(document.getElementById('testPlank').value) || 0;
-    const pikes = parseInt(document.getElementById('testPikes').value) || 0;
+    const pushups = Math.max(0, parseInt(document.getElementById('testPushups').value) || 0);
+    const squats = Math.max(0, parseInt(document.getElementById('testSquats').value) || 0);
+    const plank = Math.max(0, parseInt(document.getElementById('testPlank').value) || 0);
+    const pullups = Math.max(0, parseInt(document.getElementById('testPullups').value) || 0);
 
-    const score = pushups + (squats * 0.5) + (plank * 0.3) + (pikes * 1.5);
+    if ([pushups, squats, plank, pullups].every(v => v === 0)) {
+      alert('Inserisci almeno un risultato valido.');
+      return;
+    }
+
+    const score = pushups + (squats * 0.5) + (plank * 0.3) + (pullups * 2);
 
     if (score < 30) {
       state.level = 'principiante';
@@ -389,231 +519,390 @@
       state.multiplier = 1.2;
     }
 
-    state.testResults = { pushups, squats, plank, pikes };
+    state.testResults = { pushups, squats, plank, pullups };
     state.week = 1;
     state.currentDay = 1;
     state.isHellWeek = false;
-
+    state.logs = {};
+    state.history = [];
     saveState();
     renderUI();
   }
 
   function getBaseExercises(day) {
     const m = state.multiplier;
-    const hell = state.isHellWeek ? 1.35 : 1.0;
+    const hell = state.isHellWeek ? 1.25 : 1.0;
+
+    const rep = value => Math.max(1, Math.round(value * m * hell));
+    const seconds = value => Math.max(10, Math.round(value * m * hell));
 
     if (day === 1) {
       return {
-        title: "Giorno 1: Push & Core Focus",
-        subtitle: state.isHellWeek ? "WEEK HELL: Sovra-stimolo Petto & Spalle" : "Forza e Resistenza Parte Superiore",
+        title: 'Giorno 1: Push & Core Focus',
+        subtitle: state.isHellWeek ? 'WEEK HELL: volume superiore, tecnica sempre pulita' : 'Forza e resistenza della parte superiore',
         exercises: [
-          { name: "Push-ups Inclinati / Standard", sets: 4, baseReps: Math.round((state.testResults.pushups * 0.6 || 10) * m * hell) },
-          { name: "Pike Push-ups (Spalle)", sets: 3, baseReps: Math.round((state.testResults.pikes * 0.8 || 8) * m * hell) },
-          { name: "Dip su sedia", sets: 3, baseReps: Math.round(10 * m * hell) },
-          { name: "Plank Iso", sets: 3, baseReps: `${Math.round((state.testResults.plank * 0.7 || 30) * m * hell)}s` },
-          { name: "Crunch Addominali", sets: 3, baseReps: Math.round(15 * m * hell) }
-        ]
-      };
-    } else if (day === 2) {
-      return {
-        title: "Giorno 2: Schiena & Gambe (No Sbarra)",
-        subtitle: state.isHellWeek ? "WEEK HELL: Catena Posteriore Intensa" : "Lombari, Dorso a terra & Gambe",
-        exercises: [
-          { name: "Squat a corpo libero", sets: 4, baseReps: Math.round((state.testResults.squats * 0.7 || 15) * m * hell) },
-          { name: "Superman (Rinforzo Lombari/Schiena)", sets: 4, baseReps: Math.round(12 * m * hell) },
-          { name: "Piegamenti a T / Braccia estese a terra", sets: 3, baseReps: Math.round(10 * m * hell) },
-          { name: "Affondi Alternati", sets: 3, baseReps: Math.round(12 * m * hell) },
-          { name: "Hollow Body Hold", sets: 3, baseReps: `${Math.round(25 * m * hell)}s` }
-        ]
-      };
-    } else {
-      return {
-        title: "Giorno 3: Full Body Conditioning",
-        subtitle: state.isHellWeek ? "WEEK HELL: Circuito Cardiovascolare Estremo" : "Capacità Aerobica e Brucia Grassi",
-        exercises: [
-          { name: "Burpees", sets: 3, baseReps: Math.round(8 * m * hell) },
-          { name: "Jump Squats", sets: 3, baseReps: Math.round(12 * m * hell) },
-          { name: "Push-ups Declinati", sets: 3, baseReps: Math.round((state.testResults.pushups * 0.5 || 8) * m * hell) },
-          { name: "Mountain Climbers", sets: 3, baseReps: `${Math.round(30 * m * hell)}s` },
-          { name: "Ponte Glutei a terra", sets: 3, baseReps: Math.round(15 * m * hell) }
+          { name: 'Push-up inclinati o standard', sets: 4, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in linea, petto verso il suolo, gomiti controllati.' },
+          { name: 'Pike push-up', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Bacino alto e testa verso il pavimento, senza crollare sulle spalle.' },
+          { name: 'Dip su sedia o parallele', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Spalle basse, gomiti indietro e movimento senza rimbalzo.' },
+          { name: 'Plank isometrico', sets: 3, target: seconds((state.testResults.plank || 45) * 0.65), mode: 'time', tip: 'Glutei e addome attivi, bacino neutro.' },
+          { name: 'Crunch addominali', sets: 3, target: rep(15), mode: 'reps', cadence: 2.0, tip: 'Solleva le scapole senza tirare il collo.' }
         ]
       };
     }
+
+    if (day === 2) {
+      return {
+        title: 'Giorno 2: Pull & Legs Focus',
+        subtitle: state.isHellWeek ? 'WEEK HELL: trazione e catena posteriore' : 'Gambe, schiena e stabilità del tronco',
+        exercises: [
+          { name: 'Squat a corpo libero', sets: 4, target: rep((state.testResults.squats || 30) * 0.55), mode: 'reps', cadence: 2.5, tip: 'Ginocchia in linea con i piedi, talloni ben appoggiati.' },
+          { name: 'Trazioni o inverted row', sets: 4, target: rep(Math.max(state.testResults.pullups || 4, 4) * 0.55), mode: 'reps', cadence: 3.0, tip: 'Petto verso la presa, scapole indietro, niente slancio.' },
+          { name: 'Affondi alternati', sets: 3, target: rep(12), mode: 'reps', cadence: 2.8, tip: 'Passo stabile e ginocchio posteriore verso il suolo.' },
+          { name: 'Australian pull-up o row', sets: 3, target: rep(10), mode: 'reps', cadence: 2.8, tip: 'Mantieni il corpo rigido e porta il petto alla sbarra.' },
+          { name: 'Hollow body hold', sets: 3, target: seconds(25), mode: 'time', tip: 'Lombari aderenti al suolo e respirazione corta ma regolare.' }
+        ]
+      };
+    }
+
+    return {
+      title: 'Giorno 3: Full Body Conditioning',
+      subtitle: state.isHellWeek ? 'WEEK HELL: circuito metabolico intenso' : 'Condizionamento cardiovascolare e lavoro totale',
+      exercises: [
+        { name: 'Burpees', sets: 3, target: rep(8), mode: 'reps', cadence: 3.4, tip: 'Ritmo costante: meglio regolare che partire troppo forte.' },
+        { name: 'Jump squat', sets: 3, target: rep(12), mode: 'reps', cadence: 2.4, tip: 'Atterra morbido e riallinea ginocchia e piedi.' },
+        { name: 'Push-up declinati', sets: 3, target: rep((state.testResults.pushups || 16) * 0.45), mode: 'reps', cadence: 2.6, tip: 'Addome forte e discesa controllata.' },
+        { name: 'Mountain climber', sets: 3, target: seconds(30), mode: 'time', tip: 'Spalle sopra i polsi e bacino stabile.' },
+        { name: 'Superman lombari', sets: 3, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Solleva braccia e gambe senza forzare il collo.' }
+      ]
+    };
   }
 
   function renderWorkout() {
     const workout = getBaseExercises(state.currentDay);
-    document.getElementById('workoutTitle').innerText = workout.title;
-    document.getElementById('workoutSubtitle').innerText = workout.subtitle;
+    document.getElementById('workoutTitle').textContent = workout.title;
+    document.getElementById('workoutSubtitle').textContent = workout.subtitle;
 
-    const listContainer = document.getElementById('exerciseList');
-    listContainer.innerHTML = '';
+    const list = document.getElementById('exerciseList');
+    list.innerHTML = '';
 
     workout.exercises.forEach((ex, exIdx) => {
       const item = document.createElement('div');
       item.className = 'exercise-item';
-      
-      let setRows = '';
+      let rows = '';
+
       for (let s = 1; s <= ex.sets; s++) {
         const key = `w${state.week}_d${state.currentDay}_e${exIdx}_s${s}`;
-        const savedVal = state.logs[key] || ex.baseReps;
-
-        setRows += `
+        const defaultValue = ex.mode === 'time' ? `${ex.target}s` : ex.target;
+        const savedValue = state.logs[key] ?? defaultValue;
+        rows += `
           <div class="set-row">
-            <span class="set-label">Set ${s}</span>
-            <input type="text" class="set-input" id="${key}" value="${savedVal}" placeholder="Reps / Sec">
-          </div>
-        `;
+            <span class="set-label">Serie ${s}</span>
+            <input type="text" class="set-input" id="${key}" value="${savedValue}" oninput="updateLogValue('${key}', this.value)" aria-label="${ex.name}, serie ${s}">
+          </div>`;
       }
 
       item.innerHTML = `
         <div class="exercise-header">
           <span class="exercise-name">${ex.name}</span>
-          <span class="exercise-meta">${ex.sets} Serie (Target: ${ex.baseReps})</span>
-        </div>
-        ${setRows}
-      `;
-      listContainer.appendChild(item);
+          <span class="exercise-meta">${ex.sets} serie · ${ex.target}${ex.mode === 'time' ? 's' : ' rep'}</span>
+        </div>${rows}`;
+      list.appendChild(item);
     });
 
-    const startHellBtn = document.getElementById('startHellBtn');
-    if (state.week % 4 === 0 && !state.isHellWeek) {
-      startHellBtn.classList.remove('hidden');
-    } else {
-      startHellBtn.classList.add('hidden');
-    }
+    const hellBtn = document.getElementById('startHellBtn');
+    hellBtn.classList.toggle('hidden', !(state.week % 4 === 0 && !state.isHellWeek));
+  }
+
+  function updateLogValue(key, val) {
+    state.logs[key] = val;
+    saveState();
   }
 
   function switchDay(dayNum) {
-    state.currentDay = parseInt(dayNum);
+    state.currentDay = Number(dayNum);
     saveState();
     renderWorkout();
   }
 
   function renderCoachMessage() {
-    const coachBox = document.getElementById('coachMessage');
+    const box = document.getElementById('coachMessage');
     if (state.isHellWeek) {
-      coachBox.innerText = "🔥 SMART COACH: WEEK HELL ATTIVA. Volumi incrementati a corpo libero.";
+      box.textContent = '🔥 WEEK HELL attiva. Il volume è aumentato, ma il coach interrompe comunque ogni serie in modo ordinato e mantiene i recuperi.';
     } else if (state.week === 1) {
-      coachBox.innerText = `🤖 SMART COACH: Scheda casa calibrata (${state.level.toUpperCase()}). Usa la sessione guidata per gestire i tempi!`;
+      box.textContent = `🤖 Scheda calibrata sul livello ${state.level.toUpperCase()}. Premi “Inizia allenamento guidato”: l’app scandisce preparazione, ripetizioni, serie e recuperi.`;
     } else {
-      coachBox.innerText = `🤖 SMART COACH: Settimana ${state.week}. Moltiplicatore attivo: ${state.multiplier.toFixed(2)}x.`;
+      box.textContent = `🤖 Settimana ${state.week}, moltiplicatore ${state.multiplier.toFixed(2)}x. I target sono aggiornati in base alle sessioni precedenti.`;
     }
   }
 
-  // --- LOGICA SESSIONE GUIDATA ---
-  function startGuidedSession() {
+  function buildSequence() {
     const workout = getBaseExercises(state.currentDay);
-    guidedQueue = [];
+    const restSet = Number(document.getElementById('restBetweenSets').value);
+    const restExercise = Number(document.getElementById('restBetweenExercises').value);
+    const sequence = [];
 
-    // Costruiamo una lista piatta di tutte le serie da eseguire
-    workout.exercises.forEach((ex, exIdx) => {
-      for (let s = 1; s <= ex.sets; s++) {
-        const key = `w${state.week}_d${state.currentDay}_e${exIdx}_s${s}`;
-        guidedQueue.push({
-          exIdx: exIdx,
-          setNum: s,
-          totalSets: ex.sets,
-          name: ex.name,
-          target: ex.baseReps,
-          storageKey: key
-        });
+    workout.exercises.forEach((ex, exIndex) => {
+      for (let setIndex = 0; setIndex < ex.sets; setIndex++) {
+        sequence.push({ type: 'prepare', duration: setIndex === 0 ? 8 : 5, ex, exIndex, setIndex });
+        sequence.push({ type: 'work', ex, exIndex, setIndex });
+
+        const isLastSet = setIndex === ex.sets - 1;
+        const isLastExercise = exIndex === workout.exercises.length - 1;
+        if (!isLastExercise || !isLastSet) {
+          sequence.push({
+            type: 'rest',
+            duration: isLastSet ? restExercise : restSet,
+            ex,
+            exIndex,
+            setIndex,
+            nextExercise: isLastSet
+          });
+        }
       }
     });
 
-    currentGuidedIndex = 0;
+    return { workout, sequence };
+  }
+
+  function startGuidedWorkout() {
+    const { workout, sequence } = buildSequence();
+    runner = {
+      workout,
+      sequence,
+      index: 0,
+      paused: false,
+      secondsRemaining: 0,
+      repCurrent: 0,
+      repTarget: 0,
+      startedAt: Date.now(),
+      elapsedSeconds: 0,
+      completedSets: [],
+      voice: document.getElementById('voiceEnabled').checked
+    };
+
     document.getElementById('workoutView').classList.add('hidden');
-    document.getElementById('guidedView').classList.remove('hidden');
+    document.getElementById('summaryView').classList.add('hidden');
+    document.getElementById('runnerView').classList.remove('hidden');
+    document.getElementById('pauseBtn').textContent = '⏸ Pausa';
 
-    loadGuidedStep();
+    clearInterval(elapsedInterval);
+    elapsedInterval = setInterval(() => {
+      if (runner && !runner.paused) {
+        runner.elapsedSeconds += 1;
+        document.getElementById('runnerElapsed').textContent = formatTime(runner.elapsedSeconds);
+      }
+    }, 1000);
+
+    runCurrentPhase();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function loadGuidedStep() {
-    clearInterval(guidedInterval);
-    const item = guidedQueue[currentGuidedIndex];
-
-    document.getElementById('guidedStepCounter').innerText = `Esercizio ${item.exIdx + 1} di 5 • Serie ${item.setNum} di ${item.totalSets}`;
-    document.getElementById('guidedExName').innerText = item.name;
-    document.getElementById('guidedTarget').innerText = `Target Consigliato: ${item.target}`;
-    
-    document.getElementById('guidedTimerLabel').innerText = " ESECUZIONE IN CORSO (Esegui le ripetizioni)";
-    document.getElementById('guidedTimer').innerText = "PRONTI";
-    document.getElementById('guidedMainBtn').innerText = "Fatto! Avvia Recupero (60s)";
-    document.getElementById('guidedMainBtn').className = "btn btn-success";
-    
-    guidedStateTimer = 'working';
-  }
-
-  function guidedNextAction() {
-    if (guidedStateTimer === 'working') {
-      // Passa alla fase di recupero
-      guidedStateTimer = 'rest';
-      guidedTimeRemaining = 60; // 60 secondi di recupero standard
-      
-      document.getElementById('guidedTimerLabel').innerText = " RECUPERO TRA LE SERIE";
-      document.getElementById('guidedMainBtn').innerText = "Salta Recupero / Prossima Serie";
-      document.getElementById('guidedMainBtn').className = "btn btn-primary";
-
-      updateGuidedTimerDisplay();
-      guidedInterval = setInterval(() => {
-        guidedTimeRemaining--;
-        updateGuidedTimerDisplay();
-        if (guidedTimeRemaining < 0) {
-          clearInterval(guidedInterval);
-          if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-          advanceGuidedQueue();
-        }
-      }, 1000);
-
-    } else if (guidedStateTimer === 'rest') {
-      clearInterval(guidedInterval);
-      advanceGuidedQueue();
+  function runCurrentPhase() {
+    clearInterval(tickInterval);
+    if (!runner || runner.index >= runner.sequence.length) {
+      finishGuidedWorkout();
+      return;
     }
-  }
 
-  function updateGuidedTimerDisplay() {
-    const mins = Math.floor(guidedTimeRemaining / 60);
-    const secs = guidedTimeRemaining % 60;
-    document.getElementById('guidedTimer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  }
+    const phase = runner.sequence[runner.index];
+    const ex = phase.ex;
+    const circle = document.getElementById('counterCircle');
+    circle.className = 'big-counter';
 
-  function advanceGuidedQueue() {
-    currentGuidedIndex++;
-    if (currentGuidedIndex < guidedQueue.length) {
-      loadGuidedStep();
+    document.getElementById('runnerExercise').textContent = ex.name;
+    document.getElementById('runnerSet').textContent = `Serie ${phase.setIndex + 1} di ${ex.sets}`;
+    document.getElementById('runnerTip').textContent = ex.tip;
+    document.getElementById('runnerProgressText').textContent = `Esercizio ${phase.exIndex + 1} di ${runner.workout.exercises.length}`;
+    updateOverallProgress();
+
+    if (phase.type === 'prepare') {
+      setPhaseText('Preparati');
+      runner.secondsRemaining = phase.duration;
+      renderCounter(runner.secondsRemaining, 'secondi');
+      speak(`Preparati. ${ex.name}. Serie ${phase.setIndex + 1}.`);
+      startSecondTimer(() => advancePhase());
+      return;
+    }
+
+    if (phase.type === 'rest') {
+      setPhaseText(phase.nextExercise ? 'Recupero e cambio esercizio' : 'Recupero');
+      circle.classList.add('rest');
+      runner.secondsRemaining = phase.duration;
+      renderCounter(runner.secondsRemaining, 'recupero');
+      speak(phase.nextExercise ? `Recupero. Poi cambio esercizio.` : 'Recupero.');
+      startSecondTimer(() => advancePhase(), true);
+      return;
+    }
+
+    setPhaseText('Lavora');
+    speak('Via.');
+
+    if (ex.mode === 'time') {
+      runner.secondsRemaining = ex.target;
+      renderCounter(runner.secondsRemaining, 'secondi');
+      startSecondTimer(() => {
+        recordSet(ex.target);
+        speak('Stop.');
+        advancePhase();
+      }, true);
     } else {
-      // Fine sessione guidata!
-      alert("🎉 Sessione completata con successo nella modalità guidata!");
-      exitGuidedSession();
+      runner.repCurrent = 0;
+      runner.repTarget = ex.target;
+      renderCounter(0, `di ${ex.target}`);
+      const cadenceMs = Math.max(1300, (ex.cadence || 2.5) * 1000);
+      tickInterval = setInterval(() => {
+        if (!runner || runner.paused) return;
+        runner.repCurrent += 1;
+        renderCounter(runner.repCurrent, `di ${runner.repTarget}`);
+        if (runner.repCurrent <= 5 || runner.repCurrent === runner.repTarget || runner.repCurrent % 5 === 0) {
+          speak(String(runner.repCurrent));
+        }
+        if (navigator.vibrate) navigator.vibrate(35);
+        if (runner.repCurrent >= runner.repTarget) {
+          clearInterval(tickInterval);
+          recordSet(runner.repCurrent);
+          speak('Serie completata.');
+          setTimeout(advancePhase, 450);
+        }
+      }, cadenceMs);
     }
   }
 
-  function exitGuidedSession() {
-    clearInterval(guidedInterval);
-    document.getElementById('guidedView').classList.add('hidden');
-    document.getElementById('workoutView').classList.remove('hidden');
-    renderWorkout();
+  function startSecondTimer(onComplete, announceLastSeconds = false) {
+    tickInterval = setInterval(() => {
+      if (!runner || runner.paused) return;
+      runner.secondsRemaining -= 1;
+      renderCounter(Math.max(0, runner.secondsRemaining), document.getElementById('counterUnit').textContent);
+
+      if (announceLastSeconds && runner.secondsRemaining > 0 && runner.secondsRemaining <= 3) speak(String(runner.secondsRemaining));
+      if (runner.secondsRemaining <= 0) {
+        clearInterval(tickInterval);
+        if (navigator.vibrate) navigator.vibrate([180, 80, 180]);
+        onComplete();
+      }
+    }, 1000);
+  }
+
+  function renderCounter(value, unit) {
+    document.getElementById('counterMain').textContent = value;
+    document.getElementById('counterUnit').textContent = unit;
+  }
+
+  function setPhaseText(text) {
+    document.getElementById('runnerPhase').textContent = text;
+  }
+
+  function updateOverallProgress() {
+    const percent = runner.sequence.length ? (runner.index / runner.sequence.length) * 100 : 0;
+    document.getElementById('progressBar').style.width = `${Math.min(100, percent)}%`;
+  }
+
+  function advancePhase() {
+    if (!runner) return;
+    runner.index += 1;
+    runCurrentPhase();
+  }
+
+  function togglePause() {
+    if (!runner) return;
+    runner.paused = !runner.paused;
+    document.getElementById('pauseBtn').textContent = runner.paused ? '▶ Riprendi' : '⏸ Pausa';
+    setPhaseText(runner.paused ? 'In pausa' : phaseLabelForCurrent());
+    if (runner.paused) speak('Pausa.');
+    else speak('Riprendi.');
+  }
+
+  function phaseLabelForCurrent() {
+    const phase = runner?.sequence[runner.index];
+    if (!phase) return 'Lavora';
+    if (phase.type === 'prepare') return 'Preparati';
+    if (phase.type === 'rest') return 'Recupero';
+    return 'Lavora';
+  }
+
+  function skipCurrentPhase() {
+    if (!runner) return;
+    const phase = runner.sequence[runner.index];
+    if (phase?.type === 'work') {
+      const result = phase.ex.mode === 'time' ? Math.max(0, phase.ex.target - runner.secondsRemaining) : runner.repCurrent;
+      recordSet(result);
+    }
+    advancePhase();
+  }
+
+  function adjustCurrent(delta) {
+    if (!runner) return;
+    const phase = runner.sequence[runner.index];
+    if (!phase) return;
+
+    if (phase.type === 'work' && phase.ex.mode === 'reps') {
+      runner.repCurrent = Math.max(0, Math.min(runner.repTarget, runner.repCurrent + delta));
+      renderCounter(runner.repCurrent, `di ${runner.repTarget}`);
+    } else {
+      runner.secondsRemaining = Math.max(0, runner.secondsRemaining + delta * 5);
+      renderCounter(runner.secondsRemaining, document.getElementById('counterUnit').textContent);
+    }
+  }
+
+  function recordSet(value) {
+    const phase = runner?.sequence[runner.index];
+    if (!phase || phase.type !== 'work') return;
+    const key = `w${state.week}_d${state.currentDay}_e${phase.exIndex}_s${phase.setIndex + 1}`;
+    const displayValue = phase.ex.mode === 'time' ? `${value}s` : value;
+    state.logs[key] = displayValue;
+    runner.completedSets.push({
+      exercise: phase.ex.name,
+      set: phase.setIndex + 1,
+      value: displayValue
+    });
+    saveState();
+  }
+
+  function finishGuidedWorkout() {
+    clearInterval(tickInterval);
+    clearInterval(elapsedInterval);
+    tickInterval = null;
+    elapsedInterval = null;
+    document.getElementById('progressBar').style.width = '100%';
+    document.getElementById('counterCircle').className = 'big-counter done';
+    document.getElementById('counterMain').textContent = '✓';
+    document.getElementById('counterUnit').textContent = 'completato';
+    speak('Allenamento completato. Ottimo lavoro.');
+
+    const elapsed = runner?.elapsedSeconds || 0;
+    const sets = runner?.completedSets.length || 0;
+    document.getElementById('summaryText').textContent = `${sets} serie registrate in ${formatTime(elapsed)}.`;
+    document.getElementById('runnerView').classList.add('hidden');
+    document.getElementById('summaryView').classList.remove('hidden');
+  }
+
+  function abortWorkout() {
+    if (!runner || confirm('Vuoi terminare la sessione corrente?')) {
+      clearInterval(tickInterval);
+      clearInterval(elapsedInterval);
+      runner = null;
+      renderUI();
+    }
   }
 
   function completeWorkout() {
-    const workout = getBaseExercises(state.currentDay);
-    workout.exercises.forEach((ex, exIdx) => {
-      for (let s = 1; s <= ex.sets; s++) {
-        const key = `w${state.week}_d${state.currentDay}_e${exIdx}_s${s}`;
-        const val = document.getElementById(key).value;
-        state.logs[key] = val;
-      }
+    const rpe = Number(document.getElementById('workoutRPE').value);
+    const elapsed = runner?.elapsedSeconds || 0;
+
+    if (rpe <= 6) state.multiplier += 0.05;
+    else if (rpe <= 8) state.multiplier += 0.025;
+    else if (rpe === 9) state.multiplier = Math.max(0.65, state.multiplier - 0.01);
+    else state.multiplier = Math.max(0.65, state.multiplier - 0.04);
+
+    state.multiplier = Math.min(1.55, Number(state.multiplier.toFixed(3)));
+    state.history.push({
+      date: new Date().toISOString(),
+      week: state.week,
+      day: state.currentDay,
+      rpe,
+      elapsedSeconds: elapsed,
+      hellWeek: state.isHellWeek
     });
-
-    const rpe = parseInt(document.getElementById('workoutRPE').value);
-
-    if (rpe <= 6) {
-      state.multiplier += 0.06;
-    } else if (rpe === 7 || rpe === 8) {
-      state.multiplier += 0.03;
-    } else if (rpe === 10) {
-      state.multiplier = Math.max(0.6, state.multiplier - 0.04);
-    }
 
     if (state.currentDay < 3) {
       state.currentDay += 1;
@@ -623,6 +912,7 @@
       if (state.isHellWeek) state.isHellWeek = false;
     }
 
+    runner = null;
     saveState();
     renderUI();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -635,14 +925,31 @@
     renderUI();
   }
 
+  function speak(text) {
+    if (!runner?.voice || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'it-IT';
+    utterance.rate = 1.05;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function formatTime(totalSeconds) {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
   function resetAllData() {
-    if (confirm("Vuoi davvero cancellare tutti i dati salvati e ripetere il test?")) {
-      localStorage.removeItem('hybrid_pt_guided_state');
-      state = { ...DEFAULT_STATE };
-      renderUI();
+    if (confirm('Vuoi davvero cancellare tutti i dati e ripetere il test?')) {
+      clearInterval(tickInterval);
+      clearInterval(elapsedInterval);
+      localStorage.removeItem(STORAGE_KEY);
+      state = { ...DEFAULT_STATE, logs: {}, history: [], testResults: {} };
+      location.reload();
     }
   }
 </script>
-
 </body>
 </html>
