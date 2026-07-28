@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hybrid PT Ultra - Master Edition</title>
+  <title>Hybrid PT Ultra - Smart Coach Edition</title>
   <style>
     :root {
       --bg-dark: #0f172a;
@@ -167,76 +167,55 @@
 
   <!-- HEADER STATS -->
   <div class="card" id="headerCard">
-    <h1>HYBRID PT MASTER PRO</h1>
-    <p class="subtitle">Configurazione Flessibile & Smart Coach</p>
+    <h1>HYBRID PT UNIFIED PRO</h1>
+    <p class="subtitle">Scheda Interattiva + Smart Coach & Week Hell</p>
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <div>
-        <span class="badge badge-level" id="userLevelBadge">Non Impostato</span>
+        <span class="badge badge-level" id="userLevelBadge">Non Valutato</span>
       </div>
       <div style="text-align: right; font-size: 0.8rem; color: var(--text-sub);">
         Settimana: <strong id="currentWeekDisplay" style="color:var(--text-main)">1</strong> | 
-        Progressione: <strong id="multDisplay" style="color:var(--accent-green)">1.0x</strong>
+        Moltiplicatore: <strong id="multDisplay" style="color:var(--accent-green)">1.0x</strong>
       </div>
     </div>
   </div>
 
-  <!-- SETUP VIEW (SCELTA FREQUENZA E LIVELLO) -->
-  <div class="card" id="setupView">
-    <h2>Configura la tua Scheda</h2>
-    <p class="subtitle">Scegli i parametri di allenamento per creare la struttura iniziale.</p>
+  <!-- DIAGNOSTIC TEST VIEW -->
+  <div class="card" id="testView">
+    <h2>Test Diagnostico Iniziale</h2>
+    <p class="subtitle">Inserisci i tuoi massimali per calibrare i volumi delle schede.</p>
     
     <div class="input-group">
-      <label>Giorni di allenamento a settimana:</label>
-      <select id="setupDays">
-        <option value="2">2 Giorni (Full Body A / Full Body B)</option>
-        <option value="3" selected>3 Giorni (Push / Pull / Legs & Conditioning)</option>
-        <option value="4">4 Giorni (Push / Pull / Lower / Conditioning)</option>
-      </select>
+      <label>Push-up massimi (senza pause)</label>
+      <input type="number" id="testPushups" placeholder="es. 15" min="0">
     </div>
-
     <div class="input-group">
-      <label>Livello di Intensità Iniziale:</label>
-      <select id="setupLevel">
-        <option value="principiante">Principiante (Base volume e recuperi lunghi)</option>
-        <option value="intermedio" selected>Intermedio (Bilanciato per forza e ipertrofia)</option>
-        <option value="avanzato">Avanzato (Alto volume e densità elevata)</option>
-      </select>
+      <label>Squat massimi in 60s</label>
+      <input type="number" id="testSquats" placeholder="es. 30" min="0">
+    </div>
+    <div class="input-group">
+      <label>Plank isometrico (secondi)</label>
+      <input type="number" id="testPlank" placeholder="es. 45" min="0">
+    </div>
+    <div class="input-group">
+      <label>Trazioni / Inverted Row massime</label>
+      <input type="number" id="testPullups" placeholder="es. 5" min="0">
     </div>
 
-    <div style="margin: 14px 0; border-top: 1px dashed var(--border-color); padding-top: 12px;">
-      <p style="font-size:0.8rem; color:var(--text-sub); margin-bottom:8px;"><strong>Opzionale:</strong> Vuoi calibrare i numeri con un Test Diagnostico rapido?</p>
-      <button class="btn btn-outline" style="padding:8px; font-size:0.8rem;" onclick="toggleTestInputs()">
-        ⚙️ Mostra / Nascondi Test Diagnostico
-      </button>
-    </div>
-
-    <div id="testInputsBox" class="hidden">
-      <div class="input-group">
-        <label>Push-up max</label>
-        <input type="number" id="testPushups" placeholder="es. 15" value="15">
-      </div>
-      <div class="input-group">
-        <label>Squat max (60s)</label>
-        <input type="number" id="testSquats" placeholder="es. 25" value="25">
-      </div>
-      <div class="input-group">
-        <label>Plank max (secondi)</label>
-        <input type="number" id="testPlank" placeholder="es. 40" value="40">
-      </div>
-    </div>
-
-    <button class="btn btn-primary" onclick="initWorkoutSetup()">Genera Scheda Iniziale</button>
+    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera Schede & Inizia</button>
   </div>
 
   <!-- MAIN WORKOUT VIEW -->
   <div class="card hidden" id="workoutView">
     <div class="coach-box" id="coachMessage"></div>
 
-    <!-- SELETTORE GIORNI DINAMICO -->
+    <!-- SELETTORE GIORNI -->
     <div class="input-group">
       <label>Seleziona Sessione:</label>
       <select id="daySelector" onchange="switchDay(this.value)">
-        <!-- Generato dinamicamente in base ai giorni scelti -->
+        <option value="1">Giorno 1: Push & Core</option>
+        <option value="2">Giorno 2: Pull & Legs</option>
+        <option value="3">Giorno 3: Full Body Conditioning</option>
       </select>
     </div>
 
@@ -245,40 +224,39 @@
       <p id="workoutSubtitle" style="font-size:0.8rem; color:var(--text-sub)"></p>
     </div>
 
-    <!-- LISTA ESERCIZI -->
+    <!-- LISTA ESERCIZI DIVERSI E TRACCIABILI -->
     <div id="exerciseList"></div>
 
-    <!-- TIMER DI RECUPERO CON PROGRESSIONE -->
-    <div style="text-align: center; margin: 16px 0; background:#0f172a; padding:12px; border-radius:10px;">
-      <span style="font-size:0.75rem; color:var(--text-sub);">RECUPERO CONSIGLIATO: <strong id="recommendedRest" style="color:var(--accent-gold)">60s</strong></span>
+    <!-- TIMER DI RECUPERO -->
+    <div style="text-align: center; margin: 16px 0; background:#0f172a; padding:10px; border-radius:10px;">
+      <span style="font-size:0.75rem; color:var(--text-sub);">RECUPERO TRA LE SERIE</span>
       <div class="timer-display" id="timer">01:00</div>
       <div style="display:flex; gap:6px; justify-content:center;">
         <button class="btn btn-outline" style="padding:6px; font-size:0.75rem;" onclick="startTimer(45)">45s</button>
         <button class="btn btn-outline" style="padding:6px; font-size:0.75rem;" onclick="startTimer(60)">60s</button>
         <button class="btn btn-outline" style="padding:6px; font-size:0.75rem;" onclick="startTimer(90)">90s</button>
-        <button class="btn btn-outline" style="padding:6px; font-size:0.75rem;" onclick="startTimer(120)">120s</button>
       </div>
     </div>
 
-    <!-- FEEDBACK RPE -->
+    <!-- FEEDBACK RPE PER ADATTAMENTO COACH -->
     <div class="input-group">
-      <label>Sforzo Percepito (RPE):</label>
+      <label>Valuta lo Sforzo Percepito (RPE):</label>
       <select id="workoutRPE">
-        <option value="6">RPE 6 - Molto Facile (+ volume la prossima volta)</option>
-        <option value="7" selected>RPE 7 - Ottimale (+ progressione standard)</option>
-        <option value="8">RPE 8 - Sfidante (+ lieve incremento)</option>
-        <option value="9">RPE 9 - Vicino al limite (Consolida)</option>
-        <option value="10">RPE 10 - Cedimento (Scarico leggero)</option>
+        <option value="6">RPE 6 - Molto Facile (Troppo margine)</option>
+        <option value="7" selected>RPE 7 - Ottimale (Buona intensità)</option>
+        <option value="8">RPE 8 - Impegnativo (Ultima rip dura)</option>
+        <option value="9">RPE 9 - Limite (Senza margine)</option>
+        <option value="10">RPE 10 - Cedimento Totale</option>
       </select>
     </div>
 
-    <button class="btn btn-success" onclick="completeWorkout()">Salva Sessione e Avanza</button>
+    <button class="btn btn-success" onclick="completeWorkout()">Salva Sessione e Aggiorna Scheda</button>
     <button class="btn btn-hell hidden" id="startHellBtn" style="margin-top:10px;" onclick="triggerHellWeek()">ATTIVA WEEK HELL 🔥</button>
   </div>
 
-  <!-- PANNELLO CONTROLLO -->
+  <!-- PANNELLO CONTROLLO E RESET -->
   <div class="card" style="text-align:center;">
-    <button class="btn btn-outline" style="font-size:0.75rem; padding:8px;" onclick="resetAllData()">Riconfigura Giorni e Livello</button>
+    <button class="btn btn-outline" style="font-size:0.75rem; padding:8px;" onclick="resetAllData()">Azzera Dati e Ripeti Test</button>
   </div>
 
 </div>
@@ -286,16 +264,15 @@
 <script>
   const DEFAULT_STATE = {
     level: null,
-    totalDays: 3,
     week: 1,
     currentDay: 1,
     isHellWeek: false,
     multiplier: 1.0,
-    testResults: { pushups: 15, squats: 25, plank: 40 },
+    testResults: {},
     logs: {}
   };
 
-  let state = JSON.parse(localStorage.getItem('hybrid_pt_master_state')) || DEFAULT_STATE;
+  let state = JSON.parse(localStorage.getItem('hybrid_pt_unified_state')) || DEFAULT_STATE;
   let timerInterval = null;
 
   window.onload = function() {
@@ -303,32 +280,29 @@
   };
 
   function saveState() {
-    localStorage.setItem('hybrid_pt_master_state', JSON.stringify(state));
-  }
-
-  function toggleTestInputs() {
-    document.getElementById('testInputsBox').classList.toggle('hidden');
+    localStorage.setItem('hybrid_pt_unified_state', JSON.stringify(state));
   }
 
   function renderUI() {
     const headerCard = document.getElementById('headerCard');
-    const setupView = document.getElementById('setupView');
+    const testView = document.getElementById('testView');
     const workoutView = document.getElementById('workoutView');
 
     document.getElementById('currentWeekDisplay').innerText = state.week;
     document.getElementById('multDisplay').innerText = state.multiplier.toFixed(2) + 'x';
 
     if (!state.level) {
-      document.getElementById('userLevelBadge').innerText = "Non Impostato";
-      setupView.classList.remove('hidden');
+      document.getElementById('userLevelBadge').innerText = "Non Valutato";
+      testView.classList.remove('hidden');
       workoutView.classList.add('hidden');
       return;
     }
 
-    setupView.classList.add('hidden');
+    testView.classList.add('hidden');
     workoutView.classList.remove('hidden');
 
-    document.getElementById('userLevelBadge').innerText = `${state.level.toUpperCase()} (${state.totalDays} GG)`;
+    document.getElementById('daySelector').value = state.currentDay;
+    document.getElementById('userLevelBadge').innerText = state.level.toUpperCase();
 
     if (state.isHellWeek) {
       headerCard.classList.add('hell-theme');
@@ -341,25 +315,30 @@
       document.getElementById('userLevelBadge').className = "badge badge-level";
     }
 
-    populateDaySelector();
     renderCoachMessage();
     renderWorkout();
   }
 
-  function initWorkoutSetup() {
-    state.totalDays = parseInt(document.getElementById('setupDays').value);
-    state.level = document.getElementById('setupLevel').value;
+  function processDiagnosticTest() {
+    const pushups = parseInt(document.getElementById('testPushups').value) || 0;
+    const squats = parseInt(document.getElementById('testSquats').value) || 0;
+    const plank = parseInt(document.getElementById('testPlank').value) || 0;
+    const pullups = parseInt(document.getElementById('testPullups').value) || 0;
 
-    // Imposta moltiplicatore base in base al livello scelto
-    if (state.level === 'principiante') state.multiplier = 0.8;
-    else if (state.level === 'intermedio') state.multiplier = 1.0;
-    else if (state.level === 'avanzato') state.multiplier = 1.25;
+    const score = pushups + (squats * 0.5) + (plank * 0.3) + (pullups * 2);
 
-    // Legge eventuali valori test
-    state.testResults.pushups = parseInt(document.getElementById('testPushups').value) || 15;
-    state.testResults.squats = parseInt(document.getElementById('testSquats').value) || 25;
-    state.testResults.plank = parseInt(document.getElementById('testPlank').value) || 40;
+    if (score < 30) {
+      state.level = 'principiante';
+      state.multiplier = 0.85;
+    } else if (score < 65) {
+      state.level = 'intermedio';
+      state.multiplier = 1.0;
+    } else {
+      state.level = 'avanzato';
+      state.multiplier = 1.2;
+    }
 
+    state.testResults = { pushups, squats, plank, pullups };
     state.week = 1;
     state.currentDay = 1;
     state.isHellWeek = false;
@@ -368,94 +347,47 @@
     renderUI();
   }
 
-  function populateDaySelector() {
-    const selector = document.getElementById('daySelector');
-    selector.innerHTML = '';
-
-    const dayLabels = {
-      2: ["Giorno 1: Upper Body Focus", "Giorno 2: Lower Body & Core"],
-      3: ["Giorno 1: Push & Core", "Giorno 2: Pull & Legs", "Giorno 3: Full Body Conditioning"],
-      4: ["Giorno 1: Push Focus", "Giorno 2: Pull Focus", "Giorno 3: Lower Body", "Giorno 4: Cardio & Core"]
-    };
-
-    const labels = dayLabels[state.totalDays];
-    for (let i = 0; i < state.totalDays; i++) {
-      const opt = document.createElement('option');
-      opt.value = i + 1;
-      opt.innerText = labels[i];
-      if (i + 1 === state.currentDay) opt.selected = true;
-      selector.appendChild(opt);
-    }
-  }
-
   function getBaseExercises(day) {
     const m = state.multiplier;
     const hell = state.isHellWeek ? 1.35 : 1.0;
 
-    // Definizione Schede Dinamiche
-    const exercisesMap = {
-      // SET DI 2 GIORNI
-      2: {
-        1: { title: "Giorno 1: Upper Body", subtitle: "Petto, Spalle, Dorso, Braccia", ex: [
-          { name: "Push-ups Standard", sets: 4, baseReps: Math.round(state.testResults.pushups * 0.7 * m * hell) },
-          { name: "Trazioni / Inverted Row", sets: 4, baseReps: Math.round(6 * m * hell) },
-          { name: "Pike Push-ups (Spalle)", sets: 3, baseReps: Math.round(8 * m * hell) },
-          { name: "Dip su sedia", sets: 3, baseReps: Math.round(10 * m * hell) }
-        ]},
-        2: { title: "Giorno 2: Lower Body & Core", subtitle: "Gambe, Glutei e Addome", ex: [
-          { name: "Squat a corpo libero", sets: 4, baseReps: Math.round(state.testResults.squats * 0.8 * m * hell) },
-          { name: "Affondi Alternati", sets: 3, baseReps: Math.round(12 * m * hell) },
-          { name: "Plank Iso", sets: 3, baseReps: `${Math.round(state.testResults.plank * m * hell)}s` },
-          { name: "Crunch Addominali", sets: 3, baseReps: Math.round(15 * m * hell) }
-        ]}
-      },
-      // SET DI 3 GIORNI
-      3: {
-        1: { title: "Giorno 1: Push & Core", subtitle: "Petto, Spalle, Tricipiti", ex: [
-          { name: "Push-ups", sets: 4, baseReps: Math.round(state.testResults.pushups * 0.65 * m * hell) },
+    if (day === 1) {
+      return {
+        title: "Giorno 1: Push & Core Focus",
+        subtitle: state.isHellWeek ? "WEEK HELL: Sovra-stimolo Petto & Spalle" : "Forza e Resistenza Parte Superiore",
+        exercises: [
+          { name: "Push-ups Inclinati / Standard", sets: 4, baseReps: Math.round((state.testResults.pushups * 0.6 || 10) * m * hell) },
           { name: "Pike Push-ups", sets: 3, baseReps: Math.round(8 * m * hell) },
-          { name: "Diamond Push-ups", sets: 3, baseReps: Math.round(7 * m * hell) },
-          { name: "Plank Iso", sets: 3, baseReps: `${Math.round(state.testResults.plank * 0.8 * m * hell)}s` }
-        ]},
-        2: { title: "Giorno 2: Pull & Legs", subtitle: "Dorso, Bicipiti, Gambe", ex: [
-          { name: "Squat a corpo libero", sets: 4, baseReps: Math.round(state.testResults.squats * 0.7 * m * hell) },
-          { name: "Trazioni / Inverted Row", sets: 4, baseReps: Math.round(6 * m * hell) },
+          { name: "Dip su sedia / Parallele", sets: 3, baseReps: Math.round(10 * m * hell) },
+          { name: "Plank Iso", sets: 3, baseReps: `${Math.round((state.testResults.plank * 0.7 || 30) * m * hell)}s` },
+          { name: "Crunch Addominali", sets: 3, baseReps: Math.round(15 * m * hell) }
+        ]
+      };
+    } else if (day === 2) {
+      return {
+        title: "Giorno 2: Pull & Legs Focus",
+        subtitle: state.isHellWeek ? "WEEK HELL: Trazione e Catenaria Posteriore" : "Catena Posteriore e Gambe",
+        exercises: [
+          { name: "Squat a corpo libero", sets: 4, baseReps: Math.round((state.testResults.squats * 0.7 || 15) * m * hell) },
+          { name: "Trazioni / Inverted Row", sets: 4, baseReps: Math.round((Math.max(state.testResults.pullups, 4) * 0.6) * m * hell) },
           { name: "Affondi Alternati", sets: 3, baseReps: Math.round(12 * m * hell) },
+          { name: "Australian Pull-ups / Row", sets: 3, baseReps: Math.round(10 * m * hell) },
           { name: "Hollow Body Hold", sets: 3, baseReps: `${Math.round(25 * m * hell)}s` }
-        ]},
-        3: { title: "Giorno 3: Full Body Conditioning", subtitle: "Resistenza e Metabolico", ex: [
+        ]
+      };
+    } else {
+      return {
+        title: "Giorno 3: Full Body Conditioning",
+        subtitle: state.isHellWeek ? "WEEK HELL: Circuito Cardiovascolare Estremo" : "Capacità Aerobica e Brucia Grassi",
+        exercises: [
           { name: "Burpees", sets: 3, baseReps: Math.round(8 * m * hell) },
           { name: "Jump Squats", sets: 3, baseReps: Math.round(12 * m * hell) },
-          { name: "Push-ups Declinati", sets: 3, baseReps: Math.round(state.testResults.pushups * 0.5 * m * hell) },
-          { name: "Mountain Climbers", sets: 3, baseReps: `${Math.round(30 * m * hell)}s` }
-        ]}
-      },
-      // SET DI 4 GIORNI
-      4: {
-        1: { title: "Giorno 1: Push Focus", subtitle: "Spinta Pura", ex: [
-          { name: "Push-ups Standard", sets: 4, baseReps: Math.round(state.testResults.pushups * 0.7 * m * hell) },
-          { name: "Pike Push-ups", sets: 4, baseReps: Math.round(8 * m * hell) },
-          { name: "Dip su sedia", sets: 3, baseReps: Math.round(10 * m * hell) }
-        ]},
-        2: { title: "Giorno 2: Pull Focus", subtitle: "Trazione Pura", ex: [
-          { name: "Trazioni / Inverted Row", sets: 4, baseReps: Math.round(7 * m * hell) },
-          { name: "Australian Row", sets: 4, baseReps: Math.round(10 * m * hell) },
-          { name: "Superman Hold", sets: 3, baseReps: `${Math.round(20 * m * hell)}s` }
-        ]},
-        3: { title: "Giorno 3: Lower Body", subtitle: "Forza Gambe", ex: [
-          { name: "Squat Tempo 3-0-1", sets: 4, baseReps: Math.round(state.testResults.squats * 0.6 * m * hell) },
-          { name: "Affondi Bulgeri", sets: 3, baseReps: Math.round(10 * m * hell) },
-          { name: "Calf Raise su scalino", sets: 4, baseReps: Math.round(20 * m * hell) }
-        ]},
-        4: { title: "Giorno 4: Cardio & Core", subtitle: "Brucia grassi e Addome", ex: [
-          { name: "Burpees", sets: 3, baseReps: Math.round(10 * m * hell) },
-          { name: "Plank Iso", sets: 4, baseReps: `${Math.round(state.testResults.plank * m * hell)}s` },
-          { name: "Leg Raises", sets: 3, baseReps: Math.round(12 * m * hell) }
-        ]}
-      }
-    };
-
-    return exercisesMap[state.totalDays][day];
+          { name: "Push-ups Declinati", sets: 3, baseReps: Math.round((state.testResults.pushups * 0.5 || 8) * m * hell) },
+          { name: "Mountain Climbers", sets: 3, baseReps: `${Math.round(30 * m * hell)}s` },
+          { name: "Superman (Lombari)", sets: 3, baseReps: Math.round(15 * m * hell) }
+        ]
+      };
+    }
   }
 
   function renderWorkout() {
@@ -463,17 +395,10 @@
     document.getElementById('workoutTitle').innerText = workout.title;
     document.getElementById('workoutSubtitle').innerText = workout.subtitle;
 
-    // Rest time consigliato in base a livello e week hell
-    let restTime = "60s";
-    if (state.isHellWeek) restTime = "45s";
-    else if (state.level === 'principiante') restTime = "90s";
-    else if (state.level === 'avanzato') restTime = "45s";
-    document.getElementById('recommendedRest').innerText = restTime;
-
     const listContainer = document.getElementById('exerciseList');
     listContainer.innerHTML = '';
 
-    workout.ex.forEach((ex, exIdx) => {
+    workout.exercises.forEach((ex, exIdx) => {
       const item = document.createElement('div');
       item.className = 'exercise-item';
       
@@ -517,17 +442,18 @@
   function renderCoachMessage() {
     const coachBox = document.getElementById('coachMessage');
     if (state.isHellWeek) {
-      coachBox.innerText = "🔥 SMART COACH: WEEK HELL ATTIVA! Volume +35% e recuperi ridotti. Inserisci quello che riesci a completare.";
+      coachBox.innerText = "🔥 SMART COACH: WEEK HELL ATTIVA. Volumi incrementati. Inserisci i dati reali eseguiti nelle caselle per ogni serie.";
     } else if (state.week === 1) {
-      coachBox.innerText = `🤖 SMART COACH: Scheda impostata su ${state.totalDays} Giorni (${state.level.toUpperCase()}). Completa la sessione e usa l'RPE a fine allenamento.`;
+      coachBox.innerText = `🤖 SMART COACH: Scheda calibrata sul tuo livello (${state.level.toUpperCase()}). Puoi inserire peso e ripetizioni effettive per ogni serie.`;
     } else {
-      coachBox.innerText = `🤖 SMART COACH: Settimana ${state.week}. Moltiplicatore attivo: ${state.multiplier.toFixed(2)}x. L'intensità si sta adattando ai tuoi risultati.`;
+      coachBox.innerText = `🤖 SMART COACH: Settimana ${state.week}. Moltiplicatore attivo: ${state.multiplier.toFixed(2)}x. Mantieni l'esecuzione pulita!`;
     }
   }
 
   function completeWorkout() {
+    // Save inputs
     const workout = getBaseExercises(state.currentDay);
-    workout.ex.forEach((ex, exIdx) => {
+    workout.exercises.forEach((ex, exIdx) => {
       for (let s = 1; s <= ex.sets; s++) {
         const key = `w${state.week}_d${state.currentDay}_e${exIdx}_s${s}`;
         const val = document.getElementById(key).value;
@@ -537,16 +463,17 @@
 
     const rpe = parseInt(document.getElementById('workoutRPE').value);
 
-    // Algoritmo di Progressione
+    // Progression Engine Logic
     if (rpe <= 6) {
-      state.multiplier += 0.07;
+      state.multiplier += 0.06;
     } else if (rpe === 7 || rpe === 8) {
       state.multiplier += 0.03;
     } else if (rpe === 10) {
       state.multiplier = Math.max(0.6, state.multiplier - 0.04);
     }
 
-    if (state.currentDay < state.totalDays) {
+    // Advance flow
+    if (state.currentDay < 3) {
       state.currentDay += 1;
     } else {
       state.currentDay = 1;
@@ -592,8 +519,8 @@
   }
 
   function resetAllData() {
-    if (confirm("Vuoi cancellare la scheda attuale e ripartire dalla scelta dei giorni e del livello?")) {
-      localStorage.removeItem('hybrid_pt_master_state');
+    if (confirm("Vuoi davvero cancellare tutti i dati salvati e fare di nuovo il test?")) {
+      localStorage.removeItem('hybrid_pt_unified_state');
       state = { ...DEFAULT_STATE };
       renderUI();
     }
