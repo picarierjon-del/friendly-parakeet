@@ -1,514 +1,740 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Smart Workout Coach Pro</title>
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --card-bg: #1e293b;
-      --accent-green: #10b981;
-      --accent-blue: #3b82f6;
-      --accent-red: #ef4444;
-      --accent-gold: #f59e0b;
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      --border-color: #334155;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 12px;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding-bottom: 40px;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-
-    h1, h2, h3 {
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    h1 { font-size: 1.5rem; text-align: center; margin-bottom: 4px; }
-    .subtitle { text-align: center; color: var(--text-sub); font-size: 0.85rem; margin-bottom: 16px; }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .badge-level { background: #3b82f622; color: var(--accent-blue); border: 1px solid var(--accent-blue); }
-    .badge-hell { background: #ef444422; color: var(--accent-red); border: 1px solid var(--accent-red); }
-
-    .btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.1s, opacity 0.2s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--accent-blue); color: white; }
-    .btn-success { background: var(--accent-green); color: white; }
-    .btn-hell { background: linear-gradient(135deg, #ef4444, #991b1b); color: white; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
-    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-sub); }
-
-    .input-group {
-      margin-bottom: 14px;
-    }
-    .input-group label {
-      display: block;
-      font-size: 0.85rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-    }
-    .input-group input, .input-group select {
-      width: 100%;
-      padding: 12px;
-      background: #0f172a;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      color: var(--text-main);
-      font-size: 1rem;
-      outline: none;
-    }
-
-    .exercise-item {
-      background: #0f172a;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 10px;
-      border: 1px solid var(--border-color);
-    }
-    .exercise-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .exercise-name { font-weight: 600; font-size: 1rem; }
-    .exercise-meta { font-size: 0.85rem; color: var(--accent-green); font-weight: 700; }
-
-    .set-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-      border-top: 1px solid #1e293b;
-      font-size: 0.85rem;
-    }
-
-    .timer-display {
-      font-size: 2.5rem;
-      font-weight: 800;
-      text-align: center;
-      font-mono: monospace;
-      color: var(--accent-gold);
-      margin: 10px 0;
-    }
-
-    .coach-box {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid var(--accent-blue);
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 0.85rem;
-      line-height: 1.4;
-      color: #93c5fd;
-      margin-bottom: 16px;
-    }
-
-    .hell-theme {
-      border-color: var(--accent-red) !important;
-      background: linear-gradient(180deg, #1e293b 0%, #2a0808 100%);
-    }
-
-    .hidden { display: none !important; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#050914">
+<title>Personal Trainer Pro Commander v10</title>
+<style>
+:root{--bg:#050914;--panel:#0d1422;--panel2:#151f31;--line:#26344c;--text:#f8fafc;--muted:#93a4ba;--gold:#f59e0b;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--purple:#a855f7;--radius:20px;--shadow:0 16px 45px #0008}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit}
+.app{max-width:900px;margin:auto;padding:14px 14px 105px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,var(--gold),#ea580c);display:grid;place-items:center;color:#050914;font-weight:950;box-shadow:0 0 28px #f59e0b44}
+.brand h1{font-size:19px;margin:0}
+.brand small,.muted{color:var(--muted);font-size:12px}
+.icon{width:42px;height:42px;border-radius:12px;background:var(--panel);color:#fff;border:1px solid var(--line);cursor:pointer;display:grid;place-items:center}
+.hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:20px;background:linear-gradient(145deg,#f59e0b18,#38bdf80d);border-color:#f59e0b44}
+.hero h2{font-size:29px;margin:0 0 8px;line-height:1.05}
+.hero p{color:#d7dee8;font-size:14px;line-height:1.45}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip,.badge{border-radius:99px;padding:5px 9px;font-size:10px;font-weight:900}
+.chip{background:#050914;border:1px solid var(--line)}
+.grid{display:grid;gap:14px;margin-top:14px}
+.two{grid-template-columns:1fr}
+.card{padding:16px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.section-head h3{margin:0;font-size:17px}
+.fields{display:grid;gap:11px}
+.field label{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#050914;color:#fff;outline:none}
+.field textarea{min-height:75px}
+.btn{border:0;border-radius:14px;padding:12px 15px;font-size:13px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn-primary{background:var(--gold);color:#050914}
+.btn-secondary{background:var(--panel2);border:1px solid var(--line);color:#fff}
+.btn-danger{background:#ef44441c;border:1px solid #ef444455;color:#fca5a5}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+.stat b{font-size:20px;display:block}
+.stat span{font-size:9px;color:var(--muted);font-weight:900}
+.progress{height:8px;background:#1d293c;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--blue));transition:.3s}
+.day-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.day-check{position:relative}
+.day-check input{position:absolute;opacity:0}
+.day-check label{display:block;text-align:center;padding:10px 0;background:#050914;border:1px solid var(--line);border-radius:12px;font-size:12px;font-weight:800;cursor:pointer}
+.day-check input:checked+label{background:var(--gold);color:#050914;border-color:var(--gold)}
+.week-tabs,.filter-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.week-btn,.filter-btn{white-space:nowrap;border-radius:99px;padding:8px 12px;border:1px solid var(--line);background:#050914;color:var(--muted);font-weight:800;font-size:11px;cursor:pointer}
+.week-btn.active{background:var(--gold);color:#050914;border-color:var(--gold)}
+.filter-btn.active{background:var(--blue);color:#050914;border-color:var(--blue)}
+.workout{background:#050914;border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:10px}
+.workout.done{border-color:#22c55e66}
+.workout h4{margin:6px 0 3px}
+.workout-actions{display:flex;gap:8px;margin-top:10px}
+.tag-strength{color:var(--gold);background:#f59e0b18}
+.tag-cardio{color:#fb7185;background:#fb718518}
+.tag-run{color:var(--blue);background:#38bdf818}
+.tag-mobility{color:#c084fc;background:#c084fc18}
+.tag-hell{color:#fff;background:#dc2626}
+.notice{padding:12px;border:1px solid #f59e0b44;background:#f59e0b10;border-radius:14px;color:#fde68a;font-size:13px}
+.nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(94%,650px);display:grid;grid-template-columns:repeat(5,1fr);background:#0d1422ee;border:1px solid var(--line);backdrop-filter:blur(16px);border-radius:23px;padding:6px;z-index:100}
+.nav button{background:transparent;border:0;color:var(--muted);border-radius:15px;padding:8px 2px;font-size:10px;font-weight:800;cursor:pointer}
+.nav button.active{background:var(--panel2);color:var(--gold)}
+.page{display:none}
+.page.active{display:block}
+.exercise-row{display:flex;gap:11px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.thumb{width:50px;height:50px;border-radius:13px;background:var(--panel2);display:grid;place-items:center;font-weight:950;color:var(--gold);flex:none}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.calh{text-align:center;font-size:9px;color:var(--muted);font-weight:900}
+.cald{min-height:65px;padding:6px;border:1px solid var(--line);background:#050914;border-radius:10px;font-size:10px;overflow:hidden}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px}
+.modal,.player{display:none;position:fixed;inset:0;z-index:300;background:#000c;backdrop-filter:blur(8px);padding:18px}
+.modal.open{display:flex;align-items:center;justify-content:center}
+.modal-card{width:min(100%,560px);max-height:92vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.detail-stat{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.detail-stat b{display:block}
+.detail-stat span{font-size:9px;color:var(--muted)}
+.detail-step{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;background:#050914;border:1px solid var(--line);border-radius:12px;padding:10px;margin-top:7px}
+.stepnum{width:24px;height:24px;border-radius:50%;background:var(--panel2);display:grid;place-items:center;font-size:10px;font-weight:900}
+.player.open{display:block;overflow:auto;background:radial-gradient(circle at top,#14213a,#050914 62%)}
+.player-wrap{max-width:650px;margin:auto;min-height:100%;padding:18px 4px 35px;display:flex;flex-direction:column;justify-content:space-between}
+.player-top{display:flex;justify-content:space-between;align-items:center}
+.timer-ring{width:230px;height:230px;margin:24px auto;position:relative}
+.timer-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer-ring circle{fill:none;stroke-width:9}
+.ring-bg{stroke:var(--line)}
+.ring-progress{stroke:var(--gold);stroke-linecap:round;stroke-dasharray:565;transition:stroke-dashoffset .2s linear}
+.timer-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.clock{font-size:49px;font-weight:950}
+.controls{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:9px}
+.rpe-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.rpe-grid button{padding:12px;border-radius:11px;border:1px solid var(--line);background:#050914;color:#fff;font-weight:900;cursor:pointer}
+.rpe-grid button.active{background:var(--gold);color:#050914}
+.mesocycle{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.meso{padding:10px;border-radius:12px;border:1px solid var(--line);background:#050914;font-size:10px;text-align:center}
+.meso.active{border-color:var(--gold);box-shadow:0 0 0 1px #f59e0b55 inset}
+.readiness{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.readiness select{width:100%;padding:9px;border-radius:10px;background:#050914;color:#fff;border:1px solid var(--line)}
+@media(min-width:650px){.two{grid-template-columns:1fr 1fr}.fields.cols2{grid-template-columns:1fr 1fr}.day-grid{grid-template-columns:repeat(7,1fr)}}
+</style>
 </head>
 <body>
-
-<div class="container">
-
-  <!-- HEADER STATS -->
-  <div class="card" id="headerCard">
-    <h1>SMART COACH PRO</h1>
-    <p class="subtitle">Progressione Adattiva & Hell Week</p>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <span class="badge badge-level" id="userLevelBadge">Non Valutato</span>
+<div class="app">
+<header class="top">
+  <div class="brand">
+    <div class="logo">PT</div>
+    <div><h1>Personal Trainer Pro</h1><small>Commander Adaptive v10</small></div>
+  </div>
+  <div style="display:flex;gap:6px">
+    <button class="icon" id="voiceBtn">🗣️</button>
+    <button class="icon" id="soundBtn">🔊</button>
+  </div>
+</header>
+<main>
+<section id="homePage" class="page active">
+  <div class="hero">
+    <h2 id="heroTitle">Il tuo coach è operativo</h2>
+    <p>Programmazione personalizzata con test iniziale, progressione mensile, readiness giornaliera e adattamento tramite RPE.</p>
+    <div class="chips">
+      <span class="chip" id="chipGoal">Performance</span>
+      <span class="chip" id="chipLevel">Non valutato</span>
+      <span class="chip" id="chipCycle">Mese 1</span>
+    </div>
+  </div>
+  <div class="grid two">
+    <div class="card">
+      <div class="section-head"><div><h3>Sessione consigliata</h3><span class="muted" id="todayDate"></span></div></div>
+      <div id="todayWorkout"></div>
+    </div>
+    <div class="card">
+      <div class="section-head"><h3>Settimana</h3><b id="weekText">—</b></div>
+      <div class="stats">
+        <div class="stat"><b id="wDone">0</b><span>FATTI</span></div>
+        <div class="stat"><b id="wMin">0</b><span>MINUTI</span></div>
+        <div class="stat"><b id="wLoad">0</b><span>CARICO</span></div>
       </div>
-      <div style="text-align: right; font-size: 0.85rem; color: var(--text-sub);">
-        Settimana: <strong id="currentWeekDisplay" style="color:var(--text-main)">1</strong> | 
-        Giorno: <strong id="currentDayDisplay" style="color:var(--text-main)">1</strong>
+      <div class="progress"><i id="weekProgress" style="width:0"></i></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <div class="section-head"><div><h3>Readiness giornaliera</h3><span class="muted">Modula automaticamente il carico</span></div><b id="readyScore">75</b></div>
+      <div class="readiness">
+        <div><span class="muted">SONNO</span><select id="rSleep"><option value="1">Scarso</option><option value="2">Sufficiente</option><option value="3" selected>Buono</option><option value="4">Ottimo</option></select></div>
+        <div><span class="muted">ENERGIA</span><select id="rEnergy"><option value="1">Bassa</option><option value="2">Normale</option><option value="3" selected>Alta</option><option value="4">Massima</option></select></div>
+        <div><span class="muted">FATICA</span><select id="rFatigue"><option value="1">Alta</option><option value="2">Media</option><option value="3" selected>Bassa</option><option value="4">Nessuna</option></select></div>
+      </div>
+      <div class="notice" id="readyAdvice" style="margin-top:12px">Carico previsto confermato.</div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <div class="section-head"><div><h3>Mesociclo mensile</h3><span class="muted" id="mesoText"></span></div></div>
+      <div class="mesocycle" id="mesoGrid"></div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <div class="section-head"><h3>Calendario</h3><span class="muted" id="calendarTitle"></span></div>
+      <div class="calendar" id="calendar"></div>
+    </div>
+  </div>
+</section>
+<section id="builderPage" class="page">
+  <div class="card">
+    <div class="section-head"><div><h3>Crea il programma</h3><span class="muted">Il coach genera la scheda completa</span></div></div>
+    <div class="fields cols2">
+      <div class="field"><label>Obiettivo</label><select id="cfgGoal"><option value="muscle">Massa & Ipertrofia</option><option value="fatloss">Dimagrimento & Definizione</option><option value="hybrid" selected>Hybrid Performance</option><option value="strength">Forza a corpo libero</option><option value="running">Corsa 5/10 km</option></select></div>
+      <div class="field"><label>Frequenza</label><select id="cfgDays"><option value="2">2 giorni</option><option value="3" selected>3 giorni</option><option value="4">4 giorni</option><option value="5">5 giorni</option></select></div>
+      <div class="field"><label>Durata seduta</label><select id="cfgDuration"><option value="30">30 minuti</option><option value="45" selected>45 minuti</option><option value="60">60 minuti</option><option value="75">75 minuti</option></select></div>
+      <div class="field"><label>Durata programma</label><select id="cfgWeeks"><option value="4">4 settimane</option><option value="8">8 settimane</option><option value="12" selected>12 settimane</option><option value="16">16 settimane</option></select></div>
+      <div class="field"><label>Attrezzatura</label><select id="cfgEquipment"><option value="body">Corpo libero</option><option value="basic">Elastici + tappetino</option><option value="weights">Manubri / kettlebell</option></select></div>
+      <div class="field"><label>Livello dichiarato</label><select id="cfgDeclared"><option value="auto" selected>Automatico dal test</option><option value="beginner">Principiante</option><option value="intermediate">Intermedio</option><option value="advanced">Avanzato</option></select></div>
+    </div>
+    <div class="field" style="margin-top:12px"><label>Giorni selezionati <span id="dayCount" class="muted"></span></label><div class="day-grid" id="dayPicker"></div></div>
+    <div class="card" style="margin-top:14px;background:#050914;box-shadow:none">
+      <div class="section-head"><div><h3>Test iniziale</h3><span class="muted">Usato per calibrare volume e intensità</span></div></div>
+      <div class="fields cols2">
+        <div class="field"><label>Push-up max</label><input id="tPush" type="number" min="0" placeholder="20"></div>
+        <div class="field"><label>Squat in 60 sec</label><input id="tSquat" type="number" min="0" placeholder="35"></div>
+        <div class="field"><label>Plank max (sec)</label><input id="tPlank" type="number" min="0" placeholder="60"></div>
+        <div class="field"><label>Trazioni / Row max</label><input id="tPull" type="number" min="0" placeholder="5"></div>
+        <div class="field"><label>Tempo 5 km (mm:ss)</label><input id="t5k" type="text" placeholder="30:00"></div>
+        <div class="field"><label>Età</label><input id="tAge" type="number" value="38"></div>
+      </div>
+    </div>
+    <div class="btns"><button class="btn btn-primary" id="generateBtn" style="width:100%">⚡ Genera scheda Personal Trainer Pro</button></div>
+  </div>
+</section>
+<section id="programPage" class="page">
+  <div class="card">
+    <div class="section-head"><div><h3>Programma</h3><span class="muted" id="programInfo"></span></div></div>
+    <div class="week-tabs" id="weekTabs"></div>
+    <div id="programList"></div>
+  </div>
+</section>
+<section id="libraryPage" class="page">
+  <div class="card">
+    <div class="section-head"><h3>Libreria tecnica</h3></div>
+    <div class="filter-tabs" id="filters">
+      <button class="filter-btn active" data-cat="all">Tutti</button>
+      <button class="filter-btn" data-cat="strength">Forza</button>
+      <button class="filter-btn" data-cat="cardio">Cardio</button>
+      <button class="filter-btn" data-cat="run">Corsa</button>
+      <button class="filter-btn" data-cat="mobility">Mobilità</button>
+    </div>
+    <div id="library"></div>
+  </div>
+</section>
+<section id="statsPage" class="page">
+  <div class="grid two">
+    <div class="card">
+      <div class="section-head"><h3>Statistiche</h3></div>
+      <div class="stats">
+        <div class="stat"><b id="sSessions">0</b><span>SESSIONI</span></div>
+        <div class="stat"><b id="sMinutes">0</b><span>MINUTI</span></div>
+        <div class="stat"><b id="sRpe">0</b><span>RPE MEDIO</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-head"><h3>Aderenza</h3></div>
+      <div class="stats">
+        <div class="stat"><b id="sAdherence">0%</b><span>COMPLETATO</span></div>
+        <div class="stat"><b id="sStreak">0</b><span>SERIE</span></div>
+        <div class="stat"><b id="sLevel">—</b><span>LIVELLO</span></div>
+      </div>
+    </div>
+    <div class="card" style="grid-column:1/-1">
+      <div class="section-head"><h3>Storico sessioni</h3></div>
+      <div id="history"></div>
+      <div class="btns">
+        <button class="btn btn-secondary" id="exportBtn">Esporta backup</button>
+        <label class="btn btn-secondary" for="importFile">Importa backup</label>
+        <input id="importFile" type="file" accept="application/json" hidden>
+        <button class="btn btn-danger" id="resetBtn">Azzera tutto</button>
       </div>
     </div>
   </div>
+</section>
+</main>
+</div>
+<nav class="nav">
+  <button class="active" data-page="homePage">⌂<br>Home</button>
+  <button data-page="builderPage">✦<br>Crea</button>
+  <button data-page="programPage">▦<br>Piano</button>
+  <button data-page="libraryPage">◉<br>Tecnica</button>
+  <button data-page="statsPage">↗<br>Stats</button>
+</nav>
 
-  <!-- DIAGNOSTIC TEST VIEW -->
-  <div class="card" id="testView">
-    <h2>Test di Valutazione Iniziale</h2>
-    <p class="subtitle">Esegui i massimali (con buona forma) per calibrare il Coach.</p>
-    
-    <div class="input-group">
-      <label>Push-up massimi (senza pause)</label>
-      <input type="number" id="testPushups" placeholder="es. 15" min="0">
+<div class="modal" id="detailModal">
+  <div class="modal-card">
+    <div class="section-head">
+      <div><div id="detailBadges"></div><h2 id="detailTitle" style="margin:5px 0 2px"></h2><span class="muted" id="detailDate"></span></div>
+      <button class="icon" id="detailClose">✕</button>
     </div>
-    <div class="input-group">
-      <label>Squat a corpo libero massimi in 60s</label>
-      <input type="number" id="testSquats" placeholder="es. 30" min="0">
+    <div class="detail-grid" id="detailGrid"></div>
+    <div class="notice" id="detailCoach"></div>
+    <h3 style="margin:16px 0 5px">Fasi della seduta</h3>
+    <div id="detailSteps"></div>
+    <div class="btns">
+      <button class="btn btn-secondary" id="detailClose2">Chiudi</button>
+      <button class="btn btn-primary" id="detailStart">▶ Avvia allenamento</button>
     </div>
-    <div class="input-group">
-      <label>Plank isometrico (secondi tenuti)</label>
-      <input type="number" id="testPlank" placeholder="es. 45" min="0">
-    </div>
-    <div class="input-group">
-      <label>Trazioni / Inverted Row massime</label>
-      <input type="number" id="testPullups" placeholder="es. 5" min="0">
-    </div>
-
-    <button class="btn btn-primary" onclick="processDiagnosticTest()">Calcola Scheda e Inizia</button>
   </div>
+</div>
 
-  <!-- DASHBOARD / WORKOUT VIEW -->
-  <div class="card hidden" id="workoutView">
-    <div class="coach-box" id="coachMessage">
-      <!-- Messaggio dinamico del coach -->
+<div class="player" id="player">
+  <div class="player-wrap">
+    <div class="player-top">
+      <button class="btn btn-secondary" id="playerExit">✕ Esci</button>
+      <span class="muted" id="stepIndex"></span>
+      <button class="icon" id="playerMute">🔊</button>
     </div>
-
-    <div id="workoutHeader" style="margin-bottom: 16px;">
-      <h2 id="workoutTitle">Sessione Odierna</h2>
-      <p id="workoutSubtitle" style="font-size:0.85rem; color:var(--text-sub)"></p>
-    </div>
-
-    <div id="exerciseList">
-      <!-- Lista Esercizi Generata Dinamicamente -->
-    </div>
-
-    <!-- TIMER -->
-    <div style="text-align: center; margin: 16px 0;">
-      <span style="font-size:0.8rem; color:var(--text-sub);">TIMER RECUPERO</span>
-      <div class="timer-display" id="timer">01:00</div>
-      <div style="display:flex; gap:8px;">
-        <button class="btn btn-outline" style="padding:8px;" onclick="startTimer(45)">45s</button>
-        <button class="btn btn-outline" style="padding:8px;" onclick="startTimer(60)">60s</button>
-        <button class="btn btn-outline" style="padding:8px;" onclick="startTimer(90)">90s</button>
+    <div style="text-align:center">
+      <span class="badge tag-strength" id="stepTag">LAVORO</span>
+      <h2 id="stepTitle"></h2>
+      <p class="muted" id="stepDesc"></p>
+      <div class="timer-ring">
+        <svg><circle class="ring-bg" cx="115" cy="115" r="90"></circle><circle class="ring-progress" id="ring" cx="115" cy="115" r="90"></circle></svg>
+        <div class="timer-center"><div class="clock" id="clock">00:00</div><span class="muted" id="nextStep"></span></div>
       </div>
     </div>
-
-    <!-- FEEDBACK FORM -->
-    <div class="input-group" style="margin-top:20px;">
-      <label>Sforzo percepito (RPE 1-10) a fine allenamento:</label>
-      <select id="workoutRPE">
-        <option value="6">RPE 6 - Molto Facile (Sapevo di farne molte di più)</option>
-        <option value="7" selected>RPE 7 - Adeguato (Buona intensità, margine OK)</option>
-        <option value="8">RPE 8 - Sfidante (Ultima rip al limite)</option>
-        <option value="9">RPE 9 - Vicino al cedimento</option>
-        <option value="10">RPE 10 - Cedimento Totale / Non completato</option>
-      </select>
+    <div class="controls">
+      <button class="btn btn-secondary" id="prevStep">←</button>
+      <button class="btn btn-primary" id="pauseBtn">❚❚ Pausa</button>
+      <button class="btn btn-secondary" id="nextBtn">→</button>
     </div>
-
-    <button class="btn btn-success" id="finishWorkoutBtn" onclick="completeWorkout()">Completa Allenamento</button>
-    <button class="btn btn-hell hidden" id="startHellBtn" style="margin-top:10px;" onclick="triggerHellWeek()">ATTIVA WEEK HELL 🔥</button>
   </div>
+</div>
 
-  <!-- CONTROL PANEL -->
-  <div class="card" style="text-align:center;">
-    <button class="btn btn-outline" style="font-size:0.8rem; padding:8px;" onclick="resetAllData()">Azzera Dati e Ripeti Test</button>
+<div class="modal" id="feedbackModal">
+  <div class="modal-card">
+    <h2>Sessione completata</h2>
+    <p class="muted">Quanto è stata impegnativa?</p>
+    <div class="rpe-grid" id="rpeGrid"></div>
+    <div class="field" style="margin-top:12px"><label>Note</label><textarea id="feedbackNote" placeholder="Sensazioni, dolori, facilità, carichi..."></textarea></div>
+    <button class="btn btn-primary" id="saveFeedback" style="width:100%;margin-top:12px">Salva feedback</button>
   </div>
-
 </div>
 
 <script>
-  // STATE MANAGEMENT
-  const DEFAULT_STATE = {
-    level: null, // 'beginner', 'intermediate', 'advanced'
-    week: 1,
-    day: 1,
-    isHellWeek: false,
-    multiplier: 1.0,
-    testResults: {},
-    history: []
+const DAYS=['Lun','Mar','Mer','Gio','Ven','Sab','Dom'],DAYFULL=['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'];
+const GOALS={muscle:'Massa & Ipertrofia',fatloss:'Dimagrimento',hybrid:'Hybrid Performance',strength:'Forza',running:'Corsa 5/10 km'};
+const EX={warm:{n:'Riscaldamento dinamico',c:'mobility',d:'Mobilità, respirazione e attivazione generale.'},push:{n:'Push-up',c:'strength',d:'Corpo rigido, petto vicino al suolo, gomiti controllati.'},pike:{n:'Pike push-up',c:'strength',d:'Focus spalle e parte alta del corpo.'},row:{n:'Inverted row / tirata elastico',c:'strength',d:'Scapole addotte e busto compatto.'},squat:{n:'Squat',c:'strength',d:'Talloni a terra, ginocchia in linea, tronco stabile.'},lunge:{n:'Affondi alternati',c:'strength',d:'Passo ampio e controllo del ginocchio.'},bridge:{n:'Glute bridge',c:'strength',d:'Spinta dai talloni e contrazione glutei.'},plank:{n:'Plank',c:'strength',d:'Addome e glutei contratti.'},burpee:{n:'Burpees',c:'cardio',d:'Movimento fluido, ritmo sostenibile.'},mountain:{n:'Mountain climber',c:'cardio',d:'Ginocchia rapide mantenendo il bacino stabile.'},jacks:{n:'Jumping jacks',c:'cardio',d:'Coordinazione e ritmo costante.'},high:{n:'High knees',c:'cardio',d:'Ginocchia alte e appoggi rapidi.'},runEasy:{n:'Corsa Z2',c:'run',d:'Ritmo conversazionale e respirazione controllata.'},runTempo:{n:'Corsa tempo',c:'run',d:'Ritmo sostenuto ma regolare.'},runIntervals:{n:'Ripetute',c:'run',d:'Alterna tratti veloci e recupero attivo.'},mobility:{n:'Mobilità e defaticamento',c:'mobility',d:'Respirazione lenta e allungamento controllato.'},rest:{n:'Recupero',c:'mobility',d:'Respira e prepara la fase successiva.'}};
+const DEFAULT={settings:{goal:'hybrid',days:3,duration:45,weeks:12,equipment:'body',declared:'auto',selectedDays:[0,2,4],age:38},tests:{push:0,squat:0,plank:0,pull:0,time5k:''},level:null,multiplier:1,plan:[],completed:{},planStart:null,readiness:{sleep:3,energy:3,fatigue:3,score:75,load:1},sound:true,voice:true};
+
+let state=Object.assign({},DEFAULT,JSON.parse(localStorage.getItem('PT_COMMANDER_V10')||'null')||{});
+state.settings=Object.assign({},DEFAULT.settings,state.settings||{});
+state.tests=Object.assign({},DEFAULT.tests,state.tests||{});
+state.readiness=Object.assign({},DEFAULT.readiness,state.readiness||{});
+state.completed=state.completed||{};
+
+const $=id=>document.getElementById(id);
+let weekView=0,detailId=null,audioCtx=null,wakeLock=null,selectedRpe=7;
+
+function save(){localStorage.setItem('PT_COMMANDER_V10',JSON.stringify(state))}
+function startOfWeek(d){const x=new Date(d),k=(x.getDay()+6)%7;x.setHours(0,0,0,0);x.setDate(x.getDate()-k);return x}
+function currentWeek(){if(!state.planStart||!state.plan.length)return 0;return Math.max(0,Math.min(state.plan.length-1,Math.floor((Date.now()-state.planStart)/604800000)))}
+function meso(w){const m=Math.floor(w/4)%4;return[{name:'Fondamenta',factor:.9,rest:1.15,desc:'Tecnica, controllo e capacità di lavoro.'},{name:'Sviluppo',factor:1.02,rest:1,desc:'Aumento progressivo di volume e densità.'},{name:'Intensificazione',factor:1.12,rest:.88,desc:'Maggiore intensità e recuperi ridotti.'},{name:'Consolidamento',factor:.82,rest:1.2,desc:'Scarico attivo, qualità e recupero.'}][m]}
+function assessLevel(){if(state.settings.declared!=='auto')return state.settings.declared;const t=state.tests,score=t.push+t.squat*.45+t.plank*.25+t.pull*2;if(score<28)return'beginner';if(score<65)return'intermediate';return'advanced'}
+function step(key,dur,label){return{key,dur:Math.max(10,Math.round(dur)),label:label||EX[key].n}}
+
+function makeWorkout(w,i,code){
+  const s=state.settings,ms=meso(w),lvl={beginner:.82,intermediate:1,advanced:1.18}[state.level||'intermediate'];
+  const prog=(1+w*.025)*ms.factor*lvl*(state.readiness.load||1),rest=Math.round(45*ms.rest),day=s.selectedDays[i];
+  const mk=(title,type,steps,coach,km=0,hell=false)=>({
+    id:`w${w}d${i}_${code}`,week:w,dayIndex:day,title,type,steps,coach,km:+km.toFixed(1),
+    duration:Math.round(steps.reduce((a,b)=>a+b.dur,0)/60),
+    date:new Date(state.planStart+w*604800000+day*86400000).toISOString(),
+    meso:ms.name,hell
+  });
+  const circuits=(moves,sets,work=40)=>{
+    const a=[step('warm',300)];
+    for(let r=1;r<=sets;r++)moves.forEach(k=>{a.push(step(k,work*prog,`${EX[k].n} · Serie ${r}/${sets}`));a.push(step('rest',rest,'Recupero'))});
+    a.push(step('mobility',180));
+    return a;
   };
+  if(s.goal==='muscle'){
+    if(code%3===0)return mk('Upper Body Hypertrophy','strength',circuits(['push','row','pike','plank'],3,48),'Controlla la fase eccentrica e lascia 1-2 ripetizioni di margine.');
+    if(code%3===1)return mk('Lower Body Hypertrophy','strength',circuits(['squat','lunge','bridge','plank'],3,52),'Focus su ampiezza, stabilità e tensione continua.');
+    return mk('Full Body Volume','strength',circuits(['squat','push','row','lunge','plank'],3,44),'Volume distribuito su tutto il corpo.');
+  }
+  if(s.goal==='fatloss'){
+    if(code%3===0)return mk('Metabolic Burner','cardio',circuits(['burpee','mountain','squat','high'],4,34),'Mantieni ritmo elevato senza perdere tecnica.');
+    if(code%3===1)return mk('Corsa Z2 + HIIT','run',[step('warm',300),step('runEasy',s.duration*28),step('runIntervals',s.duration*16),step('mobility',180)],'Seduta mista per consumo calorico e capacità aerobica.',s.duration/6);
+    return mk('Full Body Density','cardio',circuits(['jacks','lunge','push','mountain'],4,36),'Recuperi brevi e densità alta.');
+  }
+  if(s.goal==='running'){
+    if(code%3===0)return mk('Corsa facile Z2','run',[step('warm',300),step('runEasy',s.duration*50),step('mobility',180)],'Corri in controllo: devi riuscire a parlare.',s.duration/7);
+    if(code%3===1)return mk('Ripetute Progressive','run',[step('warm',420),step('runIntervals',s.duration*38),step('runEasy',s.duration*10),step('mobility',180)],'Velocità controllata, recupero attivo.',s.duration/6.2);
+    return mk('Forza per la corsa','strength',circuits(['squat','lunge','bridge','plank'],3,42),'Migliora stabilità, economia di corsa e prevenzione.');
+  }
+  if(s.goal==='strength'){
+    if(code%2===0)return mk('Forza A','strength',circuits(['push','row','squat','plank'],4,45),'Movimenti lenti e tecnici.');
+    return mk('Forza B','strength',circuits(['pike','lunge','bridge','plank'],4,45),'Qualità prima della velocità.');
+  }
+  if(code%3===0)return mk('Hybrid Strength','strength',circuits(['squat','push','row','plank'],3,42),'Forza generale con controllo tecnico.');
+  if(code%3===1)return mk('Hybrid Engine','run',[step('warm',300),step('runEasy',s.duration*32),step('runTempo',s.duration*14),step('mobility',180)],'Sviluppa motore aerobico e soglia.',s.duration/6.8);
+  return mk('Hybrid Conditioning','cardio',circuits(['burpee','lunge','push','mountain'],3,35),'Condizionamento completo e sostenibile.');
+}
 
-  let state = JSON.parse(localStorage.getItem('smart_coach_state')) || DEFAULT_STATE;
-  let timerInterval = null;
+function collect(){
+  state.settings.goal=$('cfgGoal').value;
+  state.settings.days=+$('cfgDays').value;
+  state.settings.duration=+$('cfgDuration').value;
+  state.settings.weeks=+$('cfgWeeks').value;
+  state.settings.equipment=$('cfgEquipment').value;
+  state.settings.declared=$('cfgDeclared').value;
+  state.settings.selectedDays=[...document.querySelectorAll('#dayPicker input:checked')].map(x=>+x.value);
+  state.settings.age=+$('tAge').value||38;
+  state.tests={push:+$('tPush').value||0,squat:+$('tSquat').value||0,plank:+$('tPlank').value||0,pull:+$('tPull').value||0,time5k:$('t5k').value.trim()};
+}
 
-  // INIT
-  window.onload = function() {
-    renderUI();
+function generate(){
+  collect();
+  if(state.settings.selectedDays.length!==state.settings.days){alert(`Seleziona esattamente ${state.settings.days} giorni.`);return}
+  state.level=assessLevel();
+  state.multiplier={beginner:.86,intermediate:1,advanced:1.15}[state.level];
+  state.planStart=startOfWeek(new Date()).getTime();
+  state.plan=[];
+  for(let w=0;w<state.settings.weeks;w++)state.plan.push(Array.from({length:state.settings.days},(_,i)=>makeWorkout(w,i,i+w)));
+  state.completed={};
+  save();
+  weekView=0;
+  renderAll();
+  switchPage('programPage');
+}
+
+function regenerateWorkoutsWithNewReadiness(){
+  if(!state.plan||!state.plan.length)return;
+  for(let w=0;w<state.plan.length;w++){
+    for(let i=0;i<state.plan[w].length;i++){
+      const old=state.plan[w][i];
+      if(!state.completed[old.id]){
+        state.plan[w][i]=makeWorkout(w,i,i+w);
+      }
+    }
+  }
+  save();
+  renderHome();
+  renderProgram();
+}
+
+function card(w){
+  const done=state.completed[w.id];
+  return `<div class="workout ${done?'done':''}"><span class="badge tag-${w.type}">${w.type.toUpperCase()}</span> <span class="badge ${w.hell?'tag-hell':'tag-mobility'}">${w.meso}</span><h4>${DAYFULL[w.dayIndex]} · ${w.title}</h4><span class="muted">${w.duration} min ${w.km?'· '+w.km+' km':''} ${done?'· ✅ completato':''}</span><div class="workout-actions"><button class="btn btn-secondary detail" data-id="${w.id}">Dettagli</button><button class="btn btn-primary start" data-id="${w.id}">${done?'Rifai':'Avvia'}</button></div></div>`;
+}
+
+function renderHome(){
+  const s=state.settings,cw=currentWeek(),week=state.plan[cw]||[];
+  const today=week.find(w=>new Date(w.date).toDateString()===new Date().toDateString());
+  const next=today||week.find(w=>!state.completed[w.id])||state.plan.flat().find(w=>!state.completed[w.id]);
+  $('chipGoal').textContent=GOALS[s.goal];
+  $('chipLevel').textContent=state.level?state.level.toUpperCase():'NON VALUTATO';
+  $('chipCycle').textContent=state.plan.length?`Mese ${Math.floor(cw/4)+1}`:'Mese 1';
+  $('todayDate').textContent=new Date().toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});
+  $('todayWorkout').innerHTML=next?card(next):'<div class="notice">Genera il tuo programma dalla sezione Crea.</div>';
+  $('weekText').textContent=state.plan.length?`${cw+1}/${state.plan.length}`:'—';
+  const done=week.filter(w=>state.completed[w.id]);
+  $('wDone').textContent=done.length;
+  $('wMin').textContent=done.reduce((a,w)=>a+state.completed[w.id].duration,0);
+  $('wLoad').textContent=week.reduce((a,w)=>a+w.steps.length,0);
+  $('weekProgress').style.width=(week.length?done.length/week.length*100:0)+'%';
+  renderMeso();
+  renderCalendar();
+  bindCards();
+}
+
+function renderMeso(){
+  const cw=currentWeek(),m=meso(cw);
+  $('mesoText').textContent=`${m.name} · settimana ${(cw%4)+1}/4 · ${m.desc}`;
+  $('mesoGrid').innerHTML=['Fondamenta','Sviluppo','Intensificazione','Consolidamento'].map((x,i)=>`<div class="meso ${Math.floor(cw/4)%4===i?'active':''}"><b>${i+1}</b><br>${x}</div>`).join('');
+}
+
+function renderCalendar(){
+  const d=new Date(),y=d.getFullYear(),m=d.getMonth(),first=new Date(y,m,1),off=(first.getDay()+6)%7,total=new Date(y,m+1,0).getDate();
+  $('calendarTitle').textContent=d.toLocaleDateString('it-IT',{month:'long',year:'numeric'});
+  let h=DAYS.map(x=>`<div class="calh">${x}</div>`).join('');
+  for(let i=0;i<off;i++)h+='<div></div>';
+  for(let x=1;x<=total;x++){
+    const dt=new Date(y,m,x),items=state.plan.flat().filter(w=>new Date(w.date).toDateString()===dt.toDateString());
+    h+=`<div class="cald"><b>${x}</b>${items.map(w=>`<div><span class="dot" style="background:${w.type==='run'?'var(--blue)':w.type==='cardio'?'var(--red)':'var(--gold)'}"></span>${w.title.split(' ')[0]}</div>`).join('')}</div>`;
+  }
+  $('calendar').innerHTML=h;
+}
+
+function renderProgram(){
+  if(!state.plan.length){$('weekTabs').innerHTML='';$('programList').innerHTML='<div class="notice">Nessun programma attivo.</div>';return}
+  $('programInfo').textContent=`${GOALS[state.settings.goal]} · ${state.settings.days} giorni · ${state.settings.weeks} settimane`;
+  $('weekTabs').innerHTML=state.plan.map((_,i)=>`<button class="week-btn ${i===weekView?'active':''}" data-w="${i}">Sett. ${i+1}</button>`).join('');
+  $('programList').innerHTML=state.plan[weekView]?state.plan[weekView].map(card).join(''):'';
+  document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{weekView=+b.dataset.w;renderProgram()});
+  bindCards();
+}
+
+function renderLibrary(cat='all'){
+  $('library').innerHTML=Object.entries(EX).filter(([k,e])=>cat==='all'||e.c===cat).map(([k,e])=>`<div class="exercise-row"><div class="thumb">${e.n.slice(0,2).toUpperCase()}</div><div><b>${e.n}</b><br><span class="muted">${e.d}</span></div></div>`).join('');
+}
+
+function renderStats(){
+  const vals=Object.values(state.completed);
+  $('sSessions').textContent=vals.length;
+  $('sMinutes').textContent=vals.reduce((a,b)=>a+b.duration,0);
+  $('sRpe').textContent=vals.length?(vals.reduce((a,b)=>a+b.rpe,0)/vals.length).toFixed(1):0;
+  const planned=state.plan.flat().filter(w=>new Date(w.date)<=new Date()).length;
+  $('sAdherence').textContent=(planned?Math.min(100,Math.round(vals.length/planned*100)):0)+'%';
+  $('sStreak').textContent=streak(vals);
+  $('sLevel').textContent=state.level?state.level.slice(0,3).toUpperCase():'—';
+  $('history').innerHTML=vals.sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10).map(v=>`<div class="exercise-row"><div><b>${v.title}</b><br><span class="muted">${new Date(v.date).toLocaleDateString('it-IT')} · ${v.duration} min · RPE ${v.rpe}${v.note?' · '+v.note:''}</span></div></div>`).join('')||'<span class="muted">Nessuna sessione registrata.</span>';
+}
+
+function streak(vals){
+  const set=new Set(vals.map(v=>new Date(v.date).toDateString()));
+  let n=0,d=new Date();
+  for(let i=0;i<365;i++){
+    if(set.has(d.toDateString()))n++;
+    else if(i>0)break;
+    d.setDate(d.getDate()-1);
+  }
+  return n;
+}
+
+function renderBuilder(){
+  ['Goal','Days','Duration','Weeks','Equipment','Declared'].forEach(x=>{const el=$('cfg'+x);if(el)el.value=state.settings[x.toLowerCase()]});
+  $('tPush').value=state.tests.push||'';
+  $('tSquat').value=state.tests.squat||'';
+  $('tPlank').value=state.tests.plank||'';
+  $('tPull').value=state.tests.pull||'';
+  $('t5k').value=state.tests.time5k||'';
+  $('tAge').value=state.settings.age||38;
+  buildDays();
+}
+
+function buildDays(){
+  $('dayPicker').innerHTML=DAYS.map((d,i)=>`<div class="day-check"><input type="checkbox" id="d${i}" value="${i}" ${state.settings.selectedDays.includes(i)?'checked':''}><label for="d${i}">${d}</label></div>`).join('');
+  document.querySelectorAll('#dayPicker input').forEach(x=>x.onchange=e=>{
+    const max=+$('cfgDays').value,sel=[...document.querySelectorAll('#dayPicker input:checked')];
+    if(sel.length>max)e.target.checked=false;
+    state.settings.selectedDays=[...document.querySelectorAll('#dayPicker input:checked')].map(x=>+x.value);
+    $('dayCount').textContent=`${state.settings.selectedDays.length}/${max}`;
+  });
+  $('dayCount').textContent=`${state.settings.selectedDays.length}/${$('cfgDays').value}`;
+}
+
+function readiness(){
+  const sl=+$('rSleep').value,en=+$('rEnergy').value,fa=+$('rFatigue').value;
+  const score=Math.round((sl+en+fa)/12*100);
+  const load=score<45?.75:score<65?.88:score>88?1.05:1;
+  state.readiness={sleep:sl,energy:en,fatigue:fa,score,load};
+  $('readyScore').textContent=score;
+  $('readyAdvice').textContent=score<45?'Recupero o mobilità: oggi riduci il volume.':score<65?'Carico ridotto: lavora con tecnica pulita.':score>88?'Ottima giornata: puoi aggiungere un piccolo incremento.':'Carico previsto confermato.';
+  regenerateWorkoutsWithNewReadiness();
+}
+
+function showDetails(id){
+  const w=state.plan.flat().find(x=>x.id===id);
+  if(!w)return;
+  detailId=id;
+  $('detailBadges').innerHTML=`<span class="badge tag-${w.type}">${w.type.toUpperCase()}</span> <span class="badge tag-mobility">${w.meso}</span>`;
+  $('detailTitle').textContent=w.title;
+  $('detailDate').textContent=`${DAYFULL[w.dayIndex]} · ${new Date(w.date).toLocaleDateString('it-IT',{day:'numeric',month:'long'})}`;
+  $('detailGrid').innerHTML=`<div class="detail-stat"><b>${w.duration} min</b><span>DURATA</span></div><div class="detail-stat"><b>${w.km?w.km+' km':w.steps.length}</b><span>${w.km?'DISTANZA':'FASI'}</span></div><div class="detail-stat"><b>${w.meso}</b><span>MESOCICLO</span></div>`;
+  $('detailCoach').textContent='Coach: '+w.coach;
+  $('detailSteps').innerHTML=w.steps.map((s,i)=>`<div class="detail-step"><div class="stepnum">${i+1}</div><div><b>${s.label}</b><br><span class="muted">${EX[s.key]?EX[s.key].d:''}</span></div><b>${s.dur}s</b></div>`).join('');
+  $('detailModal').classList.add('open');
+}
+
+function bindCards(){
+  document.querySelectorAll('.detail').forEach(b=>b.onclick=()=>showDetails(b.dataset.id));
+  document.querySelectorAll('.start').forEach(b=>b.onclick=()=>startWorkout(b.dataset.id));
+}
+
+let player={active:false,w:null,idx:0,end:0,dur:0,paused:false,left:0,timer:null};
+
+function initAudio(){
+  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended')audioCtx.resume();
+}
+
+function beep(f=700){
+  if(!state.sound)return;
+  try{
+    initAudio();
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.frequency.value=f;
+    g.gain.value=.05;
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime+.12);
+  }catch(e){}
+}
+
+function speak(t){
+  if(!state.voice||!('speechSynthesis' in window))return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang='it-IT';
+  u.rate=1.03;
+  window.speechSynthesis.speak(u);
+}
+
+async function wake(){try{if('wakeLock'in navigator&&!wakeLock)wakeLock=await navigator.wakeLock.request('screen')}catch(e){}}
+async function release(){try{if(wakeLock){await wakeLock.release();wakeLock=null}}catch(e){}}
+
+function startWorkout(id){
+  const w=state.plan.flat().find(x=>x.id===id);
+  if(!w)return;
+  initAudio();
+  player={active:true,w,idx:0,end:0,dur:0,paused:false,left:0,timer:null};
+  $('player').classList.add('open');
+  wake();
+  loadStep(0);
+  player.timer=setInterval(loop,100);
+  speak('Inizio '+w.title);
+}
+
+function loadStep(i){
+  if(i>=player.w.steps.length){finishWorkout();return}
+  player.idx=i;
+  const s=player.w.steps[i],e=EX[s.key]||{d:''};
+  player.dur=s.dur;
+  player.end=Date.now()+s.dur*1000;
+  player.paused=false;
+  $('stepIndex').textContent=`Fase ${i+1}/${player.w.steps.length}`;
+  $('stepTitle').textContent=s.label;
+  $('stepDesc').textContent=e.d;
+  $('stepTag').textContent=s.key==='rest'?'RECUPERO':'LAVORO';
+  const n=player.w.steps[i+1];
+  $('nextStep').textContent=n?'Prossimo: '+n.label:'Ultima fase';
+  beep(s.key==='rest'?450:850);
+  speak(s.key==='rest'?'Recupero':s.label);
+  draw(s.dur);
+}
+
+function loop(){
+  if(!player.active||player.paused)return;
+  const r=Math.ceil((player.end-Date.now())/1000);
+  if(r<=0)loadStep(player.idx+1);
+  else draw(r);
+}
+
+function draw(r){
+  r=Math.max(0,r);
+  $('clock').textContent=`${String(Math.floor(r/60)).padStart(2,'0')}:${String(r%60).padStart(2,'0')}`;
+  $('ring').style.strokeDashoffset=565*(1-r/player.dur);
+  $('pauseBtn').textContent=player.paused?'▶ Riprendi':'❚❚ Pausa';
+}
+
+function togglePause(){
+  if(player.paused){
+    player.end=Date.now()+player.left;
+    player.paused=false;
+  }else{
+    player.left=player.end-Date.now();
+    player.paused=true;
+  }
+  draw(Math.ceil(player.left/1000));
+}
+
+function finishWorkout(){
+  player.active=false;
+  clearInterval(player.timer);
+  release();
+  $('player').classList.remove('open');
+  $('feedbackModal').classList.add('open');
+  selectedRpe=7;
+  renderRpe();
+  speak('Allenamento completato');
+}
+
+function renderRpe(){
+  $('rpeGrid').innerHTML=Array.from({length:10},(_,i)=>`<button class="${selectedRpe===i+1?'active':''}" data-rpe="${i+1}">${i+1}</button>`).join('');
+  document.querySelectorAll('[data-rpe]').forEach(b=>b.onclick=()=>{selectedRpe=+b.dataset.rpe;renderRpe()});
+}
+
+function saveFeedback(){
+  const w=player.w;
+  state.completed[w.id]={title:w.title,date:new Date().toISOString(),duration:w.duration,km:w.km,rpe:selectedRpe,note:$('feedbackNote').value.trim()};
+  if(selectedRpe<=6)state.multiplier=Math.min(1.35,state.multiplier+.04);
+  if(selectedRpe>=9)state.multiplier=Math.max(.7,state.multiplier-.04);
+  save();
+  $('feedbackNote').value='';
+  $('feedbackModal').classList.remove('open');
+  renderAll();
+}
+
+function closePlayer(){
+  player.active=false;
+  clearInterval(player.timer);
+  release();
+  $('player').classList.remove('open');
+}
+
+function renderAll(){
+  renderBuilder();
+  renderHome();
+  renderProgram();
+  renderLibrary();
+  renderStats();
+  $('rSleep').value=state.readiness.sleep;
+  $('rEnergy').value=state.readiness.energy;
+  $('rFatigue').value=state.readiness.fatigue;
+  $('readyScore').textContent=state.readiness.score;
+  updateToggles();
+}
+
+function switchPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  window.scrollTo(0,0);
+}
+
+function updateToggles(){
+  $('soundBtn').textContent=$('playerMute').textContent=state.sound?'🔊':'🔇';
+  $('voiceBtn').textContent=state.voice?'🗣️':'🤐';
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.body.addEventListener('click',initAudio,{once:true});
+  document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchPage(b.dataset.page));
+  $('generateBtn').onclick=generate;
+  $('cfgDays').onchange=()=>{
+    state.settings.days=+$('cfgDays').value;
+    state.settings.selectedDays=state.settings.selectedDays.slice(0,state.settings.days);
+    buildDays();
   };
-
-  function saveState() {
-    localStorage.setItem('smart_coach_state', JSON.stringify(state));
-  }
-
-  function renderUI() {
-    const headerCard = document.getElementById('headerCard');
-    const testView = document.getElementById('testView');
-    const workoutView = document.getElementById('workoutView');
-
-    document.getElementById('currentWeekDisplay').innerText = state.week;
-    document.getElementById('currentDayDisplay').innerText = state.day;
-
-    if (!state.level) {
-      document.getElementById('userLevelBadge').innerText = "Non Valutato";
-      testView.classList.remove('hidden');
-      workoutView.classList.add('hidden');
-      return;
+  ['rSleep','rEnergy','rFatigue'].forEach(id=>$(id).onchange=readiness);
+  $('filters').onclick=e=>{
+    if(e.target.matches('button')){
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      e.target.classList.add('active');
+      renderLibrary(e.target.dataset.cat);
     }
-
-    testView.classList.add('hidden');
-    workoutView.classList.remove('hidden');
-
-    document.getElementById('userLevelBadge').innerText = state.level.toUpperCase();
-
-    if (state.isHellWeek) {
-      headerCard.classList.add('hell-theme');
-      workoutView.classList.add('hell-theme');
-      document.getElementById('userLevelBadge').className = "badge badge-hell";
-      document.getElementById('userLevelBadge').innerText = "WEEK HELL 🔥";
-    } else {
-      headerCard.classList.remove('hell-theme');
-      workoutView.classList.remove('hell-theme');
-      document.getElementById('userLevelBadge').className = "badge badge-level";
+  };
+  $('detailClose').onclick=$('detailClose2').onclick=()=>{$('detailModal').classList.remove('open');detailId=null};
+  $('detailStart').onclick=()=>{
+    const id=detailId;
+    $('detailModal').classList.remove('open');
+    if(id)startWorkout(id);
+  };
+  $('pauseBtn').onclick=togglePause;
+  $('nextBtn').onclick=()=>loadStep(player.idx+1);
+  $('prevStep').onclick=()=>loadStep(Math.max(0,player.idx-1));
+  $('playerExit').onclick=()=>{if(confirm('Interrompere la sessione?'))closePlayer()};
+  $('soundBtn').onclick=$('playerMute').onclick=()=>{state.sound=!state.sound;save();updateToggles()};
+  $('voiceBtn').onclick=()=>{state.voice=!state.voice;save();updateToggles()};
+  $('saveFeedback').onclick=saveFeedback;
+  $('exportBtn').onclick=()=>{
+    const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download='personal_trainer_pro_backup.json';
+    a.click();
+  };
+  $('importFile').onchange=e=>{
+    const f=e.target.files[0];
+    if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        state=JSON.parse(r.result);
+        save();
+        location.reload();
+      }catch(err){alert('Backup non valido')}
+    };
+    r.readAsText(f);
+  };
+  $('resetBtn').onclick=()=>{
+    if(confirm('Azzerare tutti i dati?')){
+      localStorage.removeItem('PT_COMMANDER_V10');
+      location.reload();
     }
-
-    renderCoachMessage();
-    renderWorkout();
-  }
-
-  // DIAGNOSTIC TEST LOGIC
-  function processDiagnosticTest() {
-    const pushups = parseInt(document.getElementById('testPushups').value) || 0;
-    const squats = parseInt(document.getElementById('testSquats').value) || 0;
-    const plank = parseInt(document.getElementById('testPlank').value) || 0;
-    const pullups = parseInt(document.getElementById('testPullups').value) || 0;
-
-    const score = pushups + (squats * 0.5) + (plank * 0.3) + (pullups * 2);
-
-    if (score < 30) {
-      state.level = 'principiante';
-      state.multiplier = 0.8;
-    } else if (score < 65) {
-      state.level = 'intermedio';
-      state.multiplier = 1.0;
-    } else {
-      state.level = 'avanzato';
-      state.multiplier = 1.25;
-    }
-
-    state.testResults = { pushups, squats, plank, pullups };
-    state.week = 1;
-    state.day = 1;
-    state.isHellWeek = false;
-
-    saveState();
-    renderUI();
-  }
-
-  // WORKOUT GENERATOR ENGINE
-  function generateWorkout() {
-    const m = state.multiplier;
-    const isHell = state.isHellWeek;
-    const hellMult = isHell ? 1.4 : 1.0;
-
-    if (state.day === 1) {
-      return {
-        title: isHell ? "HELL DAY 1: Spinta & Volume Estremo" : "Giorno 1: Push & Core",
-        subtitle: isHell ? "Volume +40% - Recuperi ridotti a 45s" : "Focus Petto, Spalle e Addome",
-        exercises: [
-          { name: "Push-ups", sets: isHell ? 5 : 4, reps: Math.round((state.testResults.pushups * 0.6 * m) * hellMult) },
-          { name: "Pike Push-ups (Spalle)", sets: 3, reps: Math.round((8 * m) * hellMult) },
-          { name: "Plank Iso", sets: 3, reps: `${Math.round((state.testResults.plank * 0.7 * m) * hellMult)} sec` },
-          { name: "Diamond Push-ups", sets: 3, reps: Math.round((6 * m) * hellMult) }
-        ]
-      };
-    } else if (state.day === 2) {
-      return {
-        title: isHell ? "HELL DAY 2: Trazione & Gambe Infernale" : "Giorno 2: Pull & Legs",
-        subtitle: isHell ? "Superset massivo, impatto metabolico elevato" : "Focus Dorso, Bicipiti e Gambe",
-        exercises: [
-          { name: "Squats", sets: isHell ? 5 : 4, reps: Math.round((state.testResults.squats * 0.7 * m) * hellMult) },
-          { name: "Trazioni / Inverted Row", sets: 4, reps: Math.round((Math.max(state.testResults.pullups, 5) * 0.6 * m) * hellMult) },
-          { name: "Affondi Alternati", sets: 3, reps: Math.round((12 * m) * hellMult) },
-          { name: "Hollow Body Hold", sets: 3, reps: `${Math.round(25 * m * hellMult)} sec` }
-        ]
-      };
-    } else {
-      return {
-        title: isHell ? "HELL DAY 3: AMRAP Full Body Nightmare" : "Giorno 3: Full Body Conditioning",
-        subtitle: isHell ? "Massime ripetizioni nel minor tempo possibile" : "Capacità cardiovascolare e resistenza",
-        exercises: [
-          { name: "Burpees", sets: isHell ? 4 : 3, reps: Math.round((10 * m) * hellMult) },
-          { name: "Jump Squats", sets: 3, reps: Math.round((15 * m) * hellMult) },
-          { name: "Push-ups Declinati", sets: 3, reps: Math.round((state.testResults.pushups * 0.5 * m) * hellMult) },
-          { name: "Mountain Climbers", sets: 3, reps: `${Math.round(30 * m * hellMult)} sec` }
-        ]
-      };
-    }
-  }
-
-  function renderWorkout() {
-    const workout = generateWorkout();
-    document.getElementById('workoutTitle').innerText = workout.title;
-    document.getElementById('workoutSubtitle').innerText = workout.subtitle;
-
-    const listContainer = document.getElementById('exerciseList');
-    listContainer.innerHTML = '';
-
-    workout.exercises.forEach((ex, idx) => {
-      const item = document.createElement('div');
-      item.className = 'exercise-item';
-      
-      let setRows = '';
-      for (let s = 1; s <= ex.sets; s++) {
-        setRows += `
-          <div class="set-row">
-            <span>Serie ${s}</span>
-            <span><strong>${ex.reps}</strong></span>
-          </div>
-        `;
-      }
-
-      item.innerHTML = `
-        <div class="exercise-header">
-          <span class="exercise-name">${ex.name}</span>
-          <span class="exercise-meta">${ex.sets} Serie</span>
-        </div>
-        ${setRows}
-      `;
-      listContainer.appendChild(item);
-    });
-
-    const startHellBtn = document.getElementById('startHellBtn');
-    if (state.week % 4 === 0 && !state.isHellWeek) {
-      startHellBtn.classList.remove('hidden');
-    } else {
-      startHellBtn.classList.add('hidden');
-    }
-  }
-
-  // COACH SMART ENGINE (PROGRESSION ALGORITHM)
-  function renderCoachMessage() {
-    const coachBox = document.getElementById('coachMessage');
-    if (state.isHellWeek) {
-      coachBox.innerText = "🔥 COACH: Sei nella WEEK HELL! Nessun alibi. Mantieni la forma corretta anche quando il bruciore diventa intenso. Stringi i denti!";
-    } else if (state.week === 1 && state.day === 1) {
-      coachBox.innerText = `🤖 COACH: Benvenuto! Ho calibrato i tuoi carichi sul livello ${state.level.toUpperCase()}. Concentrati sull'esecuzione pulita.`;
-    } else {
-      coachBox.innerText = `🤖 COACH: Settimana ${state.week}. Ho aggiornato il moltiplicatore di intensità (${state.multiplier.toFixed(2)}x) in base ai tuoi feedback RPE recenti.`;
-    }
-  }
-
-  function completeWorkout() {
-    const rpe = parseInt(document.getElementById('workoutRPE').value);
-
-    // Dynamic Progression Logic based on RPE
-    if (rpe <= 6) {
-      state.multiplier += 0.08; // Incremento marcato se troppo facile
-    } else if (rpe === 7 || rpe === 8) {
-      state.multiplier += 0.03; // Incremento progressivo ideale
-    } else if (rpe === 9) {
-      // Mantiene costante per consolidare
-    } else if (rpe === 10) {
-      state.multiplier = Math.max(0.6, state.multiplier - 0.05); // Riduce leggermente per evitare overtraining
-    }
-
-    // Days & Weeks Flow
-    if (state.day < 3) {
-      state.day += 1;
-    } else {
-      state.day = 1;
-      state.week += 1;
-      if (state.isHellWeek) {
-        state.isHellWeek = false; // Disattiva Hell Week dopo 1 settimana
-      }
-    }
-
-    saveState();
-    renderUI();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function triggerHellWeek() {
-    state.isHellWeek = true;
-    state.day = 1;
-    saveState();
-    renderUI();
-  }
-
-  // TIMER LOGIC
-  function startTimer(seconds) {
-    clearInterval(timerInterval);
-    let remaining = seconds;
-    const display = document.getElementById('timer');
-
-    function updateDisplay() {
-      const mins = Math.floor(remaining / 60);
-      const secs = remaining % 60;
-      display.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-
-    updateDisplay();
-
-    timerInterval = setInterval(() => {
-      remaining--;
-      if (remaining < 0) {
-        clearInterval(timerInterval);
-        display.innerText = "00:00";
-        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-      } else {
-        updateDisplay();
-      }
-    }, 1000);
-  }
-
-  function resetAllData() {
-    if (confirm("Vuoi davvero azzerare i progressi e ripetere il test iniziale?")) {
-      localStorage.removeItem('smart_coach_state');
-      state = { ...DEFAULT_STATE };
-      renderUI();
-    }
-  }
+  };
+  weekView=currentWeek();
+  renderAll();
+});
 </script>
-
 </body>
 </html>
