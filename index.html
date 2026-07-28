@@ -314,10 +314,10 @@
 <body>
 <div class="container">
   <div class="card" id="headerCard">
-    <h1>HYBRID PT UNIFIED PRO</h1>
-    <p class="subtitle">Scheda adattiva con selezione attrezzi a casa</p>
+    <h1>HYBRID PT ULTIMATE</h1>
+    <p class="subtitle">Personalizzazione Avanzata: Obiettivi, Frequenza & Attrezzi</p>
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
-      <span class="badge badge-level" id="userLevelBadge">Non Valutato</span>
+      <span class="badge badge-level" id="userLevelBadge">Non Configurato</span>
       <div style="text-align:right; font-size:.8rem; color:var(--text-sub);">
         Settimana: <strong id="currentWeekDisplay" style="color:var(--text-main)">1</strong> |
         Moltiplicatore: <strong id="multDisplay" style="color:var(--accent-green)">1.00x</strong>
@@ -326,10 +326,30 @@
   </div>
 
   <div class="card" id="testView">
-    <h2>Test Diagnostico & Attrezzatura</h2>
-    <p class="subtitle">Indica cosa hai a casa e inserisci i tuoi test per calibrare l'allenamento.</p>
+    <h2>Configurazione & Test Diagnostico</h2>
+    <p class="subtitle">Scegli obiettivo, giorni settimanali, attrezzi e inserisci i tuoi test.</p>
 
-    <label style="display:block; font-size:0.8rem; color:var(--text-sub); margin-bottom:4px;">Seleziona attrezzi / modalità disponibili:</label>
+    <div class="input-group">
+      <label>Obiettivo principale</label>
+      <select id="goalSelect">
+        <option value="dimagrimento">Dimagrimento e Definizione</option>
+        <option value="massa">Massa Muscolare e Ipertrofia</option>
+        <option value="hybrid" selected>Hybrid Athlete (Forza + Resistenza)</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Giorni di allenamento a settimana</label>
+      <select id="daysPerWeekSelect">
+        <option value="2">2 Giorni</option>
+        <option value="3">3 Giorni</option>
+        <option value="4">4 Giorni</option>
+        <option value="5" selected>5 Giorni</option>
+        <option value="6">6 Giorni</option>
+      </select>
+    </div>
+
+    <label style="display:block; font-size:0.8rem; color:var(--text-sub); margin-bottom:4px;">Attrezzatura disponibile a casa:</label>
     <div class="checkbox-grid">
       <label class="checkbox-card"><input type="checkbox" id="eqBodyweight" checked> Corpo libero</label>
       <label class="checkbox-card"><input type="checkbox" id="eqDumbbells" checked> Manubri / KB</label>
@@ -342,25 +362,21 @@
     <div class="input-group"><label>Push-up massimi senza pause</label><input type="number" id="testPushups" placeholder="es. 15" min="0" inputmode="numeric" pattern="[0-9]*"></div>
     <div class="input-group"><label>Squat massimi in 60 secondi</label><input type="number" id="testSquats" placeholder="es. 30" min="0" inputmode="numeric" pattern="[0-9]*"></div>
     <div class="input-group"><label>Plank isometrico, secondi</label><input type="number" id="testPlank" placeholder="es. 45" min="0" inputmode="numeric" pattern="[0-9]*"></div>
-    <div class="input-group"><label>Rematore inverso (o Australian / con manubri/bilanciere)</label><input type="number" id="testPullups" placeholder="es. 10" min="0" inputmode="numeric" pattern="[0-9]*"></div>
+    <div class="input-group"><label>Rematore inverso o trazioni equivalenti</label><input type="number" id="testPullups" placeholder="es. 10" min="0" inputmode="numeric" pattern="[0-9]*"></div>
 
-    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera scheda personalizzata</button>
+    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera programma personalizzato</button>
   </div>
 
   <div class="card hidden" id="workoutView">
     <div class="coach-box" id="coachMessage"></div>
 
     <div class="input-group">
-      <label>Seleziona sessione</label>
-      <select id="daySelector" onchange="switchDay(this.value)">
-        <option value="1">Giorno 1: Push & Core</option>
-        <option value="2">Giorno 2: Pull & Legs</option>
-        <option value="3">Giorno 3: Full Body Conditioning</option>
-      </select>
+      <label>Seleziona sessione programmata</label>
+      <select id="daySelector" onchange="switchDay(this.value)"></select>
     </div>
 
     <div id="workoutHeader" style="margin-bottom:12px;">
-      <h2 id="workoutTitle">Giorno 1</h2>
+      <h2 id="workoutTitle">Sessione</h2>
       <p id="workoutSubtitle" style="font-size:.8rem; color:var(--text-sub)"></p>
     </div>
 
@@ -399,7 +415,7 @@
   <div class="card runner-card hidden" id="runnerView">
     <div>
       <div class="phase-label" id="runnerPhase">Preparati</div>
-      <div class="runner-exercise" id="runnerExercise">Push-up</div>
+      <div class="runner-exercise" id="runnerExercise">Esercizio</div>
       <div class="runner-set" id="runnerSet">Serie 1 di 4</div>
 
       <div class="big-counter" id="counterCircle">
@@ -444,18 +460,21 @@
         <option value="10">RPE 10 - Cedimento totale</option>
       </select>
     </div>
-    <button class="btn btn-success" onclick="completeWorkout()">Salva sessione e aggiorna scheda</button>
+    <button class="btn btn-success" onclick="completeWorkout()">Salva sessione e avanza</button>
   </div>
 
   <div class="card" style="text-align:center;">
-    <button class="btn btn-outline btn-small" onclick="resetAllData()">Azzera dati e ripeti test</button>
+    <button class="btn btn-outline btn-small" onclick="resetAllData()">Azzera dati e riconfigura</button>
   </div>
 </div>
 
 <script>
-  const STORAGE_KEY = 'hybrid_pt_unified_state_v4';
+  const STORAGE_KEY = 'hybrid_pt_ultimate_state_v1';
   const DEFAULT_STATE = {
+    configured: false,
     level: null,
+    goal: 'hybrid',
+    daysPerWeek: 5,
     week: 1,
     currentDay: 1,
     isHellWeek: false,
@@ -501,11 +520,13 @@
     document.getElementById('currentWeekDisplay').textContent = state.week;
     document.getElementById('multDisplay').textContent = state.multiplier.toFixed(2) + 'x';
 
-    if (!state.level) {
-      document.getElementById('userLevelBadge').textContent = 'Non Valutato';
+    if (!state.configured) {
+      document.getElementById('userLevelBadge').textContent = 'Non Configurato';
       testView.classList.remove('hidden');
       workoutView.classList.add('hidden');
-      // Sincronizza checkbox
+      
+      document.getElementById('goalSelect').value = state.goal;
+      document.getElementById('daysPerWeekSelect').value = String(state.daysPerWeek);
       document.getElementById('eqBodyweight').checked = state.equipment.bodyweight;
       document.getElementById('eqDumbbells').checked = state.equipment.dumbbells;
       document.getElementById('eqBarbell').checked = state.equipment.barbell;
@@ -517,6 +538,8 @@
 
     testView.classList.add('hidden');
     workoutView.classList.remove('hidden');
+    
+    populateDaySelector();
     document.getElementById('daySelector').value = String(state.currentDay);
 
     if (state.isHellWeek) {
@@ -528,14 +551,43 @@
       headerCard.classList.remove('hell-theme');
       workoutView.classList.remove('hell-theme');
       document.getElementById('userLevelBadge').className = 'badge badge-level';
-      document.getElementById('userLevelBadge').textContent = state.level.toUpperCase();
+      document.getElementById('userLevelBadge').textContent = `${state.level.toUpperCase()} | ${state.goal.toUpperCase()}`;
     }
 
     renderCoachMessage();
     renderWorkout();
   }
 
+  function populateDaySelector() {
+    const select = document.getElementById('daySelector');
+    const currentVal = select.value;
+    select.innerHTML = '';
+    
+    const dayNames = getDayNamesMapping(state.daysPerWeek);
+    for (let i = 1; i <= state.daysPerWeek; i++) {
+      const opt = document.createElement('option');
+      opt.value = String(i);
+      opt.textContent = `Giorno ${i}: ${dayNames[i-1] || 'Sessione'}`;
+      select.appendChild(opt);
+    }
+    if (Number(currentVal) <= state.daysPerWeek) {
+      select.value = currentVal;
+    }
+  }
+
+  function getDayNamesMapping(days) {
+    if (days === 2) return ['Full Body A (Forza)', 'Full Body B (Condizionamento)'];
+    if (days === 3) return ['Push (Spinta)', 'Pull (Trazione)', 'Legs & Core (Gambe)'];
+    if (days === 4) return ['Upper A', 'Lower A', 'Upper B', 'Lower B & Cardio'];
+    if (days === 5) return ['Push', 'Pull', 'Legs', 'Upper Conditioning', 'Lower & Core Engine'];
+    if (days === 6) return ['Push A', 'Pull A', 'Legs A', 'Push B', 'Pull B', 'Legs B & Engine'];
+    return ['Full Body'];
+  }
+
   function processDiagnosticTest() {
+    const goal = document.getElementById('goalSelect').value;
+    const daysPerWeek = Number(document.getElementById('daysPerWeekSelect').value);
+
     const bodyweight = document.getElementById('eqBodyweight').checked;
     const dumbbells = document.getElementById('eqDumbbells').checked;
     const barbell = document.getElementById('eqBarbell').checked;
@@ -543,6 +595,8 @@
     const jumpRope = document.getElementById('eqJumpRope').checked;
     const table = document.getElementById('eqTable').checked;
 
+    state.goal = goal;
+    state.daysPerWeek = daysPerWeek;
     state.equipment = { bodyweight, dumbbells, barbell, bands, jumpRope, table };
 
     const pushups = Math.max(0, parseInt(document.getElementById('testPushups').value) || 0);
@@ -569,6 +623,7 @@
     }
 
     state.testResults = { pushups, squats, plank, pullups };
+    state.configured = true;
     state.week = 1;
     state.currentDay = 1;
     state.isHellWeek = false;
@@ -582,113 +637,89 @@
     const m = state.multiplier;
     const hell = state.isHellWeek ? 1.25 : 1.0;
     const eq = state.equipment;
+    const goal = state.goal;
 
-    const rep = value => Math.max(1, Math.round(value * m * hell));
-    const seconds = value => Math.max(10, Math.round(value * m * hell));
-
-    if (day === 1) {
-      // GIORNO 1: PUSH & CORE
-      let pushEx;
-      if (eq.barbell) {
-        pushEx = { name: 'Panca piana con bilanciere', sets: 4, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti a circa 45 gradi, petto alto.' };
-      } else if (eq.dumbbells) {
-        pushEx = { name: 'Distensioni per il petto con manubri', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Spingi i manubri verso l’alto controllando la discesa.' };
-      } else if (eq.bands) {
-        pushEx = { name: 'Distensioni per il petto con elastico', sets: 4, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Mantieni tensione costante con l’elastico.' };
-      } else {
-        pushEx = { name: 'Push-up a corpo libero', sets: 4, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in linea, petto verso il suolo.' };
-      }
-
-      let shoulderEx;
-      if (eq.barbell) {
-        shoulderEx = { name: 'Lento avanti con bilanciere in piedi', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Core rigido, spingi sopra la testa.' };
-      } else if (eq.dumbbells) {
-        shoulderEx = { name: 'Lento avanti con manubri', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena dritta, spingi i manubri in alto.' };
-      } else if (eq.bands) {
-        shoulderEx = { name: 'Spinte verticali con elastico', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Piedi al centro dell’elastico e spingi.' };
-      } else {
-        shoulderEx = { name: 'Pike push-up a corpo libero', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Bacino alto e testa verso il pavimento.' };
-      }
-
-      let tricEx;
-      if (eq.dumbbells) {
-        tricEx = { name: 'Estensioni tricipiti con manubrio (French press)', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti fissi e flessione dell’avambraccio.' };
-      } else if (eq.barbell) {
-        tricEx = { name: 'Skull crusher (Distensioni disteso con bilanciere)', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Controlla la discesa verso la fronte.' };
-      } else if (eq.bands) {
-        tricEx = { name: 'Spinte in basso per tricipiti con elastico', sets: 3, target: rep(14), mode: 'reps', cadence: 2.5, tip: 'Gomiti aderenti ai fianchi.' };
-      } else {
-        tricEx = { name: 'Dip tra due sedie / a corpo libero', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti indietro e movimento controllato.' };
-      }
-
-      return {
-        title: 'Giorno 1: Push & Core Focus',
-        subtitle: state.isHellWeek ? 'WEEK HELL: volume superiore' : 'Forza petto, spalle, tricipiti e core',
-        exercises: [
-          pushEx,
-          shoulderEx,
-          tricEx,
-          { name: 'Plank isometrico', sets: 3, target: seconds((state.testResults.plank || 45) * 0.65), mode: 'time', tip: 'Glutei e addome attivi, bacino neutro.' },
-          { name: 'Crunch addominali', sets: 3, target: rep(15), mode: 'reps', cadence: 2.0, tip: 'Solleva le scapole senza tirare il collo.' }
-        ]
-      };
-    }
-
-    if (day === 2) {
-      // GIORNO 2: PULL & LEGS
-      let legEx;
-      if (eq.barbell) {
-        legEx = { name: 'Squat con bilanciere', sets: 4, target: rep(10), mode: 'reps', cadence: 2.8, tip: 'Bilanciere sui trapezi, schiena neutra.' };
-      } else if (eq.dumbbells) {
-        legEx = { name: 'Goblet squat con manubrio', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Tieni il peso saldo al petto, affondo profondo.' };
-      } else {
-        legEx = { name: 'Squat a corpo libero', sets: 4, target: rep((state.testResults.squats || 30) * 0.55), mode: 'reps', cadence: 2.5, tip: 'Ginocchia in linea con i piedi, talloni appoggiati.' };
-      }
-
-      let pullEx;
-      if (eq.barbell) {
-        pullEx = { name: 'Rematore con bilanciere a busto flesso', sets: 4, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena inclinata a 45 gradi, tira all’ombelico.' };
-      } else if (eq.dumbbells) {
-        pullEx = { name: 'Rematore con manubrio a un braccio', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Appoggio stabile, tira il manubrio verso l’anca.' };
-      } else if (eq.table && eq.bodyweight) {
-        pullEx = { name: 'Rematore inverso sotto il tavolo', sets: 4, target: rep(Math.max(state.testResults.pullups || 10, 8) * 0.65), mode: 'reps', cadence: 3.0, tip: 'Petto in su e corpo rigido.' };
-      } else if (eq.bands) {
-        pullEx = { name: 'Rematore orizzontale con elastico', sets: 4, target: rep(15), mode: 'reps', cadence: 2.8, tip: 'Ancora l’elastico ai piedi e tira verso l’addome.' };
-      } else {
-        pullEx = { name: 'Rematore isometrico a terra', sets: 4, target: seconds(30), mode: 'time', tip: 'Tira i gomiti verso l’alto contraendo la schiena.' };
-      }
-
-      return {
-        title: 'Giorno 2: Pull & Legs Focus',
-        subtitle: state.isHellWeek ? 'WEEK HELL: trazione e catena posteriore' : 'Gambe, schiena e stabilità',
-        exercises: [
-          legEx,
-          pullEx,
-          { name: 'Affondi alternati a corpo libero / con manubri', sets: 3, target: rep(12), mode: 'reps', cadence: 2.8, tip: 'Passo stabile e ginocchio posteriore verso terra.' },
-          { name: 'Aperture posteriori / Rematore', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Controllo della fase eccentrica.' },
-          { name: 'Hollow body hold', sets: 3, target: seconds(25), mode: 'time', tip: 'Lombari aderenti al suolo.' }
-        ]
-      };
-    }
-
-    // GIORNO 3: FULL BODY CONDITIONING
-    let cardioEx;
-    if (eq.jumpRope) {
-      cardioEx = { name: 'Salto con la corda', sets: 3, target: seconds(45), mode: 'time', tip: 'Rimbalzo leggero sulle avampunte, polsi fluidi.' };
+    // Modificatori basati sull'obiettivo
+    let repFactor = 1.0;
+    let setExtra = 0;
+    if (goal === 'massa') {
+      repFactor = 1.15; // Più volume/ripetizioni ipertrofiche
+      setExtra = 1;
+    } else if (goal === 'dimagrimento') {
+      repFactor = 1.25; // Alte ripetizioni / circuito metabolico
     } else {
-      cardioEx = { name: 'Burpees a corpo libero', sets: 3, target: rep(8), mode: 'reps', cadence: 3.4, tip: 'Ritmo costante e continuo.' };
+      repFactor = 1.0; // Hybrid athlete bilanciato
     }
+
+    const rep = val => Math.max(1, Math.round(val * m * hell * repFactor));
+    const seconds = val => Math.max(10, Math.round(val * m * hell));
+
+    const totalDays = state.daysPerWeek;
+    const dayNames = getDayNamesMapping(totalDays);
+    const titleName = dayNames[day - 1] || `Sessione ${day}`;
+
+    // Generazione dinamica a seconda del tipo di giorno e attrezzatura
+    const isPush = titleName.toLowerCase().includes('push') || titleName.toLowerCase().includes('upper');
+    const isPull = titleName.toLowerCase().includes('pull') || titleName.toLowerCase().includes('upper');
+    const isLegs = titleName.toLowerCase().includes('legs') || titleName.toLowerCase().includes('lower');
+    const isFull = totalDays <= 2 || titleName.toLowerCase().includes('full');
+
+    let exercises = [];
+
+    if (isFull || isPush || day === 1) {
+      // Esercizio di Spinta (Petto/Spalle)
+      let ex1;
+      if (eq.barbell) ex1 = { name: 'Panca piana con bilanciere', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti a 45 gradi, petto alto e scapole addotte.' };
+      else if (eq.dumbbells) ex1 = { name: 'Distensioni per il petto con manubri', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Spingi controllando la discesa ed evitando di sbattere i manubri.' };
+      else if (eq.bands) ex1 = { name: 'Distensioni per il petto con elastico', sets: 4 + setExtra, target: rep(16), mode: 'reps', cadence: 2.5, tip: 'Tensione costante durante tutto il movimento.' };
+      else ex1 = { name: 'Push-up a corpo libero', sets: 4 + setExtra, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in asse, addome e glutei contratti.' };
+
+      let ex2;
+      if (eq.barbell) ex2 = { name: 'Lento avanti con bilanciere', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Core stabile e spinta verticale pulita.' };
+      else if (eq.dumbbells) ex2 = { name: 'Lento avanti con manubri', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Movimento fluido senza inarcare la schiena.' };
+      else if (eq.bands) ex2 = { name: 'Spinte verticali con elastico', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Piedi ben piantati sull’elastico.' };
+      else ex2 = { name: 'Pike push-up', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Bacino in alto, testa verso il pavimento.' };
+
+      exercises.push(ex1, ex2);
+    }
+
+    if (isFull || isPull || day === 2) {
+      // Esercizio di Trazione (Schiena)
+      let exPull;
+      if (eq.barbell) exPull = { name: 'Rematore con bilanciere a busto flesso', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena neutra a 45 gradi, tira verso l’ombelico.' };
+      else if (eq.dumbbells) exPull = { name: 'Rematore con manubrio a un braccio', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Appoggio stabile su panca o ginocchio.' };
+      else if (eq.table && eq.bodyweight) exPull = { name: 'Rematore inverso sotto il tavolo', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 3.0, tip: 'Petto in fuori, corpo rigido come una tavola.' };
+      else if (eq.bands) exPull = { name: 'Rematore orizzontale con elastico', sets: 4 + setExtra, target: rep(15), mode: 'reps', cadence: 2.8, tip: 'Tira i gomiti indietro contraendo i dorsali.' };
+      else exPull = { name: 'Rematore isometrico a terra', sets: 4, target: seconds(30), mode: 'time', tip: 'Solleva il petto contraendo la schiena.' };
+
+      exercises.push(exPull);
+    }
+
+    if (isFull || isLegs || day === 3 || day === 5) {
+      // Esercizio Gambe
+      let exLegs;
+      if (eq.barbell) exLegs = { name: 'Squat con bilanciere', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.8, tip: 'Affondo profondo, ginocchia in linea con le punte.' };
+      else if (eq.dumbbells) exLegs = { name: 'Goblet squat con manubrio', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Tieni il peso vicino al petto, schiena dritta.' };
+      else exLegs = { name: 'Squat a corpo libero / Jump squat', sets: 4 + setExtra, target: rep(20), mode: 'reps', cadence: 2.5, tip: 'Massima esplosività in salita.' };
+
+      let exLegs2 = { name: 'Affondi alternati', sets: 3, target: rep(12), mode: 'reps', cadence: 2.8, tip: 'Passo ampio e controllo della discesa.' };
+      exercises.push(exLegs, exLegs2);
+    }
+
+    // Integrazione finale Core / Condizionamento / Hybrid
+    if (goal === 'hybrid' || goal === 'dimagrimento') {
+      let cardioComp;
+      if (eq.jumpRope) cardioComp = { name: 'Salto con la corda (Cardio Engine)', sets: 3, target: seconds(45), mode: 'time', tip: 'Rimbalzo leggero e ritmato sulle avampunte.' };
+      else cardioComp = { name: 'Burpees / Mountain climber metabolico', sets: 3, target: seconds(30), mode: 'time', tip: 'Ritmo sostenuto per alzare le pulsazioni.' };
+      exercises.push(cardioComp);
+    }
+
+    exercises.push({ name: 'Plank isometrico stabilizzatore', sets: 3, target: seconds(45), mode: 'time', tip: 'Addome e glutei serrati senza inarcare la lombare.' });
 
     return {
-      title: 'Giorno 3: Full Body Conditioning',
-      subtitle: state.isHellWeek ? 'WEEK HELL: circuito metabolico' : 'Condizionamento cardiovascolare e total body',
-      exercises: [
-        cardioEx,
-        { name: 'Jump squat a corpo libero', sets: 3, target: rep(12), mode: 'reps', cadence: 2.4, tip: 'Atterra in modo morbido.' },
-        { name: 'Push-up inclinati o facilitati', sets: 3, target: rep((state.testResults.pushups || 16) * 0.45), mode: 'reps', cadence: 2.6, tip: 'Addome forte e discesa controllata.' },
-        { name: 'Mountain climber a corpo libero', sets: 3, target: seconds(30), mode: 'time', tip: 'Spalle sopra i polsi e bacino stabile.' },
-        { name: 'Superman lombari a terra', sets: 3, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Solleva braccia e gambe senza forzare il collo.' }
-      ]
+      title: `Giorno ${day}: ${titleName}`,
+      subtitle: state.isHellWeek ? 'WEEK HELL: Volume e intensità estremi' : `Obiettivo: ${goal.toUpperCase()} | Attrezzatura configurata`,
+      exercises
     };
   }
 
@@ -743,17 +774,17 @@
     const box = document.getElementById('coachMessage');
     const eqList = [];
     if (state.equipment.bodyweight) eqList.push('Corpo libero');
-    if (state.equipment.dumbbells) eqList.push('Manubri/KB');
+    if (state.equipment.dumbbells) eqList.push('Manubri');
     if (state.equipment.barbell) eqList.push('Bilanciere');
     if (state.equipment.bands) eqList.push('Elastici');
     if (state.equipment.jumpRope) eqList.push('Corda');
     if (state.equipment.table) eqList.push('Tavolo');
-    const eqStr = eqList.length ? eqList.join(', ') : 'Nessun attrezzo';
+    const eqStr = eqList.join(', ');
 
     if (state.isHellWeek) {
-      box.textContent = '🔥 WEEK HELL attiva. Volume incrementato sulla base degli attrezzi configurati.';
+      box.textContent = '🔥 WEEK HELL attiva. Carichi e volumi spinti al massimo!';
     } else {
-      box.textContent = `🤖 Scheda calibrata sul livello ${state.level.toUpperCase()} con attrezzatura: [${eqStr}]. Nomi e target aggiornati automaticamente.`;
+      box.textContent = `🤖 Obiettivo: ${state.goal.toUpperCase()} | Frequenza: ${state.daysPerWeek} giorni/settimana | Attrezzi: [${eqStr}].`;
     }
   }
 
@@ -1026,7 +1057,7 @@
       hellWeek: state.isHellWeek
     });
 
-    if (state.currentDay < 3) {
+    if (state.currentDay < state.daysPerWeek) {
       state.currentDay += 1;
     } else {
       state.currentDay = 1;
@@ -1064,7 +1095,7 @@
   }
 
   function resetAllData() {
-    if (confirm('Vuoi davvero cancellare tutti i dati e ripetere il test?')) {
+    if (confirm('Vuoi davvero cancellare tutti i dati e riconfigurare il programma?')) {
       clearInterval(tickInterval);
       clearInterval(elapsedInterval);
       localStorage.removeItem(STORAGE_KEY);
