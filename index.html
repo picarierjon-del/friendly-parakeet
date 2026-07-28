@@ -329,9 +329,11 @@
     <h2>Test Diagnostico & Attrezzatura</h2>
     <p class="subtitle">Indica cosa hai a casa e inserisci i tuoi test per calibrare l'allenamento.</p>
 
-    <label style="display:block; font-size:0.8rem; color:var(--text-sub); margin-bottom:4px;">Seleziona attrezzi disponibili a casa:</label>
+    <label style="display:block; font-size:0.8rem; color:var(--text-sub); margin-bottom:4px;">Seleziona attrezzi / modalità disponibili:</label>
     <div class="checkbox-grid">
+      <label class="checkbox-card"><input type="checkbox" id="eqBodyweight" checked> Corpo libero</label>
       <label class="checkbox-card"><input type="checkbox" id="eqDumbbells" checked> Manubri / KB</label>
+      <label class="checkbox-card"><input type="checkbox" id="eqBarbell"> Bilanciere</label>
       <label class="checkbox-card"><input type="checkbox" id="eqBands" checked> Elastici</label>
       <label class="checkbox-card"><input type="checkbox" id="eqJumpRope"> Corda per saltare</label>
       <label class="checkbox-card"><input type="checkbox" id="eqTable" checked> Tavolo / Superficie</label>
@@ -340,7 +342,7 @@
     <div class="input-group"><label>Push-up massimi senza pause</label><input type="number" id="testPushups" placeholder="es. 15" min="0" inputmode="numeric" pattern="[0-9]*"></div>
     <div class="input-group"><label>Squat massimi in 60 secondi</label><input type="number" id="testSquats" placeholder="es. 30" min="0" inputmode="numeric" pattern="[0-9]*"></div>
     <div class="input-group"><label>Plank isometrico, secondi</label><input type="number" id="testPlank" placeholder="es. 45" min="0" inputmode="numeric" pattern="[0-9]*"></div>
-    <div class="input-group"><label>Rematore inverso (o Australian / con manubri)</label><input type="number" id="testPullups" placeholder="es. 10" min="0" inputmode="numeric" pattern="[0-9]*"></div>
+    <div class="input-group"><label>Rematore inverso (o Australian / con manubri/bilanciere)</label><input type="number" id="testPullups" placeholder="es. 10" min="0" inputmode="numeric" pattern="[0-9]*"></div>
 
     <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera scheda personalizzata</button>
   </div>
@@ -451,14 +453,14 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'hybrid_pt_unified_state_v3';
+  const STORAGE_KEY = 'hybrid_pt_unified_state_v4';
   const DEFAULT_STATE = {
     level: null,
     week: 1,
     currentDay: 1,
     isHellWeek: false,
     multiplier: 1.0,
-    equipment: { dumbbells: true, bands: true, jumpRope: false, table: true },
+    equipment: { bodyweight: true, dumbbells: true, barbell: false, bands: true, jumpRope: false, table: true },
     testResults: {},
     logs: {},
     history: []
@@ -504,7 +506,9 @@
       testView.classList.remove('hidden');
       workoutView.classList.add('hidden');
       // Sincronizza checkbox
+      document.getElementById('eqBodyweight').checked = state.equipment.bodyweight;
       document.getElementById('eqDumbbells').checked = state.equipment.dumbbells;
+      document.getElementById('eqBarbell').checked = state.equipment.barbell;
       document.getElementById('eqBands').checked = state.equipment.bands;
       document.getElementById('eqJumpRope').checked = state.equipment.jumpRope;
       document.getElementById('eqTable').checked = state.equipment.table;
@@ -532,12 +536,14 @@
   }
 
   function processDiagnosticTest() {
+    const bodyweight = document.getElementById('eqBodyweight').checked;
     const dumbbells = document.getElementById('eqDumbbells').checked;
+    const barbell = document.getElementById('eqBarbell').checked;
     const bands = document.getElementById('eqBands').checked;
     const jumpRope = document.getElementById('eqJumpRope').checked;
     const table = document.getElementById('eqTable').checked;
 
-    state.equipment = { dumbbells, bands, jumpRope, table };
+    state.equipment = { bodyweight, dumbbells, barbell, bands, jumpRope, table };
 
     const pushups = Math.max(0, parseInt(document.getElementById('testPushups').value) || 0);
     const squats = Math.max(0, parseInt(document.getElementById('testSquats').value) || 0);
@@ -581,23 +587,38 @@
     const seconds = value => Math.max(10, Math.round(value * m * hell));
 
     if (day === 1) {
-      let pushEx = { name: 'Push-up inclinati o standard', sets: 4, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in linea, petto verso il suolo.' };
-      if (eq.dumbbells) {
-        pushEx = { name: 'Distensioni per il petto con manubri (su pavimento o panca)', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Spingi i manubri verso l’alto controllando la discesa.' };
+      // GIORNO 1: PUSH & CORE
+      let pushEx;
+      if (eq.barbell) {
+        pushEx = { name: 'Panca piana con bilanciere', sets: 4, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti a circa 45 gradi, petto alto.' };
+      } else if (eq.dumbbells) {
+        pushEx = { name: 'Distensioni per il petto con manubri', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Spingi i manubri verso l’alto controllando la discesa.' };
       } else if (eq.bands) {
-        pushEx = { name: 'Distensioni per il petto con elastico ancorato', sets: 4, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Mantieni tensione costante con l’elastico.' };
+        pushEx = { name: 'Distensioni per il petto con elastico', sets: 4, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Mantieni tensione costante con l’elastico.' };
+      } else {
+        pushEx = { name: 'Push-up a corpo libero', sets: 4, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in linea, petto verso il suolo.' };
       }
 
-      let shoulderEx = { name: 'Pike push-up', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Bacino alto e testa verso il pavimento.' };
-      if (eq.dumbbells) {
-        shoulderEx = { name: 'Lento avanti con manubri da in piedi o seduto', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena dritta, spingi i manubri sopra la testa.' };
+      let shoulderEx;
+      if (eq.barbell) {
+        shoulderEx = { name: 'Lento avanti con bilanciere in piedi', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Core rigido, spingi sopra la testa.' };
+      } else if (eq.dumbbells) {
+        shoulderEx = { name: 'Lento avanti con manubri', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena dritta, spingi i manubri in alto.' };
       } else if (eq.bands) {
-        shoulderEx = { name: 'Alzate e spinte sopra la testa con elastico', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Piedi al centro dell’elastico e spingi verso l’alto.' };
+        shoulderEx = { name: 'Spinte verticali con elastico', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Piedi al centro dell’elastico e spingi.' };
+      } else {
+        shoulderEx = { name: 'Pike push-up a corpo libero', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Bacino alto e testa verso il pavimento.' };
       }
 
-      let tricEx = { name: 'Dip su sedia o supporto', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti indietro e movimento controllato.' };
+      let tricEx;
       if (eq.dumbbells) {
-        tricEx = { name: 'French press o estensioni tricipiti con manubrio', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti fissi e flessione dell’avambraccio.' };
+        tricEx = { name: 'Estensioni tricipiti con manubrio (French press)', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti fissi e flessione dell’avambraccio.' };
+      } else if (eq.barbell) {
+        tricEx = { name: 'Skull crusher (Distensioni disteso con bilanciere)', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Controlla la discesa verso la fronte.' };
+      } else if (eq.bands) {
+        tricEx = { name: 'Spinte in basso per tricipiti con elastico', sets: 3, target: rep(14), mode: 'reps', cadence: 2.5, tip: 'Gomiti aderenti ai fianchi.' };
+      } else {
+        tricEx = { name: 'Dip tra due sedie / a corpo libero', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti indietro e movimento controllato.' };
       }
 
       return {
@@ -614,16 +635,27 @@
     }
 
     if (day === 2) {
-      let legEx = { name: 'Squat a corpo libero', sets: 4, target: rep((state.testResults.squats || 30) * 0.55), mode: 'reps', cadence: 2.5, tip: 'Ginocchia in linea con i piedi, talloni appoggiati.' };
-      if (eq.dumbbells) {
-        legEx = { name: 'Goblet squat con manubrio o kettlebell', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Tieni il peso saldo al petto, affondo profondo.' };
+      // GIORNO 2: PULL & LEGS
+      let legEx;
+      if (eq.barbell) {
+        legEx = { name: 'Squat con bilanciere', sets: 4, target: rep(10), mode: 'reps', cadence: 2.8, tip: 'Bilanciere sui trapezi, schiena neutra.' };
+      } else if (eq.dumbbells) {
+        legEx = { name: 'Goblet squat con manubrio', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Tieni il peso saldo al petto, affondo profondo.' };
+      } else {
+        legEx = { name: 'Squat a corpo libero', sets: 4, target: rep((state.testResults.squats || 30) * 0.55), mode: 'reps', cadence: 2.5, tip: 'Ginocchia in linea con i piedi, talloni appoggiati.' };
       }
 
-      let pullEx = { name: 'Rematore inverso sotto il tavolo', sets: 4, target: rep(Math.max(state.testResults.pullups || 10, 8) * 0.65), mode: 'reps', cadence: 3.0, tip: 'Petto in su e corpo rigido.' };
-      if (!eq.table && eq.bands) {
-        pullEx = { name: 'Rematore orizzontale con elastico', sets: 4, target: rep(15), mode: 'reps', cadence: 2.8, tip: 'Ancora l’elastico ai piedi e tira verso l’addome.' };
+      let pullEx;
+      if (eq.barbell) {
+        pullEx = { name: 'Rematore con bilanciere a busto flesso', sets: 4, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena inclinata a 45 gradi, tira all’ombelico.' };
       } else if (eq.dumbbells) {
-        pullEx = { name: 'Rematore con manubrio a busto flesso', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Schiena neutra, tira il manubrio verso l’anca.' };
+        pullEx = { name: 'Rematore con manubrio a un braccio', sets: 4, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Appoggio stabile, tira il manubrio verso l’anca.' };
+      } else if (eq.table && eq.bodyweight) {
+        pullEx = { name: 'Rematore inverso sotto il tavolo', sets: 4, target: rep(Math.max(state.testResults.pullups || 10, 8) * 0.65), mode: 'reps', cadence: 3.0, tip: 'Petto in su e corpo rigido.' };
+      } else if (eq.bands) {
+        pullEx = { name: 'Rematore orizzontale con elastico', sets: 4, target: rep(15), mode: 'reps', cadence: 2.8, tip: 'Ancora l’elastico ai piedi e tira verso l’addome.' };
+      } else {
+        pullEx = { name: 'Rematore isometrico a terra', sets: 4, target: seconds(30), mode: 'time', tip: 'Tira i gomiti verso l’alto contraendo la schiena.' };
       }
 
       return {
@@ -632,16 +664,19 @@
         exercises: [
           legEx,
           pullEx,
-          { name: 'Affondi alternati', sets: 3, target: rep(12), mode: 'reps', cadence: 2.8, tip: 'Passo stabile e ginocchio posteriore verso terra.' },
-          { name: 'Rematore / Aperture posteriori', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Controllo della fase eccentrica.' },
+          { name: 'Affondi alternati a corpo libero / con manubri', sets: 3, target: rep(12), mode: 'reps', cadence: 2.8, tip: 'Passo stabile e ginocchio posteriore verso terra.' },
+          { name: 'Aperture posteriori / Rematore', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Controllo della fase eccentrica.' },
           { name: 'Hollow body hold', sets: 3, target: seconds(25), mode: 'time', tip: 'Lombari aderenti al suolo.' }
         ]
       };
     }
 
-    let cardioEx = { name: 'Burpees', sets: 3, target: rep(8), mode: 'reps', cadence: 3.4, tip: 'Ritmo costante e continuo.' };
+    // GIORNO 3: FULL BODY CONDITIONING
+    let cardioEx;
     if (eq.jumpRope) {
       cardioEx = { name: 'Salto con la corda', sets: 3, target: seconds(45), mode: 'time', tip: 'Rimbalzo leggero sulle avampunte, polsi fluidi.' };
+    } else {
+      cardioEx = { name: 'Burpees a corpo libero', sets: 3, target: rep(8), mode: 'reps', cadence: 3.4, tip: 'Ritmo costante e continuo.' };
     }
 
     return {
@@ -649,10 +684,10 @@
       subtitle: state.isHellWeek ? 'WEEK HELL: circuito metabolico' : 'Condizionamento cardiovascolare e total body',
       exercises: [
         cardioEx,
-        { name: 'Jump squat', sets: 3, target: rep(12), mode: 'reps', cadence: 2.4, tip: 'Atterra in modo morbido.' },
-        { name: 'Push-up declinati o facilitati', sets: 3, target: rep((state.testResults.pushups || 16) * 0.45), mode: 'reps', cadence: 2.6, tip: 'Addome forte e discesa controllata.' },
-        { name: 'Mountain climber', sets: 3, target: seconds(30), mode: 'time', tip: 'Spalle sopra i polsi e bacino stabile.' },
-        { name: 'Superman lombari', sets: 3, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Solleva braccia e gambe senza forzare il collo.' }
+        { name: 'Jump squat a corpo libero', sets: 3, target: rep(12), mode: 'reps', cadence: 2.4, tip: 'Atterra in modo morbido.' },
+        { name: 'Push-up inclinati o facilitati', sets: 3, target: rep((state.testResults.pushups || 16) * 0.45), mode: 'reps', cadence: 2.6, tip: 'Addome forte e discesa controllata.' },
+        { name: 'Mountain climber a corpo libero', sets: 3, target: seconds(30), mode: 'time', tip: 'Spalle sopra i polsi e bacino stabile.' },
+        { name: 'Superman lombari a terra', sets: 3, target: rep(15), mode: 'reps', cadence: 2.5, tip: 'Solleva braccia e gambe senza forzare il collo.' }
       ]
     };
   }
@@ -707,16 +742,18 @@
   function renderCoachMessage() {
     const box = document.getElementById('coachMessage');
     const eqList = [];
+    if (state.equipment.bodyweight) eqList.push('Corpo libero');
     if (state.equipment.dumbbells) eqList.push('Manubri/KB');
+    if (state.equipment.barbell) eqList.push('Bilanciere');
     if (state.equipment.bands) eqList.push('Elastici');
     if (state.equipment.jumpRope) eqList.push('Corda');
     if (state.equipment.table) eqList.push('Tavolo');
-    const eqStr = eqList.length ? eqList.join(', ') : 'Solo corpo libero';
+    const eqStr = eqList.length ? eqList.join(', ') : 'Nessun attrezzo';
 
     if (state.isHellWeek) {
       box.textContent = '🔥 WEEK HELL attiva. Volume incrementato sulla base degli attrezzi configurati.';
     } else {
-      box.textContent = `🤖 Scheda calibrata sul livello ${state.level.toUpperCase()} con attrezzatura: [${eqStr}]. Il coach gestisce tempi, serie e ripetizioni.`;
+      box.textContent = `🤖 Scheda calibrata sul livello ${state.level.toUpperCase()} con attrezzatura: [${eqStr}]. Nomi e target aggiornati automaticamente.`;
     }
   }
 
