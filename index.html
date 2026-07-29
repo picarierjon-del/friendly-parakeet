@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f172a">
-  <title>Hybrid PT Ultra - Smart Coach Pro V4</title>
+  <title>Hybrid PT Ultra - World Class Coach Pro V5</title>
   <style>
     :root {
       --bg-dark:#0f172a; --card-bg:#1e293b; --card-soft:#111c30;
@@ -98,8 +98,8 @@
 <body>
 <div class="container">
   <div class="card" id="headerCard">
-    <h1>HYBRID PT PRO V4</h1>
-    <p class="subtitle">Coach guidato con filtri attrezzatura rigorosi e salvataggio automatico</p>
+    <h1>HYBRID PT ELITE V5</h1>
+    <p class="subtitle">Sistemi di allenamento avanzati livello mondiale con filtri rigorosi</p>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
       <span class="badge badge-level" id="userLevelBadge">Non Configurato</span>
       <div style="text-align:right;font-size:.8rem;color:var(--text-sub);">
@@ -111,14 +111,14 @@
 
   <div class="card" id="testView">
     <h2>Configurazione & Test Diagnostico</h2>
-    <p class="subtitle">Scegli cosa hai a disposizione. Il programma userà **unicamente** l'attrezzatura selezionata (es. solo corpo libero escluderà manubri, elastici o bilancieri).</p>
+    <p class="subtitle">Seleziona con precisione la tua attrezzatura. Il motore genererà una programmazione professionale calibrata esattamente su ciò che hai spuntato.</p>
 
     <div class="input-group">
       <label>Obiettivo principale</label>
       <select id="goalSelect">
-        <option value="dimagrimento">Dimagrimento e Definizione</option>
-        <option value="massa">Massa Muscolare e Ipertrofia</option>
-        <option value="hybrid" selected>Hybrid Athlete (Forza + Resistenza)</option>
+        <option value="dimagrimento">Dimagrimento e Definizione (Metabolic Conditioning)</option>
+        <option value="massa">Massa Muscolare e Ipertrofia (Hypertrophy Focus)</option>
+        <option value="hybrid" selected>Hybrid Athlete (Forza + Resistenza Aerobica)</option>
       </select>
     </div>
 
@@ -145,7 +145,7 @@
     <div class="input-group"><label>Squat massimi in 60 secondi</label><input type="number" id="testSquats" placeholder="es. 30" min="0"></div>
     <div class="input-group"><label>Plank isometrico, secondi</label><input type="number" id="testPlank" placeholder="es. 45" min="0"></div>
     <div class="input-group"><label>Rematore inverso o trazioni equivalenti</label><input type="number" id="testPullups" placeholder="es. 10" min="0"></div>
-    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera programma personalizzato</button>
+    <button class="btn btn-primary" onclick="processDiagnosticTest()">Genera programma Elite</button>
   </div>
 
   <div class="card hidden" id="workoutView">
@@ -173,7 +173,7 @@
 
     <div class="sync-box">
       <h2 style="font-size:.95rem;">Archivio & Pulizia Rapida</h2>
-      <p class="subtitle" style="text-align:left;margin-bottom:8px;">Il salvataggio è automatico in tempo reale. Se l'app si appesantisce, usa il pulsante per pulire i vecchi log senza perdere i tuoi progressi o il programma.</p>
+      <p class="subtitle" style="text-align:left;margin-bottom:8px;">Salvataggio automatico in tempo reale. Usa il pulsante per pulire i vecchi log senza perdere i tuoi progressi o il programma.</p>
       <div class="button-grid">
         <button class="btn btn-warning btn-small" onclick="manualCleanLogs()">Pulizia dati vecchi</button>
         <button class="btn btn-outline btn-small" onclick="exportBackup()">Esporta backup</button>
@@ -208,7 +208,7 @@
       <div class="mini-stat"><strong id="sumSets">0</strong><span>Serie</span></div>
       <div class="mini-stat"><strong id="sumRun">0</strong><span>Blocchi corsa</span></div>
     </div>
-    <div class="input-group"><label>Valuta lo sforzo percepito</label>
+    <div class="input-group"><label>Valuta lo sforzo percepito (RPE)</label>
       <select id="workoutRPE"><option value="6">RPE 6 - Molto facile</option><option value="7" selected>RPE 7 - Ottimale</option><option value="8">RPE 8 - Impegnativo</option><option value="9">RPE 9 - Quasi al limite</option><option value="10">RPE 10 - Cedimento totale</option></select>
     </div>
     <button class="btn btn-success" onclick="completeWorkout()">Salva sessione e avanza</button>
@@ -222,16 +222,15 @@
 <script>
 'use strict';
 
-const STORAGE_KEY = 'hybrid_pt_pro_state_v4_backup';
-const DB_NAME = 'HybridPTUltraDB_V4';
+const STORAGE_KEY = 'hybrid_pt_pro_state_v5_backup';
+const DB_NAME = 'HybridPTEliteDB_V5';
 const DB_VERSION = 1;
 const STORE_NAME = 'app';
 const STATE_ID = 'mainState';
-const MAX_DETAILED_HISTORY = 90;
 const MAX_LOG_WEEKS = 6;
 
 const DEFAULT_STATE = {
-  schemaVersion:4, configured:false, level:null, goal:'hybrid', daysPerWeek:5,
+  schemaVersion:5, configured:false, level:null, goal:'hybrid', daysPerWeek:5,
   week:1, currentDay:1, isHellWeek:false, multiplier:1,
   equipment:{bodyweight:true,dumbbells:false,barbell:false,bands:false,jumpRope:false,table:false,running:true},
   testResults:{}, logs:{}, history:[], archive:{weekly:{}},
@@ -279,7 +278,7 @@ async function loadState(){
   try{
     const idb=await idbGet();
     if(idb) return mergeState(structuredCloneSafe(DEFAULT_STATE),idb);
-  }catch(e){ console.warn('IndexedDB non disponibile',e); }
+  }catch(e){}
   try{
     const backup=JSON.parse(localStorage.getItem(STORAGE_KEY));
     if(backup) return mergeState(structuredCloneSafe(DEFAULT_STATE),backup);
@@ -290,11 +289,11 @@ function saveState(immediate=false){
   clearTimeout(saveTimer);
   const perform=async()=>{
     const snapshot=structuredCloneSafe(state);
-    try{ await idbSet(snapshot); }catch(e){ console.warn('Errore IndexedDB',e); }
-    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(snapshot)); }catch(e){ console.warn('Backup localStorage pieno',e); }
+    try{ await idbSet(snapshot); }catch(e){}
+    try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(snapshot)); }catch(e){}
   };
   if(immediate) return perform();
-  saveTimer=setTimeout(perform,120); // Salvataggio automatico rapidissimo
+  saveTimer=setTimeout(perform,120);
 }
 async function boot(){
   state=await loadState();
@@ -310,14 +309,14 @@ function isRunningOnlyMode(){
   return (e.running&&!e.bodyweight&&!e.dumbbells&&!e.barbell&&!e.bands&&!e.jumpRope&&!e.table)||state.daysPerWeek===1;
 }
 function getDayNamesMapping(days){
-  if(isRunningOnlyMode()) return ['Fondo aerobico guidato','Ripetute controllate','Progressivo','Corsa rigenerante','Ripetute lunghe','Fondo lungo'];
-  if(days===1) return ['Sessione unica corsa e core'];
-  if(days===2) return ['Full Body A','Full Body B + Corsa'];
-  if(days===3) return ['Push Corpo Libero','Pull Corpo Libero','Legs + Corsa'];
-  if(days===4) return ['Upper A','Lower + Ripetute','Upper B','Lower + Fondo'];
-  if(days===5) return ['Push','Pull','Legs','Upper Conditioning','Corsa & Engine'];
-  if(days===6) return ['Push A','Pull A','Legs A','Push B','Pull B','Corsa & Engine B'];
-  return ['Full Body'];
+  if(isRunningOnlyMode()) return ['Fondo Aerobico Guidato','Ripetute Soglia','Corsa Progressiva','Rigenerante','Ripetute Lunghe','Fondo Lungo'];
+  if(days===1) return ['Full Body & Core Integrato'];
+  if(days===2) return ['Full Body A (Forza & Controllo)','Full Body B (Metabolico + Corsa)'];
+  if(days===3) return ['Push (Spinta Elite)','Pull (Trazione & Postura)','Legs & Engine (Gambe & Corsa)'];
+  if(days===4) return ['Upper Power','Lower Engine','Upper Hypertrophy','Full Body Conditioning'];
+  if(days===5) return ['Push (Petto/Spalle/Tricipiti)','Pull (Dorso/Bicipiti)','Legs (Gambe & Core)','Upper Metcon','Corsa & Engine Elite'];
+  if(days===6) return ['Push A','Pull A','Legs A','Push B','Pull B','Engine & Core'];
+  return ['Full Body Elite'];
 }
 function populateDaySelector(){
   const s=document.getElementById('daySelector'); s.innerHTML='';
@@ -364,33 +363,29 @@ function processDiagnosticTest(){
   state.configured=true; state.week=1; state.currentDay=1; state.isHellWeek=false; state.logs={}; state.history=[]; state.archive={weekly:{}};
   saveState(true); renderUI();
 }
-function guide(name, duration, cue, voice, side=null){ return {name,duration,mode:'time',tip:cue,voice,side}; }
+function guide(name, duration, cue, voice){ return {name,duration,mode:'time',tip:cue,voice}; }
 function runBlock(name,duration,intensity,cue,voice,kind='steady'){ return {name,duration,mode:'run',intensity,tip:cue,voice,kind}; }
 
-function buildWarmup(isRun,isLegs,isUpper){
+function buildWarmup(isRun){
   if(isRun) return [
-    guide('Camminata attiva',90,'Passo rapido ma facile. Spalle rilassate, appoggio morbido.', 'Cammina in modo attivo. Respira profondamente e sciogli le braccia.'),
-    guide('Mobilità caviglie',45,'Alterna 20 secondi per lato. Ginocchio avanti senza sollevare il tallone.','Mobilità caviglie. Mantieni il tallone appoggiato.', 'alternato'),
-    guide('Slanci gamba avanti e indietro',60,'30 secondi per lato. Movimento controllato, bacino stabile.','Slanci controllati. Non forzare l’ampiezza.', 'alternato'),
-    guide('Affondo dinamico con rotazione',60,'Passo lungo, ginocchio stabile, ruota il busto verso la gamba avanti.','Affondo dinamico con rotazione. Movimento fluido.'),
-    guide('Skip basso progressivo',60,'Parti facile e aumenta gradualmente. Appoggi rapidi sotto il baricentro.','Skip basso. Aumenta gradualmente la frequenza.'),
-    guide('Allunghi tecnici',120,'4 allunghi da 20 secondi con 10 secondi facili. Non sprintare.','Quattro allunghi progressivi. Arriva al settanta per cento, non al massimo.')
+    guide('Camminata attiva e respirazione',90,'Passo rapido, postura eretta, espirazioni profonde.', 'Cammina in modo attivo. Prepara il sistema cardiocircolatorio.'),
+    guide('Mobilità dinamica caviglie e anche',60,'Circo-duzioni e flessioni controllate senza forzare.', 'Mobilità articolare dinamica.'),
+    guide('Slanci gamba controllati',60,'30 secondi per lato. Stabilità del tronco.', 'Slanci controllati.'),
+    guide('Allunghi tecnici progressivi',90,'Tre allunghi brevi per attivare il sistema neuromuscolare.', 'Allunghi progressivi.')
   ];
   return [
-    guide('Marcia attiva sul posto',60,'Aumenta gradualmente il battito. Inspira ed espira con regolarità.', 'Marcia attiva.'),
-    guide('Mobilità articolare globale',60,'Circonduzioni di spalle, anche e polsi senza forzare.', 'Mobilità articolare.'),
-    guide('Squat a corpo libero leggeri',60,'Discesa controllata, risalita fluida.', 'Squat di riscaldamento.'),
-    guide('Affondi dinamici sul posto',60,'Passo stabile, busto eretto.', 'Affondi dinamici.'),
-    guide('Attivazione core',45,'Plank isometrico breve per accendere la muscolatura.', 'Attivazione core.')
+    guide('Marcia attiva sul posto',60,'Attivazione generale e incremento graduale della frequenza cardiaca.', 'Marcia attiva sul posto.'),
+    guide('Mobilità articolare globale',60,'Circonduzioni ampie per spalle, polsi, anche e ginocchia.', 'Mobilità articolare globale.'),
+    guide('Squat a corpo libero di riscaldamento',60,'Discesa fluida, massima attenzione alla mobilità delle caviglie.', 'Squat di attivazione.'),
+    guide('Attivazione core e stabilità',45,'Plank isometrico con massima tensione addominale.', 'Attivazione core.')
   ];
 }
-function buildCooldown(isRun,isLegs,isUpper){
+function buildCooldown(){
   return [
-    guide('Camminata lenta e controllo del respiro',120,'Riduci il ritmo gradualmente. Inspira 4 secondi, espira 6 secondi.','Cammina lentamente. Allunga l’espirazione.'),
-    guide('Allungamento polpacci',50,'Tallone a terra, gamba tesa.', 'Allunga i polpacci.'),
-    guide('Allungamento flessori anca e cosce',60,'Posizione stabile, respira profondamente.', 'Allunga la parte inferiore.'),
-    guide('Allungamento dorsale e spalle',60,'Braccia sopra la testa, allunga la schiena.', 'Allunga la parte superiore.'),
-    guide('Respirazione finale e rilassamento',60,'Rilassa completamente i muscoli.', 'Respirazione finale e recupero.')
+    guide('Defaticamento e controllo respiratorio',120,'Riduci la frequenza cardiaca con respiri diaframmatici ampi.', 'Defaticamento lento. Inspira dal naso, espira lentamente.'),
+    guide('Allungamento catena posteriore',60,'Allungamento dolce di glutei, lombari e ischiocrurali.', 'Allunga la catena posteriore.'),
+    guide('Allungamento pettorali e spalle',60,'Apertura toracica per rilasciare le tensioni della spinta.', 'Allunga pettorali e spalle.'),
+    guide('Rilassamento finale',60,'Rilascia ogni tensione muscolare residua.', 'Rilassamento e recupero completi.')
   ];
 }
 function getRunPlan(day){
@@ -399,39 +394,37 @@ function getRunPlan(day){
   const selector=((day-1)%4)+1;
   if(selector===1) return {
     name:'Fondo aerobico guidato',
-    blocks:[
-      runBlock('Corsa facile',scale(1200),'RPE 5-6','Devi riuscire a parlare per frasi complete. Passo corto, spalle basse.','Corsa facile. Mantieni un ritmo conversazionale.','steady')
-    ]
+    blocks:[runBlock('Corsa continua aerobica',scale(1200),'RPE 5-6','Passo costante e sostenibile. Conversazione possibile ma impegnativa.','Corsa continua aerobica. Mantieni il passo costante.','steady')]
   };
   if(selector===2) return {
-    name:'Ripetute brevi controllate',
+    name:'Ripetute brevi di soglia',
     blocks:[
-      runBlock('Avvicinamento ritmo',180,'RPE 5','Corsa facile e rilassata.','Tre minuti facili.','easy'),
-      ...Array.from({length:6},(_,i)=>[
-        runBlock(`Ripetuta ${i+1}/6`,scale(60),'RPE 8','Ritmo forte ma regolare. Non partire in sprint. Ultimi 10 secondi controllati.','Ripetuta. Parti controllato e aumenta dopo venti secondi.','fast'),
-        runBlock(`Recupero ${i+1}/6`,scale(90),'RPE 3-4','Cammina veloce o corri molto piano. Respira e sciogli le braccia.','Recupero facile. Non fermarti completamente.','easy')
+      runBlock('Riscaldamento corsa',180,'RPE 4','Corsa facile e sciolta.','Tre minuti facili di riscaldamento.','easy'),
+      ...Array.from({length:5},(_,i)=>[
+        runBlock(`Intervallo veloce ${i+1}/5`,scale(60),'RPE 8','Spinta intensa ma controllata. Stile pulito.','Intervallo veloce. Spingi con controllo.','fast'),
+        runBlock(`Recupero attivo ${i+1}/5`,scale(75),'RPE 3','Camminata veloce o jog leggero.','Recupero attivo. Respira profondamente.','easy')
       ]).flat(),
-      runBlock('Ritorno alla calma',180,'RPE 4','Corsa facile, lascia scendere il battito.','Tre minuti facili.','easy')
+      runBlock('Defaticamento corsa',180,'RPE 4','Jog leggero per riportare il battito a riposo.','Defaticamento finale.','easy')
     ]
   };
   if(selector===3) return {
-    name:'Corsa progressiva',
+    name:'Corsa progressiva strutturata',
     blocks:[
-      runBlock('Blocco facile',scale(480),'RPE 5','Ritmo comodo e respirazione regolare.','Otto minuti facili.','easy'),
-      runBlock('Blocco medio',scale(420),'RPE 6-7','Aumenta poco. Devi restare composto.','Sette minuti a ritmo medio.','steady'),
-      runBlock('Blocco sostenuto',scale(300),'RPE 7-8','Ritmo impegnativo ma senza sprintare.','Cinque minuti sostenuti.','fast'),
-      runBlock('Ritorno facile',180,'RPE 4','Riduci gradualmente il ritmo.','Tre minuti facili.','easy')
+      runBlock('Fase 1: Ritmo comodo',scale(480),'RPE 5','Partenza fluida e rilassata.','Otto minuti a ritmo comodo.','easy'),
+      runBlock('Fase 2: Ritmo medio',scale(420),'RPE 6-7','Aumenta leggermente la cadenza dei passi.','Sette minuti a ritmo medio.','steady'),
+      runBlock('Fase 3: Ritmo sostenuto',scale(300),'RPE 7-8','Fase intensa vicina alla soglia anaerobica.','Cinque minuti sostenuti.','fast'),
+      runBlock('Defaticamento',180,'RPE 4','Rallentamento graduale.','Tre minuti di defaticamento.','easy')
     ]
   };
   return {
-    name:'Ripetute lunghe',
+    name:'Ripetute lunghe di resistenza',
     blocks:[
-      runBlock('Corsa facile iniziale',300,'RPE 5','Ritmo conversazionale.','Cinque minuti facili.','easy'),
-      ...Array.from({length:4},(_,i)=>[
-        runBlock(`Ripetuta lunga ${i+1}/4`,scale(180),'RPE 7-8','Ritmo sostenuto uniforme. Prima metà controllata, seconda metà stabile.','Tre minuti sostenuti. Non accelerare subito.','fast'),
-        runBlock(`Recupero ${i+1}/4`,scale(120),'RPE 3-4','Jog leggero o camminata veloce.','Due minuti di recupero attivo.','easy')
+      runBlock('Avvio aerobico',300,'RPE 5','Corsa facile e regolare.','Cinque minuti di avvio aerobico.','easy'),
+      ...Array.from({length:3},(_,i)=>[
+        runBlock(`Ripetuta lunga ${i+1}/3`,scale(240),'RPE 7','Ritmo costante, uniforme e redditizio.','Quattro minuti a ritmo sostenuto.','fast'),
+        runBlock(`Recupero ${i+1}/3`,scale(120),'RPE 3','Recupero attivo con camminata o jog lento.','Due minuti di recupero attivo.','easy')
       ]).flat(),
-      runBlock('Defaticamento corsa',240,'RPE 4','Ritmo molto facile.','Quattro minuti facili.','easy')
+      runBlock('Defaticamento finale',240,'RPE 4','Ritorno graduale alla calma.','Quattro minuti di defaticamento finale.','easy')
     ]
   };
 }
@@ -444,69 +437,87 @@ function getFullSessionData(day){
   
   if(onlyRun){
     const plan=getRunPlan(day);
-    return {title:`Giorno ${day}: ${plan.name}`,subtitle:`Corsa guidata | ${goal.toUpperCase()}`,warmup:buildWarmup(true,false,false),main:plan.blocks,cooldown:buildCooldown(true,true,false)};
+    return {title:`Giorno ${day}: ${plan.name}`,subtitle:`Corsa guidata Elite | ${goal.toUpperCase()}`,warmup:buildWarmup(true),main:plan.blocks,cooldown:buildCooldown()};
   }
 
   const lower=titleName.toLowerCase(), isFull=state.daysPerWeek<=2||lower.includes('full')||lower.includes('cond');
   const main=[];
 
-  // FILTRO RIGOROSO ATTREZZATURA: Vengono inseriti SOLO esercizi che rispettano esattamente le spunte scelte dall'utente.
-  
-  // Esercizi di spinta (Push)
+  // SEZIONE SPINTA (PUSH) - FILTRO RIGOROSO ATTREZZATURA LIVELLO MONDIALE
   if(isFull||lower.includes('push')||day===1){
-    if(eq.barbell) main.push({name:'Panca piana con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Scapole addotte, piedi stabili, discesa controllata.'});
-    else if(eq.dumbbells) main.push({name:'Distensioni petto con manubri',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.6,tip:'Polsi neutri, controlla la discesa.'});
-    else if(eq.bodyweight) main.push({name:'Push-up a corpo libero',sets:4+setExtra,target:rep(16),mode:'reps',cadence:2.5,tip:'Corpo in asse, addominali contratti, petto verso il pavimento.'});
-
-    if(eq.barbell) main.push({name:'Lento avanti con bilanciere',sets:3,target:rep(10),mode:'reps',cadence:2.7,tip:'Spinta verticale controllata.'});
-    else if(eq.dumbbells) main.push({name:'Lento avanti con manubri',sets:3,target:rep(10),mode:'reps',cadence:2.7,tip:'Core stabile, evita di inarcare la schiena.'});
-    else if(eq.bodyweight) main.push({name:'Pike push-up (Spinte per spalle)',sets:3,target:rep(10),mode:'reps',cadence:2.8,tip:'Bacino alto, testa in basso controllata.'});
+    if(eq.barbell){
+      main.push({name:'Panca piana con bilanciere',sets:4+setExtra,target:rep(8),mode:'reps',cadence:2.8,tip:'Scapole addotte, fermo di un secondo al petto, spinta esplosiva.'});
+      main.push({name:'Lento avanti con bilanciere',sets:3,target:rep(8),mode:'reps',cadence:2.7,tip:'Core serrato, spinta verticale senza inarcare la schiena.'});
+    } else if(eq.dumbbells){
+      main.push({name:'Distensioni su panca con manubri',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Massimo allungamento pettorale in basso, contrazione di picco in alto.'});
+      main.push({name:'Lento avanti con manubri da seduto',sets:3,target:rep(10),mode:'reps',cadence:2.7,tip:'Schiena stabile, spinta controllata.'});
+    } else if(eq.bands){
+      main.push({name:'Chest Press con elastico ad alta tensione',sets:4,target:rep(15),mode:'reps',cadence:2.5,tip:'Ancoraggio sicuro dietro la schiena, spinta fluida e continua.'});
+      main.push({name:'Spinte verticali per spalle con elastico',sets:3,target:rep(15),mode:'reps',cadence:2.6,tip:'Tensione costante per tutto il ROM.'});
+    } else if(eq.bodyweight){
+      main.push({name:'Push-up profondi a corpo libero',sets:4+setExtra,target:rep(15),mode:'reps',cadence:2.6,tip:'Petto a contatto con il pavimento, gomiti a 45 gradi rispetto al busto.'});
+      main.push({name:'Pike push-up (Focalizzazione spalle)',sets:3,target:rep(10),mode:'reps',cadence:2.8,tip:'Bacino in alto ad angolo retto, discesa verticale della testa.'});
+    }
   }
 
-  // Esercizi di trazione (Pull)
+  // SEZIONE TRAZIONE (PULL) - FILTRO RIGOROSO ATTREZZATURA
   if(isFull||lower.includes('pull')||day===2){
-    if(eq.barbell) main.push({name:'Rematore con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Schiena neutra e gomiti indietro.'});
-    else if(eq.dumbbells) main.push({name:'Rematore con manubrio',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.7,tip:'Bacino fermo, tira verso il fianco.'});
-    else if(eq.table&&eq.bodyweight) main.push({name:'Rematore inverso sotto tavolo',sets:4,target:rep(10),mode:'reps',cadence:3,tip:'Corpo rigido e petto verso il bordo inferiore del tavolo.'});
-    else if(eq.bands) main.push({name:'Rematore con elastico',sets:4,target:rep(15),mode:'reps',cadence:2.7,tip:'Tensione continua.'});
-    else if(eq.bodyweight) main.push({name:'Camminata plank e attivazione dorsale',sets:4,target:rep(12),mode:'reps',cadence:2.8,tip:'Massima contrazione della parte alta della schiena.'});
+    if(eq.barbell){
+      main.push({name:'Rematore con bilanciere',sets:4+setExtra,target:rep(8),mode:'reps',cadence:2.7,tip:'Busto inclinato a 45 gradi, schiena neutra, trazione verso l’ombelico.'});
+    } else if(eq.dumbbells){
+      main.push({name:'Rematore con manubrio a un braccio',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Appoggio saldo su panca o ginocchio, massimo allungamento del dorso.'});
+    } else if(eq.table&&eq.bodyweight){
+      main.push({name:'Rematore inverso avanzato sotto tavolo',sets:4,target:rep(10),mode:'reps',cadence:2.8,tip:'Corpo rigido come una tavola, petto che tocca il bordo inferiore.'});
+    } else if(eq.bands){
+      main.push({name:'Rematore orizzontale con elastico',sets:4,target:rep(15),mode:'reps',cadence:2.7,tip:'Fletti i gomiti tirando indietro le scapole con forza.'});
+    } else if(eq.bodyweight){
+      main.push({name:'Camminata plank con contrazione dorsale',sets:4,target:rep(12),mode:'reps',cadence:2.8,tip:'Massima attivazione dei muscoli della schiena e della spalla in isometria.'});
+    }
   }
 
-  // Esercizi per le gambe (Legs / Lower)
+  // SEZIONE GAMBE (LEGS / LOWER) - FILTRO RIGOROSO ATTREZZATURA
   if(isFull||lower.includes('legs')||lower.includes('lower')||day===3||day===5){
-    if(eq.barbell) main.push({name:'Squat con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.9,tip:'Ginocchia in linea, addome attivo.'});
-    else if(eq.dumbbells) main.push({name:'Goblet squat con manubrio',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.7,tip:'Peso vicino al petto, talloni saldi a terra.'});
-    else if(eq.bodyweight) main.push({name:'Squat a corpo libero profondo',sets:4+setExtra,target:rep(22),mode:'reps',cadence:2.5,tip:'Discesa controllata in 3 secondi, spinta reattiva.'});
-
-    if(eq.bodyweight||eq.dumbbells) main.push({name:'Affondi alternati a corpo libero',sets:3,target:rep(12),mode:'reps',cadence:2.8,tip:'Passo ampio e busto eretto.'});
+    if(eq.barbell){
+      main.push({name:'Squat con bilanciere (Back Squat)',sets:4+setExtra,target:rep(8),mode:'reps',cadence:3.0,tip:'Affondo profondo, ginocchia in spinta verso l’esterno, petto alto.'});
+    } else if(eq.dumbbells){
+      main.push({name:'Goblet Squat pesante con manubrio',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.8,tip:'Manubrio tenuto saldo al petto, discesa profonda e controllata.'});
+    } else if(eq.bands){
+      main.push({name:'Squat con resistenza elastica',sets:4,target:rep(15),mode:'reps',cadence:2.8,tip:'Elastico sotto i piedi e impugnato sulle spalle per massima tensione.'});
+    } else if(eq.bodyweight){
+      main.push({name:'Squat a corpo libero profondo (Pistol o Bulgaro style)',sets:4+setExtra,target:rep(20),mode:'reps',cadence:2.6,tip:'Discesa controllata in 3 secondi, risalita esplosiva senza sbilanciarsi.'});
+    }
+    
+    if(eq.bodyweight||eq.dumbbells){
+      main.push({name:'Affondi alternati dinamici',sets:3,target:rep(12),mode:'reps',cadence:2.8,tip:'Passo ampio, ginocchio posteriore che sfiora dolcemente terra.'});
+    }
   }
 
-  // Corsa o attività cardio extra se spuntata
+  // ATTIVITÀ CARDIO / CORSA O CORDA SE SPUNTATA
   if(eq.running&&(lower.includes('corsa')||goal==='hybrid'||day%2===0||isFull)){
     const plan=getRunPlan(day);
     main.push(...plan.blocks);
   } else if(eq.jumpRope) {
-    main.push({name:'Salto con la corda',sets:3,target:seconds(45),mode:'time',tip:'Rimbalzo leggero sulle avampunte, polsi elastici.'});
+    main.push({name:'Salto con la corda ad alta intensità',sets:3,target:seconds(50),mode:'time',tip:'Rimbalzi rapidi sulle avampunte, movimento generato dai polsi.'});
   }
 
-  // Core immancabile (solo corpo libero)
-  main.push({name:'Plank isometrico',sets:3,target:seconds(45),mode:'time',tip:'Glutei e addome contratti, respiro costante senza trattenere l’aria.'});
+  // CORE ELITE INTEGRATO (Sempre incluso a corpo libero)
+  main.push({name:'Plank isometrico con antiversione',sets:3,target:seconds(50),mode:'time',tip:'Retroversione del bacino, glutei e addome strizzati al massimo.'});
 
   return {
     title:`Giorno ${day}: ${titleName}`,
-    subtitle:state.isHellWeek?'WEEK HELL: volume intenso e focalizzato':`Obiettivo: ${goal.toUpperCase()} (${Object.entries(eq).filter(([_,v])=>v).map(([k])=>k).join(', ')})`,
-    warmup:buildWarmup(false,lower.includes('legs'),lower.includes('push')),
+    subtitle:state.isHellWeek?'WEEK HELL ELITE: volume e intensità massimi':`Obiettivo: ${goal.toUpperCase()} (${Object.entries(eq).filter(([_,v])=>v).map(([k])=>k).join(', ')})`,
+    warmup:buildWarmup(false),
     main,
-    cooldown:buildCooldown(false,false,false)
+    cooldown:buildCooldown()
   };
 }
 
 function renderWorkout(){
   const s=getFullSessionData(state.currentDay);
   workoutTitle.textContent=s.title; workoutSubtitle.textContent=s.subtitle; exerciseList.innerHTML='';
-  renderSection('🔥 Riscaldamento guidato',s.warmup,'warm');
-  renderSection('💪 Allenamento principale',s.main,'main');
-  renderSection('🧘 Defaticamento guidato',s.cooldown,'cool');
+  renderSection('🔥 Riscaldamento Guidato',s.warmup,'warm');
+  renderSection('💪 Programma Principale Elite',s.main,'main');
+  renderSection('🧘 Defaticamento & Recupero',s.cooldown,'cool');
   startHellBtn.classList.toggle('hidden',!(state.week%4===0&&!state.isHellWeek));
 }
 function renderSection(title,items,type){
@@ -529,9 +540,9 @@ function renderSection(title,items,type){
 function updateLogValue(k,v){state.logs[k]=v;saveState();}
 function switchDay(n){state.currentDay=Number(n);saveState();renderWorkout();}
 function renderCoachMessage(){
-  if(isRunningOnlyMode()) coachMessage.textContent='🏃 Modalità corsa pura attiva: riscaldamento, ripetute con recupero attivo e defaticamento.';
-  else if(state.isHellWeek) coachMessage.textContent='🔥 WEEK HELL: intensità elevata. Ascolta il tuo corpo e mantieni la forma impeccabile.';
-  else coachMessage.textContent=`🤖 Coach adattivo: impostato su ${state.goal.toUpperCase()}. Vengono generati unicamente esercizi compatibili con la tua attrezzatura.`;
+  if(isRunningOnlyMode()) coachMessage.textContent='🏃 Modalità Corsa Pura Elite attiva: protocolli cardiocircolatori avanzati e ripetute mirate.';
+  else if(state.isHellWeek) coachMessage.textContent='🔥 WEEK HELL ELITE: carichi e volumi spinti al limite. Esecuzione impeccabile.';
+  else coachMessage.textContent=`🤖 Coach Elite: impostato su ${state.goal.toUpperCase()}. Gli esercizi sono generati rigorosamente in base all'attrezzatura selezionata.`;
 }
 function buildSequence(){
   const session=getFullSessionData(state.currentDay), seq=[], restSet=+restBetweenSets.value, restEx=+restBetweenExercises.value;
@@ -563,21 +574,21 @@ function runCurrentPhase(){
     setPhaseText(phase);runnerExercise.textContent=p.ex.name;runnerSet.textContent=setText;runnerTip.textContent=tip;coachStep.textContent=step||p.ex.voice||tip;
   };
   if(p.type==='warmup'){
-    common('Riscaldamento mirato','Preparazione attiva',p.ex.tip,p.ex.voice);runner.secondsRemaining=p.duration;renderCounter(p.duration,'secondi');speak(`Riscaldamento. ${p.ex.voice||p.ex.name}`);startSecondTimer(advancePhase,true,true);return;
+    common('Riscaldamento Elite','Preparazione attiva',p.ex.tip,p.ex.voice);runner.secondsRemaining=p.duration;renderCounter(p.duration,'secondi');speak(`Riscaldamento. ${p.ex.voice||p.ex.name}`);startSecondTimer(advancePhase,true,true);return;
   }
   if(p.type==='cooldown'){
-    c.classList.add('rest');common('Defaticamento','Recupero finale',p.ex.tip,p.ex.voice);runner.secondsRemaining=p.duration;renderCounter(p.duration,'secondi');speak(`Defaticamento. ${p.ex.voice||p.ex.name}`);startSecondTimer(advancePhase,true,true);return;
+    c.classList.add('rest');common('Defaticamento Elite','Recupero finale',p.ex.tip,p.ex.voice);runner.secondsRemaining=p.duration;renderCounter(p.duration,'secondi');speak(`Defaticamento. ${p.ex.voice||p.ex.name}`);startSecondTimer(advancePhase,true,true);return;
   }
   if(p.type==='run'){
     c.classList.add(p.ex.kind==='fast'?'run-fast':p.ex.kind==='easy'?'run-easy':'');
-    common(p.ex.kind==='fast'?'Ritmo sostenuto':'Corsa guidata',p.ex.intensity,p.ex.tip,p.ex.voice);
+    common(p.ex.kind==='fast'?'Ritmo Sostenuto':'Corsa Guidata',p.ex.intensity,p.ex.tip,p.ex.voice);
     runner.secondsRemaining=p.duration;runner.runBlocks++;runner.lastMinuteAnnounced=null;renderCounter(p.duration,'secondi');
     speak(`${p.ex.name}. ${p.ex.voice}`);
     startSecondTimer(()=>{speak('Blocco completato.');advancePhase();},true,false,true);return;
   }
   const ex=p.ex;runnerExercise.textContent=ex.name;runnerSet.textContent=`Serie ${p.setIndex+1} di ${ex.sets}`;runnerTip.textContent=ex.tip;coachStep.textContent=ex.tip;
   if(p.type==='prepare'){setPhaseText('Preparati');runner.secondsRemaining=p.duration;renderCounter(p.duration,'secondi');speak(`Preparati. ${ex.name}`);startSecondTimer(advancePhase);return;}
-  if(p.type==='rest'){setPhaseText(p.nextExercise?'Recupero e cambio':'Recupero');c.classList.add('rest');runner.secondsRemaining=p.duration;renderCounter(p.duration,'recupero');coachStep.textContent=p.nextExercise?'Respira e preparati al prossimo esercizio.':'Respira lentamente e mantieniti in movimento.';speak(p.nextExercise?'Recupero e cambio esercizio.':'Recupero.');startSecondTimer(advancePhase,true);return;}
+  if(p.type==='rest'){setPhaseText(p.nextExercise?'Recupero & Cambio':'Recupero');c.classList.add('rest');runner.secondsRemaining=p.duration;renderCounter(p.duration,'recupero');coachStep.textContent=p.nextExercise?'Respira e preparati al prossimo esercizio.':'Respira lentamente e mantieniti in movimento.';speak(p.nextExercise?'Recupero e cambio esercizio.':'Recupero.');startSecondTimer(advancePhase,true);return;}
   setPhaseText('Lavora');speak('Via.');
   if(ex.mode==='time'){
     runner.secondsRemaining=ex.target;renderCounter(ex.target,'secondi');startSecondTimer(()=>{recordSet(ex.target);speak('Stop.');advancePhase();},true);
@@ -594,12 +605,12 @@ function startSecondTimer(done,announceLast=false,midCues=false,isRun=false){
     if(announceLast&&runner.secondsRemaining>0&&runner.secondsRemaining<=3)speak(String(runner.secondsRemaining));
     if(midCues){
       const total=runner.sequence[runner.index].duration, elapsed=total-runner.secondsRemaining;
-      if(elapsed===Math.floor(total/2)) speak('Metà tempo. Mantieni il movimento fluido.');
+      if(elapsed===Math.floor(total/2)) speak('Metà tempo. Mantieni il controllo.');
     }
     if(isRun&&runner.minuteCoach&&runner.secondsRemaining>0&&runner.secondsRemaining%60===0&&runner.lastMinuteAnnounced!==runner.secondsRemaining){
       runner.lastMinuteAnnounced=runner.secondsRemaining;
       const ex=runner.sequence[runner.index].ex;
-      speak(`${Math.ceil(runner.secondsRemaining/60)} minuti rimanenti. ${ex.kind==='fast'?'Mantieni il ritmo costante.':'Respira regolare e resta rilassato.'}`);
+      speak(`${Math.ceil(runner.secondsRemaining/60)} minuti rimanenti. ${ex.kind==='fast'?'Mantieni il passo costante.':'Respira regolare e resta rilassato.'}`);
     }
     if(runner.secondsRemaining<=0){clearInterval(tickInterval);if(navigator.vibrate)navigator.vibrate([180,80,180]);done();}
   },1000);
@@ -642,12 +653,12 @@ async function runMaintenance(manual=false){
   }
   state.maintenance={lastRun:new Date().toISOString(),removedLogs:(state.maintenance.removedLogs||0)+removed};
   await saveState(true);
-  if(manual){alert(`Pulizia completata con successo.\nLog di settimane molto vecchie rimossi: ${removed}\nIl tuo programma, i progressi attuali e i massimali sono intatti.`);renderUI();}
+  if(manual){alert(`Pulizia completata con successo.\nLog di settimane molto vecchie rimossi: ${removed}\nIl programma attuale, lo storico e i progressi sono intatti.`);renderUI();}
 }
 function manualCleanLogs(){ runMaintenance(true); }
 function exportBackup(){
   const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),state},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hybrid-pt-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hybrid-pt-elite-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);
 }
 async function resetAllData(){
   if(!confirm('Vuoi davvero cancellare tutti i dati e ricominciare da zero?'))return;
