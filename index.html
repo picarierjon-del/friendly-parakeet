@@ -590,7 +590,7 @@
 
     <p class="subtitle">
       Seleziona l’attrezzatura realmente disponibile.
-      Il programma evita esercizi che richiedono strumenti non selezionati.
+      Il programma sostituisce automaticamente gli esercizi non eseguibili.
     </p>
 
     <div class="input-group">
@@ -1109,7 +1109,7 @@ const MAX_LOG_WEEKS = 6;
 const MAX_DETAILED_HISTORY = 150;
 
 const DEFAULT_STATE = {
-  schemaVersion:6,
+  schemaVersion:7,
   configured:false,
   level:'principiante',
   goal:'hybrid',
@@ -2391,27 +2391,75 @@ function addPull(
       target:repetitions(6,'pull'),
       mode:'reps',
       cadence:3,
-      tip:'Parti con scapole attive e non slanciare le gambe.'
+      tip:'Parti con scapole attive, petto alto e non slanciare le gambe.'
     });
-  } else if (equipment.barbell) {
+
+    main.push({
+      name:'Trazioni scapolari alla sbarra',
+      sets:3,
+      target:repetitions(8,'pull'),
+      mode:'reps',
+      cadence:2.8,
+      tip:'Mantieni i gomiti distesi e muovi il corpo abbassando e avvicinando le scapole.'
+    });
+
+    return;
+  }
+
+  if (equipment.barbell) {
     main.push({
       name:'Rematore con bilanciere',
       sets,
       target:repetitions(8,'pull'),
       mode:'reps',
       cadence:2.8,
-      tip:'Schiena neutra e trazione verso l’ombelico.'
+      tip:'Schiena neutra, addome attivo e trazione verso l’ombelico.'
     });
-  } else if (equipment.dumbbells) {
+
+    main.push({
+      name:'Rematore a presa larga con bilanciere',
+      sets:3,
+      target:repetitions(10,'pull'),
+      mode:'reps',
+      cadence:2.8,
+      tip:'Gomiti più aperti per coinvolgere deltoidi posteriori, trapezio e parte alta della schiena.'
+    });
+
+    return;
+  }
+
+  if (equipment.dumbbells) {
     main.push({
       name:'Rematore con manubrio a un braccio',
       sets,
       target:repetitions(10,'pull'),
       mode:'reps',
       cadence:2.8,
-      tip:'Busto stabile e gomito verso il fianco.'
+      tip:'Busto stabile, spalla lontana dall’orecchio e gomito verso il fianco.'
     });
-  } else if (
+
+    main.push({
+      name:'Reverse fly con manubri',
+      sets:3,
+      target:repetitions(12,'pull'),
+      mode:'reps',
+      cadence:2.8,
+      tip:'Busto inclinato, gomiti leggermente piegati e scapole che si avvicinano.'
+    });
+
+    main.push({
+      name:'Curl a martello con manubri',
+      sets:3,
+      target:repetitions(10,'pull'),
+      mode:'reps',
+      cadence:2.6,
+      tip:'Gomiti fermi vicino al busto e ritorno lento.'
+    });
+
+    return;
+  }
+
+  if (
     equipment.table &&
     equipment.bodyweight
   ) {
@@ -2421,26 +2469,118 @@ function addPull(
       target:repetitions(8,'pull'),
       mode:'reps',
       cadence:2.8,
-      tip:'Usa soltanto un tavolo molto stabile. Corpo rigido.'
+      tip:'Usa soltanto un tavolo molto stabile. Mantieni il corpo rigido e porta il petto verso il bordo.'
     });
-  } else if (equipment.bands) {
+
+    main.push({
+      name:'Rematore inverso con presa larga',
+      sets:3,
+      target:repetitions(8,'pull'),
+      mode:'reps',
+      cadence:2.8,
+      tip:'Allarga leggermente la presa e porta i gomiti verso l’esterno per lavorare sulla parte alta della schiena.'
+    });
+
+    return;
+  }
+
+  if (equipment.bands) {
     main.push({
       name:'Rematore con elastico',
       sets,
       target:repetitions(14,'pull'),
       mode:'reps',
       cadence:2.7,
-      tip:'Chiudi le scapole e controlla il ritorno.'
+      tip:'Chiudi le scapole, mantieni il petto alto e controlla lentamente il ritorno.'
     });
-  } else {
+
     main.push({
-      name:'Trazione non disponibile',
-      sets:0,
-      target:0,
-      mode:'notice',
-      tip:'Per allenare la trazione in sicurezza seleziona elastici, manubri, bilanciere, sbarra o tavolo stabile.'
+      name:'Face pull con elastico',
+      sets:3,
+      target:repetitions(14,'pull'),
+      mode:'reps',
+      cadence:2.7,
+      tip:'Porta le mani ai lati del viso con gomiti alti e scapole basse.'
     });
+
+    main.push({
+      name:'Curl con elastico',
+      sets:3,
+      target:repetitions(14,'pull'),
+      mode:'reps',
+      cadence:2.6,
+      tip:'Mantieni i gomiti aderenti al busto e tensione continua.'
+    });
+
+    return;
   }
+
+  if (equipment.bodyweight) {
+    main.push({
+      name:'Reverse snow angel a terra',
+      sets,
+      target:repetitions(12,'pull'),
+      mode:'reps',
+      cadence:3,
+      tip:'Sdraiato a pancia in giù, solleva leggermente le braccia e falle scorrere dai fianchi sopra la testa. Mantieni il collo neutro.'
+    });
+
+    main.push({
+      name:'Sequenza prona Y-T-W',
+      sets:3,
+      target:repetitions(9,'pull'),
+      mode:'reps',
+      cadence:3.2,
+      tip:'Sdraiato a pancia in giù, forma lentamente una Y, una T e una W. Stringi le scapole senza inarcare la schiena.'
+    });
+
+    main.push({
+      name:'Rematore auto-resistito',
+      sets:3,
+      target:repetitions(10,'pull'),
+      mode:'reps',
+      cadence:4,
+      tip:'Afferra un polso con l’altra mano. Un braccio tira verso il busto mentre l’altro oppone resistenza. Esegui metà ripetizioni per lato.'
+    });
+
+    main.push({
+      name:'Curl auto-resistito',
+      sets:3,
+      target:repetitions(10,'pull'),
+      mode:'reps',
+      cadence:4,
+      tip:'Una mano prova a flettere il gomito mentre l’altra oppone resistenza. Mantieni la tensione per tutta la ripetizione e cambia lato.'
+    });
+
+    return;
+  }
+
+  main.push({
+    name:'Rematore auto-resistito in piedi',
+    sets,
+    target:repetitions(10,'pull'),
+    mode:'reps',
+    cadence:4,
+    tip:'Afferra un polso con la mano opposta. Tira il gomito indietro mentre l’altra mano crea una resistenza progressiva. Cambia lato a metà serie.'
+  });
+
+  main.push({
+    name:'Retrazioni scapolari in piedi',
+    sets:3,
+    target:repetitions(14,'pull'),
+    mode:'reps',
+    cadence:3,
+    tip:'Braccia lungo i fianchi. Porta le scapole indietro e in basso, mantieni un secondo e rilascia lentamente.'
+  });
+
+  main.push({
+    name:'Aperture posteriori auto-resistite',
+    sets:3,
+    target:repetitions(10,'pull'),
+    mode:'reps',
+    cadence:4,
+    tip:'Spingi le mani verso l’esterno opponendo resistenza con le braccia. Concentrati sulla parte posteriore delle spalle e sulle scapole.'
+  });
 }
 
 function addLegs(
@@ -2648,18 +2788,14 @@ function getFullSessionData(day) {
     });
   }
 
-  if (
-    !main.some(
-      exercise =>
-        exercise.mode !== 'notice'
-    )
-  ) {
+  if (!main.length) {
     main.push({
-      name:'Nessun esercizio disponibile',
-      sets:0,
-      target:0,
-      mode:'notice',
-      tip:'Modifica l’attrezzatura selezionata per generare una sessione completa.'
+      name:'Attivazione total body senza attrezzi',
+      sets:3,
+      target:repetitions(12,'core'),
+      mode:'reps',
+      cadence:3,
+      tip:'Esegui squat parziale, retrazione scapolare e sollevamento controllato delle braccia.'
     });
   }
 
@@ -2748,8 +2884,7 @@ function renderSection(
 
     if (
       type === 'main' &&
-      exercise.mode !== 'run' &&
-      exercise.mode !== 'notice'
+      exercise.mode !== 'run'
     ) {
       for (
         let set = 1;
@@ -2793,9 +2928,6 @@ function renderSection(
     if (exercise.mode === 'run') {
       meta =
         `${formatTime(duration)} · ${exercise.intensity}`;
-    } else if (exercise.mode === 'notice') {
-      meta =
-        'Avviso';
     } else if (exercise.duration) {
       meta =
         formatTime(exercise.duration);
@@ -2896,10 +3028,6 @@ function buildSequence() {
 
   session.main
     .forEach((exercise,exerciseIndex) => {
-      if (exercise.mode === 'notice') {
-        return;
-      }
-
       if (exercise.mode === 'run') {
         sequence.push({
           type:'run',
