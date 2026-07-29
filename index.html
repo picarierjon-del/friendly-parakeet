@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f172a">
-  <title>Hybrid PT Ultra - Hybrid Coach AI V7 Ultimate</title>
+  <title>Hybrid PT Ultra - Hybrid Coach AI V7.1 Ultimate</title>
   <style>
     :root {
       --bg-dark:#0f172a; --card-bg:#1e293b; --card-soft:#111c30;
@@ -190,6 +190,7 @@
     <div class="toggle-row"><span>Voce coach e countdown</span><input type="checkbox" id="voiceEnabled" checked></div>
     <div class="toggle-row"><span>Annunci corsa ogni minuto</span><input type="checkbox" id="minuteRunCoach" checked></div>
 
+    <button class="btn btn-outline" style="margin-top:12px;" onclick="showWorkoutPreview()">👁 Anteprima completa allenamento</button>
     <button class="btn btn-primary" style="margin-top:12px;" onclick="startGuidedWorkout()">▶ Inizia allenamento guidato</button>
     <button class="btn btn-hell hidden" id="startHellBtn" style="margin-top:10px;" onclick="triggerHellWeek()">ATTIVA SETTIMANA INTENSA 🔥</button>
 
@@ -270,6 +271,7 @@
   </div>
 </div>
 <div class="modal hidden" id="libraryModal"><div class="modal-card"><div style="display:flex;justify-content:space-between;align-items:center"><h2>Libreria esercizi AI</h2><button class="btn btn-danger btn-small" style="width:auto" onclick="closeExerciseLibrary()">Chiudi</button></div><div class="input-group"><input id="librarySearch" placeholder="Cerca esercizio o gruppo muscolare" oninput="renderExerciseLibrary(this.value)"></div><div id="libraryList"></div></div></div>
+<div class="modal hidden" id="workoutPreviewModal"><div class="modal-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:0;background:#172033;padding-bottom:10px;z-index:2"><div><h2>Anteprima allenamento</h2><div id="previewSubtitle" style="font-size:.72rem;color:var(--text-sub)"></div></div><button class="btn btn-danger btn-small" style="width:auto" onclick="closeWorkoutPreview()">Chiudi</button></div><div id="previewContent"></div><button class="btn btn-primary" style="margin-top:14px" onclick="closeWorkoutPreview();startGuidedWorkout()">▶ Avvia questa sessione</button></div></div>
 
 <script>
 'use strict';
@@ -381,6 +383,29 @@ function renderAIPanel(){
   const d=readinessDecision(),phase=getPeriodization();$('readinessScore').textContent=d.score;$('aiRecommendation').textContent=`${phase.name}: ${d.text}`;
   const phases=[['base','Base'],['build','Build'],['peak','Peak'],['test','Test']];$('phaseTrack').innerHTML=phases.map(([k,n])=>`<div class="phase-chip ${phase.key===k?'active':''}">${n}</div>`).join('');
 }
+function showWorkoutPreview(){
+  const session=getFullSessionData(state.currentDay),container=$('previewContent');
+  $('previewSubtitle').textContent=`${session.title} · ${session.subtitle}`;
+  const section=(title,items)=>{
+    const wrap=document.createElement('div');
+    wrap.innerHTML=`<div class="section-title">${title}</div>`;
+    items.forEach((ex,i)=>{
+      const duration=ex.duration||ex.target;
+      const meta=ex.mode==='run'?`${formatTime(duration)} · ${ex.intensity||''}`:ex.duration?formatTime(ex.duration):`${ex.sets||1} serie · ${ex.target}${ex.mode==='time'?'s':' rep'}`;
+      const item=document.createElement('div');item.className='exercise-item';
+      item.innerHTML=`<div class="exercise-header"><span class="exercise-name">${i+1}. ${ex.name}</span><span class="exercise-meta">${meta}</span></div><div class="exercise-guide">${ex.tip||''}</div>`;
+      wrap.appendChild(item);
+    });
+    return wrap;
+  };
+  container.innerHTML='';
+  container.appendChild(section('🔥 Riscaldamento',session.warmup));
+  container.appendChild(section('💪 Parte principale',session.main));
+  container.appendChild(section('🧘 Defaticamento',session.cooldown));
+  $('workoutPreviewModal').classList.remove('hidden');
+  $('workoutPreviewModal').scrollTop=0;
+}
+function closeWorkoutPreview(){$('workoutPreviewModal').classList.add('hidden');}
 function showExerciseLibrary(){$('libraryModal').classList.remove('hidden');renderExerciseLibrary('');}
 function closeExerciseLibrary(){$('libraryModal').classList.add('hidden');}
 function renderExerciseLibrary(q=''){const term=q.toLowerCase();const list=EXERCISE_LIBRARY.filter(x=>!term||`${x.name} ${x.group} ${x.equipment}`.toLowerCase().includes(term));$('libraryList').innerHTML=list.map(x=>`<div class="library-item"><strong>${x.name}</strong><span>${x.group} · ${x.equipment}</span></div>`).join('');$('libraryCount').textContent=`${EXERCISE_LIBRARY.length}`;}
@@ -577,7 +602,7 @@ function renderSection(title,items,type){
     const item=document.createElement('div');item.className='exercise-item';let rows='';
     if(type==='main'&&ex.mode!=='run'&&ex.mode!=='notice')for(let s=1;s<=ex.sets;s++){const key=`w${state.week}_d${state.currentDay}_e${idx}_s${s}`,def=ex.mode==='time'?`${ex.target}s`:ex.target,val=state.logs[key]??def;rows+=`<div class="set-row"><span class="set-label">Serie ${s}</span><input class="set-input" value="${val}" oninput="updateLogValue('${key}',this.value)"></div>`;}
     const duration=ex.duration||ex.target,meta=ex.mode==='run'?`${formatTime(duration)} · ${ex.intensity}`:ex.mode==='notice'?'Avviso':ex.duration?formatTime(ex.duration):`${ex.sets} serie · ${ex.target}${ex.mode==='time'?'s':' rep'}`;
-    const extraKey=`w${state.week}_d${state.currentDay}_e${index}`,extra=state.exerciseData[extraKey]||{};
+    const extraKey=`w${state.week}_d${state.currentDay}_e${idx}`,extra=state.exerciseData[extraKey]||{};
     const extraFields=(type==='main'&&ex.mode!=='run'&&ex.mode!=='notice')?`<div class="exercise-extra"><input placeholder="kg" value="${extra.kg||''}" oninput="updateExerciseData('${extraKey}','kg',this.value)"><input placeholder="RPE" value="${extra.rpe||''}" oninput="updateExerciseData('${extraKey}','rpe',this.value)"><input placeholder="Note" value="${extra.note||''}" oninput="updateExerciseData('${extraKey}','note',this.value)"></div>`:'';
     item.innerHTML=`<div class="exercise-header"><span class="exercise-name">${ex.name}</span><span class="exercise-meta">${meta}</span></div>${rows}${extraFields}<div class="exercise-guide">${ex.tip||''}</div>`;
     $('exerciseList').appendChild(item);
