@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f172a">
-  <title>Hybrid PT Ultra - Smart Coach Edition</title>
+  <title>Hybrid PT Ultra - Smart Coach Pro</title>
   <style>
     :root {
       --bg-dark: #0f172a;
@@ -136,11 +136,20 @@
 
     .checkbox-card input { width: 18px; height: 18px; accent-color: var(--accent-blue); }
 
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin: 14px 0 8px 0;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
     .exercise-item {
       background: #0f172a;
       border-radius: 13px;
       padding: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border: 1px solid var(--border-color);
     }
 
@@ -162,7 +171,7 @@
       margin-bottom: 6px;
     }
 
-    .set-label { font-size: 0.75rem; color: var(--text-sub); width: 52px; }
+    .set-label { font-size: 0.75rem; color: var(--text-sub); width: 62px; }
     .set-input {
       flex: 1;
       padding: 7px;
@@ -219,7 +228,7 @@
 
     .runner-exercise {
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 900;
       margin-top: 10px;
       line-height: 1.1;
@@ -314,8 +323,8 @@
 <body>
 <div class="container">
   <div class="card" id="headerCard">
-    <h1>HYBRID PT ULTIMATE</h1>
-    <p class="subtitle">Personalizzazione Avanzata: Obiettivi, Frequenza & Attrezzi</p>
+    <h1>HYBRID PT PRO</h1>
+    <p class="subtitle">Warm-up mirato, Esercizi, Corsa & Cool-down integrati</p>
     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
       <span class="badge badge-level" id="userLevelBadge">Non Configurato</span>
       <div style="text-align:right; font-size:.8rem; color:var(--text-sub);">
@@ -327,7 +336,7 @@
 
   <div class="card" id="testView">
     <h2>Configurazione & Test Diagnostico</h2>
-    <p class="subtitle">Scegli obiettivo, giorni settimanali, attrezzi e inserisci i tuoi test.</p>
+    <p class="subtitle">Scegli obiettivo, giorni, attrezzi (inclusa la Corsa) e inserisci i tuoi test.</p>
 
     <div class="input-group">
       <label>Obiettivo principale</label>
@@ -341,6 +350,7 @@
     <div class="input-group">
       <label>Giorni di allenamento a settimana</label>
       <select id="daysPerWeekSelect">
+        <option value="1">1 Giorno (Solo Corsa / Test)</option>
         <option value="2">2 Giorni</option>
         <option value="3">3 Giorni</option>
         <option value="4">4 Giorni</option>
@@ -349,7 +359,7 @@
       </select>
     </div>
 
-    <label style="display:block; font-size:0.8rem; color:var(--text-sub); margin-bottom:4px;">Attrezzatura disponibile a casa:</label>
+    <label style="display:block; font-size:0.8rem; color:var(--text-sub); margin-bottom:4px;">Attrezzatura & Attività disponibili:</label>
     <div class="checkbox-grid">
       <label class="checkbox-card"><input type="checkbox" id="eqBodyweight" checked> Corpo libero</label>
       <label class="checkbox-card"><input type="checkbox" id="eqDumbbells" checked> Manubri / KB</label>
@@ -357,6 +367,7 @@
       <label class="checkbox-card"><input type="checkbox" id="eqBands" checked> Elastici</label>
       <label class="checkbox-card"><input type="checkbox" id="eqJumpRope"> Corda per saltare</label>
       <label class="checkbox-card"><input type="checkbox" id="eqTable" checked> Tavolo / Superficie</label>
+      <label class="checkbox-card" style="grid-column: span 2; border-color: var(--accent-blue); background: rgba(59,130,246,0.1);"><input type="checkbox" id="eqRunning" checked> 🏃‍♂️ Corsa all'aperto / Tapis-roulant</label>
     </div>
 
     <div class="input-group"><label>Push-up massimi senza pause</label><input type="number" id="testPushups" placeholder="es. 15" min="0" inputmode="numeric" pattern="[0-9]*"></div>
@@ -416,7 +427,7 @@
     <div>
       <div class="phase-label" id="runnerPhase">Preparati</div>
       <div class="runner-exercise" id="runnerExercise">Esercizio</div>
-      <div class="runner-set" id="runnerSet">Serie 1 di 4</div>
+      <div class="runner-set" id="runnerSet">Fase 1</div>
 
       <div class="big-counter" id="counterCircle">
         <div>
@@ -427,11 +438,11 @@
 
       <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
       <div class="runner-info">
-        <span id="runnerProgressText">Esercizio 1 di 5</span>
+        <span id="runnerProgressText">Blocco 1 di 3</span>
         <span id="runnerElapsed">00:00</span>
       </div>
 
-      <div class="runner-tip" id="runnerTip">Posizione stabile, esecuzione controllata e respirazione regolare.</div>
+      <div class="runner-tip" id="runnerTip">Esecuzione controllata e respirazione regolare.</div>
     </div>
 
     <div>
@@ -469,7 +480,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'hybrid_pt_ultimate_state_v1';
+  const STORAGE_KEY = 'hybrid_pt_pro_state_v2';
   const DEFAULT_STATE = {
     configured: false,
     level: null,
@@ -479,7 +490,7 @@
     currentDay: 1,
     isHellWeek: false,
     multiplier: 1.0,
-    equipment: { bodyweight: true, dumbbells: true, barbell: false, bands: true, jumpRope: false, table: true },
+    equipment: { bodyweight: true, dumbbells: true, barbell: false, bands: true, jumpRope: false, table: true, running: true },
     testResults: {},
     logs: {},
     history: []
@@ -533,6 +544,7 @@
       document.getElementById('eqBands').checked = state.equipment.bands;
       document.getElementById('eqJumpRope').checked = state.equipment.jumpRope;
       document.getElementById('eqTable').checked = state.equipment.table;
+      document.getElementById('eqRunning').checked = state.equipment.running;
       return;
     }
 
@@ -542,6 +554,7 @@
     populateDaySelector();
     document.getElementById('daySelector').value = String(state.currentDay);
 
+    const isOnlyRunning = isRunningOnlyMode();
     if (state.isHellWeek) {
       headerCard.classList.add('hell-theme');
       workoutView.classList.add('hell-theme');
@@ -551,11 +564,17 @@
       headerCard.classList.remove('hell-theme');
       workoutView.classList.remove('hell-theme');
       document.getElementById('userLevelBadge').className = 'badge badge-level';
-      document.getElementById('userLevelBadge').textContent = `${state.level.toUpperCase()} | ${state.goal.toUpperCase()}`;
+      document.getElementById('userLevelBadge').textContent = isOnlyRunning ? 'CORSA PURA' : `${state.level.toUpperCase()} | ${state.goal.toUpperCase()}`;
     }
 
     renderCoachMessage();
     renderWorkout();
+  }
+
+  function isRunningOnlyMode() {
+    const eq = state.equipment;
+    const onlyRun = eq.running && !eq.bodyweight && !eq.dumbbells && !eq.barbell && !eq.bands && !eq.jumpRope && !eq.table;
+    return onlyRun || state.daysPerWeek === 1;
   }
 
   function populateDaySelector() {
@@ -576,11 +595,13 @@
   }
 
   function getDayNamesMapping(days) {
-    if (days === 2) return ['Full Body A (Forza)', 'Full Body B (Condizionamento)'];
-    if (days === 3) return ['Push (Spinta)', 'Pull (Trazione)', 'Legs & Core (Gambe)'];
-    if (days === 4) return ['Upper A', 'Lower A', 'Upper B', 'Lower B & Cardio'];
-    if (days === 5) return ['Push', 'Pull', 'Legs', 'Upper Conditioning', 'Lower & Core Engine'];
-    if (days === 6) return ['Push A', 'Pull A', 'Legs A', 'Push B', 'Pull B', 'Legs B & Engine'];
+    if (isRunningOnlyMode()) return ['Sessione Corsa Dedicata', 'Sessione Corsa & Interval', 'Sessione Corsa Rigenerante'];
+    if (days === 1) return ['Sessione Unica Corsa & Core'];
+    if (days === 2) return ['Full Body A (Forza)', 'Full Body B (Corsa & Engine)'];
+    if (days === 3) return ['Push (Spinta)', 'Pull (Trazione)', 'Legs & Corsa'];
+    if (days === 4) return ['Upper A', 'Lower & Corsa A', 'Upper B', 'Lower & Corsa B'];
+    if (days === 5) return ['Push', 'Pull', 'Legs', 'Upper Conditioning', 'Corsa & Engine'];
+    if (days === 6) return ['Push A', 'Pull A', 'Legs A', 'Push B', 'Pull B', 'Corsa & Engine B'];
     return ['Full Body'];
   }
 
@@ -594,20 +615,16 @@
     const bands = document.getElementById('eqBands').checked;
     const jumpRope = document.getElementById('eqJumpRope').checked;
     const table = document.getElementById('eqTable').checked;
+    const running = document.getElementById('eqRunning').checked;
 
     state.goal = goal;
     state.daysPerWeek = daysPerWeek;
-    state.equipment = { bodyweight, dumbbells, barbell, bands, jumpRope, table };
+    state.equipment = { bodyweight, dumbbells, barbell, bands, jumpRope, table, running };
 
     const pushups = Math.max(0, parseInt(document.getElementById('testPushups').value) || 0);
     const squats = Math.max(0, parseInt(document.getElementById('testSquats').value) || 0);
     const plank = Math.max(0, parseInt(document.getElementById('testPlank').value) || 0);
     const pullups = Math.max(0, parseInt(document.getElementById('testPullups').value) || 0);
-
-    if ([pushups, squats, plank, pullups].every(v => v === 0)) {
-      alert('Inserisci almeno un risultato valido nei test.');
-      return;
-    }
 
     const score = pushups + (squats * 0.5) + (plank * 0.3) + (pullups * 2);
 
@@ -633,22 +650,20 @@
     renderUI();
   }
 
-  function getBaseExercises(day) {
+  function getFullSessionData(day) {
     const m = state.multiplier;
     const hell = state.isHellWeek ? 1.25 : 1.0;
     const eq = state.equipment;
     const goal = state.goal;
+    const onlyRun = isRunningOnlyMode();
 
-    // Modificatori basati sull'obiettivo
     let repFactor = 1.0;
     let setExtra = 0;
     if (goal === 'massa') {
-      repFactor = 1.15; // Più volume/ripetizioni ipertrofiche
+      repFactor = 1.15;
       setExtra = 1;
     } else if (goal === 'dimagrimento') {
-      repFactor = 1.25; // Alte ripetizioni / circuito metabolico
-    } else {
-      repFactor = 1.0; // Hybrid athlete bilanciato
+      repFactor = 1.25;
     }
 
     const rep = val => Math.max(1, Math.round(val * m * hell * repFactor));
@@ -658,80 +673,141 @@
     const dayNames = getDayNamesMapping(totalDays);
     const titleName = dayNames[day - 1] || `Sessione ${day}`;
 
-    // Generazione dinamica a seconda del tipo di giorno e attrezzatura
+    // --- SE SOLO CORSA ---
+    if (onlyRun) {
+      let runType = day === 1 ? 'Corsa Continua Moderata (Fondo Base)' : (day === 2 ? 'Interval Training (Scatti & Recupero)' : 'Corsa Progressiva & Endurance');
+      let runDuration = seconds(1800); // 30 min base
+      return {
+        title: `Giorno ${day}: ${titleName}`,
+        subtitle: state.isHellWeek ? 'WEEK HELL: Corsa ad Alta Intensità' : `Programma Specifico Corsa | Obiettivo: ${goal.toUpperCase()}`,
+        warmup: [
+          { name: 'Mobilità articolare dinamica (Anche, ginocchia, caviglie)', duration: 90, mode: 'time', tip: 'Circonduzioni ampie e mobilità fluida.' },
+          { name: 'Calciata alta / Skip basso sul posto', duration: 90, mode: 'time', tip: 'Attivazione neuromuscolare graduale.' }
+        ],
+        main: [
+          { name: runType, sets: 1, target: runDuration, mode: 'time', cadence: 1.0, tip: 'Passo costante, postura eretta, respirazione ritmata.' }
+        ],
+        cooldown: [
+          { name: 'Camminata di defaticamento e decompressione', duration: 120, mode: 'time', tip: 'Riporta la frequenza cardiaca a livelli di riposo.' },
+          { name: 'Stretching statico flessori e polpacci', duration: 180, mode: 'time', tip: 'Allungamento dolce senza forzare.' }
+        ]
+      };
+    }
+
+    // --- SESSIONE STANDARD (FORZA / HYBRID / CORSA MISTA) ---
     const isPush = titleName.toLowerCase().includes('push') || titleName.toLowerCase().includes('upper');
     const isPull = titleName.toLowerCase().includes('pull') || titleName.toLowerCase().includes('upper');
-    const isLegs = titleName.toLowerCase().includes('legs') || titleName.toLowerCase().includes('lower');
+    const isLegs = titleName.toLowerCase().includes('legs') || titleName.toLowerCase().includes('lower') || titleName.toLowerCase().includes('corsa');
     const isFull = totalDays <= 2 || titleName.toLowerCase().includes('full');
 
-    let exercises = [];
+    let mainExercises = [];
 
     if (isFull || isPush || day === 1) {
-      // Esercizio di Spinta (Petto/Spalle)
       let ex1;
       if (eq.barbell) ex1 = { name: 'Panca piana con bilanciere', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Gomiti a 45 gradi, petto alto e scapole addotte.' };
-      else if (eq.dumbbells) ex1 = { name: 'Distensioni per il petto con manubri', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Spingi controllando la discesa ed evitando di sbattere i manubri.' };
-      else if (eq.bands) ex1 = { name: 'Distensioni per il petto con elastico', sets: 4 + setExtra, target: rep(16), mode: 'reps', cadence: 2.5, tip: 'Tensione costante durante tutto il movimento.' };
-      else ex1 = { name: 'Push-up a corpo libero', sets: 4 + setExtra, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in asse, addome e glutei contratti.' };
+      else if (eq.dumbbells) ex1 = { name: 'Distensioni per il petto con manubri', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Spingi controllando la discesa.' };
+      else if (eq.bands) ex1 = { name: 'Distensioni per il petto con elastico', sets: 4 + setExtra, target: rep(16), mode: 'reps', cadence: 2.5, tip: 'Tensione costante.' };
+      else ex1 = { name: 'Push-up a corpo libero', sets: 4 + setExtra, target: rep((state.testResults.pushups || 16) * 0.55), mode: 'reps', cadence: 2.4, tip: 'Corpo in asse, addome contratto.' };
 
       let ex2;
       if (eq.barbell) ex2 = { name: 'Lento avanti con bilanciere', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Core stabile e spinta verticale pulita.' };
-      else if (eq.dumbbells) ex2 = { name: 'Lento avanti con manubri', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Movimento fluido senza inarcare la schiena.' };
-      else if (eq.bands) ex2 = { name: 'Spinte verticali con elastico', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Piedi ben piantati sull’elastico.' };
+      else if (eq.dumbbells) ex2 = { name: 'Lento avanti con manubri', sets: 3, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Movimento fluido senza inarcare.' };
+      else if (eq.bands) ex2 = { name: 'Spinte verticali con elastico', sets: 3, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Piedi ben piantati.' };
       else ex2 = { name: 'Pike push-up', sets: 3, target: rep(8), mode: 'reps', cadence: 2.8, tip: 'Bacino in alto, testa verso il pavimento.' };
 
-      exercises.push(ex1, ex2);
+      mainExercises.push(ex1, ex2);
     }
 
     if (isFull || isPull || day === 2) {
-      // Esercizio di Trazione (Schiena)
       let exPull;
-      if (eq.barbell) exPull = { name: 'Rematore con bilanciere a busto flesso', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena neutra a 45 gradi, tira verso l’ombelico.' };
-      else if (eq.dumbbells) exPull = { name: 'Rematore con manubrio a un braccio', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Appoggio stabile su panca o ginocchio.' };
-      else if (eq.table && eq.bodyweight) exPull = { name: 'Rematore inverso sotto il tavolo', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 3.0, tip: 'Petto in fuori, corpo rigido come una tavola.' };
-      else if (eq.bands) exPull = { name: 'Rematore orizzontale con elastico', sets: 4 + setExtra, target: rep(15), mode: 'reps', cadence: 2.8, tip: 'Tira i gomiti indietro contraendo i dorsali.' };
+      if (eq.barbell) exPull = { name: 'Rematore con bilanciere a busto flesso', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.6, tip: 'Schiena neutra a 45 gradi.' };
+      else if (eq.dumbbells) exPull = { name: 'Rematore con manubrio a un braccio', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Appoggio stabile.' };
+      else if (eq.table && eq.bodyweight) exPull = { name: 'Rematore inverso sotto il tavolo', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 3.0, tip: 'Petto in fuori, corpo rigido.' };
+      else if (eq.bands) exPull = { name: 'Rematore orizzontale con elastico', sets: 4 + setExtra, target: rep(15), mode: 'reps', cadence: 2.8, tip: 'Tira i gomiti indietro.' };
       else exPull = { name: 'Rematore isometrico a terra', sets: 4, target: seconds(30), mode: 'time', tip: 'Solleva il petto contraendo la schiena.' };
 
-      exercises.push(exPull);
+      mainExercises.push(exPull);
     }
 
     if (isFull || isLegs || day === 3 || day === 5) {
-      // Esercizio Gambe
       let exLegs;
-      if (eq.barbell) exLegs = { name: 'Squat con bilanciere', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.8, tip: 'Affondo profondo, ginocchia in linea con le punte.' };
-      else if (eq.dumbbells) exLegs = { name: 'Goblet squat con manubrio', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Tieni il peso vicino al petto, schiena dritta.' };
+      if (eq.barbell) exLegs = { name: 'Squat con bilanciere', sets: 4 + setExtra, target: rep(10), mode: 'reps', cadence: 2.8, tip: 'Affondo profondo, ginocchia in linea.' };
+      else if (eq.dumbbells) exLegs = { name: 'Goblet squat con manubrio', sets: 4 + setExtra, target: rep(12), mode: 'reps', cadence: 2.6, tip: 'Peso vicino al petto, schiena dritta.' };
       else exLegs = { name: 'Squat a corpo libero / Jump squat', sets: 4 + setExtra, target: rep(20), mode: 'reps', cadence: 2.5, tip: 'Massima esplosività in salita.' };
 
       let exLegs2 = { name: 'Affondi alternati', sets: 3, target: rep(12), mode: 'reps', cadence: 2.8, tip: 'Passo ampio e controllo della discesa.' };
-      exercises.push(exLegs, exLegs2);
+      mainExercises.push(exLegs, exLegs2);
     }
 
-    // Integrazione finale Core / Condizionamento / Hybrid
-    if (goal === 'hybrid' || goal === 'dimagrimento') {
-      let cardioComp;
-      if (eq.jumpRope) cardioComp = { name: 'Salto con la corda (Cardio Engine)', sets: 3, target: seconds(45), mode: 'time', tip: 'Rimbalzo leggero e ritmato sulle avampunte.' };
-      else cardioComp = { name: 'Burpees / Mountain climber metabolico', sets: 3, target: seconds(30), mode: 'time', tip: 'Ritmo sostenuto per alzare le pulsazioni.' };
-      exercises.push(cardioComp);
+    // Se l'utente ha la corsa abilitata e la sessione è mirata o di fine ciclo, inseriamo un blocco di corsa specifica
+    if (eq.running && (isLegs || goal === 'hybrid' || day % 2 === 0)) {
+      mainExercises.push({ name: 'Sessione di Corsa Continuativa / Interval', sets: 1, target: seconds(600), mode: 'time', cadence: 1.0, tip: 'Corsa a ritmo costante o alternato (Hybrid Engine).' });
+    } else if (eq.jumpRope) {
+      mainExercises.push({ name: 'Salto con la corda (Cardio Engine)', sets: 3, target: seconds(45), mode: 'time', tip: 'Rimbalzo leggero sulle avampunte.' });
     }
 
-    exercises.push({ name: 'Plank isometrico stabilizzatore', sets: 3, target: seconds(45), mode: 'time', tip: 'Addome e glutei serrati senza inarcare la lombare.' });
+    mainExercises.push({ name: 'Plank isometrico stabilizzatore', sets: 3, target: seconds(45), mode: 'time', tip: 'Addome e glutei serrati.' });
+
+    // Riscaldamento mirato (3-5 min)
+    const warmup = [
+      { name: 'Mobilità articolare globale (Collo, spalle, anche)', duration: 60, mode: 'time', tip: 'Lubrificazione delle articolazioni principali.' },
+      { name: 'Jumping jack o Skip leggero sul posto', duration: 90, mode: 'time', tip: 'Innalzamento graduale della frequenza cardiaca.' },
+      { name: 'Affondi dinamici a corpo libero senza carico', duration: 90, mode: 'time', tip: 'Attivazione specifica della catena inferiore.' }
+    ];
+
+    // Defaticamento (5 min)
+    const cooldown = [
+      { name: 'Camminata lenta di recupero', duration: 120, mode: 'time', tip: 'Stabilizzazione del battito cardiaco.' },
+      { name: 'Stretching statico catena posteriore e quadricipiti', duration: 180, mode: 'time', tip: 'Allungamento rilassato per favorire il recupero.' }
+    ];
 
     return {
       title: `Giorno ${day}: ${titleName}`,
       subtitle: state.isHellWeek ? 'WEEK HELL: Volume e intensità estremi' : `Obiettivo: ${goal.toUpperCase()} | Attrezzatura configurata`,
-      exercises
+      warmup,
+      main: mainExercises,
+      cooldown
     };
   }
 
   function renderWorkout() {
-    const workout = getBaseExercises(state.currentDay);
-    document.getElementById('workoutTitle').textContent = workout.title;
-    document.getElementById('workoutSubtitle').textContent = workout.subtitle;
+    const session = getFullSessionData(state.currentDay);
+    document.getElementById('workoutTitle').textContent = session.title;
+    document.getElementById('workoutSubtitle').textContent = session.subtitle;
 
     const list = document.getElementById('exerciseList');
     list.innerHTML = '';
 
-    workout.exercises.forEach((ex, exIdx) => {
+    // Render Warm-up
+    const warmTitle = document.createElement('div');
+    warmTitle.className = 'section-title';
+    warmTitle.textContent = '🔥 Riscaldamento (3-5 min)';
+    list.appendChild(warmTitle);
+
+    session.warmup.forEach((ex, idx) => {
+      const item = document.createElement('div');
+      item.className = 'exercise-item';
+      const key = `w${state.week}_d${state.currentDay}_warm_${idx}`;
+      const savedValue = state.logs[key] ?? `${ex.duration}s`;
+      item.innerHTML = `
+        <div class="exercise-header">
+          <span class="exercise-name">${ex.name}</span>
+          <span class="exercise-meta">${ex.duration}s</span>
+        </div>
+        <div class="set-row">
+          <span class="set-label">Durata</span>
+          <input type="text" class="set-input" id="${key}" value="${savedValue}" oninput="updateLogValue('${key}', this.value)" aria-label="${ex.name}">
+        </div>`;
+      list.appendChild(item);
+    });
+
+    // Render Main Exercises
+    const mainTitle = document.createElement('div');
+    mainTitle.className = 'section-title';
+    mainTitle.textContent = '💪 Allenamento Principale';
+    list.appendChild(mainTitle);
+
+    session.main.forEach((ex, exIdx) => {
       const item = document.createElement('div');
       item.className = 'exercise-item';
       let rows = '';
@@ -752,6 +828,29 @@
           <span class="exercise-name">${ex.name}</span>
           <span class="exercise-meta">${ex.sets} serie · ${ex.target}${ex.mode === 'time' ? 's' : ' rep'}</span>
         </div>${rows}`;
+      list.appendChild(item);
+    });
+
+    // Render Cool-down
+    const coolTitle = document.createElement('div');
+    coolTitle.className = 'section-title';
+    coolTitle.textContent = '🧘‍♂️ Defaticamento (5 min)';
+    list.appendChild(coolTitle);
+
+    session.cooldown.forEach((ex, idx) => {
+      const item = document.createElement('div');
+      item.className = 'exercise-item';
+      const key = `w${state.week}_d${state.currentDay}_cool_${idx}`;
+      const savedValue = state.logs[key] ?? `${ex.duration}s`;
+      item.innerHTML = `
+        <div class="exercise-header">
+          <span class="exercise-name">${ex.name}</span>
+          <span class="exercise-meta">${ex.duration}s</span>
+        </div>
+        <div class="set-row">
+          <span class="set-label">Durata</span>
+          <input type="text" class="set-input" id="${key}" value="${savedValue}" oninput="updateLogValue('${key}', this.value)" aria-label="${ex.name}">
+        </div>`;
       list.appendChild(item);
     });
 
@@ -779,28 +878,37 @@
     if (state.equipment.bands) eqList.push('Elastici');
     if (state.equipment.jumpRope) eqList.push('Corda');
     if (state.equipment.table) eqList.push('Tavolo');
+    if (state.equipment.running) eqList.push('Corsa');
     const eqStr = eqList.join(', ');
 
-    if (state.isHellWeek) {
+    if (isRunningOnlyMode()) {
+      box.textContent = '🏃‍♂️ Modalità Corsa Pura attiva: Riscaldamento dinamico, sessione di corsa e defaticamento guidato.';
+    } else if (state.isHellWeek) {
       box.textContent = '🔥 WEEK HELL attiva. Carichi e volumi spinti al massimo!';
     } else {
-      box.textContent = `🤖 Obiettivo: ${state.goal.toUpperCase()} | Frequenza: ${state.daysPerWeek} giorni/settimana | Attrezzi: [${eqStr}].`;
+      box.textContent = `🤖 Obiettivo: ${state.goal.toUpperCase()} | Frequenza: ${state.daysPerWeek} giorni | Attrezzi: [${eqStr}].`;
     }
   }
 
   function buildSequence() {
-    const workout = getBaseExercises(state.currentDay);
+    const session = getFullSessionData(state.currentDay);
     const restSet = Number(document.getElementById('restBetweenSets').value);
     const restExercise = Number(document.getElementById('restBetweenExercises').value);
     const sequence = [];
 
-    workout.exercises.forEach((ex, exIndex) => {
+    // 1. Warmup sequence
+    session.warmup.forEach((ex, idx) => {
+      sequence.push({ type: 'warmup', duration: ex.duration, ex, idx });
+    });
+
+    // 2. Main exercises sequence
+    session.main.forEach((ex, exIndex) => {
       for (let setIndex = 0; setIndex < ex.sets; setIndex++) {
-        sequence.push({ type: 'prepare', duration: setIndex === 0 ? 8 : 5, ex, exIndex, setIndex });
+        sequence.push({ type: 'prepare', duration: setIndex === 0 ? 6 : 4, ex, exIndex, setIndex });
         sequence.push({ type: 'work', ex, exIndex, setIndex });
 
         const isLastSet = setIndex === ex.sets - 1;
-        const isLastExercise = exIndex === workout.exercises.length - 1;
+        const isLastExercise = exIndex === session.main.length - 1;
         if (!isLastExercise || !isLastSet) {
           sequence.push({
             type: 'rest',
@@ -814,13 +922,18 @@
       }
     });
 
-    return { workout, sequence };
+    // 3. Cooldown sequence
+    session.cooldown.forEach((ex, idx) => {
+      sequence.push({ type: 'cooldown', duration: ex.duration, ex, idx });
+    });
+
+    return { session, sequence };
   }
 
   function startGuidedWorkout() {
-    const { workout, sequence } = buildSequence();
+    const { session, sequence } = buildSequence();
     runner = {
-      workout,
+      session,
       sequence,
       index: 0,
       paused: false,
@@ -858,31 +971,57 @@
     }
 
     const phase = runner.sequence[runner.index];
-    const ex = phase.ex;
     const circle = document.getElementById('counterCircle');
     circle.className = 'big-counter';
 
+    updateOverallProgress();
+
+    if (phase.type === 'warmup') {
+      setPhaseText('Riscaldamento Mirato');
+      document.getElementById('runnerExercise').textContent = phase.ex.name;
+      document.getElementById('runnerSet').textContent = 'Preparazione';
+      document.getElementById('runnerTip').textContent = phase.ex.tip;
+      runner.secondsRemaining = phase.duration;
+      renderCounter(runner.secondsRemaining, 'secondi');
+      speak(`Riscaldamento. ${phase.ex.name}.`);
+      startSecondTimer(() => advancePhase(), true);
+      return;
+    }
+
+    if (phase.type === 'cooldown') {
+      setPhaseText('Defaticamento');
+      circle.classList.add('rest');
+      document.getElementById('runnerExercise').textContent = phase.ex.name;
+      document.getElementById('runnerSet').textContent = 'Recupero finale';
+      document.getElementById('runnerTip').textContent = phase.ex.tip;
+      runner.secondsRemaining = phase.duration;
+      renderCounter(runner.secondsRemaining, 'secondi');
+      speak(`Defaticamento. ${phase.ex.name}.`);
+      startSecondTimer(() => advancePhase(), true);
+      return;
+    }
+
+    const ex = phase.ex;
     document.getElementById('runnerExercise').textContent = ex.name;
     document.getElementById('runnerSet').textContent = `Serie ${phase.setIndex + 1} di ${ex.sets}`;
     document.getElementById('runnerTip').textContent = ex.tip;
-    document.getElementById('runnerProgressText').textContent = `Esercizio ${phase.exIndex + 1} di ${runner.workout.exercises.length}`;
-    updateOverallProgress();
+    document.getElementById('runnerProgressText').textContent = `Esercizio ${phase.exIndex + 1}`;
 
     if (phase.type === 'prepare') {
       setPhaseText('Preparati');
       runner.secondsRemaining = phase.duration;
       renderCounter(runner.secondsRemaining, 'secondi');
-      speak(`Preparati. ${ex.name}. Serie ${phase.setIndex + 1}.`);
+      speak(`Preparati. ${ex.name}.`);
       startSecondTimer(() => advancePhase());
       return;
     }
 
     if (phase.type === 'rest') {
-      setPhaseText(phase.nextExercise ? 'Recupero e cambio esercizio' : 'Recupero');
+      setPhaseText(phase.nextExercise ? 'Recupero e cambio' : 'Recupero');
       circle.classList.add('rest');
       runner.secondsRemaining = phase.duration;
       renderCounter(runner.secondsRemaining, 'recupero');
-      speak(phase.nextExercise ? `Recupero. Poi cambio esercizio.` : 'Recupero.');
+      speak(phase.nextExercise ? `Recupero. Cambio esercizio.` : 'Recupero.');
       startSecondTimer(() => advancePhase(), true);
       return;
     }
@@ -960,17 +1099,9 @@
     if (!runner) return;
     runner.paused = !runner.paused;
     document.getElementById('pauseBtn').textContent = runner.paused ? '▶ Riprendi' : '⏸ Pausa';
-    setPhaseText(runner.paused ? 'In pausa' : phaseLabelForCurrent());
+    setPhaseText(runner.paused ? 'In pausa' : 'Lavora');
     if (runner.paused) speak('Pausa.');
     else speak('Riprendi.');
-  }
-
-  function phaseLabelForCurrent() {
-    const phase = runner?.sequence[runner.index];
-    if (!phase) return 'Lavora';
-    if (phase.type === 'prepare') return 'Preparati';
-    if (phase.type === 'rest') return 'Recupero';
-    return 'Lavora';
   }
 
   function skipCurrentPhase() {
@@ -985,16 +1116,8 @@
 
   function adjustCurrent(delta) {
     if (!runner) return;
-    const phase = runner.sequence[runner.index];
-    if (!phase) return;
-
-    if (phase.type === 'work' && phase.ex.mode === 'reps') {
-      runner.repCurrent = Math.max(0, Math.min(runner.repTarget, runner.repCurrent + delta));
-      renderCounter(runner.repCurrent, `di ${runner.repTarget}`);
-    } else {
-      runner.secondsRemaining = Math.max(0, runner.secondsRemaining + delta * 5);
-      renderCounter(runner.secondsRemaining, document.getElementById('counterUnit').textContent);
-    }
+    runner.secondsRemaining = Math.max(0, runner.secondsRemaining + delta * 5);
+    renderCounter(runner.secondsRemaining, document.getElementById('counterUnit').textContent);
   }
 
   function recordSet(value) {
@@ -1024,7 +1147,7 @@
 
     const elapsed = runner?.elapsedSeconds || 0;
     const sets = runner?.completedSets.length || 0;
-    document.getElementById('summaryText').textContent = `${sets} serie registrate in ${formatTime(elapsed)}.`;
+    document.getElementById('summaryText').textContent = `Sessione ultimata con successo in ${formatTime(elapsed)}.`;
     document.getElementById('runnerView').classList.add('hidden');
     document.getElementById('summaryView').classList.remove('hidden');
   }
