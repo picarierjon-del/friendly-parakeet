@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f172a">
-  <title>Hybrid PT Ultra - Smart Coach Pro V3</title>
+  <title>Hybrid PT Ultra - Smart Coach Pro V4</title>
   <style>
     :root {
       --bg-dark:#0f172a; --card-bg:#1e293b; --card-soft:#111c30;
@@ -18,7 +18,7 @@
       background:radial-gradient(circle at top,#172554 0%,var(--bg-dark) 34%,#080d19 100%);
       color:var(--text-main); display:flex; justify-content:center; min-height:100vh; padding:12px;
     }
-    button,input,select { touch-action:manipulation; font-size: 16px; /* Evita lo zoom automatico su iOS */ }
+    button,input,select { touch-action:manipulation; font-size: 16px; }
     .container { width:100%; max-width:520px; display:flex; flex-direction:column; gap:16px; padding-bottom:48px; }
     .card {
       background:rgba(30,41,59,.96); border-radius:18px; padding:18px;
@@ -98,8 +98,8 @@
 <body>
 <div class="container">
   <div class="card" id="headerCard">
-    <h1>HYBRID PT PRO V3</h1>
-    <p class="subtitle">Coach guidato per forza, corsa, ripetute, riscaldamento e recupero</p>
+    <h1>HYBRID PT PRO V4</h1>
+    <p class="subtitle">Coach guidato con filtri attrezzatura rigorosi e salvataggio automatico</p>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
       <span class="badge badge-level" id="userLevelBadge">Non Configurato</span>
       <div style="text-align:right;font-size:.8rem;color:var(--text-sub);">
@@ -111,7 +111,7 @@
 
   <div class="card" id="testView">
     <h2>Configurazione & Test Diagnostico</h2>
-    <p class="subtitle">Scegli obiettivo, frequenza e attrezzatura. I dati sono salvati in IndexedDB, con copia di sicurezza locale e sincronizzazione cloud opzionale.</p>
+    <p class="subtitle">Scegli cosa hai a disposizione. Il programma userà **unicamente** l'attrezzatura selezionata (es. solo corpo libero escluderà manubri, elastici o bilancieri).</p>
 
     <div class="input-group">
       <label>Obiettivo principale</label>
@@ -130,14 +130,14 @@
       </select>
     </div>
 
-    <label style="display:block;font-size:.8rem;color:var(--text-sub);margin-bottom:4px;">Attrezzatura & attività disponibili</label>
+    <label style="display:block;font-size:.8rem;color:var(--text-sub);margin-bottom:4px;">Attrezzatura & attività disponibili (Filtro rigoroso)</label>
     <div class="checkbox-grid">
       <label class="checkbox-card"><input type="checkbox" id="eqBodyweight" checked> Corpo libero</label>
-      <label class="checkbox-card"><input type="checkbox" id="eqDumbbells" checked> Manubri / KB</label>
+      <label class="checkbox-card"><input type="checkbox" id="eqDumbbells"> Manubri / KB</label>
       <label class="checkbox-card"><input type="checkbox" id="eqBarbell"> Bilanciere</label>
-      <label class="checkbox-card"><input type="checkbox" id="eqBands" checked> Elastici</label>
+      <label class="checkbox-card"><input type="checkbox" id="eqBands"> Elastici</label>
       <label class="checkbox-card"><input type="checkbox" id="eqJumpRope"> Corda</label>
-      <label class="checkbox-card"><input type="checkbox" id="eqTable" checked> Tavolo / Superficie</label>
+      <label class="checkbox-card"><input type="checkbox" id="eqTable"> Tavolo / Superficie</label>
       <label class="checkbox-card" style="grid-column:span 2;border-color:var(--accent-blue);background:rgba(59,130,246,.1);"><input type="checkbox" id="eqRunning" checked> 🏃 Corsa all'aperto / Tapis-roulant</label>
     </div>
 
@@ -172,15 +172,13 @@
     <button class="btn btn-hell hidden" id="startHellBtn" style="margin-top:10px;" onclick="triggerHellWeek()">ATTIVA WEEK HELL 🔥</button>
 
     <div class="sync-box">
-      <h2 style="font-size:.95rem;">Salvataggio avanzato</h2>
-      <p class="subtitle" style="text-align:left;margin-bottom:8px;">IndexedDB salva più dati del localStorage. Per il vero salvataggio online inserisci un endpoint REST personale compatibile con GET e PUT.</p>
-      <div class="input-group"><label>Endpoint cloud opzionale</label><input id="cloudEndpoint" type="url" placeholder="https://tuo-server.it/api/hybrid-pt"></div>
-      <div class="input-group"><label>Token API opzionale</label><input id="cloudToken" type="password" placeholder="Token Bearer"></div>
+      <h2 style="font-size:.95rem;">Archivio & Pulizia Rapida</h2>
+      <p class="subtitle" style="text-align:left;margin-bottom:8px;">Il salvataggio è automatico in tempo reale. Se l'app si appesantisce, usa il pulsante per pulire i vecchi log senza perdere i tuoi progressi o il programma.</p>
       <div class="button-grid">
-        <button class="btn btn-purple btn-small" onclick="saveCloudSettings()">Salva impostazioni</button>
-        <button class="btn btn-outline btn-small" onclick="syncNow()">Sincronizza ora</button>
+        <button class="btn btn-warning btn-small" onclick="manualCleanLogs()">Pulizia dati vecchi</button>
+        <button class="btn btn-outline btn-small" onclick="exportBackup()">Esporta backup</button>
       </div>
-      <div class="sync-status" id="syncStatus">Archivio locale pronto.</div>
+      <div class="sync-status" id="syncStatus">Salvataggio automatico attivo (IndexedDB + LocalStorage).</div>
     </div>
   </div>
 
@@ -217,33 +215,27 @@
   </div>
 
   <div class="card" style="text-align:center;">
-    <div class="button-grid">
-      <button class="btn btn-outline btn-small" onclick="runMaintenance(true)">Ottimizza archivio</button>
-      <button class="btn btn-outline btn-small" onclick="exportBackup()">Esporta backup</button>
-    </div>
-    <button class="btn btn-danger btn-small" style="margin-top:8px;" onclick="resetAllData()">Azzera dati e riconfigura</button>
+    <button class="btn btn-danger btn-small" onclick="resetAllData()">Azzera dati e riconfigura da zero</button>
   </div>
 </div>
 
 <script>
 'use strict';
 
-const STORAGE_KEY = 'hybrid_pt_pro_state_v3_backup';
-const DB_NAME = 'HybridPTUltraDB';
+const STORAGE_KEY = 'hybrid_pt_pro_state_v4_backup';
+const DB_NAME = 'HybridPTUltraDB_V4';
 const DB_VERSION = 1;
 const STORE_NAME = 'app';
 const STATE_ID = 'mainState';
-const MAX_DETAILED_HISTORY = 120;
-const MAX_LOG_WEEKS = 12;
-const CLOUD_TIMEOUT_MS = 10000;
+const MAX_DETAILED_HISTORY = 90;
+const MAX_LOG_WEEKS = 6;
 
 const DEFAULT_STATE = {
-  schemaVersion:3, configured:false, level:null, goal:'hybrid', daysPerWeek:5,
+  schemaVersion:4, configured:false, level:null, goal:'hybrid', daysPerWeek:5,
   week:1, currentDay:1, isHellWeek:false, multiplier:1,
-  equipment:{bodyweight:true,dumbbells:true,barbell:false,bands:true,jumpRope:false,table:true,running:true},
+  equipment:{bodyweight:true,dumbbells:false,barbell:false,bands:false,jumpRope:false,table:false,running:true},
   testResults:{}, logs:{}, history:[], archive:{weekly:{}},
-  cloud:{endpoint:'',token:'',lastSync:null,lastError:null},
-  maintenance:{lastRun:null,removedLogs:0,archivedSessions:0}
+  maintenance:{lastRun:null,removedLogs:0}
 };
 
 let state = structuredCloneSafe(DEFAULT_STATE);
@@ -253,8 +245,6 @@ function structuredCloneSafe(obj){ return JSON.parse(JSON.stringify(obj)); }
 function mergeState(base, incoming){
   const s = {...base,...incoming};
   s.equipment = {...base.equipment,...(incoming?.equipment||{})};
-  s.cloud = {...base.cloud,...(incoming?.cloud||{})};
-  s.maintenance = {...base.maintenance,...(incoming?.maintenance||{})};
   s.archive = incoming?.archive || {weekly:{}};
   s.logs = incoming?.logs || {};
   s.history = Array.isArray(incoming?.history) ? incoming.history : [];
@@ -304,7 +294,7 @@ function saveState(immediate=false){
     try{ localStorage.setItem(STORAGE_KEY,JSON.stringify(snapshot)); }catch(e){ console.warn('Backup localStorage pieno',e); }
   };
   if(immediate) return perform();
-  saveTimer=setTimeout(perform,180);
+  saveTimer=setTimeout(perform,120); // Salvataggio automatico rapidissimo
 }
 async function boot(){
   state=await loadState();
@@ -323,7 +313,7 @@ function getDayNamesMapping(days){
   if(isRunningOnlyMode()) return ['Fondo aerobico guidato','Ripetute controllate','Progressivo','Corsa rigenerante','Ripetute lunghe','Fondo lungo'];
   if(days===1) return ['Sessione unica corsa e core'];
   if(days===2) return ['Full Body A','Full Body B + Corsa'];
-  if(days===3) return ['Push','Pull','Legs + Corsa'];
+  if(days===3) return ['Push Corpo Libero','Pull Corpo Libero','Legs + Corsa'];
   if(days===4) return ['Upper A','Lower + Ripetute','Upper B','Lower + Fondo'];
   if(days===5) return ['Push','Pull','Legs','Upper Conditioning','Corsa & Engine'];
   if(days===6) return ['Push A','Pull A','Legs A','Push B','Pull B','Corsa & Engine B'];
@@ -339,9 +329,6 @@ function renderUI(){
   ['runnerView','summaryView'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('currentWeekDisplay').textContent=state.week;
   document.getElementById('multDisplay').textContent=state.multiplier.toFixed(2)+'x';
-  document.getElementById('cloudEndpoint').value=state.cloud.endpoint||'';
-  document.getElementById('cloudToken').value=state.cloud.token||'';
-  updateSyncStatus();
 
   if(!state.configured){
     document.getElementById('userLevelBadge').textContent='Non Configurato';
@@ -379,6 +366,7 @@ function processDiagnosticTest(){
 }
 function guide(name, duration, cue, voice, side=null){ return {name,duration,mode:'time',tip:cue,voice,side}; }
 function runBlock(name,duration,intensity,cue,voice,kind='steady'){ return {name,duration,mode:'run',intensity,tip:cue,voice,kind}; }
+
 function buildWarmup(isRun,isLegs,isUpper){
   if(isRun) return [
     guide('Camminata attiva',90,'Passo rapido ma facile. Spalle rilassate, appoggio morbido.', 'Cammina in modo attivo. Respira profondamente e sciogli le braccia.'),
@@ -388,46 +376,22 @@ function buildWarmup(isRun,isLegs,isUpper){
     guide('Skip basso progressivo',60,'Parti facile e aumenta gradualmente. Appoggi rapidi sotto il baricentro.','Skip basso. Aumenta gradualmente la frequenza.'),
     guide('Allunghi tecnici',120,'4 allunghi da 20 secondi con 10 secondi facili. Non sprintare.','Quattro allunghi progressivi. Arriva al settanta per cento, non al massimo.')
   ];
-  if(isLegs) return [
-    guide('Respirazione e marcia attiva',60,'Marcia sul posto, inspira dal naso ed espira lentamente.','Marcia attiva. Prepara il respiro.'),
-    guide('Mobilità caviglie e anche',75,'Alterna caviglie, aperture d’anca e circonduzioni controllate.','Mobilità di caviglie e anche.'),
-    guide('Squat a corpo libero tecnico',60,'Scendi in 3 secondi, ginocchia in linea, risali fluido.','Squat tecnico lento. Controlla la discesa.'),
-    guide('Affondi indietro alternati',60,'Passo indietro, busto alto, spinta dal piede avanti.','Affondi indietro alternati.'),
-    guide('Ponte glutei',45,'Spingi dai talloni, contrai i glutei senza inarcare la schiena.','Attiva i glutei.'),
-    guide('Preparazione specifica',60,'Ripeti il primo esercizio senza carico o con carico molto leggero.','Serie di avvicinamento. Nessuna fatica.')
-  ];
-  if(isUpper) return [
-    guide('Respirazione e mobilità toracica',45,'Respira profondo e ruota dolcemente il torace.','Mobilità toracica.'),
-    guide('Circonduzioni spalle',45,'Cerchi piccoli e poi ampi, senza dolore.','Sciogli le spalle.'),
-    guide('Scapular push-up',45,'Gomiti tesi, muovi solo le scapole.','Attiva le scapole.'),
-    guide('Aperture con elastico o senza carico',60,'Petto alto, spalle lontane dalle orecchie.','Apri il petto e attiva la parte alta della schiena.'),
-    guide('Push-up inclinati tecnici',45,'Corpo in asse, ripetizioni facili e controllate.','Preparazione alla spinta.'),
-    guide('Serie di avvicinamento',60,'Primo esercizio con carico leggero, senza arrivare a fatica.','Serie di avvicinamento.')
-  ];
   return [
-    guide('Marcia attiva',60,'Aumenta gradualmente il ritmo.','Marcia attiva.'),
-    guide('Mobilità globale',60,'Caviglie, anche, torace e spalle.','Mobilità globale.'),
-    guide('Squat + reach',60,'Squat controllato e braccia verso l’alto.','Squat con allungamento.'),
-    guide('Affondi alternati',60,'Passo stabile e ritmo facile.','Affondi alternati.'),
-    guide('Preparazione specifica',60,'Primo esercizio in versione facile.','Serie di preparazione.')
+    guide('Marcia attiva sul posto',60,'Aumenta gradualmente il battito. Inspira ed espira con regolarità.', 'Marcia attiva.'),
+    guide('Mobilità articolare globale',60,'Circonduzioni di spalle, anche e polsi senza forzare.', 'Mobilità articolare.'),
+    guide('Squat a corpo libero leggeri',60,'Discesa controllata, risalita fluida.', 'Squat di riscaldamento.'),
+    guide('Affondi dinamici sul posto',60,'Passo stabile, busto eretto.', 'Affondi dinamici.'),
+    guide('Attivazione core',45,'Plank isometrico breve per accendere la muscolatura.', 'Attivazione core.')
   ];
 }
 function buildCooldown(isRun,isLegs,isUpper){
-  const base=[
+  return [
     guide('Camminata lenta e controllo del respiro',120,'Riduci il ritmo gradualmente. Inspira 4 secondi, espira 6 secondi.','Cammina lentamente. Allunga l’espirazione.'),
-    guide('Polpaccio destro',35,'Tallone a terra, gamba tesa, nessun rimbalzo.','Allunga il polpaccio destro.'),
-    guide('Polpaccio sinistro',35,'Tallone a terra, gamba tesa, nessun rimbalzo.','Allunga il polpaccio sinistro.'),
-    guide('Flessore anca destro',40,'Bacino leggermente retroverso, gluteo contratto.','Allunga il flessore dell’anca destra.'),
-    guide('Flessore anca sinistro',40,'Bacino leggermente retroverso, gluteo contratto.','Allunga il flessore dell’anca sinistra.'),
-    guide('Catena posteriore',60,'Schiena lunga, piegati dall’anca senza forzare.','Rilassa la catena posteriore.'),
-    guide('Respirazione finale',60,'Inspira 4 secondi, espira 6-8 secondi.','Respirazione finale. Rilassa tutto il corpo.')
+    guide('Allungamento polpacci',50,'Tallone a terra, gamba tesa.', 'Allunga i polpacci.'),
+    guide('Allungamento flessori anca e cosce',60,'Posizione stabile, respira profondamente.', 'Allunga la parte inferiore.'),
+    guide('Allungamento dorsale e spalle',60,'Braccia sopra la testa, allunga la schiena.', 'Allunga la parte superiore.'),
+    guide('Respirazione finale e rilassamento',60,'Rilassa completamente i muscoli.', 'Respirazione finale e recupero.')
   ];
-  if(isUpper) base.splice(3,2,
-    guide('Pettorale destro',35,'Avambraccio appoggiato, ruota dolcemente il busto.','Allunga il pettorale destro.'),
-    guide('Pettorale sinistro',35,'Avambraccio appoggiato, ruota dolcemente il busto.','Allunga il pettorale sinistro.'),
-    guide('Dorsale e tricipite',50,'Braccio sopra la testa, respirazione lenta.','Allunga dorsale e tricipite.')
-  );
-  return base;
 }
 function getRunPlan(day){
   const m=state.multiplier*(state.isHellWeek?1.12:1);
@@ -471,42 +435,72 @@ function getRunPlan(day){
     ]
   };
 }
+
 function getFullSessionData(day){
   const m=state.multiplier, hell=state.isHellWeek?1.2:1, eq=state.equipment, goal=state.goal, onlyRun=isRunningOnlyMode();
   let repFactor=goal==='massa'?1.12:goal==='dimagrimento'?1.2:1, setExtra=goal==='massa'?1:0;
   const rep=v=>Math.max(1,Math.round(v*m*hell*repFactor)), seconds=v=>Math.max(10,Math.round(v*m*hell));
   const titleName=getDayNamesMapping(state.daysPerWeek)[day-1]||`Sessione ${day}`;
+  
   if(onlyRun){
     const plan=getRunPlan(day);
     return {title:`Giorno ${day}: ${plan.name}`,subtitle:`Corsa guidata | ${goal.toUpperCase()}`,warmup:buildWarmup(true,false,false),main:plan.blocks,cooldown:buildCooldown(true,true,false)};
   }
-  const lower=titleName.toLowerCase(), isUpper=lower.includes('push')||lower.includes('pull')||lower.includes('upper'), isLegs=lower.includes('legs')||lower.includes('lower')||lower.includes('corsa'), isFull=state.daysPerWeek<=2||lower.includes('full');
+
+  const lower=titleName.toLowerCase(), isFull=state.daysPerWeek<=2||lower.includes('full')||lower.includes('cond');
   const main=[];
+
+  // FILTRO RIGOROSO ATTREZZATURA: Vengono inseriti SOLO esercizi che rispettano esattamente le spunte scelte dall'utente.
+  
+  // Esercizi di spinta (Push)
   if(isFull||lower.includes('push')||day===1){
-    main.push(eq.barbell?{name:'Panca piana con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Scapole addotte, piedi stabili, discesa controllata.'}:
-      eq.dumbbells?{name:'Distensioni petto con manubri',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.6,tip:'Polsi neutri, controlla la discesa.'}:
-      {name:'Push-up',sets:4+setExtra,target:rep((state.testResults.pushups||16)*.55),mode:'reps',cadence:2.5,tip:'Corpo in asse, petto verso il pavimento.'});
-    main.push(eq.dumbbells?{name:'Lento avanti con manubri',sets:3,target:rep(10),mode:'reps',cadence:2.7,tip:'Core stabile, evita di inarcare.'}:{name:'Pike push-up',sets:3,target:rep(8),mode:'reps',cadence:2.8,tip:'Bacino alto, testa tra le mani.'});
+    if(eq.barbell) main.push({name:'Panca piana con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Scapole addotte, piedi stabili, discesa controllata.'});
+    else if(eq.dumbbells) main.push({name:'Distensioni petto con manubri',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.6,tip:'Polsi neutri, controlla la discesa.'});
+    else if(eq.bodyweight) main.push({name:'Push-up a corpo libero',sets:4+setExtra,target:rep(16),mode:'reps',cadence:2.5,tip:'Corpo in asse, addominali contratti, petto verso il pavimento.'});
+
+    if(eq.barbell) main.push({name:'Lento avanti con bilanciere',sets:3,target:rep(10),mode:'reps',cadence:2.7,tip:'Spinta verticale controllata.'});
+    else if(eq.dumbbells) main.push({name:'Lento avanti con manubri',sets:3,target:rep(10),mode:'reps',cadence:2.7,tip:'Core stabile, evita di inarcare la schiena.'});
+    else if(eq.bodyweight) main.push({name:'Pike push-up (Spinte per spalle)',sets:3,target:rep(10),mode:'reps',cadence:2.8,tip:'Bacino alto, testa in basso controllata.'});
   }
+
+  // Esercizi di trazione (Pull)
   if(isFull||lower.includes('pull')||day===2){
-    main.push(eq.barbell?{name:'Rematore con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Schiena neutra e gomiti indietro.'}:
-      eq.dumbbells?{name:'Rematore con manubrio',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.7,tip:'Bacino fermo, tira verso il fianco.'}:
-      eq.table&&eq.bodyweight?{name:'Rematore inverso sotto tavolo',sets:4,target:rep(10),mode:'reps',cadence:3,tip:'Corpo rigido e petto verso il bordo.'}:
-      {name:'Rematore con elastico',sets:4,target:rep(15),mode:'reps',cadence:2.7,tip:'Tensione continua.'});
+    if(eq.barbell) main.push({name:'Rematore con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.7,tip:'Schiena neutra e gomiti indietro.'});
+    else if(eq.dumbbells) main.push({name:'Rematore con manubrio',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.7,tip:'Bacino fermo, tira verso il fianco.'});
+    else if(eq.table&&eq.bodyweight) main.push({name:'Rematore inverso sotto tavolo',sets:4,target:rep(10),mode:'reps',cadence:3,tip:'Corpo rigido e petto verso il bordo inferiore del tavolo.'});
+    else if(eq.bands) main.push({name:'Rematore con elastico',sets:4,target:rep(15),mode:'reps',cadence:2.7,tip:'Tensione continua.'});
+    else if(eq.bodyweight) main.push({name:'Camminata plank e attivazione dorsale',sets:4,target:rep(12),mode:'reps',cadence:2.8,tip:'Massima contrazione della parte alta della schiena.'});
   }
-  if(isFull||isLegs||day===3||day===5){
-    main.push(eq.barbell?{name:'Squat con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.9,tip:'Ginocchia in linea, addome attivo.'}:
-      eq.dumbbells?{name:'Goblet squat',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.7,tip:'Peso vicino al petto, talloni a terra.'}:
-      {name:'Squat a corpo libero',sets:4+setExtra,target:rep(20),mode:'reps',cadence:2.5,tip:'Controlla la discesa e spingi dal piede intero.'});
-    main.push({name:'Affondi alternati',sets:3,target:rep(12),mode:'reps',cadence:2.8,tip:'Passo ampio e busto stabile.'});
+
+  // Esercizi per le gambe (Legs / Lower)
+  if(isFull||lower.includes('legs')||lower.includes('lower')||day===3||day===5){
+    if(eq.barbell) main.push({name:'Squat con bilanciere',sets:4+setExtra,target:rep(10),mode:'reps',cadence:2.9,tip:'Ginocchia in linea, addome attivo.'});
+    else if(eq.dumbbells) main.push({name:'Goblet squat con manubrio',sets:4+setExtra,target:rep(12),mode:'reps',cadence:2.7,tip:'Peso vicino al petto, talloni saldi a terra.'});
+    else if(eq.bodyweight) main.push({name:'Squat a corpo libero profondo',sets:4+setExtra,target:rep(22),mode:'reps',cadence:2.5,tip:'Discesa controllata in 3 secondi, spinta reattiva.'});
+
+    if(eq.bodyweight||eq.dumbbells) main.push({name:'Affondi alternati a corpo libero',sets:3,target:rep(12),mode:'reps',cadence:2.8,tip:'Passo ampio e busto eretto.'});
   }
-  if(eq.running&&(isLegs||goal==='hybrid'||day%2===0)){
+
+  // Corsa o attività cardio extra se spuntata
+  if(eq.running&&(lower.includes('corsa')||goal==='hybrid'||day%2===0||isFull)){
     const plan=getRunPlan(day);
     main.push(...plan.blocks);
-  } else if(eq.jumpRope) main.push({name:'Corda',sets:3,target:seconds(45),mode:'time',tip:'Rimbalzo leggero e polsi rilassati.'});
-  main.push({name:'Plank',sets:3,target:seconds(45),mode:'time',tip:'Glutei e addome contratti, respiro continuo.'});
-  return {title:`Giorno ${day}: ${titleName}`,subtitle:state.isHellWeek?'WEEK HELL: volume elevato ma tecnica prioritaria':`Obiettivo: ${goal.toUpperCase()}`,warmup:buildWarmup(false,isLegs,isUpper),main,cooldown:buildCooldown(false,isLegs,isUpper)};
+  } else if(eq.jumpRope) {
+    main.push({name:'Salto con la corda',sets:3,target:seconds(45),mode:'time',tip:'Rimbalzo leggero sulle avampunte, polsi elastici.'});
+  }
+
+  // Core immancabile (solo corpo libero)
+  main.push({name:'Plank isometrico',sets:3,target:seconds(45),mode:'time',tip:'Glutei e addome contratti, respiro costante senza trattenere l’aria.'});
+
+  return {
+    title:`Giorno ${day}: ${titleName}`,
+    subtitle:state.isHellWeek?'WEEK HELL: volume intenso e focalizzato':`Obiettivo: ${goal.toUpperCase()} (${Object.entries(eq).filter(([_,v])=>v).map(([k])=>k).join(', ')})`,
+    warmup:buildWarmup(false,lower.includes('legs'),lower.includes('push')),
+    main,
+    cooldown:buildCooldown(false,false,false)
+  };
 }
+
 function renderWorkout(){
   const s=getFullSessionData(state.currentDay);
   workoutTitle.textContent=s.title; workoutSubtitle.textContent=s.subtitle; exerciseList.innerHTML='';
@@ -535,9 +529,9 @@ function renderSection(title,items,type){
 function updateLogValue(k,v){state.logs[k]=v;saveState();}
 function switchDay(n){state.currentDay=Number(n);saveState();renderWorkout();}
 function renderCoachMessage(){
-  if(isRunningOnlyMode()) coachMessage.textContent='🏃 Modalità corsa pura: warm-up progressivo, indicazioni di tecnica, ripetute con recupero attivo e defaticamento completo.';
-  else if(state.isHellWeek) coachMessage.textContent='🔥 WEEK HELL: intensità più alta, ma interrompi la serie se la tecnica peggiora.';
-  else coachMessage.textContent=`🤖 Coach adattivo: ${state.goal.toUpperCase()}, ${state.daysPerWeek} giorni. La corsa viene guidata blocco per blocco, comprese le ripetute.`;
+  if(isRunningOnlyMode()) coachMessage.textContent='🏃 Modalità corsa pura attiva: riscaldamento, ripetute con recupero attivo e defaticamento.';
+  else if(state.isHellWeek) coachMessage.textContent='🔥 WEEK HELL: intensità elevata. Ascolta il tuo corpo e mantieni la forma impeccabile.';
+  else coachMessage.textContent=`🤖 Coach adattivo: impostato su ${state.goal.toUpperCase()}. Vengono generati unicamente esercizi compatibili con la tua attrezzatura.`;
 }
 function buildSequence(){
   const session=getFullSessionData(state.currentDay), seq=[], restSet=+restBetweenSets.value, restEx=+restBetweenExercises.value;
@@ -583,7 +577,7 @@ function runCurrentPhase(){
   }
   const ex=p.ex;runnerExercise.textContent=ex.name;runnerSet.textContent=`Serie ${p.setIndex+1} di ${ex.sets}`;runnerTip.textContent=ex.tip;coachStep.textContent=ex.tip;
   if(p.type==='prepare'){setPhaseText('Preparati');runner.secondsRemaining=p.duration;renderCounter(p.duration,'secondi');speak(`Preparati. ${ex.name}`);startSecondTimer(advancePhase);return;}
-  if(p.type==='rest'){setPhaseText(p.nextExercise?'Recupero e cambio':'Recupero');c.classList.add('rest');runner.secondsRemaining=p.duration;renderCounter(p.duration,'recupero');coachStep.textContent=p.nextExercise?'Respira, sistema l’attrezzatura e preparati al prossimo esercizio.':'Respira lentamente e mantieniti in movimento.';speak(p.nextExercise?'Recupero e cambio esercizio.':'Recupero.');startSecondTimer(advancePhase,true);return;}
+  if(p.type==='rest'){setPhaseText(p.nextExercise?'Recupero e cambio':'Recupero');c.classList.add('rest');runner.secondsRemaining=p.duration;renderCounter(p.duration,'recupero');coachStep.textContent=p.nextExercise?'Respira e preparati al prossimo esercizio.':'Respira lentamente e mantieniti in movimento.';speak(p.nextExercise?'Recupero e cambio esercizio.':'Recupero.');startSecondTimer(advancePhase,true);return;}
   setPhaseText('Lavora');speak('Via.');
   if(ex.mode==='time'){
     runner.secondsRemaining=ex.target;renderCounter(ex.target,'secondi');startSecondTimer(()=>{recordSet(ex.target);speak('Stop.');advancePhase();},true);
@@ -605,7 +599,7 @@ function startSecondTimer(done,announceLast=false,midCues=false,isRun=false){
     if(isRun&&runner.minuteCoach&&runner.secondsRemaining>0&&runner.secondsRemaining%60===0&&runner.lastMinuteAnnounced!==runner.secondsRemaining){
       runner.lastMinuteAnnounced=runner.secondsRemaining;
       const ex=runner.sequence[runner.index].ex;
-      speak(`${Math.ceil(runner.secondsRemaining/60)} minuti rimanenti. ${ex.kind==='fast'?'Mantieni il ritmo, senza sprintare.':'Respira regolare e resta rilassato.'}`);
+      speak(`${Math.ceil(runner.secondsRemaining/60)} minuti rimanenti. ${ex.kind==='fast'?'Mantieni il ritmo costante.':'Respira regolare e resta rilassato.'}`);
     }
     if(runner.secondsRemaining<=0){clearInterval(tickInterval);if(navigator.vibrate)navigator.vibrate([180,80,180]);done();}
   },1000);
@@ -635,70 +629,28 @@ async function completeWorkout(){
   state.multiplier=Math.min(1.55,Number(state.multiplier.toFixed(3)));
   state.history.push({id:crypto.randomUUID?.()||String(Date.now()),date:new Date().toISOString(),week:state.week,day:state.currentDay,rpe,elapsedSeconds:elapsed,hellWeek:state.isHellWeek,sets:runner?.completedSets.length||0,runBlocks:runner?.runBlocks||0});
   if(state.currentDay<state.daysPerWeek)state.currentDay++;else{state.currentDay=1;state.week++;if(state.isHellWeek)state.isHellWeek=false;}
-  runner=null;await runMaintenance(false);await saveState(true);renderUI();scrollTo({top:0,behavior:'smooth'});autoCloudSync();
+  runner=null;await runMaintenance(false);await saveState(true);renderUI();scrollTo({top:0,behavior:'smooth'});
 }
-function triggerHellWeek(){state.isHellWeek=true;state.currentDay=1;saveState();renderUI();}
+function triggerHellWeek(){state.isHellWeek=true;state.currentDay=1;saveState(true);renderUI();}
 function speak(text){if(!runner?.voice||!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='it-IT';u.rate=1.02;u.pitch=1;speechSynthesis.speak(u);}
 function formatTime(s){s=Math.max(0,Math.round(s||0));return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
 
 async function runMaintenance(manual=false){
-  const originalHistory=state.history.length;
-  if(state.history.length>MAX_DETAILED_HISTORY){
-    const old=state.history.slice(0,-MAX_DETAILED_HISTORY);
-    old.forEach(h=>{
-      const key=`${h.week}`;
-      const a=state.archive.weekly[key]||(state.archive.weekly[key]={sessions:0,totalSeconds:0,rpeSum:0,runBlocks:0});
-      a.sessions++;a.totalSeconds+=h.elapsedSeconds||0;a.rpeSum+=h.rpe||0;a.runBlocks+=h.runBlocks||0;
-    });
-    state.history=state.history.slice(-MAX_DETAILED_HISTORY);
-  }
-  const minWeek=Math.max(1,state.week-MAX_LOG_WEEKS+1);let removed=0;
+  const minWeek=Math.max(1,state.week-MAX_LOG_WEEKS);let removed=0;
   for(const k of Object.keys(state.logs)){
     const m=k.match(/^w(\d+)_/);if(m&&Number(m[1])<minWeek){delete state.logs[k];removed++;}
   }
-  state.maintenance={lastRun:new Date().toISOString(),removedLogs:(state.maintenance.removedLogs||0)+removed,archivedSessions:(state.maintenance.archivedSessions||0)+(originalHistory-state.history.length)};
+  state.maintenance={lastRun:new Date().toISOString(),removedLogs:(state.maintenance.removedLogs||0)+removed};
   await saveState(true);
-  if(manual){alert(`Archivio ottimizzato.\nLog vecchi rimossi: ${removed}\nProgressi e riepiloghi mantenuti.`);renderUI();}
+  if(manual){alert(`Pulizia completata con successo.\nLog di settimane molto vecchie rimossi: ${removed}\nIl tuo programma, i progressi attuali e i massimali sono intatti.`);renderUI();}
 }
-function saveCloudSettings(){
-  state.cloud.endpoint=cloudEndpoint.value.trim();state.cloud.token=cloudToken.value.trim();state.cloud.lastError=null;saveState(true);updateSyncStatus();alert('Impostazioni cloud salvate.');
-}
-function updateSyncStatus(){
-  if(!document.getElementById('syncStatus'))return;
-  if(state.cloud.lastError)syncStatus.textContent=`Ultimo errore: ${state.cloud.lastError}`;
-  else if(state.cloud.lastSync)syncStatus.textContent=`Ultima sincronizzazione: ${new Date(state.cloud.lastSync).toLocaleString('it-IT')}`;
-  else syncStatus.textContent=state.cloud.endpoint?'Cloud configurato, non ancora sincronizzato.':'IndexedDB attivo. Cloud non configurato.';
-}
-async function cloudFetch(method,body){
-  if(!state.cloud.endpoint)throw new Error('Endpoint cloud non configurato');
-  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),CLOUD_TIMEOUT_MS);
-  const headers={'Content-Type':'application/json'};if(state.cloud.token)headers.Authorization=`Bearer ${state.cloud.token}`;
-  try{
-    const res=await fetch(state.cloud.endpoint,{method,headers,body:body?JSON.stringify(body):undefined,signal:controller.signal,cache:'no-store'});
-    if(!res.ok)throw new Error(`HTTP ${res.status}`);
-    return res.status===204?null:await res.json();
-  }finally{clearTimeout(timer);}
-}
-async function syncNow(){
-  syncStatus.textContent='Sincronizzazione in corso...';
-  try{
-    let remote=null;
-    try{remote=await cloudFetch('GET');}catch(e){ if(!String(e.message).includes('404'))throw e; }
-    if(remote?.state){
-      const remoteDate=new Date(remote.updatedAt||0).getTime(),localDate=new Date(state.cloud.lastSync||0).getTime();
-      if(remoteDate>localDate&&confirm('Sul cloud esiste una versione più recente. Vuoi importarla?')) state=mergeState(structuredCloneSafe(DEFAULT_STATE),remote.state);
-    }
-    await cloudFetch('PUT',{updatedAt:new Date().toISOString(),state});
-    state.cloud.lastSync=new Date().toISOString();state.cloud.lastError=null;await saveState(true);updateSyncStatus();renderUI();
-  }catch(e){state.cloud.lastError=e.name==='AbortError'?'Timeout connessione':e.message;saveState();updateSyncStatus();}
-}
-function autoCloudSync(){if(state.cloud.endpoint&&navigator.onLine)syncNow();}
+function manualCleanLogs(){ runMaintenance(true); }
 function exportBackup(){
   const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),state},null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`hybrid-pt-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);
 }
 async function resetAllData(){
-  if(!confirm('Vuoi davvero cancellare tutti i dati e riconfigurare il programma?'))return;
+  if(!confirm('Vuoi davvero cancellare tutti i dati e ricominciare da zero?'))return;
   clearInterval(tickInterval);clearInterval(elapsedInterval);localStorage.removeItem(STORAGE_KEY);
   try{const db=await openDB();await new Promise((res,rej)=>{const tx=db.transaction(STORE_NAME,'readwrite');tx.objectStore(STORE_NAME).delete(STATE_ID);tx.oncomplete=res;tx.onerror=()=>rej(tx.error);});}catch(e){}
   state=structuredCloneSafe(DEFAULT_STATE);location.reload();
