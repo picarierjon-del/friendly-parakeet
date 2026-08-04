@@ -741,6 +741,12 @@
     </section>
 
     <section id="tab-settings" class="hidden">
+      <div class="card bluebox">
+        <strong>Archiviazione doppia attiva</strong><br>
+        I dati vengono salvati sia in <strong>localStorage</strong> sia in <strong>IndexedDB</strong>.
+        All'avvio viene usata automaticamente la copia piÃ¹ recente.
+      </div>
+
       <div class="card">
         <div class="section-title">ð¾ Backup</div>
         <div class="row">
@@ -834,6 +840,10 @@
 "use strict";
 
 const STORAGE_KEY="strongShoulderForLifeDefinitive_v1";
+const DB_NAME="StrongShoulderForLifeDB";
+const DB_VERSION=1;
+const DB_STORE="appData";
+const DB_RECORD_KEY="main";
 
 let selectedPain=null;
 let postPain=null;
@@ -863,16 +873,171 @@ const exercises=[
 ];
 
 function defaultData(){
-  return{sessions:[],personalNote:"",createdAt:new Date().toISOString()};
+  return{
+    sessions:[],
+    personalNote:"",
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString(),
+    schemaVersion:1
+  };
+}
+
+/*
+============================================================
+PERSISTENZA IBRIDA: localStorage + IndexedDB
+- localStorage = cache sincrona e fallback immediato
+- IndexedDB = archivio principale piÃ¹ robusto
+============================================================
+*/
+
+function openDatabase(){
+  return new Promise((resolve,reject)=>{
+    if(!("indexedDB" in window)){
+      reject(new Error("IndexedDB non supportato"));
+      return;
+    }
+
+    const request=indexedDB.open(DB_NAME,DB_VERSION);
+
+    request.onupgradeneeded=event=>{
+      const db=event.target.result;
+
+      if(!db.objectStoreNames.contains(DB_STORE)){
+        db.createObjectStore(DB_STORE);
+      }
+    };
+
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error || new Error("Errore apertura IndexedDB"));
+    request.onblocked=()=>reject(new Error("IndexedDB bloccato da un'altra scheda"));
+  });
+}
+
+async function idbGet(){
+  const db=await openDatabase();
+
+  return new Promise((resolve,reject)=>{
+    const transaction=db.transaction(DB_STORE,"readonly");
+    const store=transaction.objectStore(DB_STORE);
+    const request=store.get(DB_RECORD_KEY);
+
+    request.onsuccess=()=>{
+      db.close();
+      resolve(request.result || null);
+    };
+
+    request.onerror=()=>{
+      db.close();
+      reject(request.error || new Error("Errore lettura IndexedDB"));
+    };
+  });
+}
+
+async function idbSet(data){
+  const db=await openDatabase();
+
+  return new Promise((resolve,reject)=>{
+    const transaction=db.transaction(DB_STORE,"readwrite");
+    const store=transaction.objectStore(DB_STORE);
+    const request=store.put(data,DB_RECORD_KEY);
+
+    transaction.oncomplete=()=>{
+      db.close();
+      resolve(true);
+    };
+
+    transaction.onerror=()=>{
+      db.close();
+      reject(transaction.error || request.error || new Error("Errore scrittura IndexedDB"));
+    };
+  });
+}
+
+async function idbDelete(){
+  const db=await openDatabase();
+
+  return new Promise((resolve,reject)=>{
+    const transaction=db.transaction(DB_STORE,"readwrite");
+    const store=transaction.objectStore(DB_STORE);
+    store.delete(DB_RECORD_KEY);
+
+    transaction.oncomplete=()=>{
+      db.close();
+      resolve(true);
+    };
+
+    transaction.onerror=()=>{
+      db.close();
+      reject(transaction.error || new Error("Errore cancellazione IndexedDB"));
+    };
+  });
+}
+
+function normalizeData(data){
+  const base=defaultData();
+
+  return{
+    ...base,
+    ...(data && typeof data==="object" ? data : {}),
+    sessions:Array.isArray(data?.sessions) ? data.sessions : [],
+    personalNote:typeof data?.personalNote==="string" ? data.personalNote : "",
+    updatedAt:data?.updatedAt || new Date().toISOString(),
+    schemaVersion:1
+  };
 }
 
 function getData(){
-  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||defaultData()}
-  catch(e){return defaultData()}
+  try{
+    const cached=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return normalizeData(cached);
+  }catch(error){
+    console.warn("localStorage non leggibile:",error);
+    return defaultData();
+  }
 }
 
 function saveData(data){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+  const normalized=normalizeData({
+    ...data,
+    updatedAt:new Date().toISOString()
+  });
+
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(normalized));
+  }catch(error){
+    console.warn("Salvataggio localStorage fallito:",error);
+  }
+
+  idbSet(normalized).catch(error=>{
+    console.warn("Salvataggio IndexedDB fallito:",error);
+  });
+
+  return normalized;
+}
+
+async function hydrateFromIndexedDB(){
+  try{
+    const indexedData=await idbGet();
+    const localData=getData();
+    const localRaw=localStorage.getItem(STORAGE_KEY);
+
+    if(indexedData){
+      const normalizedIndexed=normalizeData(indexedData);
+
+      const indexedTime=Date.parse(normalizedIndexed.updatedAt || normalizedIndexed.createdAt || 0);
+      const localTime=Date.parse(localData.updatedAt || localData.createdAt || 0);
+
+      if(!localRaw || indexedTime>=localTime){
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(normalizedIndexed));
+      }else{
+        await idbSet(localData);
+      }
+    }else if(localRaw){
+      await idbSet(localData);
+    }
+  }catch(error){
+    console.warn("Avvio IndexedDB non riuscito; uso localStorage:",error);
+  }
 }
 
 function todayKey(){
@@ -1264,14 +1429,22 @@ function resetCurrentCheck(){
   showTab("today");
 }
 
-function resetAllData(){
+async function resetAllData(){
   if(confirm("Cancellare definitivamente tutto il diario?")){
     localStorage.removeItem(STORAGE_KEY);
+
+    try{
+      await idbDelete();
+    }catch(error){
+      console.warn("Cancellazione IndexedDB non riuscita:",error);
+    }
+
     returnHome();
   }
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",async()=>{
+  await hydrateFromIndexedDB();
   renderDashboard();
   renderHistory();
 });
