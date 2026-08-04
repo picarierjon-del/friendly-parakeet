@@ -1,2034 +1,1689 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0,
-        maximum-scale=1.0, user-scalable=no"
-    >
-
-    <meta name="theme-color" content="#1b4f72">
-
-    <title>Strong Shoulder Morning Reset</title>
-
-    <style>
-        :root {
-            --primary: #1b4f72;
-            --primary-dark: #154360;
-
-            --accent: #117a65;
-            --accent-dark: #0e6655;
-            --accent-light: #e8f8f5;
-
-            --bg: #f4f7f6;
-            --card-bg: #ffffff;
-
-            --text: #2c3e50;
-            --text-light: #6f7d85;
-
-            --border: #dfe6e9;
-
-            --green-bg: #eafaf1;
-            --green-text: #196f3d;
-            --green-border: #82e0aa;
-
-            --yellow-bg: #fef9e7;
-            --yellow-text: #9a7d0a;
-            --yellow-border: #f7dc6f;
-
-            --red-bg: #f9ebea;
-            --red-text: #922b21;
-            --red-border: #f1948a;
-
-            --blue-bg: #ebf5fb;
-            --blue-text: #1f618d;
-
-            --shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
-
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            min-height: 100vh;
-            padding: 14px;
-
-            display: flex;
-            justify-content: center;
-
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        button,
-        input {
-            font: inherit;
-        }
-
-        button {
-            touch-action: manipulation;
-        }
-
-        .app {
-            width: 100%;
-            max-width: 520px;
-            min-height: calc(100vh - 28px);
-
-            display: flex;
-            flex-direction: column;
-
-            overflow: hidden;
-
-            background: var(--card-bg);
-            border-radius: 22px;
-            box-shadow: var(--shadow);
-        }
-
-        header {
-            padding: 20px 18px;
-
-            text-align: center;
-            color: white;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--primary-dark)
-                );
-
-            border-bottom: 4px solid var(--accent);
-        }
-
-        header h1 {
-            margin-bottom: 5px;
-
-            font-size: 1.3rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        header p {
-            color: #d5f5e3;
-            font-size: 0.86rem;
-        }
-
-        .view {
-            flex: 1;
-            padding: 18px;
-
-            display: flex;
-            flex-direction: column;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .card {
-            padding: 15px;
-            margin-bottom: 15px;
-
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 13px;
-        }
-
-        .intro-card {
-            background: var(--accent-light);
-            border-left: 4px solid var(--accent);
-        }
-
-        .intro-card p {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: var(--primary-dark);
-        }
-
-        .section-title {
-            margin-bottom: 11px;
-
-            display: flex;
-            align-items: center;
-            gap: 8px;
-
-            color: var(--primary);
-            font-size: 1rem;
-            font-weight: 800;
-        }
-
-        .small-text {
-            color: var(--text-light);
-            font-size: 0.82rem;
-            line-height: 1.45;
-        }
-
-        .btn {
-            width: 100%;
-            min-height: 52px;
-            padding: 14px 16px;
-
-            border: none;
-            border-radius: 12px;
-
-            cursor: pointer;
-
-            background: var(--accent);
-            color: white;
-
-            font-weight: 800;
-            font-size: 0.98rem;
-
-            box-shadow:
-                0 4px 12px rgba(17, 122, 101, 0.2);
-
-            transition:
-                transform 0.1s ease,
-                background 0.2s ease;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn:hover {
-            background: var(--accent-dark);
-        }
-
-        .btn-secondary {
-            background: #e9eef1;
-            color: var(--primary);
-            box-shadow: none;
-        }
-
-        .btn-secondary:hover {
-            background: #dfe6e9;
-        }
-
-        .btn-outline {
-            background: white;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            box-shadow: none;
-        }
-
-        .btn-danger {
-            background: var(--red-text);
-            color: white;
-        }
-
-        .btn-small {
-            min-height: 42px;
-            padding: 10px 12px;
-            font-size: 0.86rem;
-        }
-
-        .button-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .button-row > * {
-            flex: 1;
-        }
-
-        .preview-list {
-            list-style: none;
-            margin-bottom: 18px;
-        }
-
-        .preview-list li {
-            margin-bottom: 8px;
-            padding: 11px 12px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            background: #f8fafb;
-
-            font-size: 0.88rem;
-        }
-
-        .time-chip {
-            flex-shrink: 0;
-
-            padding: 3px 7px;
-
-            border-radius: 5px;
-            background: #e2e8f0;
-            color: var(--text-light);
-
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .day-progress {
-            margin-bottom: 18px;
-        }
-
-        .day-progress-header {
-            margin-bottom: 8px;
-
-            display: flex;
-            justify-content: space-between;
-
-            font-size: 0.82rem;
-            color: var(--text-light);
-        }
-
-        .day-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 6px;
-        }
-
-        .day-dot {
-            aspect-ratio: 1;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 50%;
-            border: 1px solid var(--border);
-
-            background: #f8fafb;
-            color: var(--text-light);
-
-            font-size: 0.72rem;
-            font-weight: 800;
-        }
-
-        .day-dot.done {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .pain-scale {
-            margin-top: 12px;
-
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 7px;
-        }
-
-        .pain-btn {
-            min-height: 44px;
-
-            border: 1px solid var(--border);
-            border-radius: 9px;
-
-            background: white;
-            color: var(--text);
-
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        .pain-btn.selected {
-            outline: 3px solid rgba(17, 122, 101, 0.2);
-            border-color: var(--accent);
-            background: var(--accent-light);
-            color: var(--accent-dark);
-        }
-
-        .pain-result {
-            margin-top: 12px;
-            padding: 12px;
-
-            border-radius: 9px;
-            font-size: 0.87rem;
-            line-height: 1.45;
-        }
-
-        .mode-green {
-            background: var(--green-bg);
-            color: var(--green-text);
-            border: 1px solid var(--green-border);
-        }
-
-        .mode-yellow {
-            background: var(--yellow-bg);
-            color: var(--yellow-text);
-            border: 1px solid var(--yellow-border);
-        }
-
-        .mode-red {
-            background: var(--red-bg);
-            color: var(--red-text);
-            border: 1px solid var(--red-border);
-        }
-
-        .mode-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-
-            padding: 5px 9px;
-            margin-bottom: 9px;
-
-            border-radius: 20px;
-
-            font-size: 0.78rem;
-            font-weight: 800;
-        }
-
-        .workout-header {
-            margin-bottom: 14px;
-
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .exit-btn {
-            min-width: 70px;
-            min-height: 38px;
-
-            border: none;
-            border-radius: 8px;
-
-            background: #e9eef1;
-            color: var(--primary);
-
-            cursor: pointer;
-            font-size: 0.78rem;
-            font-weight: 800;
-        }
-
-        .progress-track {
-            flex: 1;
-            height: 8px;
-
-            overflow: hidden;
-
-            border-radius: 10px;
-            background: var(--border);
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0;
-
-            border-radius: 10px;
-            background: var(--accent);
-
-            transition: width 0.25s ease;
-        }
-
-        .step-counter {
-            min-width: 42px;
-            text-align: right;
-
-            color: var(--text-light);
-            font-size: 0.8rem;
-            font-weight: 800;
-        }
-
-        .exercise-card {
-            flex: 1;
-            min-height: 440px;
-
-            padding: 22px 18px;
-            margin-bottom: 16px;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-
-            text-align: center;
-
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            background: white;
-
-            box-shadow:
-                0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-
-        .exercise-category {
-            margin-bottom: 7px;
-
-            color: var(--accent);
-            font-size: 0.72rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .exercise-title {
-            margin-bottom: 10px;
-
-            color: var(--primary);
-            font-size: 1.45rem;
-            line-height: 1.2;
-            font-weight: 850;
-        }
-
-        .exercise-dose {
-            align-self: center;
-
-            margin-bottom: 15px;
-            padding: 6px 13px;
-
-            border-radius: 20px;
-            background: var(--accent-light);
-            color: var(--accent-dark);
-
-            font-size: 0.9rem;
-            font-weight: 800;
-        }
-
-        .exercise-description {
-            margin-bottom: 14px;
-
-            color: var(--text);
-            font-size: 0.94rem;
-            line-height: 1.55;
-            text-align: left;
-        }
-
-        .exercise-description ul {
-            padding-left: 20px;
-        }
-
-        .exercise-description li {
-            margin-bottom: 5px;
-        }
-
-        .tip-box {
-            margin-top: 4px;
-            padding: 11px 12px;
-
-            text-align: left;
-
-            border-left: 3px solid #2980b9;
-            border-radius: 7px;
-
-            background: var(--blue-bg);
-            color: var(--blue-text);
-
-            font-size: 0.83rem;
-            line-height: 1.45;
-        }
-
-        .warning-box {
-            margin-top: 10px;
-            padding: 11px 12px;
-
-            text-align: left;
-
-            border-left: 3px solid var(--red-text);
-            border-radius: 7px;
-
-            background: var(--red-bg);
-            color: var(--red-text);
-
-            font-size: 0.82rem;
-            line-height: 1.45;
-        }
-
-        .timer-box {
-            margin-top: 14px;
-            padding-top: 12px;
-
-            border-top: 1px solid var(--border);
-        }
-
-        .timer-label {
-            margin-bottom: 3px;
-
-            color: var(--text-light);
-            font-size: 0.76rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        .timer-display {
-            margin: 5px 0 10px;
-
-            color: var(--primary);
-            font-size: 2.45rem;
-            font-weight: 900;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .timer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .timer-btn {
-            padding: 9px 13px;
-
-            border: none;
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            font-size: 0.82rem;
-            font-weight: 800;
-        }
-
-        .timer-start {
-            background: var(--accent);
-            color: white;
-        }
-
-        .timer-pause {
-            background: var(--yellow-bg);
-            color: var(--yellow-text);
-            border: 1px solid var(--yellow-border);
-        }
-
-        .timer-reset {
-            background: #e9eef1;
-            color: var(--text);
-        }
-
-        .rest-label {
-            margin-top: 8px;
-            color: var(--text-light);
-            font-size: 0.78rem;
-        }
-
-        .skip-box {
-            margin-top: 12px;
-            padding: 12px;
-
-            border-radius: 10px;
-            border: 1px dashed var(--accent);
-
-            background: var(--accent-light);
-            color: var(--primary-dark);
-
-            font-size: 0.83rem;
-            line-height: 1.45;
-            text-align: left;
-        }
-
-        .navigation {
-            display: flex;
-            gap: 10px;
-        }
-
-        .navigation .btn {
-            flex: 1;
-        }
-
-        .summary-card {
-            padding: 20px;
-            margin-bottom: 15px;
-
-            text-align: center;
-
-            border: 1px solid var(--green-border);
-            border-radius: 13px;
-
-            background: var(--green-bg);
-        }
-
-        .summary-card h2 {
-            margin-bottom: 7px;
-
-            color: var(--green-text);
-            font-size: 1.35rem;
-        }
-
-        .summary-card p {
-            color: var(--green-text);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .summary-data {
-            margin-bottom: 15px;
-
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-        }
-
-        .summary-item {
-            padding: 12px;
-
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: #f8fafb;
-
-            text-align: center;
-        }
-
-        .summary-item strong {
-            display: block;
-
-            color: var(--primary);
-            font-size: 1.08rem;
-        }
-
-        .summary-item span {
-            color: var(--text-light);
-            font-size: 0.75rem;
-        }
-
-        .rules-box {
-            margin-bottom: 15px;
-            padding: 14px;
-
-            border: 1px solid var(--yellow-border);
-            border-radius: 10px;
-
-            background: var(--yellow-bg);
-            color: var(--yellow-text);
-
-            font-size: 0.84rem;
-            line-height: 1.5;
-        }
-
-        .rules-box h3 {
-            margin-bottom: 7px;
-            font-size: 0.9rem;
-        }
-
-        .rules-box ul {
-            padding-left: 18px;
-        }
-
-        .disclaimer {
-            margin-top: 14px;
-            padding: 12px;
-
-            border-radius: 9px;
-            background: #f8f9fa;
-            border: 1px solid var(--border);
-
-            color: var(--text-light);
-            font-size: 0.76rem;
-            line-height: 1.45;
-        }
-
-        @media (max-width: 390px) {
-            body {
-                padding: 0;
-            }
-
-            .app {
-                min-height: 100vh;
-                border-radius: 0;
-            }
-
-            .view {
-                padding: 15px;
-            }
-
-            .pain-scale {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .exercise-title {
-                font-size: 1.3rem;
-            }
-
-            .exercise-card {
-                min-height: 420px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#123f5a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Strong Shoulder For Life</title>
+
+  <style>
+    :root{
+      --navy:#123f5a;
+      --navy-dark:#0d3045;
+      --teal:#16836f;
+      --teal-dark:#0f6d5c;
+      --teal-soft:#eaf8f4;
+      --bg:#eef4f4;
+      --card:#ffffff;
+      --text:#263746;
+      --muted:#71808b;
+      --line:#dce6e8;
+      --green:#1d7a46;
+      --green-bg:#eaf7ef;
+      --yellow:#9b7208;
+      --yellow-bg:#fff8df;
+      --red:#9b2d27;
+      --red-bg:#fdeeed;
+      --blue:#235e83;
+      --blue-bg:#eaf4fb;
+      --shadow:0 10px 30px rgba(19,63,90,.10);
+      --radius:18px;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html{scroll-behavior:smooth}
+
+    body{
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--text);
+      padding:14px;
+      display:flex;
+      justify-content:center;
+    }
+
+    button,select,input,textarea{font:inherit}
+
+    button{touch-action:manipulation}
+
+    .app{
+      width:100%;
+      max-width:560px;
+      min-height:calc(100vh - 28px);
+      background:var(--card);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      background:linear-gradient(135deg,var(--navy),var(--navy-dark));
+      color:#fff;
+      padding:22px 18px 18px;
+      text-align:center;
+      border-bottom:4px solid var(--teal);
+    }
+
+    header h1{
+      font-size:1.38rem;
+      letter-spacing:.4px;
+      margin-bottom:4px;
+    }
+
+    header p{
+      font-size:.84rem;
+      color:#cdebe5;
+      line-height:1.4;
+    }
+
+    main{
+      padding:18px;
+      flex:1;
+    }
+
+    .hidden{display:none!important}
+
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:15px;
+      margin-bottom:14px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg,#eaf8f4,#edf5fa);
+      border-left:4px solid var(--teal);
+      font-size:.9rem;
+      line-height:1.48;
+    }
+
+    .section-title{
+      font-size:1rem;
+      font-weight:800;
+      color:var(--navy);
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .small{
+      font-size:.81rem;
+      color:var(--muted);
+      line-height:1.48;
+    }
+
+    .btn{
+      width:100%;
+      min-height:50px;
+      padding:14px 16px;
+      border:0;
+      border-radius:13px;
+      background:var(--teal);
+      color:#fff;
+      font-size:.95rem;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 4px 12px rgba(22,131,111,.20);
+      transition:transform .1s ease,background .2s ease;
+    }
+
+    .btn:active{transform:scale(.985)}
+    .btn:hover{background:var(--teal-dark)}
+
+    .btn.secondary{
+      background:#e8eef1;
+      color:var(--navy);
+      box-shadow:none;
+    }
+
+    .btn.outline{
+      background:#fff;
+      color:var(--teal);
+      border:1px solid var(--teal);
+      box-shadow:none;
+    }
+
+    .btn.red{background:var(--red)}
+
+    .btn.small-btn{
+      min-height:42px;
+      padding:10px 12px;
+      font-size:.84rem;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+    }
+
+    .row>*{flex:1}
+
+    .tabs{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      margin-bottom:14px;
+    }
+
+    .tab{
+      border:1px solid var(--line);
+      background:#f8fbfb;
+      color:var(--muted);
+      border-radius:11px;
+      padding:10px 6px;
+      font-size:.72rem;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .tab.active{
+      background:var(--teal-soft);
+      color:var(--teal-dark);
+      border-color:var(--teal);
+    }
+
+    .progress-head{
+      display:flex;
+      justify-content:space-between;
+      color:var(--muted);
+      font-size:.8rem;
+      margin-bottom:8px;
+    }
+
+    .track{
+      height:9px;
+      background:#e2eaec;
+      border-radius:99px;
+      overflow:hidden;
+    }
+
+    .fill{
+      height:100%;
+      width:0%;
+      background:var(--teal);
+      border-radius:99px;
+      transition:width .25s ease;
+    }
+
+    .day-grid{
+      display:grid;
+      grid-template-columns:repeat(10,1fr);
+      gap:6px;
+      margin-top:11px;
+    }
+
+    .day{
+      aspect-ratio:1;
+      border:1px solid var(--line);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.7rem;
+      font-weight:800;
+      color:var(--muted);
+      background:#f9fbfb;
+    }
+
+    .day.done{
+      background:var(--teal);
+      color:#fff;
+      border-color:var(--teal);
+    }
+
+    .day.today{
+      outline:3px solid rgba(22,131,111,.18);
+    }
+
+    .scale{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:7px;
+      margin-top:10px;
+    }
+
+    .scale button{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:9px;
+      min-height:44px;
+      font-weight:800;
+      color:var(--text);
+      cursor:pointer;
+    }
+
+    .scale button.selected{
+      border-color:var(--teal);
+      background:var(--teal-soft);
+      outline:3px solid rgba(22,131,111,.12);
+    }
+
+    .checks{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .check{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      background:#f9fbfb;
+    }
+
+    .check label{
+      display:block;
+      font-size:.78rem;
+      color:var(--muted);
+      margin-bottom:7px;
+    }
+
+    .check select,
+    .check input{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:8px;
+      background:#fff;
+      color:var(--text);
+    }
+
+    .mode{
+      padding:12px;
+      border-radius:10px;
+      margin-top:10px;
+      font-size:.84rem;
+      line-height:1.45;
+    }
+
+    .green{
+      background:var(--green-bg);
+      color:var(--green);
+      border:1px solid #a9dcbf;
+    }
+
+    .yellow{
+      background:var(--yellow-bg);
+      color:var(--yellow);
+      border:1px solid #eed987;
+    }
+
+    .redbox{
+      background:var(--red-bg);
+      color:var(--red);
+      border:1px solid #e7aaa6;
+    }
+
+    .bluebox{
+      background:var(--blue-bg);
+      color:var(--blue);
+      border:1px solid #b7d8ec;
+    }
+
+    .preview{
+      list-style:none;
+    }
+
+    .preview li{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#f9fbfb;
+      padding:10px 12px;
+      border-radius:9px;
+      margin-bottom:7px;
+      font-size:.86rem;
+    }
+
+    .chip{
+      background:#e5ecef;
+      color:var(--muted);
+      padding:2px 7px;
+      border-radius:5px;
+      font-size:.74rem;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin-bottom:14px;
+    }
+
+    .stat{
+      border:1px solid var(--line);
+      border-radius:11px;
+      padding:12px;
+      background:#f9fbfb;
+      text-align:center;
+    }
+
+    .stat strong{
+      display:block;
+      color:var(--navy);
+      font-size:1.12rem;
+    }
+
+    .stat span{
+      font-size:.73rem;
+      color:var(--muted);
+    }
+
+    .phase-card{
+      border-left:4px solid var(--teal);
+    }
+
+    .phase-card h3{
+      color:var(--navy);
+      font-size:1rem;
+      margin-bottom:6px;
+    }
+
+    .phase-card p{
+      font-size:.84rem;
+      color:var(--muted);
+      line-height:1.45;
+    }
+
+    .work-head{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    .exit{
+      border:0;
+      background:#e8eef1;
+      color:var(--navy);
+      border-radius:9px;
+      min-height:38px;
+      padding:0 11px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .count{
+      font-size:.78rem;
+      color:var(--muted);
+      font-weight:800;
+      min-width:42px;
+      text-align:right;
+    }
+
+    .exercise{
+      min-height:455px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      padding:22px 18px;
+      margin-bottom:14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      text-align:center;
+      box-shadow:0 5px 16px rgba(0,0,0,.04);
+    }
+
+    .badge{
+      align-self:center;
+      padding:5px 9px;
+      border-radius:99px;
+      font-size:.72rem;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .cat{
+      color:var(--teal);
+      font-size:.72rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      margin-bottom:7px;
+    }
+
+    .title{
+      color:var(--navy);
+      font-size:1.45rem;
+      line-height:1.2;
+      margin-bottom:9px;
+    }
+
+    .dose{
+      align-self:center;
+      background:var(--teal-soft);
+      color:var(--teal-dark);
+      font-weight:800;
+      padding:6px 13px;
+      border-radius:99px;
+      font-size:.88rem;
+      margin-bottom:14px;
+    }
+
+    .desc{
+      text-align:left;
+      font-size:.9rem;
+      line-height:1.52;
+    }
+
+    .desc ul{padding-left:20px}
+    .desc li{margin-bottom:6px}
+
+    .tip,.warn{
+      margin-top:11px;
+      text-align:left;
+      border-radius:8px;
+      padding:10px 12px;
+      font-size:.81rem;
+      line-height:1.45;
+    }
+
+    .tip{
+      background:var(--blue-bg);
+      color:var(--blue);
+      border-left:3px solid #3688b7;
+    }
+
+    .warn{
+      background:var(--red-bg);
+      color:var(--red);
+      border-left:3px solid var(--red);
+    }
+
+    .timer{
+      border-top:1px solid var(--line);
+      padding-top:12px;
+      margin-top:13px;
+    }
+
+    .time{
+      font-size:2.45rem;
+      color:var(--navy);
+      font-weight:900;
+      font-variant-numeric:tabular-nums;
+      margin:5px 0 10px;
+    }
+
+    .timer-row{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .timer-row button{
+      border:0;
+      border-radius:8px;
+      padding:9px 13px;
+      font-size:.8rem;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .start{background:var(--teal);color:#fff}
+    .reset{background:#e8eef1;color:var(--text)}
+
+    .nav{
+      display:flex;
+      gap:9px;
+    }
+
+    .nav .btn{flex:1}
+
+    .summary{
+      text-align:center;
+      background:var(--green-bg);
+      border:1px solid #a9dcbf;
+    }
+
+    .summary h2{
+      color:var(--green);
+      margin-bottom:6px;
+    }
+
+    .history-list{
+      list-style:none;
+    }
+
+    .history-list li{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:8px;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      padding:10px 0;
+      font-size:.82rem;
+    }
+
+    .history-list li:last-child{border-bottom:0}
+
+    .month-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .month-card{
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      text-align:center;
+      background:#f9fbfb;
+      font-size:.75rem;
+      color:var(--muted);
+    }
+
+    .month-card strong{
+      display:block;
+      font-size:1rem;
+      color:var(--navy);
+      margin-bottom:3px;
+    }
+
+    .footer-note{
+      font-size:.74rem;
+      color:var(--muted);
+      line-height:1.45;
+      background:#f7f9fa;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:11px;
+      margin-top:13px;
+    }
+
+    textarea{
+      width:100%;
+      min-height:90px;
+      resize:vertical;
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:10px;
+      color:var(--text);
+      background:#fff;
+    }
+
+    @media(max-width:390px){
+      body{padding:0}
+      .app{border-radius:0;min-height:100vh}
+      main{padding:15px}
+      .scale{grid-template-columns:repeat(3,1fr)}
+      .exercise{min-height:430px}
+      .checks{grid-template-columns:1fr}
+      .tabs{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
 </head>
 
 <body>
-
 <div class="app">
+  <header>
+    <h1>STRONG SHOULDER FOR LIFE</h1>
+    <p>Recupero iniziale · forza progressiva · mantenimento permanente</p>
+  </header>
 
-    <header>
-        <h1>STRONG SHOULDER RESET</h1>
-        <p>
-            Routine a terra 20 minuti · Piscina facoltativa 10–15 minuti
-        </p>
-    </header>
+  <!-- HOME -->
+  <main id="homeView">
+    <div class="tabs">
+      <button class="tab active" data-tab="today" onclick="showTab('today')">Oggi</button>
+      <button class="tab" data-tab="plan" onclick="showTab('plan')">Percorso</button>
+      <button class="tab" data-tab="history" onclick="showTab('history')">Diario</button>
+      <button class="tab" data-tab="settings" onclick="showTab('settings')">Dati</button>
+    </div>
 
-    <!-- HOME -->
-    <main id="home-view" class="view">
+    <!-- TODAY -->
+    <section id="tab-today">
+      <div class="card hero">
+        <strong>Regola For Life:</strong>
+        la spalla non deve essere “massacrata” per diventare resistente.
+        Deve ricevere il carico giusto, con costanza, controllo e recupero.
+      </div>
 
-        <div class="card intro-card">
-            <p>
-                <strong>Obiettivo dei 20 giorni:</strong>
-                migliorare mobilità toracica, controllo della scapola,
-                resistenza della cuffia dei rotatori e ridurre la tensione
-                tra trapezio, collo e scapola.
-            </p>
+      <div class="card">
+        <div class="progress-head">
+          <span id="phaseName">Fase iniziale</span>
+          <span id="overallText">0 sessioni</span>
+        </div>
+        <div class="track"><div id="overallFill" class="fill"></div></div>
+        <div class="small" id="phaseDescription" style="margin-top:9px"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">🩺 Check mattutino</div>
+        <div class="small">
+          Valuta la fitta una sola volta mentre alzi e abbassi lentamente il braccio.
+          Non ripetere continuamente il test durante la giornata.
         </div>
 
-        <div class="day-progress card">
-            <div class="day-progress-header">
-                <span>Percorso vacanza</span>
-                <span id="completed-days-text">0 / 20 giorni</span>
-            </div>
-
-            <div id="day-grid" class="day-grid"></div>
+        <div class="scale" id="painScale">
+          <button onclick="setPain(0)">0</button>
+          <button onclick="setPain(1)">1</button>
+          <button onclick="setPain(2)">2</button>
+          <button onclick="setPain(3)">3</button>
+          <button onclick="setPain(4)">4</button>
+          <button onclick="setPain(5)">5+</button>
         </div>
 
-        <section class="card">
-            <div class="section-title">
-                🩺 Controllo iniziale del dolore
-            </div>
+        <div class="checks">
+          <div class="check">
+            <label>Rigidità al risveglio</label>
+            <select id="stiffness">
+              <option value="0">Bassa</option>
+              <option value="1">Media</option>
+              <option value="2">Alta</option>
+            </select>
+          </div>
 
-            <p class="small-text">
-                Valuta il dolore mentre alzi e abbassi lentamente il braccio
-                destro, senza forzare.
-            </p>
+          <div class="check">
+            <label>Qualità del sonno</label>
+            <select id="sleep">
+              <option value="0">Buona</option>
+              <option value="1">Discreta</option>
+              <option value="2">Scarsa</option>
+            </select>
+          </div>
 
-            <div class="pain-scale">
-                <button class="pain-btn" onclick="selectPain(0)">0</button>
-                <button class="pain-btn" onclick="selectPain(1)">1</button>
-                <button class="pain-btn" onclick="selectPain(2)">2</button>
-                <button class="pain-btn" onclick="selectPain(3)">3</button>
-                <button class="pain-btn" onclick="selectPain(4)">4</button>
-                <button class="pain-btn" onclick="selectPain(5)">5+</button>
-            </div>
+          <div class="check">
+            <label>Forza del braccio</label>
+            <select id="strength">
+              <option value="0">Normale</option>
+              <option value="2">Più debole del solito</option>
+            </select>
+          </div>
 
-            <div id="pain-result" class="pain-result hidden"></div>
-        </section>
-
-        <section>
-            <div class="section-title">
-                📋 Programma della mattina
-            </div>
-
-            <ul class="preview-list">
-                <li>
-                    Respirazione diaframmatica
-                    <span class="time-chip">2 min</span>
-                </li>
-
-                <li>
-                    Cat-Camel
-                    <span class="time-chip">10 rip.</span>
-                </li>
-
-                <li>
-                    Thread the Needle
-                    <span class="time-chip">8 + 8</span>
-                </li>
-
-                <li>
-                    Rotazione toracica
-                    <span class="time-chip">8 + 8</span>
-                </li>
-
-                <li>
-                    Wall Slide
-                    <span class="time-chip">2 × 10</span>
-                </li>
-
-                <li>
-                    Push-Up Plus al muro
-                    <span class="time-chip">2 × 12</span>
-                </li>
-
-                <li>
-                    Rotazione esterna con elastico
-                    <span class="time-chip">2 × 15</span>
-                </li>
-
-                <li>
-                    Trap-3 Raise o isometria
-                    <span class="time-chip">giorni alterni</span>
-                </li>
-
-                <li>
-                    Bird Dog
-                    <span class="time-chip">2 × 8</span>
-                </li>
-
-                <li>
-                    Stretching mirato
-                    <span class="time-chip">3 min</span>
-                </li>
-
-                <li>
-                    Piscina o mare
-                    <span class="time-chip">facoltativo</span>
-                </li>
-            </ul>
-        </section>
-
-        <button
-            id="start-btn"
-            class="btn"
-            onclick="startWorkout()"
-            disabled
-            style="opacity: 0.55; cursor: not-allowed;"
-        >
-            Seleziona prima il livello di dolore
-        </button>
-
-        <div class="disclaimer">
-            Questo programma non sostituisce una valutazione medica o
-            fisioterapica. Interrompi gli esercizi e chiedi una valutazione
-            se compaiono perdita di forza, formicolio persistente,
-            dolore notturno importante, trauma o peggioramento progressivo.
+          <div class="check">
+            <label>Formicolio</label>
+            <select id="tingling">
+              <option value="0">No</option>
+              <option value="3">Sì</option>
+            </select>
+          </div>
         </div>
 
-    </main>
+        <div id="modeBox" class="mode hidden"></div>
+      </div>
 
-    <!-- WORKOUT -->
-    <main id="workout-view" class="view hidden">
+      <div class="section-title">📋 Sessione consigliata</div>
+      <ul id="previewList" class="preview"></ul>
 
-        <div class="workout-header">
+      <button id="startButton" class="btn" disabled style="opacity:.5">
+        Completa il check mattutino
+      </button>
 
-            <button class="exit-btn" onclick="confirmExit()">
-                ✕ Esci
-            </button>
+      <div class="footer-note">
+        Questo strumento non effettua diagnosi. Perdita di forza nuova, formicolio persistente,
+        trauma, febbre, gonfiore evidente o dolore notturno importante richiedono una valutazione clinica.
+      </div>
+    </section>
 
-            <div class="progress-track">
-                <div id="progress-fill" class="progress-fill"></div>
-            </div>
+    <!-- PLAN -->
+    <section id="tab-plan" class="hidden">
+      <div class="card phase-card">
+        <h3>Fase 1 · Reset e controllo</h3>
+        <p>Prime 20 sessioni. Mobilità toracica, dentato anteriore, cuffia leggera e acqua facoltativa.</p>
+      </div>
 
-            <span id="step-counter" class="step-counter">
-                1 / 1
-            </span>
+      <div class="card phase-card">
+        <h3>Fase 2 · Costruzione</h3>
+        <p>Dalla sessione 21 alla 60. Più resistenza, isometrie, Trap-3 Raise e lavoro progressivo.</p>
+      </div>
 
+      <div class="card phase-card">
+        <h3>Fase 3 · Mantenimento For Life</h3>
+        <p>Dalla sessione 61 in poi. Tre routine: breve, standard e completa, scelte in base al check mattutino.</p>
+      </div>
+
+      <div class="card">
+        <div class="section-title">📅 Frequenza ideale permanente</div>
+        <ul class="preview">
+          <li><span>Mobilità toracica</span><span class="chip">Quasi ogni giorno</span></li>
+          <li><span>Cuffia dei rotatori</span><span class="chip">2–3 volte/settimana</span></li>
+          <li><span>Dentato e scapola</span><span class="chip">2–4 volte/settimana</span></li>
+          <li><span>Core e trasporto</span><span class="chip">2 volte/settimana</span></li>
+          <li><span>Recupero in acqua</span><span class="chip">Facoltativo</span></li>
+          <li><span>Check mensile</span><span class="chip">1 volta/mese</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="section-title">🗓️ Ciclo annuale</div>
+        <div class="month-grid">
+          <div class="month-card"><strong>Gen–Mar</strong>Costruzione</div>
+          <div class="month-card"><strong>Apr–Giu</strong>Consolidamento</div>
+          <div class="month-card"><strong>Lug–Ago</strong>Recupero</div>
+          <div class="month-card"><strong>Set–Ott</strong>Rientro lavoro</div>
+          <div class="month-card"><strong>Nov–Dic</strong>Mantenimento</div>
+          <div class="month-card"><strong>Ogni mese</strong>Rivalutazione</div>
         </div>
+      </div>
+    </section>
 
-        <div class="exercise-card">
+    <!-- HISTORY -->
+    <section id="tab-history" class="hidden">
+      <div class="stats">
+        <div class="stat"><strong id="statSessions">0</strong><span>Sessioni totali</span></div>
+        <div class="stat"><strong id="statStreak">0</strong><span>Streak giorni</span></div>
+        <div class="stat"><strong id="statAvgPain">—</strong><span>Dolore medio</span></div>
+        <div class="stat"><strong id="statGreen">0%</strong><span>Sessioni verdi</span></div>
+      </div>
 
-            <div id="mode-badge" class="mode-badge mode-green">
-                Modalità verde
-            </div>
+      <div class="card">
+        <div class="section-title">📖 Ultime sessioni</div>
+        <ul id="historyList" class="history-list"></ul>
+      </div>
 
-            <div id="exercise-category" class="exercise-category">
-                Categoria
-            </div>
+      <div class="card">
+        <div class="section-title">📝 Nota personale</div>
+        <textarea id="personalNote" placeholder="Scrivi cosa migliora o peggiora la spalla..."></textarea>
+        <button class="btn small-btn" style="margin-top:9px" onclick="savePersonalNote()">Salva nota</button>
+      </div>
+    </section>
 
-            <h2 id="exercise-title" class="exercise-title">
-                Esercizio
-            </h2>
-
-            <div id="exercise-dose" class="exercise-dose">
-                Dosaggio
-            </div>
-
-            <div id="exercise-description" class="exercise-description">
-                Descrizione
-            </div>
-
-            <div id="exercise-tip" class="tip-box hidden">
-                👉 <span id="exercise-tip-text"></span>
-            </div>
-
-            <div id="exercise-warning" class="warning-box hidden">
-                ⚠️ <span id="exercise-warning-text"></span>
-            </div>
-
-            <div id="timer-box" class="timer-box hidden">
-
-                <div id="timer-label" class="timer-label">
-                    Timer
-                </div>
-
-                <div id="timer-display" class="timer-display">
-                    00:00
-                </div>
-
-                <div class="timer-controls">
-
-                    <button
-                        id="timer-toggle-btn"
-                        class="timer-btn timer-start"
-                        onclick="toggleTimer()"
-                    >
-                        Avvia
-                    </button>
-
-                    <button
-                        class="timer-btn timer-reset"
-                        onclick="resetTimer()"
-                    >
-                        Reset
-                    </button>
-
-                </div>
-
-                <div id="rest-label" class="rest-label hidden"></div>
-
-            </div>
-
-            <div id="skip-box" class="skip-box hidden">
-                <strong>Piscina facoltativa.</strong><br>
-                Puoi saltarla in caso di mare mosso, acqua troppo fredda,
-                stanchezza o aumento dei sintomi.
-            </div>
-
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="hidden">
+      <div class="card">
+        <div class="section-title">💾 Backup dei dati</div>
+        <div class="small" style="margin-bottom:10px">
+          Esporta periodicamente il diario in formato JSON per non perdere lo storico.
         </div>
-
-        <div class="navigation">
-
-            <button
-                id="prev-btn"
-                class="btn btn-secondary"
-                onclick="previousStep()"
-            >
-                Indietro
-            </button>
-
-            <button
-                id="skip-btn"
-                class="btn btn-outline hidden"
-                onclick="skipCurrentStep()"
-            >
-                Salta
-            </button>
-
-            <button
-                id="next-btn"
-                class="btn"
-                onclick="nextStep()"
-            >
-                Avanti
-            </button>
-
+        <div class="row">
+          <button class="btn small-btn" onclick="exportData()">Esporta</button>
+          <button class="btn secondary small-btn" onclick="document.getElementById('importFile').click()">Importa</button>
         </div>
+        <input id="importFile" type="file" accept=".json" class="hidden" onchange="importData(event)" />
+      </div>
 
-    </main>
+      <div class="card">
+        <div class="section-title">🔄 Gestione percorso</div>
+        <button class="btn secondary" onclick="resetCurrentCheck()">Azzera solo il check di oggi</button>
+        <button class="btn red" style="margin-top:9px" onclick="resetAllData()">Cancella tutto il diario</button>
+      </div>
 
-    <!-- SUMMARY -->
-    <main id="summary-view" class="view hidden">
+      <div class="card bluebox">
+        <strong>Uso consigliato:</strong><br>
+        aggiungi questa pagina alla schermata Home dell’iPhone.
+        I dati rimangono salvati nel browser tramite localStorage.
+      </div>
+    </section>
+  </main>
 
-        <div class="summary-card">
-            <h2>🎉 Sessione completata</h2>
-            <p>
-                Hai concluso la routine mattutina senza dover inseguire
-                la fatica. Precisione e costanza vengono prima
-                dell'intensità.
-            </p>
+  <!-- WORKOUT -->
+  <main id="workoutView" class="hidden">
+    <div class="work-head">
+      <button class="exit" onclick="leaveWorkout()">✕ Esci</button>
+      <div class="track" style="flex:1"><div id="workoutFill" class="fill"></div></div>
+      <div id="stepCounter" class="count">1/1</div>
+    </div>
+
+    <div class="exercise">
+      <div id="modeBadge" class="badge green">Modalità verde</div>
+      <div id="exerciseCategory" class="cat"></div>
+      <h2 id="exerciseTitle" class="title"></h2>
+      <div id="exerciseDose" class="dose"></div>
+      <div id="exerciseDescription" class="desc"></div>
+      <div id="exerciseTip" class="tip hidden"></div>
+      <div id="exerciseWarning" class="warn hidden"></div>
+
+      <div id="timerBox" class="timer hidden">
+        <div id="timerDisplay" class="time">00:00</div>
+        <div class="timer-row">
+          <button id="timerToggleButton" class="start" onclick="toggleTimer()">Avvia timer</button>
+          <button class="reset" onclick="resetTimer()">Reset</button>
         </div>
+      </div>
+    </div>
 
-        <div class="summary-data">
+    <div class="nav">
+      <button id="previousButton" class="btn secondary" onclick="previousStep()">Indietro</button>
+      <button id="skipButton" class="btn outline hidden" onclick="skipStep()">Salta</button>
+      <button id="nextButton" class="btn" onclick="nextStep()">Fatto</button>
+    </div>
+  </main>
 
-            <div class="summary-item">
-                <strong id="summary-mode">Verde</strong>
-                <span>Modalità</span>
-            </div>
+  <!-- SUMMARY -->
+  <main id="summaryView" class="hidden">
+    <div class="card summary">
+      <h2>Sessione completata ✓</h2>
+      <p>Hai allenato continuità, controllo e tolleranza al carico.</p>
+    </div>
 
-            <div class="summary-item">
-                <strong id="summary-pain">0 / 10</strong>
-                <span>Dolore iniziale</span>
-            </div>
+    <div class="stats">
+      <div class="stat"><strong id="summarySession">1</strong><span>Sessione</span></div>
+      <div class="stat"><strong id="summaryMode">Verde</strong><span>Modalità</span></div>
+      <div class="stat"><strong id="summaryPain">0/10</strong><span>Dolore iniziale</span></div>
+      <div class="stat"><strong id="summaryExercises">0</strong><span>Esercizi svolti</span></div>
+    </div>
 
-            <div class="summary-item">
-                <strong id="summary-completed">0</strong>
-                <span>Esercizi completati</span>
-            </div>
+    <div class="card">
+      <div class="section-title">🌙 Regola per oggi</div>
+      <div class="small">
+        Non testare continuamente la fitta. Mantieni attività normale entro una zona tollerabile,
+        cura idratazione e sonno, e ripeti domani il check.
+      </div>
+    </div>
 
-            <div class="summary-item">
-                <strong id="summary-day">1 / 20</strong>
-                <span>Giorno percorso</span>
-            </div>
-
-        </div>
-
-        <div class="rules-box">
-            <h3>Regole per la giornata</h3>
-
-            <ul>
-                <li>
-                    Mantieni la spalla lontana dall'orecchio.
-                </li>
-
-                <li>
-                    Non testare continuamente il movimento doloroso.
-                </li>
-
-                <li>
-                    Evita esercizi pesanti sopra la testa.
-                </li>
-
-                <li>
-                    La stessa fitta intensa non va allenata.
-                </li>
-
-                <li>
-                    Bevi acqua e continua a muoverti con tranquillità.
-                </li>
-            </ul>
-        </div>
-
-        <button class="btn" onclick="returnHome()">
-            Torna alla Home
-        </button>
-
-        <button
-            class="btn btn-secondary"
-            style="margin-top: 10px;"
-            onclick="resetTwentyDays()"
-        >
-            Azzera percorso 20 giorni
-        </button>
-
-    </main>
-
+    <button class="btn" onclick="returnHome()">Torna alla home</button>
+  </main>
 </div>
 
 <script>
-    "use strict";
+"use strict";
 
-    /*
-    ============================================================
-    DATI E STATO
-    ============================================================
-    */
+const STORAGE_KEY = "strongShoulderForLife_v1";
 
-    const STORAGE_KEY = "strongShoulderVacation20Days_v2";
+let selectedPain = null;
+let selectedMode = null;
+let workoutSteps = [];
+let currentStepIndex = 0;
+let completedExercises = 0;
+let timerInterval = null;
+let timerRunning = false;
+let timeLeft = 0;
 
-    let selectedPain = null;
-    let selectedMode = null;
+const exerciseLibrary = [
+  {
+    id:"breathing",
+    category:"Reset del sistema",
+    title:"Respirazione diaframmatica",
+    dose:"10 respiri · 2 minuti",
+    timer:120,
+    modes:["green","yellow","red"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Una mano sul petto e una sulla pancia.</li>
+        <li>Inspira dal naso per 4 secondi.</li>
+        <li>Espira lentamente per 6 secondi.</li>
+        <li>Lascia scendere spalle e mandibola.</li>
+      </ul>
+    `,
+    tip:"La pancia si muove più del petto."
+  },
+  {
+    id:"catCamel",
+    category:"Mobilità",
+    title:"Cat-Camel",
+    dose:"10 ripetizioni lente",
+    timer:90,
+    modes:["green","yellow","red"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Quadrupedia, mani sotto le spalle.</li>
+        <li>Arrotonda dolcemente il dorso.</li>
+        <li>Riapri il petto senza estendere il collo.</li>
+      </ul>
+    `,
+    warning:"Non forzare la posizione finale."
+  },
+  {
+    id:"threadNeedle",
+    category:"Mobilità toracica",
+    title:"Thread the Needle",
+    dose:"6–8 per lato",
+    timer:120,
+    modes:["green","yellow","red"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Fai passare un braccio sotto il torace.</li>
+        <li>Ruota il busto mantenendo il bacino stabile.</li>
+        <li>Apri soltanto entro l'ampiezza indolore.</li>
+      </ul>
+    `,
+    warning:"Riduci l'ampiezza se compare la fitta."
+  },
+  {
+    id:"wallSlide",
+    category:"Controllo scapolare",
+    title:"Wall Slide",
+    dose:"2 × 8–10 · recupero 30 s",
+    timer:150,
+    modes:["green","yellow"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Avambracci alla parete.</li>
+        <li>Scivola lentamente verso l'alto.</li>
+        <li>Fermati prima che la spalla salga verso l'orecchio.</li>
+        <li>Ritorna in 3 secondi.</li>
+      </ul>
+    `,
+    tip:"Collo lungo, costole rilassate."
+  },
+  {
+    id:"pushUpPlus",
+    category:"Dentato anteriore",
+    title:"Push-Up Plus al muro",
+    dose:"2 × 10–12 · recupero 30 s",
+    timer:150,
+    modes:["green","yellow"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Mani alla parete, gomiti distesi.</li>
+        <li>Avvicina leggermente il petto.</li>
+        <li>Spingi il muro allontanando le scapole.</li>
+      </ul>
+    `,
+    tip:"Senti lavoro sotto l'ascella, non nel collo."
+  },
+  {
+    id:"externalRotation",
+    category:"Cuffia dei rotatori",
+    title:"Rotazione esterna con elastico",
+    dose:"2 × 12–15 · recupero 40 s",
+    timer:180,
+    modes:["green","yellow"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Gomito aderente al fianco con asciugamano.</li>
+        <li>Apri l'avambraccio lentamente.</li>
+        <li>Ritorna in 3 secondi.</li>
+      </ul>
+    `,
+    warning:"Usa un elastico leggero. Interrompi se riproduce la fitta."
+  },
+  {
+    id:"isometric",
+    category:"Stabilità",
+    title:"Isometria alla parete",
+    dose:"5 × 8 secondi",
+    timer:120,
+    modes:["green","yellow"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Avambraccio contro la parete.</li>
+        <li>Spingi al 30–40% senza muovere il braccio.</li>
+        <li>Recupera 12 secondi tra le tenute.</li>
+      </ul>
+    `,
+    tip:"Deve sembrare facile e controllato."
+  },
+  {
+    id:"trap3",
+    category:"Trapezio inferiore",
+    title:"Trap-3 Raise leggero",
+    dose:"2 × 8–10",
+    timer:150,
+    modes:["green"],
+    phases:[2,3],
+    description:`
+      <ul>
+        <li>Senza peso o con bottiglia da 0,5 L.</li>
+        <li>Braccio in diagonale a Y, pollice in alto.</li>
+        <li>Fermati prima che il collo si irrigidisca.</li>
+      </ul>
+    `,
+    warning:"Solo senza fitta e con controllo completo."
+  },
+  {
+    id:"birdDog",
+    category:"Core e catena cinetica",
+    title:"Bird Dog",
+    dose:"2 × 6–8 per lato",
+    timer:160,
+    modes:["green","yellow"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Allunga braccio e gamba opposta.</li>
+        <li>Mantieni bacino e torace stabili.</li>
+        <li>Tieni il braccio più basso se necessario.</li>
+      </ul>
+    `
+  },
+  {
+    id:"farmerCarry",
+    category:"Resistenza globale",
+    title:"Farmer Carry leggero",
+    dose:"3 × 30–40 secondi",
+    timer:150,
+    modes:["green"],
+    phases:[2,3],
+    description:`
+      <ul>
+        <li>Cammina con due pesi leggeri.</li>
+        <li>Collo rilassato e spalle lontane dalle orecchie.</li>
+        <li>Respira senza irrigidire la mandibola.</li>
+      </ul>
+    `,
+    warning:"Non usare carichi che irrigidiscono il trapezio."
+  },
+  {
+    id:"stretch",
+    category:"Scarico",
+    title:"Stretching dolce",
+    dose:"3 esercizi · 30 s per lato",
+    timer:180,
+    modes:["green","yellow","red"],
+    phases:[1,2,3],
+    description:`
+      <ul>
+        <li>Pettorale allo stipite.</li>
+        <li>Elevatore della scapola senza tirare forte.</li>
+        <li>Gran dorsale con mani appoggiate.</li>
+      </ul>
+    `,
+    warning:"Allungamento leggero, mai dolore acuto."
+  },
+  {
+    id:"waterWalk",
+    category:"Piscina o mare · facoltativo",
+    title:"Camminata in acqua",
+    dose:"3–5 minuti",
+    timer:240,
+    modes:["green","yellow","red"],
+    phases:[1,2,3],
+    optional:true,
+    description:`
+      <ul>
+        <li>Acqua fino al petto.</li>
+        <li>Cammina lentamente.</li>
+        <li>Lascia oscillare naturalmente le braccia.</li>
+      </ul>
+    `,
+    warning:"Salta con mare mosso, acqua fredda o stanchezza."
+  },
+  {
+    id:"waterMoves",
+    category:"Piscina · facoltativo",
+    title:"Movimenti piccoli in acqua",
+    dose:"2 × 10–12",
+    timer:150,
+    modes:["green","yellow"],
+    phases:[1,2,3],
+    optional:true,
+    description:`
+      <ul>
+        <li>Cerchi piccoli e lenti.</li>
+        <li>Aperture e chiusure entro una zona comoda.</li>
+        <li>Rotazioni esterne con gomiti ai fianchi.</li>
+      </ul>
+    `,
+    warning:"Niente cerchi ampi o movimenti veloci attraverso i 90°."
+  },
+  {
+    id:"floatRelax",
+    category:"Recupero in acqua · facoltativo",
+    title:"Scarico e respirazione",
+    dose:"2 minuti",
+    timer:120,
+    modes:["green","yellow","red"],
+    phases:[1,2,3],
+    optional:true,
+    description:`
+      <ul>
+        <li>Appoggiati al bordo o galleggia in sicurezza.</li>
+        <li>Rilassa collo e spalle.</li>
+        <li>Espira più a lungo dell'inspirazione.</li>
+      </ul>
+    `
+  }
+];
 
-    let workoutSteps = [];
-    let currentStepIndex = 0;
-    let completedExerciseCount = 0;
+function defaultData(){
+  return{
+    sessions:[],
+    personalNote:"",
+    createdAt:new Date().toISOString()
+  };
+}
 
-    let timerInterval = null;
-    let timerRunning = false;
-    let timeLeft = 0;
+function getData(){
+  try{
+    const parsed=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return parsed || defaultData();
+  }catch(error){
+    console.error(error);
+    return defaultData();
+  }
+}
 
-    /*
-    ============================================================
-    ELEMENTI DOM
-    ============================================================
-    */
+function saveData(data){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+}
 
-    const homeView = document.getElementById("home-view");
-    const workoutView = document.getElementById("workout-view");
-    const summaryView = document.getElementById("summary-view");
+function getPhase(sessionCount){
+  if(sessionCount<20)return 1;
+  if(sessionCount<60)return 2;
+  return 3;
+}
 
-    const startBtn = document.getElementById("start-btn");
-    const painResult = document.getElementById("pain-result");
+function phaseLabel(phase){
+  if(phase===1)return"Fase 1 · Reset e controllo";
+  if(phase===2)return"Fase 2 · Costruzione";
+  return"Fase 3 · Mantenimento For Life";
+}
 
-    /*
-    ============================================================
-    ESERCIZI BASE
-    ============================================================
-    */
+function phaseDescription(phase){
+  if(phase===1)return"Prime 20 sessioni: mobilità, controllo scapolare, cuffia leggera e recupero.";
+  if(phase===2)return"Sessioni 21–60: resistenza, Trap-3 Raise, carry leggeri e progressione graduale.";
+  return"Da 61 sessioni in poi: mantenimento permanente scelto in base al check giornaliero.";
+}
 
-    const baseSteps = [
-        {
-            id: "breathing",
-            category: "Preparazione",
-            title: "Respirazione Diaframmatica",
-            dose: "10 respiri · circa 2 minuti",
-            description: `
-                <ul>
-                    <li>Sdraiati oppure rimani in piedi rilassato.</li>
-                    <li>Metti una mano sul petto e una sulla pancia.</li>
-                    <li>Inspira dal naso per 4 secondi.</li>
-                    <li>Espira lentamente dalla bocca per 6 secondi.</li>
-                    <li>Durante l'espirazione lascia scendere le spalle.</li>
-                </ul>
-            `,
-            tip: "La mano sulla pancia dovrebbe muoversi più di quella sul petto.",
-            warning: "",
-            timer: 120,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+function showTab(tabName){
+  ["today","plan","history","settings"].forEach(name=>{
+    document.getElementById("tab-"+name).classList.toggle("hidden",name!==tabName);
+  });
 
-        {
-            id: "catCamel",
-            category: "Mobilità toracica",
-            title: "Cat-Camel",
-            dose: "10 ripetizioni lente",
-            description: `
-                <ul>
-                    <li>Posizionati in quadrupedia.</li>
-                    <li>Spingi dolcemente il dorso verso l'alto.</li>
-                    <li>Poi riapri il petto senza forzare il collo.</li>
-                    <li>Collega il movimento al respiro.</li>
-                </ul>
-            `,
-            tip: "Muovi tutta la colonna, non soltanto il collo.",
-            warning: "Non forzare la posizione finale e non cercare dolore.",
-            timer: 90,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+  document.querySelectorAll(".tab").forEach(button=>{
+    button.classList.toggle("active",button.dataset.tab===tabName);
+  });
 
-        {
-            id: "threadNeedle",
-            category: "Mobilità toracica",
-            title: "Thread the Needle",
-            dose: "8 ripetizioni per lato",
-            description: `
-                <ul>
-                    <li>Rimani in quadrupedia.</li>
-                    <li>Fai passare lentamente un braccio sotto il torace.</li>
-                    <li>Ruota il busto senza spostare troppo il bacino.</li>
-                    <li>Ritorna e apri il braccio verso l'alto solo finché è comodo.</li>
-                </ul>
-            `,
-            tip: "Pensa a ruotare il torace, non a tirare con la spalla.",
-            warning: "Riduci l'ampiezza se compare la fitta.",
-            timer: 120,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+  if(tabName==="history")renderHistory();
+}
 
-        {
-            id: "thoracicRotation",
-            category: "Mobilità toracica",
-            title: "Rotazione Toracica",
-            dose: "8 ripetizioni per lato",
-            description: `
-                <ul>
-                    <li>Siediti oppure mettiti in posizione di cavalier servente.</li>
-                    <li>Porta le braccia davanti al petto.</li>
-                    <li>Ruota lentamente il busto a destra e a sinistra.</li>
-                    <li>Mantieni il bacino il più possibile stabile.</li>
-                </ul>
-            `,
-            tip: "Il movimento deve partire dal petto, non dalla mano.",
-            warning: "",
-            timer: 120,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+function setPain(value){
+  selectedPain=value;
 
-        {
-            id: "wallSlide",
-            category: "Controllo scapolare",
-            title: "Wall Slide",
-            dose: "2 serie × 10 ripetizioni",
-            description: `
-                <ul>
-                    <li>Appoggia gli avambracci alla parete.</li>
-                    <li>Fai scivolare lentamente le braccia verso l'alto.</li>
-                    <li>Mantieni collo e mandibola rilassati.</li>
-                    <li>Fermati prima che la spalla salga verso l'orecchio.</li>
-                    <li>Recupera 30 secondi tra le due serie.</li>
-                </ul>
-            `,
-            tip: "Immagina che il collo diventi lungo mentre sali.",
-            warning: "Non superare l'ampiezza che puoi controllare senza fitta.",
-            timer: 150,
-            optional: false,
-            allowedModes: ["green", "yellow"]
-        },
+  document.querySelectorAll("#painScale button").forEach((button,index)=>{
+    button.classList.toggle("selected",index===Math.min(value,5));
+  });
 
-        {
-            id: "wallPushPlus",
-            category: "Dentato anteriore",
-            title: "Push-Up Plus al Muro",
-            dose: "2 serie × 12 ripetizioni",
-            description: `
-                <ul>
-                    <li>Appoggia le mani alla parete.</li>
-                    <li>Mantieni i gomiti distesi.</li>
-                    <li>Avvicina leggermente il petto alla parete.</li>
-                    <li>Poi spingi il muro allontanando le scapole.</li>
-                    <li>Recupera 30 secondi tra le serie.</li>
-                </ul>
-            `,
-            tip: "Dovresti sentire lavoro sotto l'ascella e lungo le costole.",
-            warning: "Se senti soprattutto il collo, riduci la spinta.",
-            timer: 150,
-            optional: false,
-            allowedModes: ["green", "yellow"]
-        },
+  evaluateReadiness();
+}
 
-        {
-            id: "externalRotation",
-            category: "Cuffia dei rotatori",
-            title: "Rotazione Esterna con Elastico",
-            dose: "2 serie × 15 ripetizioni",
-            description: `
-                <ul>
-                    <li>Tieni il gomito aderente al fianco.</li>
-                    <li>Inserisci un piccolo asciugamano tra gomito e busto.</li>
-                    <li>Ruota lentamente l'avambraccio verso l'esterno.</li>
-                    <li>Ritorna in 3 secondi.</li>
-                    <li>Recupera 30–45 secondi tra le serie.</li>
-                </ul>
-            `,
-            tip: "Usa un elastico leggero. Devi controllare anche il ritorno.",
-            warning: "Interrompi se compare la stessa fitta della discesa del braccio.",
-            timer: 180,
-            optional: false,
-            allowedModes: ["green", "yellow"]
-        },
+function evaluateReadiness(){
+  if(selectedPain===null)return;
 
-        {
-            id: "trap3",
-            category: "Trapezio inferiore",
-            title: "Trap-3 Raise",
-            dose: "2 serie × 10–12 ripetizioni",
-            description: `
-                <ul>
-                    <li>Eseguilo senza peso oppure con bottiglietta da 0,5 L.</li>
-                    <li>Solleva il braccio in diagonale formando una Y.</li>
-                    <li>Mantieni il pollice rivolto verso l'alto.</li>
-                    <li>Fermati prima che il trapezio superiore si irrigidisca.</li>
-                    <li>Recupera 45 secondi tra le serie.</li>
-                </ul>
-            `,
-            tip: "Questo esercizio viene proposto solo a giorni alterni.",
-            warning: "Se senti dolore a 90° o durante la discesa, usa la variante isometrica.",
-            timer: 180,
-            optional: false,
-            allowedModes: ["green"]
-        },
+  const stiffness=Number(document.getElementById("stiffness").value);
+  const sleep=Number(document.getElementById("sleep").value);
+  const strength=Number(document.getElementById("strength").value);
+  const tingling=Number(document.getElementById("tingling").value);
 
-        {
-            id: "trap3Isometric",
-            category: "Controllo scapolare",
-            title: "Isometria Leggera della Scapola",
-            dose: "5 tenute da 8 secondi",
-            description: `
-                <ul>
-                    <li>Appoggia l'avambraccio alla parete.</li>
-                    <li>Spingi dolcemente senza muovere il braccio.</li>
-                    <li>Mantieni collo e trapezio rilassati.</li>
-                    <li>Recupera 10–15 secondi tra le tenute.</li>
-                </ul>
-            `,
-            tip: "Questa è la variante leggera dei giorni senza Trap-3 Raise.",
-            warning: "La contrazione deve essere moderata, non massimale.",
-            timer: 120,
-            optional: false,
-            allowedModes: ["green", "yellow"]
-        },
+  const score=selectedPain+stiffness+sleep+strength+tingling;
+  const modeBox=document.getElementById("modeBox");
 
-        {
-            id: "birdDog",
-            category: "Stabilità e core",
-            title: "Bird Dog",
-            dose: "2 serie × 8 per lato",
-            description: `
-                <ul>
-                    <li>Posizionati in quadrupedia.</li>
-                    <li>Allunga lentamente un braccio e la gamba opposta.</li>
-                    <li>Mantieni il bacino fermo.</li>
-                    <li>Ritorna lentamente senza perdere l'equilibrio.</li>
-                </ul>
-            `,
-            tip: "Immagina di avere un bicchiere appoggiato sulla schiena.",
-            warning: "Tieni il braccio più basso se la posizione alta dà fastidio.",
-            timer: 180,
-            optional: false,
-            allowedModes: ["green", "yellow"]
-        },
+  modeBox.className="mode";
 
-        {
-            id: "pectoralStretch",
-            category: "Stretching",
-            title: "Stretch del Pettorale",
-            dose: "30 secondi per lato · 2 volte",
-            description: `
-                <ul>
-                    <li>Appoggia l'avambraccio a una parete o a uno stipite.</li>
-                    <li>Ruota lentamente il torace dalla parte opposta.</li>
-                    <li>Mantieni la spalla bassa.</li>
-                    <li>Respira senza trattenere il fiato.</li>
-                </ul>
-            `,
-            tip: "Devi sentire un allungamento dolce davanti al petto.",
-            warning: "Non cercare una tensione forte nella parte anteriore della spalla.",
-            timer: 120,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+  if(tingling>=3 || strength>=2 || selectedPain>=5){
+    selectedMode="red";
+    modeBox.classList.add("redbox");
+    modeBox.innerHTML="<strong>🔴 Recupero prudente</strong><br>Solo mobilità dolce e scarico. Debolezza nuova o formicolio persistente richiedono valutazione clinica.";
+  }else if(score>=5 || selectedPain>=3){
+    selectedMode="yellow";
+    modeBox.classList.add("yellow");
+    modeBox.innerHTML="<strong>🟡 Carico ridotto</strong><br>Mobilità, controllo scapolare ed elastico leggero. Nessuna ricerca della fatica.";
+  }else{
+    selectedMode="green";
+    modeBox.classList.add("green");
+    modeBox.innerHTML="<strong>🟢 Sessione completa</strong><br>Puoi eseguire il programma del giorno con tecnica controllata.";
+  }
 
-        {
-            id: "levatorStretch",
-            category: "Stretching",
-            title: "Stretch Elevatore della Scapola",
-            dose: "30 secondi per lato",
-            description: `
-                <ul>
-                    <li>Ruota leggermente il viso verso l'ascella opposta.</li>
-                    <li>Inclina dolcemente la testa in avanti.</li>
-                    <li>Non tirare forte con la mano.</li>
-                    <li>Mantieni la spalla dolorante rilassata.</li>
-                </ul>
-            `,
-            tip: "Una tensione leggera è sufficiente.",
-            warning: "Interrompi se provoca vertigini, formicolio o dolore irradiato.",
-            timer: 90,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+  modeBox.classList.remove("hidden");
 
-        {
-            id: "latStretch",
-            category: "Stretching",
-            title: "Stretch del Gran Dorsale",
-            dose: "30 secondi per lato",
-            description: `
-                <ul>
-                    <li>Appoggia le mani a una parete o a un supporto stabile.</li>
-                    <li>Porta lentamente il bacino indietro.</li>
-                    <li>Lascia allungare i fianchi e la parte laterale del dorso.</li>
-                    <li>Mantieni le spalle lontane dalle orecchie.</li>
-                </ul>
-            `,
-            tip: "Mantieni l'allungamento entro una zona comoda.",
-            warning: "",
-            timer: 90,
-            optional: false,
-            allowedModes: ["green", "yellow", "red"]
-        },
+  const startButton=document.getElementById("startButton");
+  startButton.disabled=false;
+  startButton.style.opacity="1";
+  startButton.textContent="Avvia sessione di oggi";
+  startButton.onclick=startWorkout;
 
-        {
-            id: "poolWalk",
-            category: "Piscina facoltativa",
-            title: "Camminata in Acqua",
-            dose: "3 minuti",
-            description: `
-                <ul>
-                    <li>Entra in acqua fino al petto.</li>
-                    <li>Cammina lentamente avanti e indietro.</li>
-                    <li>Lascia oscillare naturalmente le braccia.</li>
-                    <li>Respira con calma.</li>
-                </ul>
-            `,
-            tip: "L'acqua deve essere confortevole, non eccessivamente fredda.",
-            warning: "Salta la piscina se il mare è mosso o ti senti affaticato.",
-            timer: 180,
-            optional: true,
-            allowedModes: ["green", "yellow", "red"]
-        },
+  buildWorkout();
+  renderPreview();
+}
 
-        {
-            id: "poolCircles",
-            category: "Piscina facoltativa",
-            title: "Cerchi Piccoli in Acqua",
-            dose: "15 avanti + 15 indietro",
-            description: `
-                <ul>
-                    <li>Mantieni le braccia immerse e rilassate.</li>
-                    <li>Inizia con cerchi molto piccoli.</li>
-                    <li>Aumenta leggermente l'ampiezza solo se non compare dolore.</li>
-                    <li>Muoviti lentamente.</li>
-                </ul>
-            `,
-            tip: "I cerchi piccoli sono preferibili ai cerchi ampi.",
-            warning: "Fermati prima della zona in cui compare la fitta.",
-            timer: 90,
-            optional: true,
-            allowedModes: ["green", "yellow"]
-        },
+["stiffness","sleep","strength","tingling"].forEach(id=>{
+  document.getElementById(id).addEventListener("change",()=>{
+    if(selectedPain!==null)evaluateReadiness();
+  });
+});
 
-        {
-            id: "poolOpenClose",
-            category: "Piscina facoltativa",
-            title: "Aperture e Chiusure in Acqua",
-            dose: "2 serie × 12 ripetizioni",
-            description: `
-                <ul>
-                    <li>Tieni le braccia immerse davanti al corpo.</li>
-                    <li>Aprile lentamente senza superare l'ampiezza comoda.</li>
-                    <li>Richiudile controllando la resistenza dell'acqua.</li>
-                    <li>Recupera 30 secondi tra le serie.</li>
-                </ul>
-            `,
-            tip: "L'acqua deve offrire una resistenza leggera, non una lotta.",
-            warning: "Non scendere velocemente attraverso i 90° se lì compare dolore.",
-            timer: 150,
-            optional: true,
-            allowedModes: ["green", "yellow"]
-        },
+function buildWorkout(){
+  const data=getData();
+  const phase=getPhase(data.sessions.length);
+  const sessionNumber=data.sessions.length+1;
+  const odd=sessionNumber%2===1;
 
-        {
-            id: "poolExternalRotation",
-            category: "Piscina facoltativa",
-            title: "Rotazioni Esterne Immerse",
-            dose: "2 serie × 12 ripetizioni",
-            description: `
-                <ul>
-                    <li>Tieni i gomiti vicini al busto.</li>
-                    <li>Ruota lentamente gli avambracci verso l'esterno.</li>
-                    <li>Ritorna lentamente.</li>
-                    <li>Mantieni collo e spalle rilassati.</li>
-                </ul>
-            `,
-            tip: "L'acqua crea già resistenza: non serve aggiungere attrezzi.",
-            warning: "Interrompi se aumenta la fitta o la tensione cervicale.",
-            timer: 150,
-            optional: true,
-            allowedModes: ["green", "yellow"]
-        },
+  workoutSteps=exerciseLibrary.filter(exercise=>{
+    if(!exercise.modes.includes(selectedMode))return false;
+    if(!exercise.phases.includes(phase))return false;
 
-        {
-            id: "floatRelax",
-            category: "Piscina facoltativa",
-            title: "Scarico e Respirazione",
-            dose: "2 minuti",
-            description: `
-                <ul>
-                    <li>Appoggiati al bordo oppure galleggia in sicurezza.</li>
-                    <li>Lascia rilassare collo e spalle.</li>
-                    <li>Inspira lentamente dal naso.</li>
-                    <li>Espira più a lungo dell'inspirazione.</li>
-                </ul>
-            `,
-            tip: "Terminata la piscina, cammina 5 minuti e bevi acqua.",
-            warning: "Galleggia soltanto in condizioni sicure e controllate.",
-            timer: 120,
-            optional: true,
-            allowedModes: ["green", "yellow", "red"]
-        }
-    ];
+    if(exercise.id==="trap3" && !odd)return false;
+    if(exercise.id==="isometric" && odd && phase>=2)return false;
 
-    /*
-    ============================================================
-    CONTROLLO DEL DOLORE
-    ============================================================
-    */
-
-    function selectPain(value) {
-        selectedPain = value;
-
-        document.querySelectorAll(".pain-btn").forEach((button) => {
-            button.classList.remove("selected");
-        });
-
-        const buttonIndex = Math.min(value, 5);
-
-        document
-            .querySelectorAll(".pain-btn")
-            [buttonIndex]
-            .classList.add("selected");
-
-        painResult.classList.remove(
-            "hidden",
-            "mode-green",
-            "mode-yellow",
-            "mode-red"
-        );
-
-        if (value <= 2) {
-            selectedMode = "green";
-
-            painResult.classList.add("mode-green");
-
-            painResult.innerHTML = `
-                <strong>🟢 Modalità verde</strong><br>
-                Puoi eseguire la routine completa,
-                mantenendo tutti i movimenti entro una zona confortevole.
-            `;
-        } else if (value <= 4) {
-            selectedMode = "yellow";
-
-            painResult.classList.add("mode-yellow");
-
-            painResult.innerHTML = `
-                <strong>🟡 Modalità gialla</strong><br>
-                Routine ridotta: mobilità, controllo scapolare,
-                elastico leggero, stretching e acqua dolce.
-                Niente rinforzo impegnativo.
-            `;
-        } else {
-            selectedMode = "red";
-
-            painResult.classList.add("mode-red");
-
-            painResult.innerHTML = `
-                <strong>🔴 Modalità rossa</strong><br>
-                Oggi solo respirazione, mobilità molto leggera,
-                stretching dolce e scarico in acqua.
-                Se il dolore rimane elevato o peggiora,
-                serve una rivalutazione professionale.
-            `;
-        }
-
-        startBtn.disabled = false;
-        startBtn.style.opacity = "1";
-        startBtn.style.cursor = "pointer";
-        startBtn.innerText = "🚀 Avvia Routine Guidata";
+    if(selectedMode==="red"){
+      return[
+        "breathing",
+        "catCamel",
+        "threadNeedle",
+        "stretch",
+        "waterWalk",
+        "floatRelax"
+      ].includes(exercise.id);
     }
 
-    /*
-    ============================================================
-    COSTRUZIONE DELLA ROUTINE
-    ============================================================
-    */
+    return true;
+  });
 
-    function buildWorkoutSteps() {
-        const completedDays = getStoredData().completedDays || 0;
+  if(phase===3 && selectedMode==="green"){
+    const day=new Date().getDay();
 
-        /*
-        Trap-3 Raise a giorni alterni.
-        Giorni dispari: Trap-3.
-        Giorni pari: isometria leggera.
-        */
-
-        const nextDayNumber = Math.min(completedDays + 1, 20);
-        const trap3Day = nextDayNumber % 2 === 1;
-
-        workoutSteps = baseSteps.filter((step) => {
-            if (!step.allowedModes.includes(selectedMode)) {
-                return false;
-            }
-
-            if (step.id === "trap3" && !trap3Day) {
-                return false;
-            }
-
-            if (step.id === "trap3Isometric" && trap3Day) {
-                return false;
-            }
-
-            return true;
-        });
+    if(day===2 || day===5){
+      workoutSteps=workoutSteps.filter(exercise=>
+        !["waterWalk","waterMoves","floatRelax"].includes(exercise.id)
+      );
     }
 
-    function startWorkout() {
-        if (selectedPain === null || !selectedMode) {
-            alert("Seleziona prima il livello di dolore.");
-            return;
-        }
+    if(day===0){
+      workoutSteps=workoutSteps.filter(exercise=>
+        ["breathing","catCamel","threadNeedle","stretch","waterWalk","floatRelax"].includes(exercise.id)
+      );
+    }
+  }
+}
 
-        buildWorkoutSteps();
+function renderPreview(){
+  const list=document.getElementById("previewList");
+  list.innerHTML="";
 
-        currentStepIndex = 0;
-        completedExerciseCount = 0;
+  workoutSteps.forEach(exercise=>{
+    const item=document.createElement("li");
+    item.innerHTML=`
+      <span>${exercise.title}</span>
+      <span class="chip">${exercise.dose.split("·")[0]}</span>
+    `;
+    list.appendChild(item);
+  });
+}
 
-        homeView.classList.add("hidden");
-        summaryView.classList.add("hidden");
-        workoutView.classList.remove("hidden");
+function startWorkout(){
+  if(selectedPain===null || !selectedMode)return;
 
-        loadStep();
+  buildWorkout();
+  currentStepIndex=0;
+  completedExercises=0;
+
+  document.getElementById("homeView").classList.add("hidden");
+  document.getElementById("summaryView").classList.add("hidden");
+  document.getElementById("workoutView").classList.remove("hidden");
+
+  loadStep();
+}
+
+function loadStep(){
+  stopTimer();
+
+  const exercise=workoutSteps[currentStepIndex];
+  if(!exercise){
+    finishWorkout();
+    return;
+  }
+
+  document.getElementById("exerciseCategory").textContent=exercise.category;
+  document.getElementById("exerciseTitle").textContent=exercise.title;
+  document.getElementById("exerciseDose").textContent=exercise.dose;
+  document.getElementById("exerciseDescription").innerHTML=exercise.description;
+
+  const tip=document.getElementById("exerciseTip");
+  tip.classList.toggle("hidden",!exercise.tip);
+  tip.textContent=exercise.tip ? "👉 "+exercise.tip : "";
+
+  const warning=document.getElementById("exerciseWarning");
+  warning.classList.toggle("hidden",!exercise.warning);
+  warning.textContent=exercise.warning ? "⚠️ "+exercise.warning : "";
+
+  const badge=document.getElementById("modeBadge");
+  badge.className="badge "+(
+    selectedMode==="green" ? "green" :
+    selectedMode==="yellow" ? "yellow" :
+    "redbox"
+  );
+
+  badge.textContent=
+    selectedMode==="green" ? "🟢 Completa" :
+    selectedMode==="yellow" ? "🟡 Ridotta" :
+    "🔴 Recupero";
+
+  document.getElementById("workoutFill").style.width=
+    ((currentStepIndex+1)/workoutSteps.length*100)+"%";
+
+  document.getElementById("stepCounter").textContent=
+    `${currentStepIndex+1}/${workoutSteps.length}`;
+
+  document.getElementById("previousButton").style.visibility=
+    currentStepIndex===0 ? "hidden" : "visible";
+
+  document.getElementById("skipButton").classList.toggle("hidden",!exercise.optional);
+
+  document.getElementById("nextButton").textContent=
+    currentStepIndex===workoutSteps.length-1 ? "Completa 🏁" : "Fatto, avanti";
+
+  timeLeft=exercise.timer || 0;
+  document.getElementById("timerBox").classList.toggle("hidden",!exercise.timer);
+  updateTimerDisplay();
+}
+
+function nextStep(){
+  completedExercises++;
+
+  if(currentStepIndex<workoutSteps.length-1){
+    currentStepIndex++;
+    loadStep();
+  }else{
+    finishWorkout();
+  }
+}
+
+function previousStep(){
+  if(currentStepIndex>0){
+    currentStepIndex--;
+    loadStep();
+  }
+}
+
+function skipStep(){
+  if(currentStepIndex<workoutSteps.length-1){
+    currentStepIndex++;
+    loadStep();
+  }else{
+    finishWorkout();
+  }
+}
+
+function leaveWorkout(){
+  if(confirm("Interrompere la sessione?")){
+    returnHome();
+  }
+}
+
+function toggleTimer(){
+  const button=document.getElementById("timerToggleButton");
+
+  if(timerRunning){
+    stopTimer();
+    button.textContent="Riprendi";
+    return;
+  }
+
+  timerRunning=true;
+  button.textContent="Pausa";
+
+  timerInterval=setInterval(()=>{
+    if(timeLeft>0){
+      timeLeft--;
+      updateTimerDisplay();
+    }else{
+      stopTimer();
+
+      if("vibrate" in navigator){
+        navigator.vibrate([180,100,180]);
+      }
+
+      alert("Tempo completato.");
+    }
+  },1000);
+}
+
+function stopTimer(){
+  clearInterval(timerInterval);
+  timerRunning=false;
+  timerInterval=null;
+
+  const button=document.getElementById("timerToggleButton");
+  if(button)button.textContent="Avvia timer";
+}
+
+function resetTimer(){
+  stopTimer();
+  timeLeft=workoutSteps[currentStepIndex]?.timer || 0;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay(){
+  const minutes=Math.floor(timeLeft/60);
+  const seconds=timeLeft%60;
+
+  document.getElementById("timerDisplay").textContent=
+    String(minutes).padStart(2,"0")+":"+String(seconds).padStart(2,"0");
+}
+
+function finishWorkout(){
+  stopTimer();
+
+  const data=getData();
+  const now=new Date();
+
+  data.sessions.push({
+    date:now.toISOString(),
+    pain:selectedPain,
+    mode:selectedMode,
+    completedExercises,
+    stiffness:Number(document.getElementById("stiffness").value),
+    sleep:Number(document.getElementById("sleep").value)
+  });
+
+  saveData(data);
+
+  document.getElementById("workoutView").classList.add("hidden");
+  document.getElementById("homeView").classList.add("hidden");
+  document.getElementById("summaryView").classList.remove("hidden");
+
+  document.getElementById("summarySession").textContent=data.sessions.length;
+  document.getElementById("summaryMode").textContent=
+    selectedMode==="green" ? "Verde" :
+    selectedMode==="yellow" ? "Gialla" :
+    "Rossa";
+
+  document.getElementById("summaryPain").textContent=
+    selectedPain>=5 ? "5+/10" : selectedPain+"/10";
+
+  document.getElementById("summaryExercises").textContent=completedExercises;
+
+  renderDashboard();
+}
+
+function returnHome(){
+  stopTimer();
+
+  selectedPain=null;
+  selectedMode=null;
+
+  document.querySelectorAll("#painScale button").forEach(button=>{
+    button.classList.remove("selected");
+  });
+
+  document.getElementById("modeBox").className="mode hidden";
+
+  const startButton=document.getElementById("startButton");
+  startButton.disabled=true;
+  startButton.style.opacity=".5";
+  startButton.textContent="Completa il check mattutino";
+  startButton.onclick=null;
+
+  document.getElementById("workoutView").classList.add("hidden");
+  document.getElementById("summaryView").classList.add("hidden");
+  document.getElementById("homeView").classList.remove("hidden");
+
+  showTab("today");
+  renderDashboard();
+  document.getElementById("previewList").innerHTML="";
+}
+
+function renderDashboard(){
+  const data=getData();
+  const sessionCount=data.sessions.length;
+  const phase=getPhase(sessionCount);
+
+  document.getElementById("phaseName").textContent=phaseLabel(phase);
+  document.getElementById("overallText").textContent=sessionCount+" sessioni";
+
+  const progress=
+    phase===1 ? Math.min(sessionCount/20*100,100) :
+    phase===2 ? Math.min((sessionCount-20)/40*100,100) :
+    100;
+
+  document.getElementById("overallFill").style.width=progress+"%";
+  document.getElementById("phaseDescription").textContent=phaseDescription(phase);
+
+  document.getElementById("personalNote").value=data.personalNote || "";
+}
+
+function renderHistory(){
+  const data=getData();
+  const sessions=data.sessions;
+
+  document.getElementById("statSessions").textContent=sessions.length;
+
+  const streak=calculateStreak(sessions);
+  document.getElementById("statStreak").textContent=streak;
+
+  if(sessions.length){
+    const average=sessions.reduce((sum,item)=>sum+Number(item.pain||0),0)/sessions.length;
+    document.getElementById("statAvgPain").textContent=average.toFixed(1);
+
+    const greenCount=sessions.filter(item=>item.mode==="green").length;
+    document.getElementById("statGreen").textContent=
+      Math.round(greenCount/sessions.length*100)+"%";
+  }else{
+    document.getElementById("statAvgPain").textContent="—";
+    document.getElementById("statGreen").textContent="0%";
+  }
+
+  const historyList=document.getElementById("historyList");
+  historyList.innerHTML="";
+
+  const recent=[...sessions].reverse().slice(0,15);
+
+  if(!recent.length){
+    const item=document.createElement("li");
+    item.innerHTML="<span>Nessuna sessione registrata</span><span>—</span><span>—</span>";
+    historyList.appendChild(item);
+    return;
+  }
+
+  recent.forEach(session=>{
+    const date=new Date(session.date);
+    const item=document.createElement("li");
+    item.innerHTML=`
+      <span>${date.toLocaleDateString("it-IT")}</span>
+      <span>${session.mode}</span>
+      <span>${session.pain>=5 ? "5+" : session.pain}/10</span>
+    `;
+    historyList.appendChild(item);
+  });
+}
+
+function calculateStreak(sessions){
+  if(!sessions.length)return 0;
+
+  const uniqueDates=[...new Set(
+    sessions.map(item=>new Date(item.date).toISOString().slice(0,10))
+  )].sort().reverse();
+
+  let streak=0;
+  let cursor=new Date();
+  cursor.setHours(0,0,0,0);
+
+  for(const dateString of uniqueDates){
+    const date=new Date(dateString+"T00:00:00");
+    const difference=Math.round((cursor-date)/(1000*60*60*24));
+
+    if(difference===0 || difference===1){
+      streak++;
+      cursor=date;
+    }else{
+      break;
+    }
+  }
+
+  return streak;
+}
+
+function savePersonalNote(){
+  const data=getData();
+  data.personalNote=document.getElementById("personalNote").value.trim();
+  saveData(data);
+  alert("Nota salvata.");
+}
+
+function exportData(){
+  const data=getData();
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download="strong-shoulder-for-life-backup.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(event){
+  const file=event.target.files?.[0];
+  if(!file)return;
+
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const imported=JSON.parse(reader.result);
+
+      if(!imported || !Array.isArray(imported.sessions)){
+        throw new Error("Formato non valido");
+      }
+
+      saveData(imported);
+      renderDashboard();
+      renderHistory();
+      alert("Dati importati correttamente.");
+    }catch(error){
+      alert("File non valido.");
     }
 
-    function loadStep() {
-        stopTimer();
-
-        const step = workoutSteps[currentStepIndex];
-
-        if (!step) {
-            finishWorkout();
-            return;
-        }
-
-        document.getElementById("exercise-category").innerText =
-            step.category;
-
-        document.getElementById("exercise-title").innerText =
-            step.title;
-
-        document.getElementById("exercise-dose").innerText =
-            step.dose;
-
-        document.getElementById("exercise-description").innerHTML =
-            step.description;
-
-        const tipBox = document.getElementById("exercise-tip");
-        const tipText = document.getElementById("exercise-tip-text");
-
-        if (step.tip) {
-            tipText.innerText = step.tip;
-            tipBox.classList.remove("hidden");
-        } else {
-            tipBox.classList.add("hidden");
-        }
-
-        const warningBox =
-            document.getElementById("exercise-warning");
-
-        const warningText =
-            document.getElementById("exercise-warning-text");
-
-        if (step.warning) {
-            warningText.innerText = step.warning;
-            warningBox.classList.remove("hidden");
-        } else {
-            warningBox.classList.add("hidden");
-        }
-
-        const modeBadge = document.getElementById("mode-badge");
-
-        modeBadge.className = "mode-badge";
-
-        if (selectedMode === "green") {
-            modeBadge.classList.add("mode-green");
-            modeBadge.innerText = "🟢 Modalità verde";
-        } else if (selectedMode === "yellow") {
-            modeBadge.classList.add("mode-yellow");
-            modeBadge.innerText = "🟡 Modalità gialla";
-        } else {
-            modeBadge.classList.add("mode-red");
-            modeBadge.innerText = "🔴 Modalità rossa";
-        }
-
-        const progress =
-            ((currentStepIndex + 1) / workoutSteps.length) * 100;
-
-        document.getElementById("progress-fill").style.width =
-            progress + "%";
-
-        document.getElementById("step-counter").innerText =
-            `${currentStepIndex + 1} / ${workoutSteps.length}`;
-
-        const timerBox = document.getElementById("timer-box");
-
-        if (step.timer) {
-            timeLeft = step.timer;
-            timerBox.classList.remove("hidden");
-            updateTimerDisplay();
-        } else {
-            timerBox.classList.add("hidden");
-        }
-
-        const skipBox = document.getElementById("skip-box");
-        const skipBtn = document.getElementById("skip-btn");
-
-        if (step.optional) {
-            skipBox.classList.remove("hidden");
-            skipBtn.classList.remove("hidden");
-        } else {
-            skipBox.classList.add("hidden");
-            skipBtn.classList.add("hidden");
-        }
-
-        document.getElementById("prev-btn").style.visibility =
-            currentStepIndex === 0 ? "hidden" : "visible";
-
-        document.getElementById("next-btn").innerText =
-            currentStepIndex === workoutSteps.length - 1
-                ? "Completa 🏁"
-                : "Fatto, avanti";
-    }
-
-    /*
-    ============================================================
-    NAVIGAZIONE
-    ============================================================
-    */
-
-    function nextStep() {
-        completedExerciseCount++;
-
-        if (currentStepIndex < workoutSteps.length - 1) {
-            currentStepIndex++;
-            loadStep();
-        } else {
-            finishWorkout();
-        }
-    }
-
-    function previousStep() {
-        if (currentStepIndex > 0) {
-            currentStepIndex--;
-            loadStep();
-        }
-    }
-
-    function skipCurrentStep() {
-        if (currentStepIndex < workoutSteps.length - 1) {
-            currentStepIndex++;
-            loadStep();
-        } else {
-            finishWorkout();
-        }
-    }
-
-    function confirmExit() {
-        const confirmed = confirm(
-            "Vuoi interrompere la routine e tornare alla Home?"
-        );
-
-        if (confirmed) {
-            returnHome();
-        }
-    }
-
-    /*
-    ============================================================
-    TIMER
-    ============================================================
-    */
-
-    function updateTimerDisplay() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-
-        document.getElementById("timer-display").innerText =
-            String(minutes).padStart(2, "0") +
-            ":" +
-            String(seconds).padStart(2, "0");
-    }
-
-    function toggleTimer() {
-        const button =
-            document.getElementById("timer-toggle-btn");
-
-        if (timerRunning) {
-            stopTimer();
-
-            button.innerText = "Riprendi";
-            button.className = "timer-btn timer-start";
-
-            return;
-        }
-
-        timerRunning = true;
-
-        button.innerText = "Pausa";
-        button.className = "timer-btn timer-pause";
-
-        timerInterval = setInterval(() => {
-            if (timeLeft > 0) {
-                timeLeft--;
-                updateTimerDisplay();
-            } else {
-                stopTimer();
-
-                document.getElementById("timer-display").innerText =
-                    "FINE";
-
-                if ("vibrate" in navigator) {
-                    navigator.vibrate([200, 100, 200]);
-                }
-
-                setTimeout(() => {
-                    alert(
-                        "Tempo completato. Recupera qualche secondo e passa avanti."
-                    );
-                }, 100);
-            }
-        }, 1000);
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-
-        timerInterval = null;
-        timerRunning = false;
-
-        const button =
-            document.getElementById("timer-toggle-btn");
-
-        if (button) {
-            button.innerText = "Avvia";
-            button.className = "timer-btn timer-start";
-        }
-    }
-
-    function resetTimer() {
-        stopTimer();
-
-        const step = workoutSteps[currentStepIndex];
-
-        timeLeft = step?.timer || 0;
-
-        updateTimerDisplay();
-    }
-
-    /*
-    ============================================================
-    COMPLETAMENTO E SALVATAGGIO
-    ============================================================
-    */
-
-    function finishWorkout() {
-        stopTimer();
-
-        saveCompletedDay();
-
-        workoutView.classList.add("hidden");
-        homeView.classList.add("hidden");
-        summaryView.classList.remove("hidden");
-
-        const storedData = getStoredData();
-        const completedDays = storedData.completedDays || 0;
-
-        document.getElementById("summary-mode").innerText =
-            selectedMode === "green"
-                ? "Verde"
-                : selectedMode === "yellow"
-                ? "Gialla"
-                : "Rossa";
-
-        document.getElementById("summary-pain").innerText =
-            selectedPain >= 5
-                ? "5+ / 10"
-                : `${selectedPain} / 10`;
-
-        document.getElementById("summary-completed").innerText =
-            completedExerciseCount;
-
-        document.getElementById("summary-day").innerText =
-            `${Math.min(completedDays, 20)} / 20`;
-    }
-
-    function saveCompletedDay() {
-        const data = getStoredData();
-
-        const today = new Date().toISOString().slice(0, 10);
-
-        if (!data.completedDates.includes(today)) {
-            data.completedDates.push(today);
-
-            if (data.completedDays < 20) {
-                data.completedDays++;
-            }
-        }
-
-        data.lastPain = selectedPain;
-        data.lastMode = selectedMode;
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(data)
-        );
-    }
-
-    function getStoredData() {
-        try {
-            const saved =
-                JSON.parse(localStorage.getItem(STORAGE_KEY));
-
-            return {
-                completedDays:
-                    Number(saved?.completedDays) || 0,
-
-                completedDates:
-                    Array.isArray(saved?.completedDates)
-                        ? saved.completedDates
-                        : [],
-
-                lastPain:
-                    saved?.lastPain ?? null,
-
-                lastMode:
-                    saved?.lastMode ?? null
-            };
-        } catch (error) {
-            console.error(
-                "Errore nella lettura dei dati:",
-                error
-            );
-
-            return {
-                completedDays: 0,
-                completedDates: [],
-                lastPain: null,
-                lastMode: null
-            };
-        }
-    }
-
-    function resetTwentyDays() {
-        const confirmed = confirm(
-            "Vuoi davvero azzerare tutti i 20 giorni salvati?"
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
-        localStorage.removeItem(STORAGE_KEY);
-
-        returnHome();
-    }
-
-    /*
-    ============================================================
-    HOME E PERCORSO
-    ============================================================
-    */
-
-    function returnHome() {
-        stopTimer();
-
-        selectedPain = null;
-        selectedMode = null;
-
-        document.querySelectorAll(".pain-btn").forEach((button) => {
-            button.classList.remove("selected");
-        });
-
-        painResult.className = "pain-result hidden";
-        painResult.innerHTML = "";
-
-        startBtn.disabled = true;
-        startBtn.style.opacity = "0.55";
-        startBtn.style.cursor = "not-allowed";
-        startBtn.innerText =
-            "Seleziona prima il livello di dolore";
-
-        workoutView.classList.add("hidden");
-        summaryView.classList.add("hidden");
-        homeView.classList.remove("hidden");
-
-        renderDayProgress();
-    }
-
-    function renderDayProgress() {
-        const data = getStoredData();
-
-        const completedDays =
-            Math.min(data.completedDays || 0, 20);
-
-        document.getElementById(
-            "completed-days-text"
-        ).innerText = `${completedDays} / 20 giorni`;
-
-        const dayGrid = document.getElementById("day-grid");
-
-        dayGrid.innerHTML = "";
-
-        for (let day = 1; day <= 20; day++) {
-            const dot = document.createElement("div");
-
-            dot.className =
-                day <= completedDays
-                    ? "day-dot done"
-                    : "day-dot";
-
-            dot.innerText =
-                day <= completedDays ? "✓" : day;
-
-            dayGrid.appendChild(dot);
-        }
-    }
-
-    /*
-    ============================================================
-    AVVIO
-    ============================================================
-    */
-
-    document.addEventListener("DOMContentLoaded", () => {
-        renderDayProgress();
-    });
+    event.target.value="";
+  };
+
+  reader.readAsText(file);
+}
+
+function resetCurrentCheck(){
+  selectedPain=null;
+  selectedMode=null;
+
+  document.querySelectorAll("#painScale button").forEach(button=>{
+    button.classList.remove("selected");
+  });
+
+  document.getElementById("modeBox").className="mode hidden";
+  document.getElementById("previewList").innerHTML="";
+
+  const startButton=document.getElementById("startButton");
+  startButton.disabled=true;
+  startButton.style.opacity=".5";
+  startButton.textContent="Completa il check mattutino";
+
+  showTab("today");
+}
+
+function resetAllData(){
+  if(confirm("Vuoi cancellare definitivamente tutto il diario?")){
+    localStorage.removeItem(STORAGE_KEY);
+    returnHome();
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  renderDashboard();
+  renderHistory();
+});
 </script>
-
 </body>
 </html>
