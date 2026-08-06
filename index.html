@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Erjon Coach AI">
-<title>Erjon Hybrid Coach AI · 10+ · For Life</title>
+<title>Erjon Hybrid Coach AI · 10+ Fisio Flow · For Life</title>
 <style>
 :root{--bg:#06111d;--panel:#0c1c2b;--panel2:#10263a;--line:#21384e;--text:#f4f8fb;--muted:#8fa6ba;--green:#16c784;--blue:#38bdf8;--orange:#fb923c;--purple:#a78bfa;--red:#ef4444;--yellow:#facc15;--greenbg:rgba(22,199,132,.13);--bluebg:rgba(56,189,248,.12);--redbg:rgba(239,68,68,.12);--yellowbg:rgba(250,204,21,.10);--radius:18px;--shadow:0 18px 52px rgba(0,0,0,.28)}
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -77,7 +77,7 @@ button:disabled{opacity:.42;cursor:not-allowed}
 <section id="page-work" class="hidden"><div class="card"><div class="eyebrow">Pizzaiolo Performance</div><h2>Proteggi la spalla durante pala, banco e forno</h2></div><div class="grid3"><div class="card"><h3>Pre-turno · 5 min</h3><div class="small">Attivazione cuffia e scapola.</div><button class="btn full" style="margin-top:10px" onclick="startSpecial('prework')">Avvia</button></div><div class="card"><h3>Micro-reset · 60 sec</h3><div class="small">Respiri, scapole morbide e torace.</div><button class="btn blue full" style="margin-top:10px" onclick="startSpecial('midwork')">Avvia</button></div><div class="card"><h3>Post-turno · 8 min</h3><div class="small">Scarico dolce e respirazione.</div><button class="btn purple full" style="margin-top:10px" onclick="startSpecial('postwork')">Avvia</button></div></div></section>
 <section id="page-library" class="hidden"><div class="card"><div class="eyebrow">Libreria 120+ esercizi</div><h2>Database personale filtrabile</h2><div class="grid3" style="margin-top:10px"><div class="field"><label>Categoria</label><select id="libCategory" onchange="renderLibrary()"><option value="all">Tutte</option><option value="rehab">Spalla e scapola</option><option value="mobility">Mobilità</option><option value="release">Palla e roller</option><option value="military">Military</option><option value="legs">Gambe</option><option value="core">Core</option><option value="run">Corsa</option><option value="hyrox">Hyrox</option><option value="pool">Piscina</option><option value="work">Pizzaiolo</option><option value="recovery">Recupero</option></select></div><div class="field"><label>Attrezzatura</label><select id="libEquipment" onchange="renderLibrary()"><option value="all">Tutta</option><option value="bodyweight">Corpo libero</option><option value="band">Elastico</option><option value="weights">Pesi</option><option value="bench">Panca/step</option><option value="ball">Palla</option><option value="roller">Roller</option><option value="pool">Piscina</option></select></div><div class="field"><label>Cerca</label><input id="libSearch" placeholder="Nome esercizio..." oninput="renderLibrary()"></div></div></div><div class="card"><div id="libraryCount" class="small" style="margin-bottom:10px"></div><div id="libraryGrid" class="library-grid"></div></div></section>
 <section id="page-physio" class="hidden">
-<div class="card"><div class="eyebrow">Programma del fisioterapista</div><h2>Schede riabilitative originali · 10/10/2022</h2><p class="small">Trascrizione guidata delle due schede del Dott. Francesco Natale. Scheda 1: lunedì e giovedì. Scheda 2: martedì e venerdì. Prima di riprendere oggi un programma del 2022, soprattutto con dip, spinte sopra la testa, plank prolungati e circuiti potenti, è prudente farlo riconfermare dal professionista che ti segue.</p></div>
+<div class="card"><div class="eyebrow">Programma del fisioterapista</div><h2>Schede riabilitative originali · 10/10/2022</h2><p class="small">Trascrizione guidata delle due schede del Dott. Francesco Natale. Scheda 1: lunedì e giovedì. Scheda 2: martedì e venerdì. I circuiti ora scorrono esercizio per esercizio, con 60 secondi ciascuno, giri separati e passaggio automatico. Prima di riprendere oggi un programma del 2022, soprattutto con dip, spinte sopra la testa, plank prolungati e circuiti potenti, è prudente farlo riconfermare dal professionista che ti segue.</p></div>
 <div class="card warning"><strong>Modalità fedele al documento:</strong> l’app guida ordine, durata, recuperi e voce. Non modifica automaticamente gli esercizi prescritti. Il check spalla resta obbligatorio e blocca la sessione con debolezza nuova, formicolio persistente o dolore notturno importante.</div>
 <div class="card"><div class="segment"><button class="active" onclick="selectPhysio('workout1',this)">Scheda 1 · Lun/Gio</button><button onclick="selectPhysio('workout2',this)">Scheda 2 · Mar/Ven</button></div><div id="physioPreview" class="workout-list"></div><button class="btn purple full" style="margin-top:12px" onclick="startPhysio()">Avvia programma fisioterapista</button></div>
 </section>
@@ -95,6 +95,7 @@ const LEGACY_KEYS=["erjonHybridCoachAI110_ForLife_v2","erjonHybridCoachAI110_For
 let selectedPain=null,postPain=null,mode=null,readiness=0,blocked=false,currentWorkout=[],currentIndex=0,currentType="generated";
 let timerLeft=0,timerInitial=0,timerId=null,countdownId=null,timerRunning=false,countdownRunning=false,voiceEnabled=true,halfCuePlayed=false,tenCuePlayed=false,fiveCuePlayed=false;
 let shoulderRoutine="reset",militaryLevel="recovery",runType="easy",physioRoutine="workout1";
+let wakeLock=null,wakeLockWanted=false,autoFlow=false,autoAdvanceId=null;
 const EX={};
 function add(id,t,d,s,i,c,x,e="bodyweight"){EX[id]={id,t,d,s,i,c,x,e}}
 [
@@ -139,6 +140,59 @@ const physioPrograms={
  workout1:["physio1_mob1","physio1_mob2","physio1_mob3","physio1_mob4","physio1_pfk","physio1_swimmer","physio1_plus","physio1_c1warm","physio1_c1power","physio1_c2warm","physio1_c2power","physio_stretch_side","physio_stretch_front","physio_legs_wall"],
  workout2:["physio2_mob1","physio2_mob2","physio2_mob3","physio2_plank","physio2_superman","physio2_hollow","physio2_c1warm","physio2_c1power","physio2_c2warm","physio2_c2power","physio2_stretch_back","physio2_stretch_front","physio_legs_wall"]
 };
+
+function physioStep(id,t,d,s,i,x,extra={}){return{id,t,d,s,i,c:"physio",x,e:extra.e||"bodyweight",autoNext:extra.autoNext!==false,noCountdown:!!extra.noCountdown,phase:extra.phase||""}}
+function circuitSteps(prefix,title,names,rounds=1,warm=false){
+  const out=[];
+  for(let round=1;round<=rounds;round++){
+    names.forEach((name,index)=>out.push(physioStep(`${prefix}_r${round}_${index+1}`,`${title} · Giro ${round}/${rounds} · ${name}`,"60 secondi",60,index===0?"🔥":"⚡",`${warm?"Riscaldamento con carico leggero. ":"Carico adeguato e tecnica controllata. "}Esegui ${name} per un minuto. Passa direttamente all’esercizio successivo: la scheda originale non prevede pausa.`,{e:name.toLowerCase().includes("push-up")||name.toLowerCase().includes("jump")||name.toLowerCase().includes("wall sit")?"bodyweight":"weights",noCountdown:true,phase:title})));
+  }
+  return out;
+}
+function buildPhysioFlow(which){
+  if(which==="workout1"){
+    return [
+      EX.physio1_mob1,EX.physio1_mob2,EX.physio1_mob3,EX.physio1_mob4,
+      physioStep("p1_pfk_1","PFK medio prono · Serie 1/2","60 secondi",60,"🪽","Braccia a 90 gradi, pollici verso l’alto. Solleva le braccia e senti il lavoro tra le scapole."),
+      physioStep("p1_pfk_rest","Recupero PFK","30 secondi",30,"⏸️","Rilassa completamente braccia, collo e scapole."),
+      physioStep("p1_pfk_2","PFK medio prono · Serie 2/2","60 secondi",60,"🪽","Ripeti con controllo, senza irrigidire il collo."),
+      physioStep("p1_swim_1","Nuotatore prono · Serie 1/2","60 secondi",60,"🏊","Fronte appoggiata, mani lungo i fianchi. Esegui lentamente l’angelo sulla neve."),
+      physioStep("p1_swim_rest","Recupero Nuotatore","60 secondi",60,"⏸️","Riposa in posizione comoda e lascia scendere le spalle."),
+      physioStep("p1_swim_2","Nuotatore prono · Serie 2/2","60 secondi",60,"🏊","Ripeti mantenendo movimento fluido e indolore."),
+      physioStep("p1_plus_1","Push-up plus · Serie 1/2","60 secondi",60,"🫸","Braccia tese: allontana e avvicina le scapole senza piegare i gomiti."),
+      physioStep("p1_plus_rest","Recupero Push-up plus","60 secondi",60,"⏸️","Scarica polsi e spalle. Respira lentamente."),
+      physioStep("p1_plus_2","Push-up plus · Serie 2/2","60 secondi",60,"🫸","Ripeti senza oltrepassare il dolore consentito."),
+      ...circuitSteps("p1c1w","Circuito 1 · Riscaldamento",["Wall sit","Spinte manubri su panca 30°","Alzate laterali manubri","Dip su panca"],1,true),
+      physioStep("p1c1prep","Preparazione carichi Circuito 1","45 secondi suggeriti",45,"🧰","Tempo organizzativo aggiunto dall’app: prepara carichi adeguati. Non è un recupero prescritto nella scheda.",{autoNext:false}),
+      ...circuitSteps("p1c1p","Circuito 1 · Serie potenti",["Wall sit","Spinte manubri su panca 30°","Alzate laterali manubri","Dip su panca"],2,false),
+      ...circuitSteps("p1c2w","Circuito 2 · Riscaldamento",["Affondi alternati con manubri","Push-up","Spinte in alto con manubri","French press manubri"],1,true),
+      physioStep("p1c2prep","Preparazione carichi Circuito 2","45 secondi suggeriti",45,"🧰","Tempo organizzativo aggiunto dall’app: prepara carichi adeguati. Non è un recupero prescritto nella scheda.",{autoNext:false}),
+      ...circuitSteps("p1c2p","Circuito 2 · Serie potenti",["Affondi alternati con manubri","Push-up","Spinte in alto con manubri","French press manubri"],2,false),
+      EX.physio_stretch_side,EX.physio_stretch_front,EX.physio_legs_wall
+    ].filter(Boolean);
+  }
+  return [
+    EX.physio2_mob1,EX.physio2_mob2,EX.physio2_mob3,
+    physioStep("p2_plank_1","Plank · Serie 1/2","90 secondi",90,"📐","Mantieni bacino, ginocchia e tronco allineati."),
+    physioStep("p2_plank_rest","Recupero Plank","60 secondi",60,"⏸️","Appoggia il corpo e respira lentamente."),
+    physioStep("p2_plank_2","Plank · Serie 2/2","90 secondi",90,"📐","Ripeti mantenendo l’allineamento."),
+    physioStep("p2_super_a1","Superman · Lato A · Giro 1/2","60 secondi",60,"🐕","Distendi braccio e gamba opposta senza appoggiare."),
+    physioStep("p2_super_b1","Superman · Lato B · Giro 1/2","60 secondi",60,"🐕","Cambia lato e mantieni il bacino stabile.",{noCountdown:true}),
+    physioStep("p2_super_rest","Recupero Superman","30 secondi",30,"⏸️","Riposa in quadrupedia."),
+    physioStep("p2_super_a2","Superman · Lato A · Giro 2/2","60 secondi",60,"🐕","Ripeti il primo lato."),
+    physioStep("p2_super_b2","Superman · Lato B · Giro 2/2","60 secondi",60,"🐕","Completa il secondo lato.",{noCountdown:true}),
+    physioStep("p2_hollow_1","Hollow position · Serie 1/2","60 secondi",60,"🧠","Solleva talloni e tronco anche solo di poco, mantenendo controllo."),
+    physioStep("p2_hollow_rest","Recupero Hollow","60 secondi",60,"⏸️","Appoggia completamente schiena e gambe."),
+    physioStep("p2_hollow_2","Hollow position · Serie 2/2","60 secondi",60,"🧠","Ripeti senza perdere controllo lombare."),
+    ...circuitSteps("p2c1w","Circuito 1 · Riscaldamento",["Rematore bilanciere","Stacco rumeno bilanciere","Curl manubri classico","Jumping jack"],1,true),
+    physioStep("p2c1prep","Preparazione carichi Circuito 1","45 secondi suggeriti",45,"🧰","Tempo organizzativo aggiunto dall’app: prepara carichi adeguati. Non è un recupero prescritto nella scheda.",{autoNext:false}),
+    ...circuitSteps("p2c1p","Circuito 1 · Serie potenti",["Rematore bilanciere","Stacco rumeno bilanciere","Curl manubri classico","Jumping jack"],2,false),
+    ...circuitSteps("p2c2w","Circuito 2 · Riscaldamento",["Croci inverse in piedi","Affondi in camminata con pesi","Curl manubri martello","Jump squat libero"],1,true),
+    physioStep("p2c2prep","Preparazione carichi Circuito 2","45 secondi suggeriti",45,"🧰","Tempo organizzativo aggiunto dall’app: prepara carichi adeguati. Non è un recupero prescritto nella scheda.",{autoNext:false}),
+    ...circuitSteps("p2c2p","Circuito 2 · Serie potenti",["Croci inverse in piedi","Affondi in camminata con pesi","Curl manubri martello","Jump squat libero"],2,false),
+    EX.physio2_stretch_back,EX.physio2_stretch_front,EX.physio_legs_wall
+  ].filter(Boolean);
+}
 const shoulder={reset:["breathing","cat","thread","wall","plus","external","bird"],build:["breathing","cat","wall","plus","external","pullApart","iso","bird","inclinePush","rowBand","carry"],release:["rollerThoracic","ballScap","ballPec","rollerLat","ballLat","breathing"],pool:["poolWalk","poolScap","poolER","breathing"]};
 const military={recovery:["breathing","squat","split","bridge","calf","deadbug","bird"],build:["breathing","squat","split","stepup","inclinePush","rowBand","deadbug","carry"],elite:["breathing","squat","split","stepup","inclinePush","rowBand","thrust","mountain","carry","deadbug"]};
 const running={easy:["breathing","runEasy","walk","stretch"],interval:["breathing","intervals","walk","stretch"],tempo:["breathing","tempo","walk","stretch"],hyrox:["breathing","hyroxRun","squat","stepup","carry","deadbug"],pool:["poolWalk","poolJog","poolScap","breathing"]};
@@ -204,8 +258,8 @@ function selectShoulder(type,btn){shoulderRoutine=type;segment(btn);renderPrevie
 function selectMilitary(type,btn){militaryLevel=type;segment(btn);renderPreviews()}
 function selectRun(type,btn){runType=type;segment(btn);renderPreviews()}
 function selectPhysio(type,btn){physioRoutine=type;segment(btn);renderPhysioPreview()}
-function renderPhysioPreview(){const target=document.getElementById("physioPreview");if(!target)return;const list=(physioPrograms[physioRoutine]||[]).map(id=>EX[id]).filter(Boolean);render(target,list)}
-function startPhysio(){if(!requiredCheck())return;const ids=physioPrograms[physioRoutine]||[];const missing=ids.filter(id=>!eqAvailable(id));if(missing.length&&!data().settings.equipment.weights){const ok=confirm("Questa scheda contiene circuiti con manubri o bilanciere. Vuoi aprire comunque la guida fedele al programma originale?");if(!ok)return}startWorkout(ids.map(id=>EX[id]).filter(Boolean),physioRoutine==="workout1"?"Fisioterapista · Scheda 1":"Fisioterapista · Scheda 2")}
+function renderPhysioPreview(){const target=document.getElementById("physioPreview");if(!target)return;const list=buildPhysioFlow(physioRoutine);render(target,list)}
+function startPhysio(){if(!requiredCheck())return;const list=buildPhysioFlow(physioRoutine);if(!data().settings.equipment.weights){const ok=confirm("Questa scheda contiene esercizi con manubri o bilanciere. Vuoi aprire comunque la guida fedele al programma originale?");if(!ok)return}startWorkout(list,physioRoutine==="workout1"?"Fisioterapista · Scheda 1":"Fisioterapista · Scheda 2",true)}
 function renderPreviews(){let s=[...shoulder[shoulderRoutine]];if(shoulderRoutine==="build")s=enhance(s,"rehab");render(document.getElementById("shoulderPreview"),limit(unique(s)).map(exercise));let m=mode==="recovery"||blocked?military.recovery:[...military[militaryLevel]];if(mode==="safe")m=m.filter(id=>!["thrust","mountain"].includes(id));render(document.getElementById("militaryPreview"),limit(unique(enhance(m,"military"))).map(exercise));let r=mode==="recovery"&&!["easy","pool"].includes(runType)?running.easy:[...running[runType]];render(document.getElementById("runningPreview"),limit(unique(enhance(r,runType==="hyrox"?"hyrox":runType==="pool"?"recovery":"easy"))).map(exercise))}
 function renderWeek(){const d=data(),tpl=template(d.settings.goal),mk=mask(d.settings.days),names=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"],lab={strength:"Forza totale",easy:"Corsa Z2",rehab:"Spalla & mobilità",recovery:"Recupero",interval:"Intervalli",hyrox:"Hyrox Safe",military:"Military Safe",tempo:"Tempo Run"};document.getElementById("weekGrid").innerHTML=names.map((n,i)=>`<div class="day-card ${i===dayIndex()?"today":""}"><strong>${n}</strong><p>${lab[mk[i]?tpl[i]:"recovery"]}</p></div>`).join("")}
 function requiredCheck(){if(selectedPain===null){alert("Completa prima il check.");return false}if(blocked){alert("Sessione bloccata per sicurezza.");return false}return true}
@@ -214,11 +268,14 @@ function startShoulder(){if(!requiredCheck())return;let ids=[...shoulder[shoulde
 function startMilitary(){if(!requiredCheck())return;let ids=mode==="recovery"?military.recovery:[...military[militaryLevel]];if(mode==="safe")ids=ids.filter(id=>!["thrust","mountain"].includes(id));startWorkout(limit(unique(enhance(ids,"military"))).map(exercise),"Military Safe")}
 function startRunning(){if(!requiredCheck())return;let ids=mode==="recovery"&&!["easy","pool"].includes(runType)?running.easy:[...running[runType]];startWorkout(limit(unique(enhance(ids,runType==="hyrox"?"hyrox":runType==="pool"?"recovery":"easy"))).map(exercise),"Running & Hyrox")}
 function startSpecial(type){if(blocked){alert("Protocollo bloccato.");return}startWorkout(unique(specials[type]).map(exercise),type)}
-function startWorkout(list,type){if(!list.length){alert("Nessun esercizio disponibile.");return}currentWorkout=list;currentIndex=0;currentType=type;renderSession();document.getElementById("sessionModal").classList.remove("hidden")}
+async function requestWakeLock(){wakeLockWanted=true;if(!("wakeLock" in navigator))return false;try{wakeLock=await navigator.wakeLock.request("screen");wakeLock.addEventListener("release",()=>{wakeLock=null});return true}catch(err){console.warn("Wake Lock non disponibile",err);return false}}
+async function releaseWakeLock(){wakeLockWanted=false;if(wakeLock){try{await wakeLock.release()}catch{}wakeLock=null}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&wakeLockWanted&&!wakeLock)requestWakeLock()});
+function startWorkout(list,type,isAutoFlow=false){if(!list.length){alert("Nessun esercizio disponibile.");return}clearTimeout(autoAdvanceId);autoFlow=!!isAutoFlow;currentWorkout=list;currentIndex=0;currentType=type;document.getElementById("sessionModal").classList.remove("hidden");requestWakeLock().then(ok=>{const status=document.getElementById("voiceStatus");if(status&&ok)status.textContent="Voce attiva · schermo mantenuto acceso"});renderSession()}
 function renderSession(){const e=currentWorkout[currentIndex];if(!e){closeSession();return}document.getElementById("sessionTitle").textContent=`${currentIndex+1}/${currentWorkout.length} · ${currentType}`;document.getElementById("sessionProgress").style.width=((currentIndex+1)/currentWorkout.length*100)+"%";document.getElementById("exerciseVisual").textContent=e.i;document.getElementById("exerciseTitle").textContent=e.t;document.getElementById("exerciseDose").textContent=e.d;document.getElementById("exerciseInstructions").textContent=e.x;timerLeft=e.s||90;timerInitial=timerLeft;resetTimer(false);updateVoiceUI();setTimeout(()=>speak(`${e.t}. ${e.d}.`,true),300)}
 function nextStep(){stopTimer();if(currentIndex<currentWorkout.length-1){currentIndex++;renderSession()}else{closeSession();if(selectedPain!==null&&["Piano giornaliero","Shoulder Rehab","Military Safe","Running & Hyrox","Fisioterapista · Scheda 1","Fisioterapista · Scheda 2"].includes(currentType))openPost();else{logActivity(currentType);alert("Protocollo completato.")}}}
 function prevStep(){stopTimer();if(currentIndex>0){currentIndex--;renderSession()}}
-function closeSession(){stopTimer();window.speechSynthesis?.cancel();document.getElementById("sessionModal").classList.add("hidden")}
+function closeSession(){clearTimeout(autoAdvanceId);autoFlow=false;stopTimer();window.speechSynthesis?.cancel();releaseWakeLock();document.getElementById("sessionModal").classList.add("hidden")}
 function speak(text,interrupt=false){if(!voiceEnabled||!("speechSynthesis" in window))return;try{if(interrupt)window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="it-IT";u.rate=1.04;u.pitch=1;u.volume=1;const voices=window.speechSynthesis.getVoices();const it=voices.find(v=>v.lang?.toLowerCase().startsWith("it"));if(it)u.voice=it;window.speechSynthesis.speak(u)}catch(e){console.warn("Voce non disponibile",e)}}
 function updateVoiceUI(){const b=document.getElementById("voiceBtn"),s=document.getElementById("voiceStatus");if(b)b.textContent=voiceEnabled?"🔊 Voce attiva":"🔇 Voce disattivata";if(s)s.textContent=voiceEnabled?"Countdown e indicazioni vocali attivi":"Indicazioni vocali disattivate"}
 function persistVoice(){const d=data();d.settings.voice=voiceEnabled;save(d);const c=document.getElementById("voiceSetting");if(c)c.checked=voiceEnabled}
@@ -229,7 +286,8 @@ function beginCountdown(){if(countdownRunning||timerRunning)return;countdownRunn
 function startRealTimer(){if(timerRunning)return;timerRunning=true;document.getElementById("timerBtn").textContent="Pausa";updateTimer();timerId=setInterval(()=>{if(timerLeft>0){timerLeft--;updateTimer();announceTimerCues()}if(timerLeft<=0)finishTimer()},1000)}
 function toggleTimer(){if(countdownRunning){cancelCountdown();document.getElementById("timerBtn").textContent="Avvia timer";updateTimer();return}if(timerRunning){stopTimer(false);document.getElementById("timerBtn").textContent="Riprendi";speak("Pausa",true);return}if(timerLeft<=0)resetTimer();if(timerLeft===timerInitial)beginCountdown();else{speak("Riprendi",true);startRealTimer()}}
 function announceTimerCues(){if(!timerInitial||timerLeft<=0)return;const half=Math.floor(timerInitial/2);if(!halfCuePlayed&&timerLeft===half&&timerInitial>=40){halfCuePlayed=true;speak("Metà")}if(!tenCuePlayed&&timerLeft===10){tenCuePlayed=true;speak("Dieci secondi")}if(!fiveCuePlayed&&timerLeft===5){fiveCuePlayed=true;speak("Cinque")}if(timerLeft===3)speak("Tre");if(timerLeft===2)speak("Due");if(timerLeft===1)speak("Uno")}
-function finishTimer(){clearInterval(timerId);timerId=null;timerRunning=false;timerLeft=0;document.getElementById("timerDisplay").textContent="FINE";document.getElementById("timerBtn").textContent="Ripeti timer";speak("Fine",true);navigator.vibrate?.([180,100,180,100,250])}
+function finishTimer(){clearInterval(timerId);timerId=null;timerRunning=false;timerLeft=0;document.getElementById("timerDisplay").textContent="FINE";document.getElementById("timerBtn").textContent="Ripeti timer";speak("Fine",true);navigator.vibrate?.([180,100,180,100,250]);if(autoFlow&&currentWorkout[currentIndex]?.autoNext!==false){autoAdvanceId=setTimeout(autoAdvancePhysio,650)}}
+function autoAdvancePhysio(){if(!autoFlow)return;if(currentIndex<currentWorkout.length-1){currentIndex++;renderSession();const e=currentWorkout[currentIndex];setTimeout(()=>{if(!autoFlow)return;if(e.noCountdown)startRealTimer();else beginCountdown()},500)}else{nextStep()}}
 function cancelCountdown(){clearInterval(countdownId);countdownId=null;countdownRunning=false;window.speechSynthesis?.cancel()}
 function stopTimer(resetButton=true){clearInterval(timerId);timerId=null;timerRunning=false;cancelCountdown();if(resetButton)document.getElementById("timerBtn").textContent="Avvia timer"}
 function resetTimer(reset=true){stopTimer();if(reset){timerLeft=currentWorkout[currentIndex]?.s||90;timerInitial=timerLeft}else timerInitial=timerLeft;resetVoiceCues();updateTimer()}
