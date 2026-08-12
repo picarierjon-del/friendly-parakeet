@@ -2,424 +2,753 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<title>Erjon Hybrid Coach AI · V12.1 Fatigue Engine</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#061827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Erjon Coach AI">
+<title>Erjon Hybrid Coach AI · V10 MASTER Fusion 16.2</title>
 <style>
-:root{--bg:#0b1020;--card:#121a2b;--card2:#182238;--text:#f7f9fc;--muted:#aab5c8;--line:#293650;--accent:#7dd3fc;--good:#6ee7b7;--warn:#fbbf24;--bad:#fb7185}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#080d18,#10182a);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.wrap{max-width:1100px;margin:auto;padding:18px}.hero{padding:20px 0 8px}.hero h1{font-size:30px;margin:0 0 6px}.hero p{color:var(--muted);margin:0}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wide{grid-column:1/-1}
-.card{background:rgba(18,26,43,.96);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
-h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:14px 0 8px}
-label{display:block;font-size:12px;color:var(--muted);margin:0 0 5px}select,input,textarea,button{font:inherit}
-select,input,textarea{width:100%;background:#0d1525;color:var(--text);border:1px solid var(--line);border-radius:11px;padding:11px}
-textarea{min-height:80px;resize:vertical}
-.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.row3{grid-template-columns:repeat(3,minmax(0,1fr))}
-button{border:0;border-radius:11px;padding:11px 14px;background:#24324e;color:white;font-weight:700;cursor:pointer}
-button.primary{background:var(--accent);color:#07111c}button.good{background:var(--good);color:#07150f}button.warn{background:var(--warn);color:#1b1300}button.danger{background:var(--bad);color:#260711}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:#1e2a43;color:#dbeafe;font-size:12px;margin:3px 3px 0 0}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{background:#0d1525;border:1px solid var(--line);border-radius:13px;padding:12px}.kpi b{display:block;font-size:23px}.kpi span{font-size:11px;color:var(--muted)}
-.status{padding:12px;border-radius:13px;background:#0d1525;border:1px solid var(--line);margin-top:10px}.goodtxt{color:var(--good)}.warntxt{color:var(--warn)}.badtxt{color:var(--bad)}
-.workout{border:1px solid var(--line);border-radius:14px;padding:13px;margin:8px 0;background:#0e1728}.workout .top{display:flex;justify-content:space-between;gap:10px}.exercise{padding:9px 0;border-top:1px solid #202c43}.exercise:first-child{border-top:0}.muted{color:var(--muted)}.small{font-size:12px}
-.hidden{display:none!important}.timer{font-size:54px;text-align:center;font-variant-numeric:tabular-nums;margin:10px 0}.timerName{text-align:center;font-weight:800}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left}th{color:var(--muted)}
-footer{padding:20px 0;color:var(--muted);font-size:11px;text-align:center}
-@media(max-width:760px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.row,.row3{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:25px}}
+:root{
+  --bg:#06111d;--panel:#0c1c2b;--panel2:#10263a;--line:#21384e;--text:#f4f8fb;--muted:#a7bbcc;
+  --green:#16c784;--blue:#38bdf8;--orange:#fb923c;--purple:#a78bfa;--red:#ef4444;--yellow:#facc15;
+  --greenbg:rgba(22,199,132,.13);--bluebg:rgba(56,189,248,.12);--redbg:rgba(239,68,68,.12);--yellowbg:rgba(250,204,21,.10);
+  --radius:18px;--shadow:0 18px 52px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#06111d,#0a1928 55%,#06111d);color:var(--text);min-height:100vh;padding-bottom:calc(116px + env(safe-area-inset-bottom))}
+body.high-contrast{--muted:#eef6ff;--line:#57718d;--panel:#0d2032;--panel2:#17304a}
+body.high-contrast .small,body.high-contrast .note,body.high-contrast .reason,body.high-contrast label{color:#f2f7fb!important}
+button,select,input,textarea{font:inherit}button{touch-action:manipulation;cursor:pointer}button:disabled{opacity:.42;cursor:not-allowed}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.hidden{display:none!important}.app{max-width:1280px;margin:auto}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;padding:13px 16px;background:rgba(6,17,29,.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.logo{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,var(--green),var(--blue));display:grid;place-items:center;font-size:1.5rem}
+.brand{flex:1}.brand h1{font-size:1.03rem;line-height:1.15}.brand small{font-size:.67rem;color:var(--muted)}.pill{padding:7px 10px;border:1px solid var(--line);border-radius:999px;font-size:.67rem;color:var(--blue);white-space:nowrap}
+.container{padding:14px;display:grid;grid-template-columns:290px 1fr;gap:14px}.sidebar,.main{display:flex;flex-direction:column;gap:12px}
+.card{background:linear-gradient(180deg,var(--panel),#0a1927);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.card h2,.card h3{color:#fff}.eyebrow{font-size:.65rem;letter-spacing:.9px;text-transform:uppercase;font-weight:900;color:var(--muted);margin-bottom:6px}.small{font-size:.78rem;color:var(--muted);line-height:1.5}.note{font-size:.72rem;color:var(--muted);line-height:1.45;margin-top:9px}
+.score{width:114px;height:114px;border-radius:50%;margin:8px auto;position:relative;display:grid;place-items:center;background:conic-gradient(var(--green) calc(var(--p)*1%),#1a2e42 0)}
+.score:before{content:"";position:absolute;width:84px;height:84px;border-radius:50%;background:var(--panel)}.score strong{position:relative;font-size:1.52rem}
+.progress{height:9px;background:#1a2e42;border-radius:999px;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--blue));width:0;transition:.25s}
+.rules{list-style:none;display:grid;gap:8px;margin-top:9px}.rules li{font-size:.74rem;color:var(--muted);display:flex;gap:8px}.rules li:before{content:"✓";color:var(--green);font-weight:900}
+.nav{position:fixed;left:50%;bottom:calc(9px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;width:min(1050px,calc(100% - 18px));display:grid;grid-template-columns:repeat(11,1fr);gap:5px;padding:7px;background:rgba(12,28,43,.97);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.nav button{border:0;background:transparent;color:var(--muted);padding:8px 3px;border-radius:11px;font-size:.58rem;font-weight:800}.nav button.active{background:linear-gradient(135deg,rgba(22,199,132,.18),rgba(56,189,248,.17));color:#fff}
+.hero{background:linear-gradient(135deg,rgba(22,199,132,.12),rgba(56,189,248,.10));border-color:#245b75}.hero-grid{display:grid;grid-template-columns:1fr 250px;gap:16px;align-items:center}.hero h2{font-size:1.36rem;margin-bottom:7px}
+.readiness-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.readiness{text-align:center;padding:10px;border-radius:12px;background:#071522;border:1px solid var(--line)}.readiness strong{display:block;font-size:1.75rem;color:var(--green)}.readiness span{font-size:.62rem;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.field label{display:block;font-size:.72rem;color:var(--muted);margin-bottom:5px}select,input,textarea{width:100%;border:1px solid var(--line);background:#071522;color:var(--text);border-radius:10px;padding:10px}textarea{min-height:90px;resize:vertical}
+.pain-scale{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:9px}.pain-scale button{min-height:46px;border:1px solid var(--line);background:#081827;color:#fff;border-radius:10px;font-weight:900}.pain-scale button.active{background:var(--greenbg);border-color:var(--green)}
+.mode{padding:13px;border-radius:12px;font-size:.8rem;line-height:1.5}.mode.green{background:var(--greenbg);border:1px solid rgba(22,199,132,.45);color:#91f0cc}.mode.yellow{background:var(--yellowbg);border:1px solid rgba(250,204,21,.4);color:#fde68a}.mode.red{background:var(--redbg);border:1px solid rgba(239,68,68,.45);color:#fca5a5}
+.reason{margin-top:5px;font-size:.64rem;color:#b8cde0;line-height:1.35}.reason.up{color:#9af1ce}.reason.down{color:#fde68a}.reason.neutral{color:#b8cde0}
+.btn{border:0;border-radius:12px;padding:13px 14px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--green),#089f6d)}.btn.blue{background:linear-gradient(135deg,var(--blue),#1684c5)}.btn.orange{background:linear-gradient(135deg,var(--orange),#dc6418)}.btn.purple{background:linear-gradient(135deg,var(--purple),#7c3aed)}.btn.secondary{background:#172b3e;border:1px solid var(--line)}.btn.danger{background:var(--red)}.full{width:100%}
+.segment{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.segment button{border:1px solid var(--line);background:#071522;color:var(--muted);padding:8px 11px;border-radius:999px;font-weight:800}.segment button.active{background:var(--greenbg);border-color:var(--green);color:#9af1ce}
+.module-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.module{padding:14px;border:1px solid var(--line);border-radius:14px;background:#081827}.module .ico{font-size:1.6rem}.module h3{font-size:.84rem;margin:7px 0 4px}.module p{font-size:.69rem;color:var(--muted);line-height:1.4}
+.workout-list{display:flex;flex-direction:column;gap:8px}.workout-item{border:1px solid var(--line);background:#071522;border-radius:12px;padding:11px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.workout-item strong{font-size:.83rem}.workout-item span{font-size:.69rem;color:var(--muted)}
+.tag{font-size:.64rem;padding:4px 7px;border-radius:999px;background:var(--bluebg);color:var(--blue);white-space:nowrap}.stat{padding:13px;border:1px solid var(--line);border-radius:13px;background:#071522}.stat strong{display:block;font-size:1.22rem}.stat span{font-size:.66rem;color:var(--muted)}
+.warning{background:var(--yellowbg);border:1px solid rgba(250,204,21,.3);color:#fde68a;border-radius:12px;padding:12px;font-size:.76rem;line-height:1.45}.info{background:var(--bluebg);border:1px solid rgba(56,189,248,.32);color:#bfeaff;border-radius:12px;padding:12px;font-size:.76rem;line-height:1.45}
+.checks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.checkline{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:#071522;border-radius:10px;padding:10px;font-size:.76rem;color:var(--muted)}.checkline input{width:auto}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.day-card{border:1px solid var(--line);border-radius:12px;padding:10px;background:#071522;min-height:108px}.day-card.today{outline:2px solid var(--green)}.day-card strong{font-size:.75rem}.day-card p{font-size:.65rem;color:var(--muted);margin-top:7px;line-height:1.35}
+.equipment-summary{display:flex;flex-wrap:wrap;gap:6px}.equipment-summary span{font-size:.65rem;padding:5px 8px;border-radius:999px;background:var(--greenbg);color:#9af1ce}
+.library-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.lib-card{border:1px solid var(--line);background:#071522;border-radius:12px;padding:11px}.lib-card h4{font-size:.79rem}.lib-card p{font-size:.67rem;color:var(--muted);margin-top:5px;line-height:1.35}
+.chart{height:190px;display:flex;align-items:flex-end;gap:8px;border-bottom:1px solid var(--line);padding:20px 4px 0}.bar-wrap{flex:1;min-width:18px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.bar{width:100%;max-width:42px;border-radius:7px 7px 0 0;background:linear-gradient(180deg,var(--blue),var(--green));min-height:4px}.bar-label{font-size:.58rem;color:var(--muted);margin:4px 0}.bar-value{font-size:.6rem;color:#fff;margin-bottom:4px}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.76);display:grid;place-items:center;padding:14px}.modal-box{width:min(620px,100%);max-height:92vh;overflow:auto;background:#0b1c2b;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow)}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.close{width:36px;height:36px;border-radius:50%;border:0;background:#1b2f43;color:#fff;font-size:1.1rem}
+.exercise-visual{height:185px;border-radius:14px;background:linear-gradient(180deg,#10263a,#081625);display:grid;place-items:center;font-size:4rem;margin-bottom:12px}.timer{font-size:2.75rem;text-align:center;font-weight:900;color:var(--blue);font-variant-numeric:tabular-nums;margin:13px 0}
+.timer-controls,.timer-tools,.session-nav{display:grid;grid-template-columns:1fr 1fr;gap:8px}.timer-tools{margin-top:8px}.session-nav{margin-top:10px}.profile-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.profile-mini .stat strong{font-size:1rem}
+.duration-banner{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px;padding:9px 10px;border-radius:10px;background:#071522;border:1px solid var(--line);font-size:.7rem;color:var(--muted)}.duration-banner strong{color:#fff}
+.splash{position:fixed;inset:0;z-index:9999;background:rgba(4,10,18,.97);display:flex;align-items:center;justify-content:center;padding:24px}.splash-box{width:min(460px,100%);background:#0c1c2b;border:1px solid var(--line);border-radius:20px;padding:22px;text-align:center}.spinner{width:42px;height:42px;margin:0 auto 14px;border:4px solid #26344e;border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.system-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.system-item{background:#071522;border:1px solid var(--line);border-radius:12px;padding:10px}.system-item b{display:block;font-size:.82rem}.system-item span{font-size:.65rem;color:var(--muted)}
+@media(max-width:980px){.container{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,1fr)}.module-grid{grid-template-columns:repeat(2,1fr)}.library-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.container{padding:10px}.sidebar,.hero-grid,.grid2,.grid3,.grid4,.grid6{grid-template-columns:1fr}.readiness-pair{grid-template-columns:1fr 1fr}.module-grid{grid-template-columns:1fr 1fr}.nav{grid-template-columns:repeat(5,1fr)}.pain-scale{grid-template-columns:repeat(3,1fr)}.week-grid{grid-template-columns:repeat(2,1fr)}.library-grid{grid-template-columns:1fr}.pill{display:none}.topbar{padding:11px}.profile-mini{grid-template-columns:1fr 1fr 1fr}.system-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="hero">
-    <h1>🏋️ Erjon Hybrid Coach AI · V12.1</h1>
-    <p>Hybrid periodization + storico + Fatigue Engine: decide <b>cosa</b> allenare e soprattutto <b>quanto spingere</b> la settimana successiva.</p>
+<div id="startupSplash" class="splash"><div class="splash-box"><div class="spinner"></div><h2>Sincronizzazione For Life</h2><div class="small" id="splashText">Controllo IndexedDB e localStorage…</div></div></div>
+
+<div class="app">
+<header class="topbar">
+  <div class="logo">🛡️</div>
+  <div class="brand">
+    <h1>ERJON HYBRID COACH AI · V10 MASTER FUSION 16.2</h1>
+    <small>V10 Definitive · Shoulder Safe · Hybrid · Fisio · Pizzaiolo · Digital Coach Master · For Life</small>
   </div>
+  <div class="pill" id="headerStatus">SYNC</div>
+</header>
 
-  <div class="grid">
-    <section class="card">
-      <h2>⚙️ Profilo & disponibilità</h2>
-      <div class="row">
-        <div><label>Obiettivo principale</label><select id="goal">
-          <option value="hybrid">Hybrid puro</option><option value="hyrox">HYROX</option>
-          <option value="running">Running</option><option value="strength">Forza</option>
-          <option value="military">Military / Corpo libero</option>
-        </select></div>
-        <div><label>Livello</label><select id="level"><option value="beginner">Base</option><option value="intermediate" selected>Intermedio</option><option value="advanced">Avanzato</option></select></div>
-      </div>
-      <div class="row">
-        <div><label>Giorni disponibili / settimana</label><select id="days"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
-        <div><label>Durata seduta</label><select id="duration"><option value="35">35 min</option><option value="50" selected>50 min</option><option value="65">65 min</option><option value="80">80 min</option></select></div>
-      </div>
-      <h3>Attrezzatura disponibile</h3>
-      <div class="row row3">
-        <label><input type="checkbox" class="equip" value="dumbbell"> Manubri</label>
-        <label><input type="checkbox" class="equip" value="barbell"> Bilanciere</label>
-        <label><input type="checkbox" class="equip" value="kettlebell"> Kettlebell</label>
-        <label><input type="checkbox" class="equip" value="pullup"> Sbarra</label>
-        <label><input type="checkbox" class="equip" value="bench"> Panca</label>
-        <label><input type="checkbox" class="equip" value="bike"> Bike</label>
-        <label><input type="checkbox" class="equip" value="row"> Row</label>
-        <label><input type="checkbox" class="equip" value="sled"> Sled</label>
-        <label><input type="checkbox" class="equip" value="ball"> Palla</label>
-      </div>
-      <div class="status" id="equipStatus">Nessuna attrezzatura selezionata → <b>Military / corpo libero</b> come fallback.</div>
-      <div class="actions"><button class="primary" onclick="saveProfile()">Salva profilo</button><button onclick="resetAll()">Reset dati</button></div>
-    </section>
+<div class="container">
+<aside class="sidebar">
+<section class="card">
+  <div class="eyebrow">Indice di tolleranza · confermate</div>
+  <div class="score" id="scoreRing" style="--p:50"><strong id="scoreValue">50%</strong></div>
+  <div class="small" id="scoreLabel" style="text-align:center">Dati iniziali</div>
+</section>
 
-    <section class="card">
-      <h2>🧠 Fatigue Engine</h2>
-      <p class="small muted">La seduta di oggi viene registrata e influenza automaticamente il carico della settimana successiva. Il motore considera carico interno, RPE, durata, recupero, sonno/energia e trend delle ultime settimane.</p>
-      <div class="row">
-        <div><label>Energia oggi (1–10)</label><input id="energy" type="number" min="1" max="10" value="7"></div>
-        <div><label>Sonno (ore)</label><input id="sleep" type="number" min="0" max="12" step=".5" value="7"></div>
-      </div>
-      <div class="row">
-        <div><label>Stress percepito (1–10)</label><input id="stress" type="number" min="1" max="10" value="3"></div>
-        <div><label>Dolori/fatica muscolare (1–10)</label><input id="soreness" type="number" min="1" max="10" value="2"></div>
-      </div>
-      <div class="row">
-        <div><label>RPE seduta (1–10)</label><input id="rpe" type="number" min="1" max="10" value="7"></div>
-        <div><label>Durata effettiva (min)</label><input id="actualDuration" type="number" min="5" max="240" value="50"></div>
-      </div>
-      <div class="row">
-        <div><label>Intensità percepita</label><select id="intensity"><option value="easy">Facile</option><option value="moderate" selected>Moderata</option><option value="hard">Dura</option><option value="veryhard">Molto dura</option></select></div>
-        <div><label>Tipo seduta</label><select id="sessionType"><option>Forza</option><option>Running</option><option>HYROX</option><option>HIIT</option><option>Zone 2</option><option>Military</option><option>Hybrid</option><option>Recupero</option></select></div>
-      </div>
-      <button class="good" onclick="logWorkout()">➕ Registra allenamento</button>
-      <div id="fatigueNow" class="status"></div>
-    </section>
-
-    <section class="card wide">
-      <h2>📊 Stato atleta & decisione automatica</h2>
-      <div class="kpis">
-        <div class="kpi"><b id="readiness">—</b><span>Readiness</span></div>
-        <div class="kpi"><b id="load7">—</b><span>Carico 7 giorni</span></div>
-        <div class="kpi"><b id="load28">—</b><span>Carico 28 giorni</span></div>
-        <div class="kpi"><b id="push">—</b><span>Push settimana</span></div>
-      </div>
-      <div id="decision" class="status"></div>
-      <div class="small muted" style="margin-top:8px">Regola chiave: lo storico non cambia solo la scelta degli allenamenti. Modifica volume, intensità, densità, RPE target e numero di giorni duri della settimana seguente.</div>
-    </section>
-
-    <section class="card wide">
-      <h2>🗓️ Generatore settimana</h2>
-      <div class="actions">
-        <button class="primary" onclick="generateWeek()">Genera / aggiorna settimana</button>
-        <button onclick="showPreview()">Anteprima completa</button>
-      </div>
-      <div id="week"></div>
-    </section>
-
-    <section class="card">
-      <h2>⏱️ Timer Coach</h2>
-      <div class="timerName" id="timerName">Pronto</div><div class="timer" id="timer">00:30</div>
-      <div class="actions"><button class="primary" onclick="startTimer()">▶ Start</button><button onclick="pauseTimer()">Ⅱ Pausa</button><button onclick="resetTimer()">↺ Reset</button></div>
-      <div class="small muted" id="voiceState">Voce: attiva</div>
-    </section>
-
-    <section class="card">
-      <h2>📚 Storico & trend</h2>
-      <div id="history"></div>
-      <div class="actions"><button onclick="exportData()">Esporta JSON</button><button class="danger" onclick="clearHistory()">Cancella storico</button></div>
-    </section>
+<section class="card">
+  <div class="eyebrow">Profilo atleta</div>
+  <div class="profile-mini">
+    <div class="stat"><strong id="profileAge">—</strong><span>ANNI</span></div>
+    <div class="stat"><strong id="profileLevel">Intermedio</strong><span>LIVELLO</span></div>
+    <div class="stat"><strong id="profileGoalMini">Hybrid</strong><span>OBIETTIVO</span></div>
   </div>
-  <footer>V12.1 · dati salvati localmente nel browser · il motore è autoregolativo e non sostituisce valutazioni professionali.</footer>
+</section>
+
+<section class="card">
+  <div class="eyebrow">Ciclo reale</div>
+  <h3 id="cycleTitle">Base</h3>
+  <div class="small" id="cycleText">Ancorato alle settimane reali.</div>
+  <div class="progress"><span id="cycleProgress"></span></div>
+</section>
+
+<section class="card">
+  <div class="eyebrow">Digital Coach</div>
+  <h3 id="coachSidebar">MANTIENI</h3>
+  <div class="small" id="coachSidebarWhy">In attesa del check.</div>
+</section>
+
+<section class="card"><div class="eyebrow">Attrezzatura attiva</div><div id="equipmentSummary" class="equipment-summary"></div></section>
+
+<section class="card">
+  <div class="eyebrow">Regole For Life</div>
+  <ul class="rules">
+    <li>Dolore durante massimo 2–3/10.</li>
+    <li>Follow-up eleggibile dal giorno successivo o dopo 18h.</li>
+    <li>Debolezza nuova o formicolio persistente: stop.</li>
+    <li>Una sola variabile progressiva alla volta.</li>
+    <li>Fatica prevale sempre sulla performance.</li>
+    <li>Qualità tecnica prima di volume e intensità.</li>
+  </ul>
+</section>
+
+<section class="card"><div class="grid2"><div class="stat"><strong id="statSessions">0</strong><span>SESSIONI</span></div><div class="stat"><strong id="statStreak">0</strong><span>STREAK</span></div></div></section>
+</aside>
+
+<main class="main">
+
+<section id="page-today">
+<div class="card hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">Digital Coach adattivo giornaliero</div>
+      <h2 id="todayTitle">Completa il check prima di allenarti</h2>
+      <p class="small" id="todayMessage">V10 + motore Master: spalla, follow-up, fatica, performance, progressione, readiness, lavoro, ciclo reale e storico.</p>
+    </div>
+    <div class="readiness-pair">
+      <div class="readiness"><strong id="shoulderReadinessValue">—</strong><span>SPALLA</span></div>
+      <div class="readiness"><strong id="performanceReadinessValue">—</strong><span>PERFORMANCE</span></div>
+    </div>
+  </div>
 </div>
+
+<div class="card">
+  <div class="eyebrow">Check quotidiano V10</div>
+  <div class="small">Valuta la fitta una sola volta durante salita e discesa del braccio. Il follow-up viene attribuito solo a una seduta precedente eleggibile.</div>
+  <div class="pain-scale" id="painScale">
+    <button onclick="setPain(0)">0</button><button onclick="setPain(1)">1</button><button onclick="setPain(2)">2</button>
+    <button onclick="setPain(3)">3</button><button onclick="setPain(4)">4</button><button onclick="setPain(5)">5+</button>
+  </div>
+  <div class="grid3" style="margin-top:10px">
+    <div class="field"><label>Risposta ultima seduta</label><select id="pain24"><option value="0">Uguale o migliore</option><option value="1">Leggermente peggiore</option><option value="3">Chiaramente peggiore</option></select></div>
+    <div class="field"><label>Sonno</label><select id="sleep"><option value="0">Buono</option><option value="1">Discreto</option><option value="2">Scarso</option></select></div>
+    <div class="field"><label>Rigidità</label><select id="stiff"><option value="0">Bassa</option><option value="1">Media</option><option value="2">Alta</option></select></div>
+    <div class="field"><label>Energia</label><select id="energy"><option value="0">Alta</option><option value="1">Media</option><option value="2">Bassa</option></select></div>
+    <div class="field"><label>Carico lavoro oggi</label><select id="workload"><option value="0">Normale</option><option value="1">Turno intenso</option><option value="2">Turno molto pesante</option></select></div>
+    <div class="field"><label>Forza braccio</label><select id="weakness"><option value="0">Normale</option><option value="5">Nuova debolezza</option></select></div>
+    <div class="field"><label>Formicolio</label><select id="tingling"><option value="0">No</option><option value="5">Persistente</option></select></div>
+    <div class="field"><label>Dolore notturno</label><select id="night"><option value="0">No</option><option value="2">Lieve</option><option value="5">Mi sveglia</option></select></div>
+  </div>
+  <div id="followupInfo" class="info" style="margin-top:10px"></div>
+  <div id="modeBox" class="mode yellow" style="margin-top:10px"><strong>CHECK INCOMPLETO</strong><br>Seleziona il dolore.</div>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Decisione Digital Coach Master</div>
+  <div class="grid6">
+    <div class="stat"><strong id="mFatigue">—</strong><span>FATICA</span></div>
+    <div class="stat"><strong id="mPerf">—</strong><span>PERFORMANCE</span></div>
+    <div class="stat"><strong id="mProg">—</strong><span>PROGRESSIONE</span></div>
+    <div class="stat"><strong id="mDaily">—</strong><span>READINESS OGGI</span></div>
+    <div class="stat"><strong id="mAC">—</strong><span>A:C</span></div>
+    <div class="stat"><strong id="mDebt">—</strong><span>FATIGUE DEBT</span></div>
+  </div>
+  <div id="masterDecision" class="info" style="margin-top:10px">Completa il check per la decisione integrata.</div>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Motore di progressione</div>
+  <div id="progressionAdvice" class="info">Completa il check.</div>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Piano generato oggi</div>
+  <div id="todayDuration"></div>
+  <div id="todayWorkout" class="workout-list"><div class="small">Il piano apparirà dopo il check.</div></div>
+  <button id="startToday" class="btn full" style="margin-top:12px" onclick="startGeneratedWorkout()" disabled>AVVIA ALLENAMENTO</button>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Moduli personali V10</div>
+  <div class="module-grid">
+    <div class="module" onclick="showPage('shoulder')"><div class="ico">🩺</div><h3>Shoulder Rehab</h3><p>Cuffia, scapola, palla, roller e piscina.</p></div>
+    <div class="module" onclick="showPage('military')"><div class="ico">💪</div><h3>Military Safe</h3><p>Forza adattata alla spalla e attrezzatura.</p></div>
+    <div class="module" onclick="showPage('running')"><div class="ico">🏃</div><h3>Running & Hyrox</h3><p>Z2, intervalli, tempo e Hyrox.</p></div>
+    <div class="module" onclick="showPage('work')"><div class="ico">🍕</div><h3>Pizzaiolo Mode</h3><p>Pre-turno, micro-reset e post-turno.</p></div>
+  </div>
+</div>
+</section>
+
+<section id="page-plan" class="hidden">
+  <div class="card"><div class="eyebrow">Settimana For Life</div><h2>Programmazione adattiva Master</h2><p class="small">Fase calendario reale → correzione Coach → hard-day budget → piano V10.</p></div>
+  <div class="card"><div id="weekGrid" class="week-grid"></div></div>
+</section>
+
+<section id="page-shoulder" class="hidden">
+  <div class="card"><div class="eyebrow">Shoulder Safe</div><h2>Recupero e prevenzione permanente</h2></div>
+  <div class="card"><div class="segment">
+    <button class="active" onclick="selectShoulder('reset',this)">Reset</button><button onclick="selectShoulder('build',this)">Costruzione</button>
+    <button onclick="selectShoulder('release',this)">Palla & Roller</button><button onclick="selectShoulder('pool',this)">Piscina</button>
+  </div><div id="shoulderPreview" class="workout-list"></div><button class="btn full" style="margin-top:12px" onclick="startShoulder()">Avvia routine</button></div>
+</section>
+
+<section id="page-military" class="hidden">
+  <div class="card"><div class="eyebrow">Military Safe Shoulder</div><h2>Forza, resistenza e controllo</h2></div>
+  <div class="card"><div class="segment">
+    <button class="active" onclick="selectMilitary('recovery',this)">Recovery</button><button onclick="selectMilitary('build',this)">Build</button><button onclick="selectMilitary('elite',this)">Elite Safe</button>
+  </div><div id="militaryPreview" class="workout-list"></div><button class="btn orange full" style="margin-top:12px" onclick="startMilitary()">Avvia Military</button></div>
+  <div class="card warning"><strong>Fallback:</strong> senza attrezzatura, Military e forza passano automaticamente a corpo libero.</div>
+</section>
+
+<section id="page-running" class="hidden">
+  <div class="card"><div class="eyebrow">Running & Hyrox</div><h2>Motore aerobico e performance ibrida</h2><p class="small">La progressione permanente conserva i livelli raggiunti; il Master può ridurre temporaneamente la dose senza cancellarli.</p></div>
+  <div class="card"><div class="segment">
+    <button class="active" onclick="selectRun('easy',this)">Z2</button><button onclick="selectRun('interval',this)">Intervalli</button><button onclick="selectRun('tempo',this)">Tempo</button><button onclick="selectRun('hyrox',this)">Hyrox Safe</button><button onclick="selectRun('pool',this)">Pool Cardio</button>
+  </div><div id="runningPreview" class="workout-list"></div><button class="btn blue full" style="margin-top:12px" onclick="startRunning()">Avvia sessione</button></div>
+</section>
+
+<section id="page-work" class="hidden">
+  <div class="card"><div class="eyebrow">Pizzaiolo Performance</div><h2>Proteggi la spalla durante pala, banco e forno</h2></div>
+  <div class="grid3">
+    <div class="card"><h3>Pre-turno · 5 min</h3><div class="small">Attivazione cuffia e scapola.</div><button class="btn full" style="margin-top:10px" onclick="startSpecial('prework')">Avvia</button></div>
+    <div class="card"><h3>Micro-reset · 60 sec</h3><div class="small">Respiri, scapole morbide e torace.</div><button class="btn blue full" style="margin-top:10px" onclick="startSpecial('midwork')">Avvia</button></div>
+    <div class="card"><h3>Post-turno · 8 min</h3><div class="small">Scarico dolce e respirazione.</div><button class="btn purple full" style="margin-top:10px" onclick="startSpecial('postwork')">Avvia</button></div>
+  </div>
+</section>
+
+<section id="page-library" class="hidden">
+  <div class="card"><div class="eyebrow">Libreria esercizi</div><h2>Database personale filtrabile</h2>
+    <div class="grid3" style="margin-top:10px">
+      <div class="field"><label>Categoria</label><select id="libCategory" onchange="renderLibrary()"><option value="all">Tutte</option><option value="rehab">Spalla</option><option value="mobility">Mobilità</option><option value="release">Palla/roller</option><option value="military">Military</option><option value="legs">Gambe</option><option value="core">Core</option><option value="run">Corsa</option><option value="hyrox">Hyrox</option><option value="pool">Piscina</option><option value="work">Pizzaiolo</option><option value="recovery">Recupero</option><option value="physio">Fisio</option></select></div>
+      <div class="field"><label>Attrezzatura</label><select id="libEquipment" onchange="renderLibrary()"><option value="all">Tutta</option><option value="bodyweight">Corpo libero</option><option value="band">Elastico</option><option value="weights">Pesi</option><option value="bench">Panca/step</option><option value="ball">Palla</option><option value="roller">Roller</option><option value="pool">Piscina</option></select></div>
+      <div class="field"><label>Cerca</label><input id="libSearch" placeholder="Nome esercizio..." oninput="renderLibrary()"></div>
+    </div>
+  </div>
+  <div class="card"><div id="libraryCount" class="small" style="margin-bottom:10px"></div><div id="libraryGrid" class="library-grid"></div></div>
+</section>
+
+<section id="page-physio" class="hidden">
+  <div class="card"><div class="eyebrow">Programma del fisioterapista V10</div><h2>Schede originali · separate dal motore Master</h2><p class="small">Il Digital Coach non modifica automaticamente una prescrizione professionale storica.</p></div>
+  <div class="card warning"><strong>Modalità fedele:</strong> il check spalla resta obbligatorio; verifica periodicamente l'attualità della scheda.</div>
+  <div class="card"><div class="segment"><button class="active" onclick="selectPhysio('workout1',this)">Scheda 1</button><button onclick="selectPhysio('workout2',this)">Scheda 2</button></div><div id="physioPreview" class="workout-list"></div><button class="btn purple full" style="margin-top:12px" onclick="startPhysio()">Avvia programma fisioterapista</button></div>
+</section>
+
+<section id="page-tests" class="hidden">
+  <div class="card"><div class="eyebrow">Test periodici</div><h2>Rivalutazione ripetibile</h2></div>
+  <div class="card"><div class="grid2">
+    <div class="field"><label>Comfort elevazione braccio 0–10</label><input id="testShoulder" type="number" min="0" max="10" value="5"></div>
+    <div class="field"><label>Wall push-up controllati</label><input id="testWallPush" type="number" min="0" max="100" value="10"></div>
+    <div class="field"><label>Squat in 60 secondi</label><input id="testSquat" type="number" min="0" max="100" value="20"></div>
+    <div class="field"><label>1 km corsa/cammino · secondi</label><input id="testKm" type="number" min="180" max="1200" value="420"></div>
+  </div><button class="btn full" style="margin-top:12px" onclick="saveMonthlyTest()">Salva test</button></div>
+  <div class="card"><div id="testsHistory" class="workout-list"></div></div>
+</section>
+
+<section id="page-progress" class="hidden">
+  <div class="card"><div class="grid4">
+    <div class="stat"><strong id="pSessions">0</strong><span>SESSIONI</span></div>
+    <div class="stat"><strong id="pPain">—</strong><span>DOLORE MEDIO</span></div>
+    <div class="stat"><strong id="pGood">0%</strong><span>TOLLERATE</span></div>
+    <div class="stat"><strong id="pStreak">0</strong><span>STREAK</span></div>
+  </div></div>
+  <div class="card"><div class="eyebrow">Dolore pre-sessione · ultime 10</div><div id="painChart" class="chart"></div></div>
+  <div class="card"><div class="eyebrow">Diario sessioni · dose · RPE · follow-up · progresso</div><div id="history" class="workout-list"></div></div>
+  <div class="card"><textarea id="note" placeholder="Cosa migliora o peggiora la spalla?"></textarea><button class="btn secondary full" style="margin-top:9px" onclick="saveNote()">Salva nota</button></div>
+</section>
+
+<section id="page-settings" class="hidden">
+  <div class="card"><div class="eyebrow">Profilo personale V10</div>
+    <div class="grid3">
+      <div class="field"><label>Data di nascita</label><input id="birthDate" type="date" value="1988-04-07"></div>
+      <div class="field"><label>Livello atleta</label><select id="athleteLevel"><option value="beginner">Principiante</option><option value="intermediate" selected>Intermedio</option><option value="advanced">Avanzato</option></select></div>
+      <div class="field"><label>Obiettivo</label><select id="goal"><option value="longevity">Longevità atletica</option><option value="hyrox">Hyrox</option><option value="military">Military fitness</option><option value="run10k">10 km</option><option value="hybrid" selected>Hybrid completo</option></select></div>
+      <div class="field"><label>Giorni/settimana</label><select id="days"><option>3</option><option>4</option><option selected>5</option><option>6</option></select></div>
+      <div class="field"><label>Tempo seduta</label><select id="minutes"><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">60 min</option></select></div>
+    </div>
+    <div class="eyebrow" style="margin-top:14px">Attrezzatura</div>
+    <div class="checks">
+      <label class="checkline"><input type="checkbox" id="eqBand" checked> Elastico</label>
+      <label class="checkline"><input type="checkbox" id="eqWeights"> Manubri/Kettlebell</label>
+      <label class="checkline"><input type="checkbox" id="eqBench"> Panca/step</label>
+      <label class="checkline"><input type="checkbox" id="eqPool"> Piscina</label>
+      <label class="checkline"><input type="checkbox" id="eqBall" checked> Palla da tennis</label>
+      <label class="checkline"><input type="checkbox" id="eqRoller" checked> Foam roller</label>
+      <label class="checkline"><input type="checkbox" id="voiceSetting" checked> Coach vocale</label>
+      <label class="checkline"><input type="checkbox" id="contrastSetting"> Outdoor High Contrast</label>
+    </div>
+    <button class="btn full" style="margin-top:12px" onclick="saveSettings()">Salva e rigenera</button>
+  </div>
+
+  <div class="card"><div class="eyebrow">Stato sistema Master</div>
+    <div class="system-grid">
+      <div class="system-item"><b id="sysDb">—</b><span>DATABASE</span></div>
+      <div class="system-item"><b id="sysSave">—</b><span>ULTIMO SAVE</span></div>
+      <div class="system-item"><b id="sysPhase">—</b><span>FASE</span></div>
+      <div class="system-item"><b id="sysCoach">—</b><span>COACH</span></div>
+    </div>
+    <div id="systemStatusText" class="info" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card"><div class="eyebrow">Dati e backup</div>
+    <div class="grid2"><button class="btn" onclick="exportData()">Esporta JSON</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">Importa JSON</button></div>
+    <input id="importFile" class="hidden" type="file" accept=".json,application/json">
+    <div class="info" id="backupInfo" style="margin-top:10px">Backup non ancora eseguito.</div>
+    <button class="btn danger full" style="margin-top:10px" onclick="resetData()">Cancella tutti i dati</button>
+    <p class="note">IndexedDB strutturato + localStorage fallback. All'avvio vince la copia più recente. Backup JSON consigliato.</p>
+  </div>
+</section>
+
+</main></div></div>
+
+<nav class="nav">
+<button class="active" data-page="today" onclick="showPage('today')">⌂<br>Oggi</button>
+<button data-page="plan" onclick="showPage('plan')">🗓<br>Piano</button>
+<button data-page="shoulder" onclick="showPage('shoulder')">🩺<br>Spalla</button>
+<button data-page="military" onclick="showPage('military')">💪<br>Military</button>
+<button data-page="running" onclick="showPage('running')">🏃<br>Running</button>
+<button data-page="work" onclick="showPage('work')">🍕<br>Lavoro</button>
+<button data-page="library" onclick="showPage('library')">📚<br>Libreria</button>
+<button data-page="physio" onclick="showPage('physio')">🧑‍⚕️<br>Fisio</button>
+<button data-page="tests" onclick="showPage('tests')">🧪<br>Test</button>
+<button data-page="progress" onclick="showPage('progress')">📊<br>Progressi</button>
+<button data-page="settings" onclick="showPage('settings')">⚙<br>Dati</button>
+</nav>
+
+<div id="sessionModal" class="modal hidden"><div class="modal-box">
+  <div class="modal-head"><h3 id="sessionTitle">Sessione</h3><button class="close" onclick="closeSession()">×</button></div>
+  <div class="progress"><span id="sessionProgress"></span></div>
+  <div class="exercise-visual" id="exerciseVisual">💪</div>
+  <h2 id="exerciseTitle"></h2><div class="small" id="exerciseDose"></div><div id="exerciseReason" class="reason neutral"></div><div id="exerciseInstructions" class="note"></div>
+  <div class="timer" id="timerDisplay">00:00</div>
+  <div class="timer-controls"><button class="btn blue" id="timerBtn" onclick="toggleTimer()">Avvia timer</button><button class="btn secondary" onclick="resetTimer()">Reset</button></div>
+  <div class="timer-tools"><button class="btn secondary" onclick="addTimerSeconds(30)">+30 sec</button><button class="btn secondary" onclick="skipRecovery()">Salta recupero</button></div>
+  <div class="timer-controls" style="margin-top:8px"><button class="btn secondary" id="voiceBtn" onclick="toggleVoice()">🔊 Voce attiva</button><button class="btn secondary" onclick="repeatVoiceInstruction()">🗣 Ripeti</button></div>
+  <div id="voiceStatus" class="note" style="text-align:center">Voce pronta</div>
+  <div class="session-nav"><button class="btn secondary" onclick="prevStep()">Indietro</button><button class="btn" onclick="nextStep()">Fatto / Avanti</button></div>
+</div></div>
+
+<div id="postModal" class="modal hidden"><div class="modal-box">
+  <div class="modal-head"><h3>Risposta alla sessione</h3><button class="close" onclick="closePost()">×</button></div>
+  <div class="small">Come sta la spalla subito dopo?</div>
+  <div class="pain-scale" id="postScale"><button onclick="setPostPain(0)">0</button><button onclick="setPostPain(1)">1</button><button onclick="setPostPain(2)">2</button><button onclick="setPostPain(3)">3</button><button onclick="setPostPain(4)">4</button><button onclick="setPostPain(5)">5+</button></div>
+  <div class="field" style="margin-top:14px"><label>RPE sessione</label><select id="sessionRPE"><option value="">Seleziona RPE</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+  <button id="saveSessionBtn" class="btn full" style="margin-top:12px" onclick="saveCompletedSession()" disabled>Salva sessione</button>
+</div></div>
 
 <script>
 "use strict";
 
-/* =========================
-   STORAGE / STATE
-========================= */
-const KEY="hybridCoachAI_V12_1";
-const state=JSON.parse(localStorage.getItem(KEY)||"null")||{
-  profile:{goal:"hybrid",level:"intermediate",days:4,duration:50,equip:[]},
-  history:[],week:[]
-};
-function persist(){localStorage.setItem(KEY,JSON.stringify(state));}
-function $(id){return document.getElementById(id);}
-function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
-function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
-function daysAgo(d){return (Date.now()-new Date(d).getTime())/86400000;}
-function dateISO(d=new Date()){return d.toISOString().slice(0,10);}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+/* =========================================================
+   V10 DEFINITIVE + MASTER 16.2 FUSION
+   ========================================================= */
+const APP_VERSION="10.16.2-MASTER-FUSION";
+const SCHEMA_VERSION=162;
+const KEY="erjonHybridCoachAI_V10_MASTER_FUSION_16_2";
+const LEGACY_KEYS=[
+  "erjonHybridCoachAI_Definitive_ForLife_v10",
+  "erjonHybridCoachAI_Definitive_ForLife_v6",
+  "hybridCoachAI_V16_2","hybridCoachAI_V16_1","hybridCoachAI_V16",
+  "hybridCoachAI_V15","hybridCoachAI_V14","hybridCoachAI_V13","hybridCoachAI_V12_1"
+];
+const DB_NAME="ErjonHybridCoachAI_V10_MASTER_FUSION_DB";
+const DB_VERSION=1;
+const STORES=["meta","profile","sessions","activities","tests","progression","readiness","performance","week"];
+let storageMode="localStorage fallback",appReady=false,persistQueue=Promise.resolve();
 
-/* =========================
-   PROFILE
-========================= */
-function loadProfile(){
-  const p=state.profile;
-  $("goal").value=p.goal;$("level").value=p.level;$("days").value=p.days;$("duration").value=p.duration;
-  document.querySelectorAll(".equip").forEach(x=>x.checked=p.equip.includes(x.value));
-  updateEquipStatus(); updateDashboard(); renderHistory(); renderWeek();
-}
-function saveProfile(){
-  state.profile={
-    goal:$("goal").value,level:$("level").value,days:+$("days").value,duration:+$("duration").value,
-    equip:[...document.querySelectorAll(".equip:checked")].map(x=>x.value)
-  };
-  persist();updateEquipStatus();generateWeek();alert("Profilo salvato.");
-}
-function updateEquipStatus(){
-  const n=state.profile.equip.length;
-  $("equipStatus").innerHTML=n?`Attrezzatura: <b>${n}</b> categorie selezionate. Il coach userà automaticamente sostituzioni compatibili.`:`Nessuna attrezzatura selezionata → <b>Military / corpo libero</b> come fallback.`;
-}
+let selectedPain=null,postPain=null,mode=null,readiness=0,shoulderReadiness=0,performanceReadiness=0,blocked=false;
+let currentWorkout=[],currentIndex=0,currentType="generated",sessionStartedAt=null,completedSteps=[];
+let timerLeft=0,timerInitial=0,timerId=null,countdownId=null,timerRunning=false,countdownRunning=false;
+let voiceEnabled=true,voicePrimed=false,halfCuePlayed=false,tenCuePlayed=false,fiveCuePlayed=false;
+let shoulderRoutine="reset",militaryLevel="recovery",runType="easy",physioRoutine="workout1";
+let wakeLock=null,wakeLockWanted=false,autoFlow=false,autoAdvanceId=null;
 
-/* =========================
-   FATIGUE ENGINE
-   =========================
-   Internal load = duration * RPE.
-   Recent load uses exponential decay.
-   Readiness combines acute load, chronic load, sleep, stress,
-   soreness, energy and recent RPE drift.
-========================= */
-function loadWindow(days){
-  return state.history.filter(x=>daysAgo(x.date)<=days).reduce((s,x)=>s+x.load,0);
-}
-function weightedRecentLoad(){
-  return state.history.reduce((s,x)=>{
-    const d=daysAgo(x.date);
-    return s+x.load*Math.exp(-d/3.5);
-  },0);
-}
-function chronicLoad(){
-  const vals=[];
-  for(let w=0;w<4;w++){
-    const end=w*7, start=(w+1)*7;
-    vals.push(state.history.filter(x=>{const d=daysAgo(x.date);return d>end&&d<=start;}).reduce((s,x)=>s+x.load,0));
+/* =========================================================
+   HELPERS / LOCAL DATES
+   ========================================================= */
+function $(id){return document.getElementById(id)}
+function clamp(n,a,b){return Math.max(a,Math.min(b,n))}
+function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function localDateKey(input=new Date()){const d=input instanceof Date?input:new Date(input);if(Number.isNaN(d.getTime()))return"";return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function localMidnight(input=new Date()){const d=input instanceof Date?new Date(input):new Date(input);if(Number.isNaN(d.getTime()))return null;return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function calendarDaysAgo(input){const d=localMidnight(input),n=localMidnight();return d&&n?Math.round((n-d)/86400000):Infinity}
+function formatSeconds(sec){const s=Math.max(0,Math.round(Number(sec)||0));return`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`}
+function ageFromBirthDate(s){const dob=new Date(s+"T00:00:00");if(Number.isNaN(dob.getTime()))return"—";const n=new Date();let a=n.getFullYear()-dob.getFullYear();if(n.getMonth()<dob.getMonth()||(n.getMonth()===dob.getMonth()&&n.getDate()<dob.getDate()))a--;return Math.max(0,a)}
+function dayIndex(){const d=new Date().getDay();return d===0?6:d-1}
+function setSplash(t){if($("splashText"))$("splashText").textContent=t}
+function hideSplash(){appReady=true;const s=$("startupSplash");if(s){s.style.opacity="0";s.style.transition=".2s";setTimeout(()=>s.remove(),220)}}
+function guardReady(){if(appReady)return true;alert("Sincronizzazione For Life in corso.");return false}
+
+/* =========================================================
+   DATABASE EXERCISES — V10
+   ========================================================= */
+const EX={};
+function add(id,t,d,s,i,c,x,e="bodyweight",meta={}){EX[id]={id,t,d,s,i,c,x,e,...meta}}
+[
+["breathing","Respirazione diaframmatica","2 min",120,"🫁","rehab","Inspira 4 secondi, espira 6. Spalle e mandibola rilassate."],
+["cat","Cat-Camel toracico","10 ripetizioni",90,"🐈","mobility","Muovi lentamente la colonna senza forzare il collo."],
+["thread","Thread the Needle","6 per lato",120,"🧵","mobility","Ruota il torace senza crollare sulla spalla."],
+["wall","Wall Slide","2×8",150,"🧱","rehab","Scivola in alto e torna lentamente; spalla lontana dall'orecchio."],
+["plus","Push-Up Plus al muro","2×10",150,"🫸","rehab","Allontana le scapole senza piegare i gomiti."],
+["iso","Isometria alla parete","5×8 sec",120,"🧱","rehab","Spingi al 30–40% senza trattenere il respiro."],
+["external","Rotazione esterna con elastico","2×12",180,"➰","rehab","Gomito al fianco, elastico leggero, ritorno lento.","band"],
+["pullApart","Band Pull-Apart basso","2×12",150,"➰","rehab","Apri l'elastico all'altezza dello sterno senza inarcare.","band"],
+["bird","Bird Dog","2×6 per lato",150,"🐕","core","Core stabile; braccio più basso se serve."],
+["deadbug","Dead Bug","3×8 per lato",180,"🪲","core","Espira durante l'estensione mantenendo la schiena neutra."],
+["squat","Squat controllato","3×12",180,"🦵","legs","Ritmo fluido e ginocchia stabili."],
+["split","Split Squat","3×8 per lato",210,"🦿","legs","Discesa controllata e busto alto."],
+["bridge","Glute Bridge","3×15",180,"🌉","legs","Spingi dai talloni senza inarcare."],
+["calf","Calf Raise","3×18",150,"⬆️","legs","Salita, pausa e discesa lenta."],
+["reverseLunge","Affondo indietro","3×8 per lato",210,"↩️","legs","Passo stabile e ritorno controllato."],
+["wallPush","Push-Up al muro","3×10–15",180,"🧱","military","Discesa corta e controllata."],
+["rowTowel","Row isometrico con asciugamano","5×10 sec",150,"🧻","military","Trazione moderata senza alzare le spalle."],
+["rowBand","Row con elastico","3×12",180,"🪢","military","Tira verso il torace senza sollevare le spalle.","band"],
+["inclinePush","Push-Up inclinato","3×6–10",180,"↗️","military","Gomiti 30–45° e ROM indolore.","bench"],
+["march","Marcia sul posto","3×40 sec",150,"🎒","military","Addome attivo e postura alta."],
+["thrust","Squat Thrust senza push-up","3×8",180,"⚡","military","Vai in plank alto e ritorna senza discesa del petto."],
+["mountain","Mountain Climber lento","3×20",150,"⛰️","military","Versione al muro se la spalla è sensibile."],
+["goblet","Goblet Squat leggero","3×10",180,"🏋️","legs","Peso vicino al petto.","weights"],
+["rdl","Romanian Deadlift","3×10",180,"🏋️","legs","Carichi vicini alle cosce, schiena neutra.","weights"],
+["rowDB","Row manubrio supportato","3×10 per lato",190,"🏋️","military","Gomito vicino al corpo.","weights"],
+["carry","Farmer Carry leggero","3×30 sec",150,"🧳","hyrox","Collo rilassato e presa moderata.","weights"],
+["stepup","Step-Up","3×10 per lato",210,"🪜","legs","Controlla la discesa.","bench"],
+["walk","Cammino rilassato","2 min",120,"🚶","recovery","Braccia morbide e passo comodo."],
+["walkFast","Camminata veloce","25 min",1500,"🚶","run","Passo sostenuto, collo rilassato.","bodyweight",{runType:"easy"}],
+["runEasy","Corsa Z2","25 min",1500,"🏃","run","Ritmo conversazionale e sostenibile.","bodyweight",{runType:"easy"}],
+["intervals","Intervalli controllati","6×2 min forte / 2 min facili",1440,"⏱️","run","Forte ma sostenibile; niente sprint massimale.","bodyweight",{runType:"interval"}],
+["tempo","Tempo Run","3×6 min / 2 min facili",1320,"🔥","run","Ritmo impegnativo ma controllato.","bodyweight",{runType:"tempo"}],
+["hyroxRun","Corsa Hyrox Safe","4×800 m con recupero",1500,"🏁","hyrox","Tra i blocchi usa stazioni senza overhead.","bodyweight",{runType:"hyrox"}],
+["stretch","Stretching dolce pettorale","2×30 sec",90,"🧘","recovery","Gomito basso, nessuna fitta."],
+["scapset","Scapular Set","6×5 sec",60,"🪽","rehab","Controllo leggero delle scapole."],
+["ballScap","Palla zona scapolare","45 sec per punto",90,"🎾","release","Mai su osso, collo o colonna.","ball"],
+["ballPec","Palla pettorale","45 sec per lato",90,"🎾","release","Sotto la clavicola, lontano da ascella e articolazione.","ball"],
+["ballLat","Palla gran dorsale al muro","45 sec per lato",90,"🎾","release","Pressione dolce sul muscolo.","ball"],
+["rollerThoracic","Foam roller toracico","6–8 respiri ×2",120,"🪵","release","Dorso alto, non collo o lombari.","roller"],
+["rollerLat","Foam roller gran dorsale","45 sec per lato",90,"🪵","release","Movimenti corti.","roller"],
+["poolWalk","Cammino in acqua","10 min",600,"🏊","pool","Passo rilassato.","pool"],
+["poolScap","Scapular Set in acqua","2×10",120,"🏊","pool","Movimento piccolo e indolore.","pool"],
+["poolER","Rotazione esterna in acqua","2×10",150,"🏊","pool","Gomito al fianco.","pool"],
+["poolJog","Aqua Jogging leggero","15 min",900,"🏊","pool","Ritmo facile.","pool"]
+].forEach(v=>add(...v));
+
+const seed={rehab:["Scapular Clock","Serratus Reach","Low Row scapolare"],mobility:["Open Book","Rotazione torace seduto","Caviglia al muro"],military:["Squat a tempo","Step Jack senza salto","Marcia militare controllata"],legs:["Wall Sit","Single Leg Bridge","Tibialis Raise"],core:["Heel Tap","Side Plank ginocchia","Standing Brace"],run:["Corsa facile 30 min","Fartlek 10×1 min","Ripetute 8×400 m"],hyrox:["Run + Squat","Run + Affondi","Circuito 4 stazioni safe"],recovery:["Respirazione 4-6","Mobilità globale 8 min","Passeggiata rigenerante"],work:["Pre-turno scapola","Micro-pausa pala","Reset cervicale banco"]};
+Object.entries(seed).forEach(([c,names])=>names.forEach((name,i)=>add(`${c}_${i+1}`,name,c==="run"||c==="hyrox"?"Blocco guidato":"2–3 serie",c==="run"||c==="hyrox"?240:120,c==="work"?"🍕":c==="run"?"🏃":c==="hyrox"?"🏁":"🧘",c,"Tecnica controllata; regredisci se compare dolore oltre 2–3/10.")));
+
+["physio1_mob1","physio1_mob2","physio1_mob3","physio1_mob4","physio2_mob1","physio2_mob2","physio2_mob3"].forEach((id,i)=>add(id,["Mobilità tronco in quadrupedia","Cavalier servente · apertura tronco","Rotazione tronco in piedi","Sequenza braccia in piedi","Basculamento bacino","Quadrupedia indietro/avanti","Rotazione lombare supina"][i],"15 ripetizioni",150,"🧑‍⚕️","physio","Prescrizione fisioterapista: esegui fedelmente e senza forzare."));
+add("physio_stretch","Stretching finale fisioterapista","2 min",120,"🧘","physio","Respirazione lenta.");
+
+const shoulder={reset:["breathing","cat","thread","wall","plus","external","bird"],build:["breathing","cat","wall","plus","external","pullApart","iso","bird","inclinePush","rowBand","carry"],release:["rollerThoracic","ballScap","ballPec","rollerLat","ballLat","breathing"],pool:["poolWalk","poolScap","poolER","breathing"]};
+const military={recovery:["breathing","squat","split","bridge","calf","deadbug","bird"],build:["breathing","squat","split","stepup","inclinePush","rowBand","deadbug","carry"],elite:["breathing","squat","split","stepup","inclinePush","rowBand","thrust","mountain","carry","deadbug"]};
+const running={easy:["breathing","runEasy","walk","stretch"],interval:["breathing","intervals","walk","stretch"],tempo:["breathing","tempo","walk","stretch"],hyrox:["breathing","hyroxRun","squat","stepup","carry","deadbug"],pool:["poolWalk","poolJog","poolScap","breathing"]};
+const specials={prework:["breathing","wall","plus","external"],midwork:["breathing","scapset","stretch"],postwork:["walk","cat","thread","stretch","breathing"]};
+
+/* =========================================================
+   STATE + INDEXEDDB STRUCTURED MASTER
+   ========================================================= */
+function defaults(){return{
+  schemaVersion:SCHEMA_VERSION,appVersion:APP_VERSION,
+  sessions:[],activities:[],tests:[],note:"",
+  progression:{byExercise:{},lastProgressedId:null,totalProgressions:0},
+  readinessHistory:[],performance:[],weekCache:[],
+  fatigueDebt:0,programStartDate:localDateKey(),highContrast:false,lastSuccessfulSaveAt:null,
+  settings:{birthDate:"1988-04-07",athleteLevel:"intermediate",goal:"hybrid",days:5,minutes:30,equipment:{band:true,weights:false,bench:false,pool:false,ball:true,roller:true},voice:true},
+  createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),lastBackupAt:null
+}}
+function norm(v){
+  const b=defaults(),x=v&&typeof v==="object"?v:{},ss=x.settings||{},pr=x.progression||{},lp=x.profile||{};
+  return{
+    ...b,...x,schemaVersion:SCHEMA_VERSION,appVersion:APP_VERSION,
+    sessions:Array.isArray(x.sessions)?x.sessions.map(s=>({...s,day:s.day||localDateKey(s.date)})):[],
+    activities:Array.isArray(x.activities)?x.activities.map(s=>({...s,day:s.day||localDateKey(s.date)})):[],
+    tests:Array.isArray(x.tests)?x.tests.map(s=>({...s,day:s.day||localDateKey(s.date)})):[],
+    readinessHistory:Array.isArray(x.readinessHistory)?x.readinessHistory.map(s=>({...s,day:s.day||localDateKey(s.date)})):[],
+    performance:Array.isArray(x.performance)?x.performance.map(s=>({...s,day:s.day||localDateKey(s.date)})):[],
+    weekCache:Array.isArray(x.weekCache)?x.weekCache:[],
+    progression:{...b.progression,...pr,byExercise:{...b.progression.byExercise,...(pr.byExercise||{})}},
+    settings:{...b.settings,...ss,birthDate:ss.birthDate||lp.birthDate||b.settings.birthDate,athleteLevel:ss.athleteLevel||lp.level||b.settings.athleteLevel,equipment:{...b.settings.equipment,...(ss.equipment||{})},voice:ss.voice!==false},
+    programStartDate:x.programStartDate||localDateKey(x.createdAt||new Date()),highContrast:!!x.highContrast,
+    createdAt:x.createdAt||x.created||b.createdAt,updatedAt:x.updatedAt||b.updatedAt,lastBackupAt:x.lastBackupAt||null,lastSuccessfulSaveAt:x.lastSuccessfulSaveAt||null
   }
-  return avg(vals)||1;
 }
-function computeFatigue(){
-  const h=state.history.slice(0,21);
-  if(!h.length)return {readiness:7,acute:0,chronic:1,ratio:0,push:"NORMAL",factor:1,deload:false};
-  const acute=loadWindow(7), chronic=chronicLoad();
-  const ratio=acute/Math.max(chronic,1);
-  const e=avg(h.slice(0,7).map(x=>x.energy||7));
-  const sl=avg(h.slice(0,7).map(x=>x.sleep||7));
-  const st=avg(h.slice(0,7).map(x=>x.stress||3));
-  const so=avg(h.slice(0,7).map(x=>x.soreness||2));
-  const rpe=avg(h.slice(0,7).map(x=>x.rpe||6));
-  const recentRPE=avg(h.slice(0,3).map(x=>x.rpe||6));
-  const oldRPE=avg(h.slice(3,10).map(x=>x.rpe||6))||recentRPE;
-  const rpeDrift=recentRPE-oldRPE;
-  let readiness=7;
-  readiness += (e-7)*0.55;
-  readiness += (sl-7)*0.45;
-  readiness -= (st-3)*0.32;
-  readiness -= (so-2)*0.38;
-  readiness -= Math.max(0,ratio-1)*1.6;
-  readiness -= Math.max(0,rpeDrift)*0.45;
-  readiness=clamp(readiness,1,10);
+let state=defaults();
+function localCandidate(){for(const k of [KEY,...LEGACY_KEYS]){const raw=localStorage.getItem(k);if(!raw)continue;try{const p=JSON.parse(raw);return norm(p?.data&&p?.meta?p.data:p)}catch{}}return defaults()}
 
-  let factor=1, push="NORMAL", deload=false;
-  if(readiness>=8.2 && ratio<1.20){factor=1.08;push="PUSH";} 
-  else if(readiness>=7.2 && ratio<1.45){factor=1.02;push="PROGRESS";} 
-  else if(readiness>=6.2 && ratio<1.70){factor=.94;push="CONTROL";} 
-  else if(readiness>=5.2){factor=.82;push="REDUCE";} 
-  else {factor=.68;push="DELOAD";deload=true;}
-  if(ratio>1.90){factor=Math.min(factor,.72);push="DELOAD";deload=true;}
-  return {readiness,acute,chronic,ratio,e,sl,st,so,rpe,rpeDrift,factor,push,deload};
+function openDB(){return new Promise((resolve,reject)=>{if(!("indexedDB" in window)){reject(new Error("IndexedDB non disponibile"));return}const r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=e=>{const db=e.target.result;STORES.forEach(s=>{if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:"id"})})};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.onblocked=()=>reject(new Error("DB bloccato"))})}
+function all(db,s){return new Promise((resolve,reject)=>{const r=db.transaction(s,"readonly").objectStore(s).getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error)})}
+async function idbLoad(){const db=await openDB();try{const [meta,profile,sessions,activities,tests,progression,readiness,performance,week]=await Promise.all(STORES.map(s=>all(db,s)));if(!meta.length&&!profile.length&&!sessions.length)return null;const m=meta.find(x=>x.id==="main")?.value||{},p=profile.find(x=>x.id==="main")?.value||{},pr={};progression.forEach(x=>{if(x.exerciseId)pr[x.exerciseId]=x.value});return norm({...m,settings:p,sessions:sessions.map(x=>x.value),activities:activities.map(x=>x.value),tests:tests.map(x=>x.value),progression:{...(m.progression||{}),byExercise:pr},readinessHistory:readiness.map(x=>x.value),performance:performance.map(x=>x.value),weekCache:week.find(x=>x.id==="current")?.value||[]})}finally{db.close()}}
+async function idbSave(snap){const db=await openDB();try{const tx=db.transaction(STORES,"readwrite"),S=n=>tx.objectStore(n);STORES.forEach(n=>S(n).clear());S("meta").put({id:"main",value:{schemaVersion:snap.schemaVersion,appVersion:snap.appVersion,note:snap.note,fatigueDebt:snap.fatigueDebt,programStartDate:snap.programStartDate,highContrast:snap.highContrast,createdAt:snap.createdAt,updatedAt:snap.updatedAt,lastBackupAt:snap.lastBackupAt,lastSuccessfulSaveAt:snap.lastSuccessfulSaveAt,progression:{lastProgressedId:snap.progression.lastProgressedId,totalProgressions:snap.progression.totalProgressions}}});S("profile").put({id:"main",value:snap.settings});snap.sessions.forEach((x,i)=>S("sessions").put({id:String(x.id||x.date||i),value:x}));snap.activities.forEach((x,i)=>S("activities").put({id:String(x.id||x.date||i),value:x}));snap.tests.forEach((x,i)=>S("tests").put({id:String(x.id||x.date||i),value:x}));Object.entries(snap.progression.byExercise).forEach(([exerciseId,value])=>S("progression").put({id:exerciseId,exerciseId,value}));snap.readinessHistory.forEach((x,i)=>S("readiness").put({id:String(x.id||x.date||i),value:x}));snap.performance.forEach((x,i)=>S("performance").put({id:String(x.id||x.date||i),value:x}));S("week").put({id:"current",value:snap.weekCache});await new Promise((res,rej)=>{tx.oncomplete=res;tx.onerror=()=>rej(tx.error);tx.onabort=()=>rej(tx.error)})}finally{db.close()}}
+function save(){
+  state.updatedAt=new Date().toISOString();const snap=norm(state);state=snap;
+  try{localStorage.setItem(KEY,JSON.stringify(snap))}catch{}
+  persistQueue=persistQueue.then(async()=>{try{await idbSave(snap);storageMode="IndexedDB strutturato + localStorage fallback";state.lastSuccessfulSaveAt=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}}catch(e){storageMode="localStorage fallback";state.lastSuccessfulSaveAt=new Date().toISOString();console.warn(e)}updateSystemStatus()});
+  return persistQueue
 }
-function fatigueLabel(f){
-  if(f.push==="PUSH")return `<span class="goodtxt">🟢 PUSH</span>`;
-  if(f.push==="PROGRESS")return `<span class="goodtxt">🟢 PROGRESS</span>`;
-  if(f.push==="CONTROL")return `<span class="warntxt">🟡 CONTROL</span>`;
-  if(f.push==="REDUCE")return `<span class="warntxt">🟠 REDUCE</span>`;
-  return `<span class="badtxt">🔴 DELOAD</span>`;
-}
-function updateDashboard(){
-  const f=computeFatigue();
-  $("readiness").textContent=f.readiness.toFixed(1)+"/10";
-  $("load7").textContent=Math.round(f.acute);
-  $("load28").textContent=Math.round(loadWindow(28));
-  $("push").innerHTML=fatigueLabel(f);
-  $("decision").innerHTML=
-    `<b>Decisione V12.1:</b> ${fatigueLabel(f)} · fattore di carico <b>${Math.round(f.factor*100)}%</b>.<br>
-     Acute load: ${Math.round(f.acute)} · Chronic baseline: ${Math.round(f.chronic)} · rapporto A:C: ${f.ratio.toFixed(2)}.
-     ${f.deload?" Lo storico indica necessità di scarico automatico.":" Il sistema può mantenere/progredire il carico senza ignorare la fatica."}`;
-  $("fatigueNow").innerHTML=`Readiness attuale: <b>${f.readiness.toFixed(1)}/10</b> · ${fatigueLabel(f)} · fattore settimana successiva <b>${Math.round(f.factor*100)}%</b>.`;
-}
+async function hydrate(){const l=localCandidate();let i=null;try{i=await idbLoad()}catch(e){console.warn(e)}const lt=Date.parse(l.updatedAt||0)||0,it=Date.parse(i?.updatedAt||0)||0;state=norm(i&&it>=lt?i:l);try{localStorage.setItem(KEY,JSON.stringify(state))}catch{}try{await idbSave(state);storageMode="IndexedDB strutturato + localStorage fallback"}catch{storageMode="localStorage fallback"}}
 
-/* =========================
-   WORKOUT LOG
-========================= */
-function logWorkout(){
-  const r=clamp(+$("rpe").value||7,1,10), d=clamp(+$("actualDuration").value||50,5,240);
-  const load=Math.round(d*r);
-  state.history.unshift({
-    id:Date.now(),date:new Date().toISOString(),rpe:r,duration:d,load,
-    energy:clamp(+$("energy").value||7,1,10),
-    sleep:clamp(+$("sleep").value||7,0,12),
-    stress:clamp(+$("stress").value||3,1,10),
-    soreness:clamp(+$("soreness").value||2,1,10),
-    intensity:$("intensity").value,type:$("sessionType").value
-  });
-  state.history=state.history.slice(0,120);persist();updateDashboard();renderHistory();generateWeek();
-  alert(`Allenamento registrato · carico interno ${load}. Lo storico è stato aggiornato e la prossima settimana è stata ricalibrata.`);
-}
+/* =========================================================
+   FOLLOWUP V10
+   ========================================================= */
+function followupAgeHours(s){return(Date.now()-Date.parse(s.date))/3600000}
+function isFollowupEligible(s){return s&&s.nextDayReaction==null&&Number.isFinite(Date.parse(s.date))&&((s.day||localDateKey(s.date))!==localDateKey()||followupAgeHours(s)>=18)}
+function pendingFollowup(){for(let i=state.sessions.length-1;i>=0;i--){if(state.sessions[i]?.nextDayReaction==null)return{index:i,session:state.sessions[i]}}return null}
+function confirmedSessions(limit=Infinity){return state.sessions.filter(s=>s&&s.nextDayReaction!=null&&s.postPain!=null).slice(-limit)}
+function sessionTolerated(s){if(!s||s.nextDayReaction==null||s.postPain==null)return false;const pre=+s.prePain||0,post=+s.postPain||pre;return(post-pre)<=1&&post<=3&&+s.nextDayReaction<3}
+function updateFollowupUI(){const p=pendingFollowup(),sel=$("pain24"),el=$("followupInfo");if(!p){sel.disabled=true;el.textContent="Nessuna seduta in attesa di follow-up.";return}if(isFollowupEligible(p.session)){sel.disabled=false;el.textContent=`Follow-up disponibile per ${new Date(p.session.date).toLocaleString("it-IT")} · ${p.session.type}.`}else{sel.disabled=true;el.textContent=`Follow-up non ancora eleggibile: circa ${Math.max(0,Math.floor(followupAgeHours(p.session)))} ore.`}}
+function commitPreviousFollowup(){const p=pendingFollowup();if(!p||!isFollowupEligible(p.session))return false;state.sessions[p.index]={...state.sessions[p.index],nextDayReaction:+$("pain24").value,followUpAt:new Date().toISOString()};applyProgressionFromSession(p.index);save();updateFollowupUI();return true}
 
-/* =========================
-   EXERCISE LIBRARY + EQUIPMENT FALLBACK
-========================= */
-const EX={
-  push:{name:"Push-up",equip:[],sets:4,reps:"8–15"},
-  pike:{name:"Pike push-up",equip:[],sets:3,reps:"6–12"},
-  squat:{name:"Air squat",equip:[],sets:4,reps:"12–20"},
-  lunge:{name:"Reverse lunge",equip:[],sets:3,reps:"8–12/lato"},
-  split:{name:"Bulgarian split squat",equip:["bench"],sets:3,reps:"8–12/lato"},
-  row:{name:"Inverted row",equip:["bench"],sets:4,reps:"8–15"},
-  pull:{name:"Pull-up",equip:["pullup"],sets:4,reps:"5–10"},
-  dbrow:{name:"One-arm DB row",equip:["dumbbell"],sets:4,reps:"8–12/lato"},
-  dbpress:{name:"DB floor press",equip:["dumbbell"],sets:4,reps:"8–12"},
-  dead:{name:"Romanian deadlift",equip:["barbell","dumbbell"],sets:4,reps:"6–10"},
-  swing:{name:"Kettlebell swing",equip:["kettlebell"],sets:5,reps:"12–20"},
-  carry:{name:"Farmer carry",equip:["dumbbell","kettlebell"],sets:4,reps:"30–50 m"},
-  burpee:{name:"Burpee",equip:[],sets:4,reps:"8–15"},
-  run:{name:"Running intervals",equip:[],sets:6,reps:"1 min fast / 1 min easy"},
-  z2:{name:"Zone 2 run / brisk walk",equip:[],sets:1,reps:"30–50 min"},
-  bike:{name:"Bike intervals",equip:["bike"],sets:8,reps:"45s hard / 75s easy"},
-  rower:{name:"Row intervals",equip:["row"],sets:8,reps:"45s hard / 75s easy"},
-  sled:{name:"Sled push",equip:["sled"],sets:6,reps:"15–25 m"},
-  wall:{name:"Wall-ball / thruster substitute",equip:["ball"],sets:5,reps:"12–20"},
-  mountain:{name:"Mountain climber",equip:[],sets:4,reps:"30–45s"},
-  plank:{name:"Plank",equip:[],sets:3,reps:"30–60s"},
-  calf:{name:"Calf raise",equip:[],sets:3,reps:"15–25"},
-  mobility:{name:"Mobility / breathing",equip:[],sets:1,reps:"8–12 min"}
-};
-function has(eq){return state.profile.equip.includes(eq);}
-function choose(primary, fallback){
-  const a=EX[primary];
-  if(!a)return EX[fallback];
-  if(!a.equip.length || a.equip.some(has))return a;
-  return EX[fallback];
-}
-function scaleExercise(e,f){
-  const x=JSON.parse(JSON.stringify(e));
-  const volume=f.factor;
-  x.sets=Math.max(1,Math.round(x.sets*volume));
-  return x;
-}
+/* =========================================================
+   CYCLE REAL TIME MASTER
+   ========================================================= */
+function weeksSinceProgramStart(){const s=localMidnight(state.programStartDate),n=localMidnight();return s&&n?Math.max(0,Math.floor((n-s)/604800000)):0}
+function rawCalendarPhase(){return["BASE","BUILD","PEAK","DELOAD"][weeksSinceProgramStart()%4]}
 
-/* =========================
-   WEEKLY HYBRID PERIODIZATION
-   Goal selects emphasis, NOT a single repetitive workout.
-   Every week rotates strength / engine / conditioning / recovery.
-========================= */
-function phaseForWeek(){
-  const weekNo=Math.floor(state.history.length/4)%4;
-  return ["Base","Build","Peak","Reset"][weekNo];
+/* =========================================================
+   FATIGUE / PERFORMANCE / PROGRESSION / DAILY MASTER
+   ========================================================= */
+function sessionLoad(s){return Number.isFinite(+s.sessionLoad)?+s.sessionLoad:Math.max(0,(+s.durationSec||0)/60*(+s.rpe||0))}
+function loadWindow(days){return state.sessions.filter(s=>calendarDaysAgo(s.date)<=days).reduce((a,s)=>a+sessionLoad(s),0)}
+function weeklyLoads(){const a=[];for(let w=0;w<6;w++)a.push(state.sessions.filter(s=>{const d=calendarDaysAgo(s.date);return d>=w*7&&d<(w+1)*7}).reduce((x,s)=>x+sessionLoad(s),0));return a}
+function chronicLoad(){const a=weeklyLoads().slice(1,5).filter(x=>x>0);return avg(a)||1}
+function dailyLoads(){const a=[];for(let i=0;i<7;i++)a.push(state.sessions.filter(s=>calendarDaysAgo(s.date)===i).reduce((x,s)=>x+sessionLoad(s),0));return a}
+function monotony7(){const a=dailyLoads();if(a.filter(x=>x>0).length<2)return 0;const m=avg(a),sd=Math.sqrt(avg(a.map(x=>(x-m)**2)));return sd?m/sd:0}
+function hardCount(){return state.sessions.filter(s=>calendarDaysAgo(s.date)<=7&&(+s.rpe>=8||["hyrox","interval","tempo","military"].some(k=>String(s.type).toLowerCase().includes(k)))).length}
+function masterFatigue(){
+  const c=confirmedSessions(10),acute=loadWindow(7),chronic=chronicLoad(),ratio=acute/Math.max(chronic,1),mono=monotony7();
+  const pain=c.length?avg(c.map(s=>+s.prePain||0)):0,rpe=c.length?avg(c.map(s=>+s.rpe||6)):6;
+  let score=78-pain*6-Math.max(0,ratio-1)*18-Math.max(0,mono-1.7)*8-Math.max(0,hardCount()-3)*5;
+  let debt=state.fatigueDebt||0;if(c.length){if(score<55)debt=Math.min(5,debt+.5);else if(score>75)debt=Math.max(0,debt-.2)}
+  score=clamp(score-debt*5,10,100);
+  return{score,acute,chronic,ratio,mono,debt}
 }
-function buildSession(day, f, phase){
-  const g=state.profile.goal, base=f.factor;
-  let s={day,title:"",focus:"",ex:[],rpe:clamp(6.5+(base-1)*5,5,8.5),duration:+state.profile.duration};
-  if(day===0){
-    s.title="Forza + tecnica";s.focus="Potenza controllata / forza fondamentale";
-    const a=g==="running"?choose("split","lunge"):choose("dead","squat");
-    const b=g==="running"?choose("dbrow","row"):choose("dbpress","push");
-    s.ex=[a,b,choose("pull","row"),EX.plank];
-  }else if(day===1){
-    s.title="Engine / alta intensità";s.focus="HYROX / HIIT / running";
-    const engine=g==="running"?EX.run:(has("row")?EX.rower:(has("bike")?EX.bike:(has("sled")?EX.sled:EX.burpee)));
-    s.ex=[engine,EX.burpee,EX.mountain];
-  }else if(day===2){
-    s.title="Recupero attivo + base aerobica";s.focus="Zone 2 + mobilità";
-    s.ex=[EX.z2,EX.mobility];
-  }else if(day===3){
-    s.title="Hybrid Strength-Endurance";s.focus="Forza resistente + circuito";
-    const a=choose("swing","squat"), b=choose("carry","lunge");
-    const c=g==="hyrox"?(has("ball")?EX.wall:EX.burpee):choose("dbrow","push");
-    s.ex=[a,b,c,EX.mountain];
-  }else if(day===4){
-    s.title="Running / threshold";s.focus="Capacità di sostenere ritmo";
-    s.ex=[EX.run,EX.calf,EX.plank];
-  }else{
-    s.title="Military full body";s.focus="Corpo libero / conditioning";
-    s.ex=[EX.push,EX.squat,EX.lunge,EX.pull.equip.length&&has("pullup")?EX.pull:EX.burpee,EX.plank];
-  }
-  // Fatigue controls volume first, then intensity, then hard-day density.
-  s.ex=s.ex.map(x=>scaleExercise(x,f));
-  if(f.deload){s.title="DELOAD · "+s.title;s.rpe=Math.min(s.rpe,6);s.duration=Math.round(s.duration*.70);}
-  else if(f.push==="REDUCE"){s.duration=Math.round(s.duration*.82);s.rpe=Math.min(s.rpe,7);}
-  else if(f.push==="CONTROL"){s.duration=Math.round(s.duration*.92);}
-  else if(f.push==="PUSH"){s.rpe=Math.min(9,s.rpe+.4);}
-  return s;
+function masterPerformance(){
+  const p=state.performance.filter(x=>Number.isFinite(+x.metric)&&+x.metric>0);if(!p.length)return{score:50,trend:0};
+  const r=avg(p.slice(0,3).map(x=>+x.metric)),o=p.slice(3,6).length?avg(p.slice(3,6).map(x=>+x.metric)):r,trend=o?((r-o)/o)*100:0;
+  return{score:clamp(50+trend*1.5+Math.min(p.length,30)*.4,20,100),trend}
 }
-function generateWeek(){
-  state.profile.days=+$("days").value;state.profile.duration=+$("duration").value;
-  state.profile.goal=$("goal").value;state.profile.level=$("level").value;
-  state.profile.equip=[...document.querySelectorAll(".equip:checked")].map(x=>x.value);
-  const f=computeFatigue(), phase=phaseForWeek(), n=+state.profile.days;
-  const pattern={
-    3:[0,1,2],4:[0,1,2,3],5:[0,1,2,3,4],6:[0,1,2,3,4,5]
-  }[n]||[0,1,2,3];
-  state.week=pattern.map((d,i)=>buildSession(d,f,phase));
-  persist();renderWeek();updateDashboard();
+function masterProgression(){
+  const levels=Object.values(state.progression.byExercise).map(Number),recent=state.sessions.slice(-8).filter(s=>s.progressedExerciseId).length;
+  return{score:clamp(50+recent*6+levels.reduce((a,b)=>a+b,0)*.5,30,95),recent}
 }
-function renderWeek(){
-  const w=state.week||[];
-  if(!w.length){$("week").innerHTML='<p class="muted">Premi “Genera / aggiorna settimana”.</p>';return;}
-  $("week").innerHTML=w.map((s,i)=>`
-    <div class="workout">
-      <div class="top"><div><b>Giorno ${i+1} · ${esc(s.title)}</b><div class="small muted">${esc(s.focus)}</div></div>
-      <span class="pill">RPE target ${s.rpe.toFixed(1)}</span><span class="pill">${s.duration} min</span></div>
-      <div>${s.ex.map(e=>`<div class="exercise"><b>${esc(e.name)}</b> · ${e.sets} × ${esc(e.reps)}</div>`).join("")}</div>
-    </div>`).join("");
+function masterDaily(){
+  if(selectedPain==null)return{score:65};
+  const sl=+$("sleep").value,en=+$("energy").value,st=+$("stiff").value,wo=+$("workload").value;
+  let s=85-selectedPain*11-sl*7-en*7-st*4-wo*5;s-=blocked?50:0;return{score:clamp(s,5,100)}
 }
-function showPreview(){
-  if(!state.week.length)generateWeek();
-  const text=state.week.map((s,i)=>`GIORNO ${i+1}: ${s.title}\nFocus: ${s.focus}\nDurata: ${s.duration} min · RPE target: ${s.rpe.toFixed(1)}\n`+
-    s.ex.map(e=>`- ${e.name}: ${e.sets} × ${e.reps}`).join("\n")).join("\n\n");
-  alert(text);
+function masterDecision(){
+  const f=masterFatigue(),p=masterPerformance(),g=masterProgression(),d=masterDaily();
+  let combined=f.score*.38+p.score*.18+g.score*.14+d.score*.30,action="MANTIENI";
+  if(blocked||f.score<35||d.score<35)action="DELOAD";
+  else if(f.score<50||d.score<50)action="RECUPERA";
+  else if(combined<65)action="CONTROLLA";
+  else if(combined>=82&&p.trend>=0&&f.ratio<1.4&&d.score>=80)action="SPINGI";
+  else if(combined>=74&&p.trend>=-2)action="PROGREDISCI";
+  const positives=[],brakes=[];
+  if(d.score>=80)positives.push("readiness giornaliera alta");if(f.score>=75)positives.push("fatica sotto controllo");if(p.trend>3)positives.push(`performance +${p.trend.toFixed(1)}%`);if(g.recent>=2)positives.push("progressioni recenti");
+  if(d.score<60)brakes.push("readiness giornaliera bassa");if(f.ratio>1.5)brakes.push(`A:C ${f.ratio.toFixed(2)}`);if(f.debt>=2)brakes.push(`fatigue debt ${f.debt.toFixed(1)}`);if(p.trend<-3)brakes.push(`performance ${p.trend.toFixed(1)}%`);
+  return{f,p,g,d,combined:clamp(combined,0,100),action,positives,brakes}
+}
+function effectivePhase(){const raw=rawCalendarPhase(),m=masterDecision();if(["DELOAD","RECUPERA"].includes(m.action))return"DELOAD";if(raw==="PEAK"&&["CONTROLLA","MANTIENI"].includes(m.action))return"BUILD";return raw}
+
+/* =========================================================
+   PERSISTENT PROGRESSION V10
+   ========================================================= */
+function getLevel(id){return Math.max(0,+state.progression.byExercise[id]||0)}
+function applyPersistentLevel(e){const lv=getLevel(e.id),o={...e};if(!lv)return o;if(e.id==="runEasy"){const m=Math.min(60,25+lv*3);o.d=`${m} min`;o.s=m*60}else if(e.id==="intervals"){const r=Math.min(12,6+lv);o.d=`${r}×2 min forte / 2 min facili`;o.s=r*240}else if(e.id==="tempo"){const b=Math.min(12,6+lv);o.d=`3×${b} min / 2 min facili`;o.s=3*b*60+240}else if(e.id==="hyroxRun"){const b=Math.min(8,4+lv);o.d=`${b}×800 m con recupero`;o.s=1500+(b-4)*300}else{const m=String(o.d).match(/^(\d+)×(\d+)(.*)$/);if(m)o.d=`${m[1]}×${Math.min(+m[2]+lv,+m[2]+6)}${m[3]||""}`}return o}
+function progressionCandidate(s){const ids=(s.prescribedWorkout||[]).map(x=>x.id).filter(id=>id&&EX[id]&&EX[id].c!=="physio"&&!["breathing","walk","stretch","cat","thread"].includes(id));if(!ids.length)return null;return ids.sort((a,b)=>getLevel(a)-getLevel(b))[0]}
+function applyProgressionFromSession(index){const s=state.sessions[index];if(!s||s.progressionApplied||s.nextDayReaction==null)return;s.progressionApplied=true;if(sessionTolerated(s)&&+s.rpe<=8){const id=progressionCandidate(s);if(id){state.progression.byExercise[id]=Math.min(24,getLevel(id)+1);state.progression.lastProgressedId=id;state.progression.totalProgressions++;s.progressedExerciseId=id;s.progressedToLevel=getLevel(id)}}}
+
+/* =========================================================
+   EQUIPMENT FALLBACK V10
+   ========================================================= */
+function eqAvailable(id){const e=EX[id],q=state.settings.equipment;return e?.e==="bodyweight"||!e?.e||!!q[e.e]}
+function substitute(id){if(eqAvailable(id))return id;return({external:"iso",rowBand:"rowTowel",pullApart:"scapset",inclinePush:"wallPush",stepup:"reverseLunge",carry:"march",goblet:"squat",rdl:"bridge",rowDB:"rowTowel",ballScap:"stretch",ballPec:"stretch",ballLat:"thread",rollerThoracic:"cat",rollerLat:"thread",poolWalk:"walkFast",poolScap:"scapset",poolER:"iso",poolJog:"walkFast"})[id]||id}
+function unique(ids){const s=new Set();return(ids||[]).map(substitute).filter(id=>EX[id]&&!s.has(id)&&(s.add(id),true))}
+function enhance(ids,type){const q=state.settings.equipment,o=[...ids];if(["strength","military","hyrox"].includes(type)){if(q.weights){replace(o,"squat","goblet");replace(o,"bridge","rdl");replace(o,"rowBand","rowDB");if(!o.includes("carry"))o.push("carry")}if(q.bench){replace(o,"reverseLunge","stepup");replace(o,"wallPush","inclinePush")}if(q.band&&!o.includes("external"))o.splice(Math.min(2,o.length),0,"external")}if(type==="rehab"){if(q.ball)o.push("ballScap");if(q.roller)o.push("rollerThoracic")}if(type==="recovery"&&q.pool)return["poolWalk","poolScap","poolER","breathing"];return o}
+function replace(a,f,t){const i=a.indexOf(f);if(i>=0)a[i]=t}
+
+/* =========================================================
+   EXERCISE MASTER ADJUSTMENT
+   ========================================================= */
+function exercise(id){const src=EX[id];if(!src)return null;if(src.c==="physio")return{...src,reason:"Prescrizione fisioterapista · non modificata"};let e=applyPersistentLevel(src),m=masterDecision();if(["RECUPERA","DELOAD"].includes(m.action)){if(/^3×/.test(e.d))e.d=e.d.replace(/^3×/,"2×");if(/^2×/.test(e.d))e.d=e.d.replace(/^2×/,"1–2×");if(e.id==="runEasy"){e.d="20 min";e.s=1200}e.reason="↓ riduzione temporanea Master · livello permanente conservato"}else if(m.action==="CONTROLLA"){e.reason="→ controllo Master · qualità e margine"}else if(getLevel(e.id)>0){e.reason=`↑ livello permanente ${getLevel(e.id)} · follow-up confermati`}else if(m.action==="SPINGI"){e.reason="↑ Master: progressione consentita, una variabile alla volta"}else e.reason="→ dose stabile · consolidamento";return e}
+function workoutSeconds(a){return(a||[]).reduce((s,e)=>s+(+e.s||0),0)}
+function fitToTime(ids,min){const p=unique(ids).map(exercise).filter(Boolean),target=+min*60,max=target*1.1,out=[];let total=0;for(const e of p){const main=["runEasy","intervals","tempo","hyroxRun","poolJog","walkFast"].includes(e.id);if(out.length>=3&&total+e.s>max&&!main)continue;out.push(e);total+=e.s;if(total>=target&&out.length>=3)break}return out}
+function renderDuration(id,list){const e=$(id);if(!e)return;const sec=workoutSeconds(list);e.innerHTML=`<div class="duration-banner"><span>Durata stimata</span><strong>${formatSeconds(sec)}</strong><span>target ${state.settings.minutes} min</span></div>`}
+
+/* =========================================================
+   DAILY CHECK / V10 MODES
+   ========================================================= */
+function setPain(v){selectedPain=v;document.querySelectorAll("#painScale button").forEach((b,i)=>b.classList.toggle("active",i===v));evaluate()}
+["pain24","sleep","stiff","energy","workload","weakness","tingling","night"].forEach(id=>$(id).addEventListener("change",()=>selectedPain!==null&&evaluate()));
+function evaluate(){
+  if(selectedPain===null)return;const g=id=>+$(id).value;
+  blocked=g("weakness")>=5||g("tingling")>=5||g("night")>=5;
+  shoulderReadiness=clamp(Math.round(100-selectedPain*16-($("pain24").disabled?0:g("pain24")*10)-g("stiff")*5-g("night")*6),0,100);
+  performanceReadiness=clamp(Math.round(100-g("sleep")*12-g("energy")*12-g("workload")*10),0,100);
+  readiness=Math.round(shoulderReadiness*.65+performanceReadiness*.35);
+  $("shoulderReadinessValue").textContent=shoulderReadiness+"%";$("performanceReadinessValue").textContent=performanceReadiness+"%";
+  const b=$("modeBox");if(blocked){mode="blocked";b.className="mode red";b.innerHTML="<strong>⛔ BLOCCO DI SICUREZZA</strong><br>Valutazione clinica consigliata."}
+  else if(selectedPain>=4||shoulderReadiness<45){mode="recovery";b.className="mode red";b.innerHTML="<strong>🔴 RECOVERY</strong><br>Mobilità dolce, gambe, core e cardio leggero."}
+  else if(selectedPain>=3||shoulderReadiness<70||performanceReadiness<55){mode="safe";b.className="mode yellow";b.innerHTML="<strong>🟡 SAFE MODE</strong><br>Oggi niente progressione aggressiva."}
+  else{mode="build";b.className="mode green";b.innerHTML="<strong>🟢 BUILD MODE</strong><br>Progressione controllata consentita."}
+  $("headerStatus").textContent=blocked?"SESSIONE BLOCCATA":masterDecision().action;
+  $("todayTitle").textContent=blocked?"Valutazione clinica consigliata":masterDecision().action==="DELOAD"?"Deload protetto":masterDecision().action==="RECUPERA"?"Recupero intelligente":masterDecision().action==="SPINGI"?"Hybrid Performance Day":"Hybrid Adaptive Day";
+  $("startToday").disabled=blocked;$("progressionAdvice").textContent=progressionText();generateToday();renderPreviews();dashboard(false)
+}
+function progressionText(){const m=masterDecision();return`${m.action}: score integrato ${Math.round(m.combined)}/100. ${m.brakes.length?"Freni: "+m.brakes.join(" · "):"Nessun freno rilevante."} ${m.positives.length?"A favore: "+m.positives.join(" · "):""}`}
+
+/* =========================================================
+   WEEK V10 + MASTER
+   ========================================================= */
+function template(goal){return({longevity:["strength","easy","rehab","strength","easy","recovery","recovery"],hyrox:["strength","interval","rehab","hyrox","easy","strength","recovery"],military:["military","easy","rehab","military","interval","strength","recovery"],run10k:["easy","interval","rehab","strength","tempo","easy","recovery"],hybrid:["strength","easy","rehab","hyrox","tempo","military","recovery"]})[goal]||["strength","easy","rehab","hyrox","tempo","military","recovery"]}
+function mask(n){return({3:[1,0,1,0,1,0,0],4:[1,1,0,1,0,1,0],5:[1,1,1,0,1,1,0],6:[1,1,1,1,1,1,0]})[n]||[1,1,1,0,1,1,0]}
+function plan(type){const m={rehab:shoulder.reset,recovery:["breathing","cat","walkFast","stretch"],easy:running.easy,interval:running.interval,tempo:running.tempo,hyrox:running.hyrox,strength:["breathing","squat","split","inclinePush","rowBand","deadbug","carry"],military:military.build};let ids=[...(m[type]||m.recovery)];const md=masterDecision();if(["CONTROLLA","RECUPERA","DELOAD"].includes(md.action)||mode==="safe")ids=ids.filter(id=>!["thrust","mountain"].includes(id));if(["RECUPERA","DELOAD"].includes(md.action)||mode==="recovery")ids=ids.filter(id=>!["inclinePush","carry","thrust","mountain"].includes(id));return ids}
+function generateToday(){if(selectedPain===null)return;const i=dayIndex(),train=mask(state.settings.days)[i],scheduled=template(state.settings.goal)[i],md=masterDecision();let type=!train?"recovery":scheduled;if(["RECUPERA","DELOAD"].includes(md.action))type="recovery";let ids=type==="recovery"?["breathing","cat","squat","bridge","deadbug","walkFast"]:plan(type);ids=enhance(ids,type);currentWorkout=fitToTime(ids,state.settings.minutes);render($("todayWorkout"),currentWorkout);renderDuration("todayDuration",currentWorkout)}
+function renderWeek(){const tpl=template(state.settings.goal),mk=mask(state.settings.days),names=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"],lab={strength:"Forza totale",easy:"Corsa Z2",rehab:"Spalla & mobilità",recovery:"Recupero",interval:"Intervalli",hyrox:"Hyrox Safe",military:"Military Safe",tempo:"Tempo Run"},md=masterDecision();let hardBudget=md.action==="SPINGI"?3:md.action==="PROGREDISCI"?2:md.action==="MANTIENI"?2:md.action==="CONTROLLA"?1:0;
+  const hard=["interval","hyrox","military","tempo"];const week=names.map((n,i)=>{let type=mk[i]?tpl[i]:"recovery";if(hard.includes(type)){if(hardBudget>0)hardBudget--;else type=md.action==="DELOAD"?"recovery":"easy"}return{n,type}});state.weekCache=week;save();
+  $("weekGrid").innerHTML=week.map((x,i)=>`<div class="day-card ${i===dayIndex()?"today":""}"><strong>${x.n}</strong><p>${lab[x.type]||x.type}</p><div class="reason neutral">${effectivePhase()} · ${md.action}</div></div>`).join("")
 }
 
-/* =========================
-   HISTORY / REPORT
-========================= */
-function renderHistory(){
-  const h=state.history.slice(0,12);
-  if(!h.length){$("history").innerHTML='<p class="muted">Nessun allenamento registrato.</p>';return;}
-  $("history").innerHTML=`<table><thead><tr><th>Data</th><th>Tipo</th><th>RPE</th><th>Min</th><th>Load</th></tr></thead><tbody>`+
-  h.map(x=>`<tr><td>${esc(new Date(x.date).toLocaleDateString("it-IT"))}</td><td>${esc(x.type)}</td><td>${x.rpe}</td><td>${x.duration}</td><td>${x.load}</td></tr>`).join("")+
-  `</tbody></table><p class="small muted">Totale sessioni: ${state.history.length}. Carico 7g: ${Math.round(loadWindow(7))}. Carico 28g: ${Math.round(loadWindow(28))}.</p>`;
-}
-function exportData(){
-  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Hybrid_Coach_AI_V12_1_backup.json";a.click();URL.revokeObjectURL(a.href);
-}
-function clearHistory(){
-  if(!confirm("Cancellare tutto lo storico degli allenamenti?"))return;
-  state.history=[];state.week=[];persist();updateDashboard();renderHistory();renderWeek();
-}
-function resetAll(){
-  if(!confirm("Reset completo del coach e dello storico?"))return;
-  localStorage.removeItem(KEY);location.reload();
+/* =========================================================
+   RENDER
+   ========================================================= */
+function render(target,list){if(!target)return;target.innerHTML=(list||[]).length?list.map((e,i)=>`<div class="workout-item"><div><strong>${i+1}. ${esc(e.t)}</strong><br><span>${esc(e.d)}</span>${e.reason?`<div class="reason ${e.reason.startsWith("↑")?"up":e.reason.startsWith("↓")?"down":"neutral"}">${esc(e.reason)}</div>`:""}</div><div class="tag">${esc(String(e.c||"").toUpperCase())}</div></div>`).join(""):'<div class="small">Nessun allenamento disponibile.</div>'}
+function showPage(name){["today","plan","shoulder","military","running","work","library","physio","tests","progress","settings"].forEach(p=>{const e=$("page-"+p);if(e)e.classList.toggle("hidden",p!==name)});document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));if(name==="plan")renderWeek();if(name==="progress")renderProgress();if(name==="tests")renderTests();if(name==="library")renderLibrary();if(name==="physio")renderPhysioPreview();renderPreviews();window.scrollTo({top:0,behavior:"smooth"})}
+function segment(btn){if(!btn)return;btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("active"));btn.classList.add("active")}
+function selectShoulder(t,b){shoulderRoutine=t;segment(b);renderPreviews()}function selectMilitary(t,b){militaryLevel=t;segment(b);renderPreviews()}function selectRun(t,b){runType=t;segment(b);renderPreviews()}function selectPhysio(t,b){physioRoutine=t;segment(b);renderPhysioPreview()}
+function renderPreviews(){let s=[...shoulder[shoulderRoutine]];if(shoulderRoutine==="build")s=enhance(s,"rehab");render($("shoulderPreview"),fitToTime(s,state.settings.minutes));let m=mode==="recovery"||blocked?military.recovery:[...military[militaryLevel]];render($("militaryPreview"),fitToTime(enhance(m,"military"),state.settings.minutes));let r=mode==="recovery"&&!["easy","pool"].includes(runType)?running.easy:[...running[runType]];render($("runningPreview"),fitToTime(enhance(r,runType==="hyrox"?"hyrox":runType==="pool"?"recovery":"easy"),state.settings.minutes))}
+function buildPhysioFlow(which){const ids=which==="workout1"?["physio1_mob1","physio1_mob2","physio1_mob3","physio1_mob4","physio_stretch"]:["physio2_mob1","physio2_mob2","physio2_mob3","physio_stretch"];return ids.map(id=>({...EX[id],reason:"Prescrizione fisioterapista · non modificata"}))}
+function renderPhysioPreview(){render($("physioPreview"),buildPhysioFlow(physioRoutine))}
+
+/* =========================================================
+   START SESSION
+   ========================================================= */
+function requiredCheck(){if(selectedPain===null){alert("Completa prima il check.");return false}if(blocked){alert("Sessione bloccata per sicurezza.");return false}commitPreviousFollowup();return true}
+function startGeneratedWorkout(){if(requiredCheck())startWorkout(currentWorkout,"Piano giornaliero")}
+function startShoulder(){if(!requiredCheck())return;let ids=[...shoulder[shoulderRoutine]];if(mode==="recovery"&&shoulderRoutine==="build")ids=shoulder.reset;startWorkout(fitToTime(enhance(ids,shoulderRoutine==="build"?"rehab":"recovery"),state.settings.minutes),"Shoulder Rehab")}
+function startMilitary(){if(!requiredCheck())return;let ids=mode==="recovery"?military.recovery:[...military[militaryLevel]];startWorkout(fitToTime(enhance(ids,"military"),state.settings.minutes),"Military Safe")}
+function startRunning(){if(!requiredCheck())return;let ids=mode==="recovery"&&!["easy","pool"].includes(runType)?running.easy:[...running[runType]];startWorkout(fitToTime(enhance(ids,runType==="hyrox"?"hyrox":runType==="pool"?"recovery":"easy"),state.settings.minutes),"Running & Hyrox")}
+function startSpecial(type){if(blocked){alert("Protocollo bloccato.");return}startWorkout(unique(specials[type]).map(exercise).filter(Boolean),type)}
+function startPhysio(){if(!requiredCheck())return;if(!confirm("Confermi di aver verificato che la scheda fisioterapica storica sia ancora adatta alla situazione attuale?"))return;startWorkout(buildPhysioFlow(physioRoutine),physioRoutine==="workout1"?"Fisioterapista · Scheda 1":"Fisioterapista · Scheda 2",true)}
+
+async function requestWakeLock(){wakeLockWanted=true;if(!("wakeLock" in navigator))return false;try{wakeLock=await navigator.wakeLock.request("screen");return true}catch{return false}}
+async function releaseWakeLock(){wakeLockWanted=false;if(wakeLock){try{await wakeLock.release()}catch{}wakeLock=null}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&wakeLockWanted&&!wakeLock)requestWakeLock()});
+
+function startWorkout(list,type,isAuto=false){if(!Array.isArray(list)||!list.length){alert("Nessun esercizio disponibile.");return}currentWorkout=list.map(x=>({...x}));currentIndex=0;currentType=type;completedSteps=[];sessionStartedAt=Date.now();autoFlow=!!isAuto;$("sessionModal").classList.remove("hidden");requestWakeLock();renderSession()}
+function renderSession(){const e=currentWorkout[currentIndex];if(!e)return;$("sessionTitle").textContent=`${currentIndex+1}/${currentWorkout.length} · ${currentType}`;$("sessionProgress").style.width=((currentIndex+1)/currentWorkout.length*100)+"%";$("exerciseVisual").textContent=e.i||"💪";$("exerciseTitle").textContent=e.t||"";$("exerciseDose").textContent=e.d||"";$("exerciseReason").textContent=e.reason||"";$("exerciseInstructions").textContent=e.x||"";timerLeft=+e.s||90;timerInitial=timerLeft;resetTimer(false);setTimeout(()=>speak(`${e.t}. ${e.d}.`,true),250)}
+function markStep(){const e=currentWorkout[currentIndex];if(!e||completedSteps.some(x=>x.index===currentIndex))return;completedSteps.push({index:currentIndex,id:e.id,title:e.t,dose:e.d,seconds:+e.s||0})}
+function nextStep(){stopTimer();markStep();if(currentIndex<currentWorkout.length-1){currentIndex++;renderSession();return}closeSession();if(selectedPain!==null&&["Piano giornaliero","Shoulder Rehab","Military Safe","Running & Hyrox","Fisioterapista · Scheda 1","Fisioterapista · Scheda 2"].includes(currentType))openPost();else{state.activities.push({id:Date.now(),date:new Date().toISOString(),day:localDateKey(),type:currentType});save();alert("Protocollo completato.")}}
+function prevStep(){stopTimer();if(currentIndex>0){currentIndex--;renderSession()}}
+function closeSession(){clearTimeout(autoAdvanceId);autoFlow=false;stopTimer();speechSynthesis?.cancel();releaseWakeLock();$("sessionModal").classList.add("hidden")}
+
+/* =========================================================
+   VOICE + TIMER iOS SAFE
+   ========================================================= */
+function primeVoice(){if(!voiceEnabled||!("speechSynthesis" in window))return;try{const u=new SpeechSynthesisUtterance(" ");u.lang="it-IT";u.volume=.01;speechSynthesis.cancel();speechSynthesis.speak(u);voicePrimed=true}catch{}updateVoiceUI()}
+function speak(t,interrupt=false){if(!voiceEnabled||!("speechSynthesis" in window))return;try{if(interrupt)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="it-IT";u.rate=1.02;const v=speechSynthesis.getVoices?.()||[],it=v.find(x=>String(x.lang).toLowerCase().startsWith("it"));if(it)u.voice=it;speechSynthesis.speak(u);voicePrimed=true}catch{}updateVoiceUI()}
+function updateVoiceUI(){if($("voiceBtn"))$("voiceBtn").textContent=voiceEnabled?"🔊 Voce attiva":"🔇 Voce disattivata";if($("voiceStatus"))$("voiceStatus").textContent=voiceEnabled?(voicePrimed?"Voce attiva · audio inizializzato":"Voce attiva · tocca il toggle per inizializzare su iPhone"):"Voce disattivata"}
+function toggleVoice(){voiceEnabled=!voiceEnabled;state.settings.voice=voiceEnabled;if(voiceEnabled)primeVoice();else speechSynthesis?.cancel();save();updateVoiceUI()}
+function repeatVoiceInstruction(){const e=currentWorkout[currentIndex];if(e)speak(`${e.t}. ${e.d}.`,true)}
+function beginCountdown(){if(countdownRunning||timerRunning)return;countdownRunning=true;if(voiceEnabled&&!voicePrimed)primeVoice();let c=3;$("timerBtn").textContent="Preparati";$("timerDisplay").textContent="3";speak("Tre",true);countdownId=setInterval(()=>{c--;if(c>0){$("timerDisplay").textContent=String(c);speak(String(c));return}clearInterval(countdownId);countdownId=null;countdownRunning=false;$("timerDisplay").textContent="VIA";speak("Via");setTimeout(startRealTimer,400)},1000)}
+function startRealTimer(){if(timerRunning)return;timerRunning=true;$("timerBtn").textContent="Pausa";updateTimer();timerId=setInterval(()=>{if(timerLeft>0){timerLeft--;updateTimer();announceTimerCues()}if(timerLeft<=0)finishTimer()},1000)}
+function toggleTimer(){if(countdownRunning){cancelCountdown();updateTimer();return}if(timerRunning){stopTimer(false);$("timerBtn").textContent="Riprendi";return}if(timerLeft<=0)resetTimer();timerLeft===timerInitial?beginCountdown():startRealTimer()}
+function addTimerSeconds(s){timerLeft=Math.max(0,timerLeft+s);timerInitial=Math.max(timerInitial,timerLeft);updateTimer()}
+function isRecoveryStep(e){return!!e&&(/recupero|riposa/i.test(e.t||"")||e.i==="⏸️"||e.c==="recovery")}
+function skipRecovery(){if(!isRecoveryStep(currentWorkout[currentIndex])){speak("Questo non è un recupero",true);return}nextStep()}
+function announceTimerCues(){const h=Math.floor(timerInitial/2);if(!halfCuePlayed&&timerLeft===h&&timerInitial>=40){halfCuePlayed=true;speak("Metà")}if(!tenCuePlayed&&timerLeft===10){tenCuePlayed=true;speak("Dieci secondi")}if(!fiveCuePlayed&&timerLeft===5){fiveCuePlayed=true;speak("Cinque")}if([3,2,1].includes(timerLeft))speak(String(timerLeft))}
+function finishTimer(){clearInterval(timerId);timerId=null;timerRunning=false;timerLeft=0;$("timerDisplay").textContent="FINE";speak("Fine",true);navigator.vibrate?.([180,100,180]);if(autoFlow&&currentIndex<currentWorkout.length-1)setTimeout(()=>{markStep();currentIndex++;renderSession();beginCountdown()},600)}
+function cancelCountdown(){clearInterval(countdownId);countdownId=null;countdownRunning=false}
+function stopTimer(resetButton=true){clearInterval(timerId);timerId=null;timerRunning=false;cancelCountdown();if(resetButton&&$("timerBtn"))$("timerBtn").textContent="Avvia timer"}
+function resetTimer(reset=true){stopTimer();if(reset){timerLeft=+(currentWorkout[currentIndex]?.s||90);timerInitial=timerLeft}else timerInitial=timerLeft;halfCuePlayed=tenCuePlayed=fiveCuePlayed=false;updateTimer()}
+function updateTimer(){$("timerDisplay").textContent=`${String(Math.floor(timerLeft/60)).padStart(2,"0")}:${String(timerLeft%60).padStart(2,"0")}`}
+
+/* =========================================================
+   POST SESSION / PERFORMANCE
+   ========================================================= */
+function openPost(){postPain=null;document.querySelectorAll("#postScale button").forEach(b=>b.classList.remove("active"));$("sessionRPE").value="";$("saveSessionBtn").disabled=true;$("postModal").classList.remove("hidden")}
+function closePost(){$("postModal").classList.add("hidden")}
+function setPostPain(v){postPain=v;document.querySelectorAll("#postScale button").forEach((b,i)=>b.classList.toggle("active",i===v));validatePost()}
+$("sessionRPE").addEventListener("change",validatePost);
+function validatePost(){const r=+$("sessionRPE").value;$("saveSessionBtn").disabled=!(postPain!==null&&r>=1&&r<=10)}
+function saveCompletedSession(){
+  if(!guardReady())return;const rpe=+$("sessionRPE").value;if(postPain==null||rpe<1||rpe>10)return;
+  const durationSec=sessionStartedAt?Math.max(0,Math.round((Date.now()-sessionStartedAt)/1000)):0,snapshot=currentWorkout.map((e,i)=>({index:i,id:e.id,title:e.t,dose:e.d,seconds:+e.s||0,category:e.c,reason:e.reason||""}));
+  const s={id:crypto.randomUUID?.()||String(Date.now()),date:new Date().toISOString(),day:localDateKey(),type:currentType,prePain:selectedPain,postPain,nextDayReaction:null,followUpAt:null,progressionApplied:false,mode,readiness,shoulderReadiness,performanceReadiness,calendarPhase:rawCalendarPhase(),effectivePhase:effectivePhase(),durationSec,estimatedDurationSec:workoutSeconds(currentWorkout),rpe,sessionLoad:Math.round(durationSec/60*rpe),goal:state.settings.goal,athleteLevel:state.settings.athleteLevel,prescribedWorkout:snapshot,completedSteps:[...completedSteps],equipment:{...state.settings.equipment},appVersion:APP_VERSION};
+  state.sessions.push(s);const metric=s.sessionLoad/Math.max(1,durationSec/60);state.performance.unshift({id:"p-"+Date.now(),date:s.date,day:s.day,domain:String(currentType).toLowerCase(),metric,rpe});
+  state.readinessHistory.unshift({id:"r-"+Date.now(),date:s.date,day:s.day,shoulderReadiness,performanceReadiness,integrated:masterDaily().score});
+  state.fatigueDebt=masterFatigue().debt;save();closePost();updateFollowupUI();dashboard(true);alert("Sessione salvata. Il Master ricalibrerà la settimana e attenderà il follow-up eleggibile.")
 }
 
-/* =========================
-   TIMER + VOICE
-========================= */
-let timerSec=30,timerId=null,paused=true;
-function speak(t){if("speechSynthesis" in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}}
-function paintTimer(){const m=String(Math.floor(timerSec/60)).padStart(2,"0"),s=String(timerSec%60).padStart(2,"0");$("timer").textContent=`${m}:${s}`;}
-function startTimer(){
-  if(timerId)return;paused=false;speak("Via");
-  timerId=setInterval(()=>{timerSec--;paintTimer();
-    if([30,10,5,3,2,1].includes(timerSec))speak(String(timerSec));
-    if(timerSec<=0){clearInterval(timerId);timerId=null;paused=true;speak("Fine");}
-  },1000);
+/* =========================================================
+   DASHBOARD MASTER
+   ========================================================= */
+function streak(s){if(!s.length)return 0;const dates=[...new Set(s.map(x=>x.day).filter(Boolean))].sort().reverse();let count=0,c=localMidnight();for(const ds of dates){const dt=localMidnight(ds+"T00:00:00"),diff=Math.round((c-dt)/86400000);if(diff===0||diff===1){count++;c=dt}else break}return count}
+function dashboard(full=true){
+  const conf=confirmedSessions(10),good=conf.length?conf.filter(sessionTolerated).length/conf.length:0,avgPain=conf.length?avg(conf.map(x=>+x.prePain||0)):null,score=conf.length?clamp(Math.round(100-(avgPain||0)*12+good*20),10,100):50,md=masterDecision(),phase=effectivePhase();
+  $("scoreRing").style.setProperty("--p",score);$("scoreValue").textContent=score+"%";$("scoreLabel").textContent=conf.length?(good>=.8?"Tolleranza buona":"Tolleranza da costruire"):"Servono follow-up";
+  $("statSessions").textContent=state.sessions.length;$("statStreak").textContent=streak(state.sessions);$("profileAge").textContent=ageFromBirthDate(state.settings.birthDate);$("profileLevel").textContent=state.settings.athleteLevel==="advanced"?"Avanzato":state.settings.athleteLevel==="beginner"?"Principiante":"Intermedio";$("profileGoalMini").textContent=({hybrid:"Hybrid",hyrox:"Hyrox",military:"Military",run10k:"10 km",longevity:"Longevità"})[state.settings.goal]||"Hybrid";
+  $("cycleTitle").textContent=phase;$("cycleText").textContent=`Calendario ${rawCalendarPhase()} · settimana reale ${weeksSinceProgramStart()+1}. Il Coach può congelare o retrocedere la fase.`;$("cycleProgress").style.width=({"BASE":25,"BUILD":50,"PEAK":75,"DELOAD":100})[phase]+"%";
+  $("coachSidebar").textContent=md.action;$("coachSidebarWhy").textContent=md.brakes.length?md.brakes.join(" · "):md.positives.join(" · ")||"Consolidamento.";
+  $("mFatigue").textContent=Math.round(md.f.score);$("mPerf").textContent=Math.round(md.p.score);$("mProg").textContent=Math.round(md.g.score);$("mDaily").textContent=Math.round(md.d.score);$("mAC").textContent=md.f.ratio.toFixed(2);$("mDebt").textContent=md.f.debt.toFixed(1);
+  $("masterDecision").innerHTML=`<strong>${esc(md.action)} · ${Math.round(md.combined)}/100</strong><br>${md.brakes.length?`Freni: ${esc(md.brakes.join(" · "))}. `:""}${md.positives.length?`A favore: ${esc(md.positives.join(" · "))}.`:""}<br><span class="small">Fatica e sicurezza hanno priorità sulla performance.</span>`;
+  if(full){loadSettings();equipmentSummary();renderWeek();renderPreviews();renderTests();renderLibrary();renderPhysioPreview();updateFollowupUI();updateVoiceUI();updateBackupInfo();applyContrast();updateSystemStatus()}
+  if(selectedPain!==null){generateToday();$("progressionAdvice").textContent=progressionText()}
 }
-function pauseTimer(){if(timerId){clearInterval(timerId);timerId=null;}paused=true;speak("Pausa");}
-function resetTimer(){pauseTimer();timerSec=30;paintTimer();$("timerName").textContent="Pronto";}
+function equipmentSummary(){const e=state.settings.equipment,l={band:"Elastico",weights:"Pesi",bench:"Panca",pool:"Piscina",ball:"Palla",roller:"Roller"},a=Object.entries(e).filter(([,v])=>v).map(([k])=>l[k]);$("equipmentSummary").innerHTML=(a.length?a:["Solo corpo libero"]).map(x=>`<span>${x}</span>`).join("")}
+function updateSystemStatus(){if(!$("sysDb"))return;$("sysDb").textContent=storageMode.includes("IndexedDB")?"SYNC OK":"FALLBACK";$("sysSave").textContent=state.lastSuccessfulSaveAt?new Date(state.lastSuccessfulSaveAt).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"}):"—";$("sysPhase").textContent=effectivePhase();$("sysCoach").textContent=masterDecision().action;$("systemStatusText").innerHTML=`DB: <b>${esc(storageMode)}</b> · settimana reale <b>${weeksSinceProgramStart()+1}</b> · fase calendario <b>${rawCalendarPhase()}</b> · fase effettiva <b>${effectivePhase()}</b> · ultimo salvataggio <b>${state.lastSuccessfulSaveAt?new Date(state.lastSuccessfulSaveAt).toLocaleString("it-IT"):"—"}</b>.`}
 
-/* =========================
-   INIT
-========================= */
-document.querySelectorAll(".equip").forEach(x=>x.addEventListener("change",updateEquipStatus));
-loadProfile();
-if(!state.week.length)generateWeek(); else {renderWeek();updateDashboard();}
-paintTimer();
+/* =========================================================
+   LIBRARY / PROGRESS / TESTS
+   ========================================================= */
+function renderLibrary(){const c=$("libCategory").value,e=$("libEquipment").value,q=$("libSearch").value.toLowerCase(),a=Object.values(EX).filter(x=>(c==="all"||x.c===c)&&(e==="all"||x.e===e)&&(!q||x.t.toLowerCase().includes(q)));$("libraryCount").textContent=`${a.length} esercizi su ${Object.keys(EX).length}`;$("libraryGrid").innerHTML=a.map(x=>`<div class="lib-card"><h4>${x.i} ${esc(x.t)}</h4><p>${esc(x.d)} · ${x.c} · ${x.e}</p><p>${esc(x.x)}</p></div>`).join("")}
+function renderProgress(){const s=state.sessions,conf=confirmedSessions(10),pain=conf.length?avg(conf.map(x=>+x.prePain||0)):null,good=conf.length?conf.filter(sessionTolerated).length/conf.length:0;$("pSessions").textContent=s.length;$("pPain").textContent=pain==null?"—":pain.toFixed(1);$("pGood").textContent=Math.round(good*100)+"%";$("pStreak").textContent=streak(s);$("history").innerHTML=s.length?[...s].reverse().slice(0,100).map(x=>`<div class="workout-item"><div><strong>${new Date(x.date).toLocaleDateString("it-IT")} · ${esc(x.type)}</strong><br><span>${x.prePain}/10 → ${x.postPain}/10 · RPE ${x.rpe} · ${x.nextDayReaction==null?"follow-up in attesa":"24h "+x.nextDayReaction}</span>${x.progressedExerciseId?`<div class="reason up">↑ ${esc(EX[x.progressedExerciseId]?.t||x.progressedExerciseId)} · livello ${x.progressedToLevel}</div>`:""}</div><div class="tag">${esc(x.mode||"")}</div></div>`).join(""):'<div class="small">Nessuna sessione.</div>';$("note").value=state.note||"";const recent=s.slice(-10);$("painChart").innerHTML=recent.map(x=>{const v=clamp(+x.prePain||0,0,5);return`<div class="bar-wrap"><div class="bar-value">${v}</div><div class="bar" style="height:${Math.max(4,v/5*100)}%"></div><div class="bar-label">${esc((x.day||"").slice(5))}</div></div>`}).join("")}
+function saveNote(){state.note=$("note").value;save();alert("Nota salvata.")}
+function saveMonthlyTest(){const t={shoulder:+$("testShoulder").value,wallPush:+$("testWallPush").value,squat:+$("testSquat").value,km:+$("testKm").value};if(t.shoulder<0||t.shoulder>10||t.km<180||t.km>1200){alert("Controlla i valori.");return}state.tests.push({id:Date.now(),date:new Date().toISOString(),day:localDateKey(),...t});save();renderTests();alert("Test salvato.")}
+function renderTests(){$("testsHistory").innerHTML=state.tests.length?[...state.tests].reverse().map(x=>`<div class="workout-item"><div><strong>${new Date(x.date).toLocaleDateString("it-IT")}</strong><br><span>Spalla ${x.shoulder}/10 · Wall ${x.wallPush} · Squat ${x.squat} · 1 km ${Math.floor(x.km/60)}:${String(x.km%60).padStart(2,"0")}</span></div><div class="tag">TEST</div></div>`).join(""):'<div class="small">Nessun test.</div>'}
+
+/* =========================================================
+   SETTINGS / CONTRAST / BACKUP
+   ========================================================= */
+function loadSettings(){const s=state.settings;$("birthDate").value=s.birthDate;$("athleteLevel").value=s.athleteLevel;$("goal").value=s.goal;$("days").value=String(s.days);$("minutes").value=String(s.minutes);$("eqBand").checked=!!s.equipment.band;$("eqWeights").checked=!!s.equipment.weights;$("eqBench").checked=!!s.equipment.bench;$("eqPool").checked=!!s.equipment.pool;$("eqBall").checked=!!s.equipment.ball;$("eqRoller").checked=!!s.equipment.roller;$("voiceSetting").checked=s.voice!==false;$("contrastSetting").checked=!!state.highContrast}
+function saveSettings(){if(!guardReady())return;state.settings={birthDate:$("birthDate").value||"1988-04-07",athleteLevel:$("athleteLevel").value,goal:$("goal").value,days:+$("days").value,minutes:+$("minutes").value,equipment:{band:$("eqBand").checked,weights:$("eqWeights").checked,bench:$("eqBench").checked,pool:$("eqPool").checked,ball:$("eqBall").checked,roller:$("eqRoller").checked},voice:$("voiceSetting").checked};state.highContrast=$("contrastSetting").checked;voiceEnabled=state.settings.voice;applyContrast();save();dashboard(true);if(selectedPain!==null)evaluate();alert("Impostazioni salvate.")}
+function applyContrast(){document.body.classList.toggle("high-contrast",!!state.highContrast)}
+function updateBackupInfo(){if(!state.lastBackupAt){$("backupInfo").textContent="Backup non ancora eseguito.";return}$("backupInfo").textContent=`Ultimo backup: ${new Date(state.lastBackupAt).toLocaleString("it-IT")}.`}
+function exportData(){state.lastBackupAt=new Date().toISOString();save();const payload={meta:{app:"Erjon Hybrid Coach AI",edition:"V10 MASTER Fusion 16.2",schemaVersion:SCHEMA_VERSION,exportedAt:new Date().toISOString(),storage:storageMode},data:state},blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=`Erjon_V10_MASTER_Fusion_16_2_${localDateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);updateBackupInfo()}
+$("importFile").addEventListener("change",e=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result),n=norm(p?.data&&p?.meta?p.data:p);state=n;save();dashboard(true);alert("Backup importato.")}catch{alert("File non valido.")}e.target.value=""};r.readAsText(f)});
+async function resetData(){if(!confirm("Cancellare definitivamente tutti i dati?"))return;[KEY,...LEGACY_KEYS].forEach(k=>localStorage.removeItem(k));try{indexedDB.deleteDatabase(DB_NAME)}catch{}location.reload()}
+
+/* =========================================================
+   START
+   ========================================================= */
+document.addEventListener("DOMContentLoaded",async()=>{
+  try{
+    setSplash("Controllo IndexedDB…");await hydrate();setSplash("Migrazione V10 e ricostruzione Master…");
+    state.fatigueDebt=masterFatigue().debt;voiceEnabled=state.settings.voice!==false;applyContrast();dashboard(true);
+    selectShoulder("reset",document.querySelector("#page-shoulder .segment button"));
+    selectMilitary("recovery",document.querySelector("#page-military .segment button"));
+    selectRun("easy",document.querySelector("#page-running .segment button"));
+    updateSystemStatus();
+  }catch(e){console.warn(e);storageMode="localStorage fallback";dashboard(true)}
+  finally{hideSplash();$("headerStatus").textContent="CHECK NON COMPLETATO"}
+});
 </script>
 </body>
 </html>
