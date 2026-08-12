@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Erjon Coach AI">
 
-<title>Erjon Hybrid Coach AI · Definitive For Life</title>
+<title>Erjon Hybrid Coach AI · Definitive For Life 10/10</title>
 
 <style>
 :root{
@@ -54,7 +54,10 @@ body{
   padding-bottom:calc(116px + env(safe-area-inset-bottom))
 }
 
-button,select,input,textarea{
+button,
+select,
+input,
+textarea{
   font:inherit
 }
 
@@ -828,24 +831,77 @@ textarea{
 }
 
 @media(max-width:980px){
-  .container{grid-template-columns:1fr}
-  .sidebar{display:grid;grid-template-columns:repeat(2,1fr)}
-  .module-grid{grid-template-columns:repeat(2,1fr)}
-  .library-grid{grid-template-columns:repeat(2,1fr)}
+  .container{
+    grid-template-columns:1fr
+  }
+
+  .sidebar{
+    display:grid;
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .module-grid{
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .library-grid{
+    grid-template-columns:repeat(2,1fr)
+  }
 }
 
 @media(max-width:680px){
-  .container{padding:10px}
-  .sidebar,.hero-grid,.grid2,.grid3,.grid4{grid-template-columns:1fr}
-  .readiness-pair{grid-template-columns:1fr 1fr}
-  .module-grid{grid-template-columns:1fr 1fr}
-  .nav{grid-template-columns:repeat(5,1fr)}
-  .pain-scale{grid-template-columns:repeat(3,1fr)}
-  .week-grid{grid-template-columns:repeat(2,1fr)}
-  .library-grid{grid-template-columns:1fr}
-  .pill{display:none}
-  .topbar{padding:11px}
-  .profile-mini{grid-template-columns:1fr 1fr 1fr}
+
+  body{
+    padding-bottom:calc(180px + env(safe-area-inset-bottom))
+  }
+
+  .container{
+    padding:10px
+  }
+
+  .sidebar,
+  .hero-grid,
+  .grid2,
+  .grid3,
+  .grid4{
+    grid-template-columns:1fr
+  }
+
+  .readiness-pair{
+    grid-template-columns:1fr 1fr
+  }
+
+  .module-grid{
+    grid-template-columns:1fr 1fr
+  }
+
+  .nav{
+    grid-template-columns:repeat(5,1fr)
+  }
+
+  .pain-scale{
+    grid-template-columns:repeat(3,1fr)
+  }
+
+  .week-grid{
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .library-grid{
+    grid-template-columns:1fr
+  }
+
+  .pill{
+    display:none
+  }
+
+  .topbar{
+    padding:11px
+  }
+
+  .profile-mini{
+    grid-template-columns:1fr 1fr 1fr
+  }
 }
 </style>
 </head>
@@ -855,16 +911,25 @@ textarea{
 <div class="app">
 
 <header class="topbar">
-  <div class="logo">🛡️</div>
+
+  <div class="logo">
+    🛡️
+  </div>
 
   <div class="brand">
-    <h1>ERJON HYBRID COACH AI · DEFINITIVE</h1>
-    <small>Shoulder Safe · Military · Running · Hyrox · Fisio · Pizzaiolo · Longevity · For Life</small>
+    <h1>
+      ERJON HYBRID COACH AI · DEFINITIVE FOR LIFE
+    </h1>
+
+    <small>
+      Shoulder Safe · Military · Running · Hyrox · Fisio · Pizzaiolo · Longevity
+    </small>
   </div>
 
   <div class="pill" id="headerStatus">
     CHECK NON COMPLETATO
   </div>
+
 </header>
 
 <div class="container">
@@ -872,19 +937,36 @@ textarea{
 <aside class="sidebar">
 
 <section class="card">
-  <div class="eyebrow">Indice di tolleranza · ultime 10</div>
 
-  <div class="score" id="scoreRing" style="--p:50">
-    <strong id="scoreValue">50%</strong>
+  <div class="eyebrow">
+    Indice di tolleranza · ultime 10 confermate
   </div>
 
-  <div class="small" id="scoreLabel" style="text-align:center">
+  <div
+    class="score"
+    id="scoreRing"
+    style="--p:50"
+  >
+    <strong id="scoreValue">
+      50%
+    </strong>
+  </div>
+
+  <div
+    class="small"
+    id="scoreLabel"
+    style="text-align:center"
+  >
     Dati iniziali
   </div>
+
 </section>
 
 <section class="card">
-  <div class="eyebrow">Profilo atleta</div>
+
+  <div class="eyebrow">
+    Profilo atleta
+  </div>
 
   <div class="profile-mini">
 
@@ -904,55 +986,128 @@ textarea{
     </div>
 
   </div>
+
 </section>
 
 <section class="card">
-  <div class="eyebrow">Ciclo attuale</div>
-  <h3 id="cycleTitle">Settimana Base</h3>
-  <div class="small" id="cycleText">Tecnica e volume moderato.</div>
+
+  <div class="eyebrow">
+    Ciclo attuale
+  </div>
+
+  <h3 id="cycleTitle">
+    Settimana Base
+  </h3>
+
+  <div
+    class="small"
+    id="cycleText"
+  >
+    Tecnica e volume moderato.
+  </div>
+
   <div class="progress">
     <span id="cycleProgress"></span>
   </div>
+
 </section>
 
 <section class="card">
-  <div class="eyebrow">Fase atletica</div>
-  <h3 id="phaseTitle">Recovery Warrior</h3>
-  <div class="small" id="phaseText">Recupero spalla e basi solide.</div>
+
+  <div class="eyebrow">
+    Fase atletica
+  </div>
+
+  <h3 id="phaseTitle">
+    Recovery Warrior
+  </h3>
+
+  <div
+    class="small"
+    id="phaseText"
+  >
+    Recupero spalla e basi solide.
+  </div>
+
 </section>
 
 <section class="card">
-  <div class="eyebrow">Attrezzatura attiva</div>
-  <div id="equipmentSummary" class="equipment-summary"></div>
+
+  <div class="eyebrow">
+    Attrezzatura attiva
+  </div>
+
+  <div
+    id="equipmentSummary"
+    class="equipment-summary"
+  ></div>
+
 </section>
 
 <section class="card">
-  <div class="eyebrow">Regole For Life</div>
+
+  <div class="eyebrow">
+    Regole For Life
+  </div>
 
   <ul class="rules">
-    <li>Dolore durante massimo 2–3/10.</li>
-    <li>La risposta nelle 24h guida la progressione.</li>
-    <li>Debolezza nuova o formicolio persistente: stop.</li>
-    <li>Una sola variabile progressiva alla volta.</li>
-    <li>Due risposte negative consecutive anticipano il Deload.</li>
-    <li>Qualità tecnica prima di volume e intensità.</li>
+
+    <li>
+      Dolore durante massimo 2–3/10.
+    </li>
+
+    <li>
+      La risposta del giorno successivo guida la progressione.
+    </li>
+
+    <li>
+      Debolezza nuova o formicolio persistente: stop.
+    </li>
+
+    <li>
+      Una sola variabile progressiva alla volta.
+    </li>
+
+    <li>
+      Due risposte negative consecutive anticipano il Deload.
+    </li>
+
+    <li>
+      Il Deload non cancella il livello costruito.
+    </li>
+
+    <li>
+      Qualità tecnica prima di volume e intensità.
+    </li>
+
   </ul>
+
 </section>
 
 <section class="card">
+
   <div class="grid2">
 
     <div class="stat">
-      <strong id="statSessions">0</strong>
-      <span>SESSIONI</span>
+      <strong id="statSessions">
+        0
+      </strong>
+      <span>
+        SESSIONI
+      </span>
     </div>
 
     <div class="stat">
-      <strong id="statStreak">0</strong>
-      <span>STREAK</span>
+      <strong id="statStreak">
+        0
+      </strong>
+      <span>
+        STREAK
+      </span>
     </div>
 
   </div>
+
 </section>
 
 </aside>
@@ -966,6 +1121,7 @@ textarea{
   <div class="hero-grid">
 
     <div>
+
       <div class="eyebrow">
         Coach adattivo giornaliero
       </div>
@@ -974,22 +1130,35 @@ textarea{
         Completa il check prima di allenarti
       </h2>
 
-      <p class="small" id="todayMessage">
-        Il piano considera spalla, risposta 24h, sonno, energia,
-        lavoro, ciclo, obiettivo, durata, attrezzatura e storico.
+      <p
+        class="small"
+        id="todayMessage"
+      >
+        Il piano considera spalla, follow-up, sonno, energia,
+        lavoro, ciclo, obiettivo, livello atleta,
+        durata, attrezzatura e storico.
       </p>
+
     </div>
 
     <div class="readiness-pair">
 
       <div class="readiness">
-        <strong id="shoulderReadinessValue">—</strong>
-        <span>SPALLA</span>
+        <strong id="shoulderReadinessValue">
+          —
+        </strong>
+        <span>
+          SPALLA
+        </span>
       </div>
 
       <div class="readiness">
-        <strong id="performanceReadinessValue">—</strong>
-        <span>PERFORMANCE</span>
+        <strong id="performanceReadinessValue">
+          —
+        </strong>
+        <span>
+          PERFORMANCE
+        </span>
       </div>
 
     </div>
@@ -1006,95 +1175,254 @@ textarea{
 
   <div class="small">
     Valuta la fitta una sola volta durante salita e discesa del braccio.
-    La risposta a 24 ore viene associata alla seduta precedente,
-    non a quella che stai per svolgere.
+    Se esiste una seduta eleggibile, il follow-up deve essere scelto
+    esplicitamente prima di iniziare un nuovo allenamento.
   </div>
 
-  <div class="pain-scale" id="painScale">
-    <button onclick="setPain(0)">0</button>
-    <button onclick="setPain(1)">1</button>
-    <button onclick="setPain(2)">2</button>
-    <button onclick="setPain(3)">3</button>
-    <button onclick="setPain(4)">4</button>
-    <button onclick="setPain(5)">5+</button>
+  <div
+    class="pain-scale"
+    id="painScale"
+  >
+
+    <button onclick="setPain(0)">
+      0
+    </button>
+
+    <button onclick="setPain(1)">
+      1
+    </button>
+
+    <button onclick="setPain(2)">
+      2
+    </button>
+
+    <button onclick="setPain(3)">
+      3
+    </button>
+
+    <button onclick="setPain(4)">
+      4
+    </button>
+
+    <button onclick="setPain(5)">
+      5+
+    </button>
+
   </div>
 
-  <div class="grid3" style="margin-top:10px">
+  <div
+    class="grid3"
+    style="margin-top:10px"
+  >
 
     <div class="field">
-      <label>Risposta 24h ultima seduta</label>
-      <select id="pain24">
-        <option value="0">Uguale o migliore</option>
-        <option value="1">Leggermente peggiore</option>
-        <option value="3">Chiaramente peggiore</option>
+
+      <label>
+        Risposta ultima seduta
+      </label>
+
+      <select
+        id="pain24"
+        disabled
+      >
+        <option value="">
+          Seleziona risposta...
+        </option>
+
+        <option value="0">
+          Uguale o migliore
+        </option>
+
+        <option value="1">
+          Leggermente peggiore
+        </option>
+
+        <option value="3">
+          Chiaramente peggiore
+        </option>
       </select>
+
     </div>
 
     <div class="field">
-      <label>Sonno</label>
+
+      <label>
+        Sonno
+      </label>
+
       <select id="sleep">
-        <option value="0">Buono</option>
-        <option value="1">Discreto</option>
-        <option value="2">Scarso</option>
+
+        <option value="0">
+          Buono
+        </option>
+
+        <option value="1">
+          Discreto
+        </option>
+
+        <option value="2">
+          Scarso
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Rigidità</label>
+
+      <label>
+        Rigidità
+      </label>
+
       <select id="stiff">
-        <option value="0">Bassa</option>
-        <option value="1">Media</option>
-        <option value="2">Alta</option>
+
+        <option value="0">
+          Bassa
+        </option>
+
+        <option value="1">
+          Media
+        </option>
+
+        <option value="2">
+          Alta
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Energia</label>
+
+      <label>
+        Energia
+      </label>
+
       <select id="energy">
-        <option value="0">Alta</option>
-        <option value="1">Media</option>
-        <option value="2">Bassa</option>
+
+        <option value="0">
+          Alta
+        </option>
+
+        <option value="1">
+          Media
+        </option>
+
+        <option value="2">
+          Bassa
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Carico lavoro oggi</label>
+
+      <label>
+        Carico lavoro oggi
+      </label>
+
       <select id="workload">
-        <option value="0">Normale</option>
-        <option value="1">Turno intenso</option>
-        <option value="2">Turno molto pesante</option>
+
+        <option value="0">
+          Normale
+        </option>
+
+        <option value="1">
+          Turno intenso
+        </option>
+
+        <option value="2">
+          Turno molto pesante
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Forza braccio</label>
+
+      <label>
+        Forza braccio
+      </label>
+
       <select id="weakness">
-        <option value="0">Normale</option>
-        <option value="5">Nuova debolezza</option>
+
+        <option value="0">
+          Normale
+        </option>
+
+        <option value="5">
+          Nuova debolezza
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Formicolio</label>
+
+      <label>
+        Formicolio
+      </label>
+
       <select id="tingling">
-        <option value="0">No</option>
-        <option value="5">Persistente</option>
+
+        <option value="0">
+          No
+        </option>
+
+        <option value="5">
+          Persistente
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Dolore notturno</label>
+
+      <label>
+        Dolore notturno
+      </label>
+
       <select id="night">
-        <option value="0">No</option>
-        <option value="2">Lieve</option>
-        <option value="5">Mi sveglia</option>
+
+        <option value="0">
+          No
+        </option>
+
+        <option value="2">
+          Lieve
+        </option>
+
+        <option value="5">
+          Mi sveglia
+        </option>
+
       </select>
+
     </div>
 
   </div>
 
-  <div id="modeBox" class="mode yellow" style="margin-top:10px">
-    <strong>CHECK INCOMPLETO</strong><br>
+  <div
+    id="followupInfo"
+    class="info"
+    style="margin-top:10px"
+  >
+    Nessuna seduta in attesa di follow-up.
+  </div>
+
+  <div
+    id="modeBox"
+    class="mode yellow"
+    style="margin-top:10px"
+  >
+    <strong>
+      CHECK INCOMPLETO
+    </strong>
+    <br>
     Seleziona il dolore.
   </div>
 
@@ -1106,7 +1434,10 @@ textarea{
     Motore di progressione
   </div>
 
-  <div id="progressionAdvice" class="info">
+  <div
+    id="progressionAdvice"
+    class="info"
+  >
     Completa il check per conoscere il carico consigliato.
   </div>
 
@@ -1120,10 +1451,15 @@ textarea{
 
   <div id="todayDuration"></div>
 
-  <div id="todayWorkout" class="workout-list">
+  <div
+    id="todayWorkout"
+    class="workout-list"
+  >
+
     <div class="small">
       Il piano apparirà dopo il check.
     </div>
+
   </div>
 
   <button
@@ -1146,28 +1482,72 @@ textarea{
 
   <div class="module-grid">
 
-    <div class="module" onclick="showPage('shoulder')">
-      <div class="ico">🩺</div>
-      <h3>Shoulder Rehab</h3>
-      <p>Cuffia, scapola, palla, roller e piscina.</p>
+    <div
+      class="module"
+      onclick="showPage('shoulder')"
+    >
+      <div class="ico">
+        🩺
+      </div>
+
+      <h3>
+        Shoulder Rehab
+      </h3>
+
+      <p>
+        Cuffia, scapola, palla, roller e piscina.
+      </p>
     </div>
 
-    <div class="module" onclick="showPage('military')">
-      <div class="ico">💪</div>
-      <h3>Military Safe</h3>
-      <p>Forza progressiva adattata alla spalla.</p>
+    <div
+      class="module"
+      onclick="showPage('military')"
+    >
+      <div class="ico">
+        💪
+      </div>
+
+      <h3>
+        Military Safe
+      </h3>
+
+      <p>
+        Forza progressiva adattata alla spalla.
+      </p>
     </div>
 
-    <div class="module" onclick="showPage('running')">
-      <div class="ico">🏃</div>
-      <h3>Running & Hyrox</h3>
-      <p>Z2, intervalli, tempo e progressione specifica.</p>
+    <div
+      class="module"
+      onclick="showPage('running')"
+    >
+      <div class="ico">
+        🏃
+      </div>
+
+      <h3>
+        Running & Hyrox
+      </h3>
+
+      <p>
+        Z2, intervalli, tempo e progressione specifica.
+      </p>
     </div>
 
-    <div class="module" onclick="showPage('work')">
-      <div class="ico">🍕</div>
-      <h3>Pizzaiolo Mode</h3>
-      <p>Pre-turno, micro-reset e post-turno.</p>
+    <div
+      class="module"
+      onclick="showPage('work')"
+    >
+      <div class="ico">
+        🍕
+      </div>
+
+      <h3>
+        Pizzaiolo Mode
+      </h3>
+
+      <p>
+        Pre-turno, micro-reset e post-turno.
+      </p>
     </div>
 
   </div>
@@ -1176,43 +1556,91 @@ textarea{
 
 </section>
 
-<section id="page-plan" class="hidden">
+<section
+  id="page-plan"
+  class="hidden"
+>
 
 <div class="card">
-  <div class="eyebrow">Settimana For Life</div>
 
-  <h2>Programmazione adattiva</h2>
+  <div class="eyebrow">
+    Settimana For Life
+  </div>
+
+  <h2>
+    Programmazione adattiva
+  </h2>
 
   <p class="small">
     Base → Build → Peak → Deload.
-    Due risposte consecutive nettamente negative anticipano automaticamente
-    il Deload.
+    La progressione persistente ricorda il livello raggiunto.
+    Due risposte consecutive nettamente negative anticipano
+    automaticamente il Deload.
   </p>
+
 </div>
 
 <div class="card">
-  <div id="weekGrid" class="week-grid"></div>
+  <div
+    id="weekGrid"
+    class="week-grid"
+  ></div>
 </div>
 
 </section>
 
-<section id="page-shoulder" class="hidden">
+<section
+  id="page-shoulder"
+  class="hidden"
+>
 
 <div class="card">
-  <div class="eyebrow">Shoulder Safe</div>
-  <h2>Recupero e prevenzione permanente</h2>
+
+  <div class="eyebrow">
+    Shoulder Safe
+  </div>
+
+  <h2>
+    Recupero e prevenzione permanente
+  </h2>
+
 </div>
 
 <div class="card">
 
   <div class="segment">
-    <button class="active" onclick="selectShoulder('reset',this)">Reset</button>
-    <button onclick="selectShoulder('build',this)">Costruzione</button>
-    <button onclick="selectShoulder('release',this)">Palla & Roller</button>
-    <button onclick="selectShoulder('pool',this)">Piscina</button>
+
+    <button
+      class="active"
+      onclick="selectShoulder('reset',this)"
+    >
+      Reset
+    </button>
+
+    <button
+      onclick="selectShoulder('build',this)"
+    >
+      Costruzione
+    </button>
+
+    <button
+      onclick="selectShoulder('release',this)"
+    >
+      Palla & Roller
+    </button>
+
+    <button
+      onclick="selectShoulder('pool',this)"
+    >
+      Piscina
+    </button>
+
   </div>
 
-  <div id="shoulderPreview" class="workout-list"></div>
+  <div
+    id="shoulderPreview"
+    class="workout-list"
+  ></div>
 
   <button
     class="btn full"
@@ -1226,22 +1654,52 @@ textarea{
 
 </section>
 
-<section id="page-military" class="hidden">
+<section
+  id="page-military"
+  class="hidden"
+>
 
 <div class="card">
-  <div class="eyebrow">Military Safe Shoulder</div>
-  <h2>Forza, resistenza e controllo</h2>
+
+  <div class="eyebrow">
+    Military Safe Shoulder
+  </div>
+
+  <h2>
+    Forza, resistenza e controllo
+  </h2>
+
 </div>
 
 <div class="card">
 
   <div class="segment">
-    <button class="active" onclick="selectMilitary('recovery',this)">Recovery</button>
-    <button onclick="selectMilitary('build',this)">Build</button>
-    <button onclick="selectMilitary('elite',this)">Elite Safe</button>
+
+    <button
+      class="active"
+      onclick="selectMilitary('recovery',this)"
+    >
+      Recovery
+    </button>
+
+    <button
+      onclick="selectMilitary('build',this)"
+    >
+      Build
+    </button>
+
+    <button
+      onclick="selectMilitary('elite',this)"
+    >
+      Elite Safe
+    </button>
+
   </div>
 
-  <div id="militaryPreview" class="workout-list"></div>
+  <div
+    id="militaryPreview"
+    class="workout-list"
+  ></div>
 
   <button
     class="btn orange full"
@@ -1254,39 +1712,83 @@ textarea{
 </div>
 
 <div class="card warning">
-  <strong>Protezione automatica:</strong>
-  niente dip nel programma generato, niente overhead pesante,
+  <strong>
+    Protezione automatica:
+  </strong>
+  niente dip nel programma generato,
+  niente overhead pesante,
   niente burpee con push-up profondo.
   Il coach modifica una sola variabile progressiva per volta.
 </div>
 
 </section>
 
-<section id="page-running" class="hidden">
+<section
+  id="page-running"
+  class="hidden"
+>
 
 <div class="card">
-  <div class="eyebrow">Running & Hyrox</div>
 
-  <h2>Motore aerobico e performance ibrida</h2>
+  <div class="eyebrow">
+    Running & Hyrox
+  </div>
+
+  <h2>
+    Motore aerobico e performance ibrida
+  </h2>
 
   <p class="small">
-    La corsa progredisce in modo specifico:
-    Z2 prima nella durata, intervalli prima nelle ripetute,
-    Tempo Run nel tempo di lavoro e Hyrox nel numero dei blocchi.
+    La corsa conserva il livello raggiunto:
+    Z2 progredisce nella durata,
+    intervalli nelle ripetute,
+    Tempo nel tempo di lavoro
+    e Hyrox nel numero dei blocchi.
   </p>
+
 </div>
 
 <div class="card">
 
   <div class="segment">
-    <button class="active" onclick="selectRun('easy',this)">Z2</button>
-    <button onclick="selectRun('interval',this)">Intervalli</button>
-    <button onclick="selectRun('tempo',this)">Tempo</button>
-    <button onclick="selectRun('hyrox',this)">Hyrox Safe</button>
-    <button onclick="selectRun('pool',this)">Pool Cardio</button>
+
+    <button
+      class="active"
+      onclick="selectRun('easy',this)"
+    >
+      Z2
+    </button>
+
+    <button
+      onclick="selectRun('interval',this)"
+    >
+      Intervalli
+    </button>
+
+    <button
+      onclick="selectRun('tempo',this)"
+    >
+      Tempo
+    </button>
+
+    <button
+      onclick="selectRun('hyrox',this)"
+    >
+      Hyrox Safe
+    </button>
+
+    <button
+      onclick="selectRun('pool',this)"
+    >
+      Pool Cardio
+    </button>
+
   </div>
 
-  <div id="runningPreview" class="workout-list"></div>
+  <div
+    id="runningPreview"
+    class="workout-list"
+  ></div>
 
   <button
     class="btn blue full"
@@ -1300,18 +1802,34 @@ textarea{
 
 </section>
 
-<section id="page-work" class="hidden">
+<section
+  id="page-work"
+  class="hidden"
+>
 
 <div class="card">
-  <div class="eyebrow">Pizzaiolo Performance</div>
-  <h2>Proteggi la spalla durante pala, banco e forno</h2>
+
+  <div class="eyebrow">
+    Pizzaiolo Performance
+  </div>
+
+  <h2>
+    Proteggi la spalla durante pala, banco e forno
+  </h2>
+
 </div>
 
 <div class="grid3">
 
   <div class="card">
-    <h3>Pre-turno · 5 min</h3>
-    <div class="small">Attivazione cuffia e scapola.</div>
+
+    <h3>
+      Pre-turno · 5 min
+    </h3>
+
+    <div class="small">
+      Attivazione cuffia e scapola.
+    </div>
 
     <button
       class="btn full"
@@ -1320,11 +1838,18 @@ textarea{
     >
       Avvia
     </button>
+
   </div>
 
   <div class="card">
-    <h3>Micro-reset · 60 sec</h3>
-    <div class="small">Respiri, scapole morbide e torace.</div>
+
+    <h3>
+      Micro-reset · 60 sec
+    </h3>
+
+    <div class="small">
+      Respiri, scapole morbide e torace.
+    </div>
 
     <button
       class="btn blue full"
@@ -1333,11 +1858,18 @@ textarea{
     >
       Avvia
     </button>
+
   </div>
 
   <div class="card">
-    <h3>Post-turno · 8 min</h3>
-    <div class="small">Scarico dolce e respirazione.</div>
+
+    <h3>
+      Post-turno · 8 min
+    </h3>
+
+    <div class="small">
+      Scarico dolce e respirazione.
+    </div>
 
     <button
       class="btn purple full"
@@ -1346,13 +1878,17 @@ textarea{
     >
       Avvia
     </button>
+
   </div>
 
 </div>
 
 </section>
 
-<section id="page-library" class="hidden">
+<section
+  id="page-library"
+  class="hidden"
+>
 
 <div class="card">
 
@@ -1360,14 +1896,25 @@ textarea{
     Libreria esercizi
   </div>
 
-  <h2>Database personale filtrabile</h2>
+  <h2>
+    Database personale filtrabile
+  </h2>
 
-  <div class="grid3" style="margin-top:10px">
+  <div
+    class="grid3"
+    style="margin-top:10px"
+  >
 
     <div class="field">
-      <label>Categoria</label>
 
-      <select id="libCategory" onchange="renderLibrary()">
+      <label>
+        Categoria
+      </label>
+
+      <select
+        id="libCategory"
+        onchange="renderLibrary()"
+      >
         <option value="all">Tutte</option>
         <option value="rehab">Spalla e scapola</option>
         <option value="mobility">Mobilità</option>
@@ -1382,12 +1929,19 @@ textarea{
         <option value="recovery">Recupero</option>
         <option value="physio">Fisio</option>
       </select>
+
     </div>
 
     <div class="field">
-      <label>Attrezzatura</label>
 
-      <select id="libEquipment" onchange="renderLibrary()">
+      <label>
+        Attrezzatura
+      </label>
+
+      <select
+        id="libEquipment"
+        onchange="renderLibrary()"
+      >
         <option value="all">Tutta</option>
         <option value="bodyweight">Corpo libero</option>
         <option value="band">Elastico</option>
@@ -1397,15 +1951,21 @@ textarea{
         <option value="roller">Roller</option>
         <option value="pool">Piscina</option>
       </select>
+
     </div>
 
     <div class="field">
-      <label>Cerca</label>
+
+      <label>
+        Cerca
+      </label>
+
       <input
         id="libSearch"
         placeholder="Nome esercizio..."
         oninput="renderLibrary()"
       >
+
     </div>
 
   </div>
@@ -1413,13 +1973,26 @@ textarea{
 </div>
 
 <div class="card">
-  <div id="libraryCount" class="small" style="margin-bottom:10px"></div>
-  <div id="libraryGrid" class="library-grid"></div>
+
+  <div
+    id="libraryCount"
+    class="small"
+    style="margin-bottom:10px"
+  ></div>
+
+  <div
+    id="libraryGrid"
+    class="library-grid"
+  ></div>
+
 </div>
 
 </section>
 
-<section id="page-physio" class="hidden">
+<section
+  id="page-physio"
+  class="hidden"
+>
 
 <div class="card">
 
@@ -1442,8 +2015,12 @@ textarea{
 
 <div class="card warning">
 
-  <strong>Modalità fedele:</strong>
+  <strong>
+    Modalità fedele:
+  </strong>
+
   il check spalla resta obbligatorio.
+
   Prima di riutilizzare una vecchia scheda contenente dip,
   spinte sopra la testa o plank prolungati,
   è prudente verificarne periodicamente l'attualità
@@ -1470,7 +2047,10 @@ textarea{
 
   </div>
 
-  <div id="physioPreview" class="workout-list"></div>
+  <div
+    id="physioPreview"
+    class="workout-list"
+  ></div>
 
   <button
     class="btn purple full"
@@ -1484,17 +2064,26 @@ textarea{
 
 </section>
 
-<section id="page-tests" class="hidden">
+<section
+  id="page-tests"
+  class="hidden"
+>
 
 <div class="card">
-  <div class="eyebrow">Test periodici</div>
 
-  <h2>Rivalutazione semplice e ripetibile</h2>
+  <div class="eyebrow">
+    Test periodici
+  </div>
+
+  <h2>
+    Rivalutazione semplice e ripetibile
+  </h2>
 
   <p class="small">
     Registra sempre nelle stesse condizioni.
     Non forzare un movimento doloroso.
   </p>
+
 </div>
 
 <div class="card">
@@ -1502,23 +2091,67 @@ textarea{
   <div class="grid2">
 
     <div class="field">
-      <label>Comfort elevazione braccio 0–10</label>
-      <input id="testShoulder" type="number" min="0" max="10" value="5">
+
+      <label>
+        Comfort elevazione braccio 0–10
+      </label>
+
+      <input
+        id="testShoulder"
+        type="number"
+        min="0"
+        max="10"
+        value="5"
+      >
+
     </div>
 
     <div class="field">
-      <label>Wall push-up controllati</label>
-      <input id="testWallPush" type="number" min="0" max="100" value="10">
+
+      <label>
+        Wall push-up controllati
+      </label>
+
+      <input
+        id="testWallPush"
+        type="number"
+        min="0"
+        max="100"
+        value="10"
+      >
+
     </div>
 
     <div class="field">
-      <label>Squat in 60 secondi</label>
-      <input id="testSquat" type="number" min="0" max="100" value="20">
+
+      <label>
+        Squat in 60 secondi
+      </label>
+
+      <input
+        id="testSquat"
+        type="number"
+        min="0"
+        max="100"
+        value="20"
+      >
+
     </div>
 
     <div class="field">
-      <label>1 km corsa/cammino · secondi</label>
-      <input id="testKm" type="number" min="180" max="1200" value="420">
+
+      <label>
+        1 km corsa/cammino · secondi
+      </label>
+
+      <input
+        id="testKm"
+        type="number"
+        min="180"
+        max="1200"
+        value="420"
+      >
+
     </div>
 
   </div>
@@ -1534,35 +2167,59 @@ textarea{
 </div>
 
 <div class="card">
-  <div id="testsHistory" class="workout-list"></div>
+
+  <div
+    id="testsHistory"
+    class="workout-list"
+  ></div>
+
 </div>
 
 </section>
 
-<section id="page-progress" class="hidden">
+<section
+  id="page-progress"
+  class="hidden"
+>
 
 <div class="card">
 
   <div class="grid4">
 
     <div class="stat">
-      <strong id="pSessions">0</strong>
-      <span>SESSIONI</span>
+      <strong id="pSessions">
+        0
+      </strong>
+      <span>
+        SESSIONI
+      </span>
     </div>
 
     <div class="stat">
-      <strong id="pPain">—</strong>
-      <span>DOLORE MEDIO</span>
+      <strong id="pPain">
+        —
+      </strong>
+      <span>
+        DOLORE MEDIO
+      </span>
     </div>
 
     <div class="stat">
-      <strong id="pGood">0%</strong>
-      <span>TOLLERATE · ULTIME 10</span>
+      <strong id="pGood">
+        0%
+      </strong>
+      <span>
+        TOLLERATE · CONFERMATE
+      </span>
     </div>
 
     <div class="stat">
-      <strong id="pStreak">0</strong>
-      <span>STREAK</span>
+      <strong id="pStreak">
+        0
+      </strong>
+      <span>
+        STREAK
+      </span>
     </div>
 
   </div>
@@ -1570,20 +2227,33 @@ textarea{
 </div>
 
 <div class="card">
+
   <div class="eyebrow">
     Dolore pre-sessione · ultime 10
   </div>
-  <div id="painChart" class="chart"></div>
+
+  <div
+    id="painChart"
+    class="chart"
+  ></div>
+
 </div>
 
 <div class="card">
+
   <div class="eyebrow">
     Diario sessioni · dose · RPE · follow-up
   </div>
-  <div id="history" class="workout-list"></div>
+
+  <div
+    id="history"
+    class="workout-list"
+  ></div>
+
 </div>
 
 <div class="card">
+
   <textarea
     id="note"
     placeholder="Cosa migliora o peggiora la spalla?"
@@ -1596,11 +2266,15 @@ textarea{
   >
     Salva nota
   </button>
+
 </div>
 
 </section>
 
-<section id="page-settings" class="hidden">
+<section
+  id="page-settings"
+  class="hidden"
+>
 
 <div class="card">
 
@@ -1611,38 +2285,86 @@ textarea{
   <div class="grid3">
 
     <div class="field">
-      <label>Data di nascita</label>
+
+      <label>
+        Data di nascita
+      </label>
+
       <input
         id="birthDate"
         type="date"
         value="1988-04-07"
       >
+
     </div>
 
     <div class="field">
-      <label>Livello atleta</label>
+
+      <label>
+        Livello atleta
+      </label>
 
       <select id="athleteLevel">
-        <option value="beginner">Principiante</option>
-        <option value="intermediate" selected>Intermedio</option>
-        <option value="advanced">Avanzato</option>
+
+        <option value="beginner">
+          Principiante
+        </option>
+
+        <option
+          value="intermediate"
+          selected
+        >
+          Intermedio
+        </option>
+
+        <option value="advanced">
+          Avanzato
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Obiettivo</label>
+
+      <label>
+        Obiettivo
+      </label>
 
       <select id="goal">
-        <option value="longevity">Longevità atletica</option>
-        <option value="hyrox">Hyrox</option>
-        <option value="military">Military fitness</option>
-        <option value="run10k">10 km</option>
-        <option value="hybrid" selected>Hybrid completo</option>
+
+        <option value="longevity">
+          Longevità atletica
+        </option>
+
+        <option value="hyrox">
+          Hyrox
+        </option>
+
+        <option value="military">
+          Military fitness
+        </option>
+
+        <option value="run10k">
+          10 km
+        </option>
+
+        <option
+          value="hybrid"
+          selected
+        >
+          Hybrid completo
+        </option>
+
       </select>
+
     </div>
 
     <div class="field">
-      <label>Giorni/settimana</label>
+
+      <label>
+        Giorni/settimana
+      </label>
 
       <select id="days">
         <option>3</option>
@@ -1650,59 +2372,108 @@ textarea{
         <option selected>5</option>
         <option>6</option>
       </select>
+
     </div>
 
     <div class="field">
-      <label>Tempo seduta</label>
+
+      <label>
+        Tempo seduta
+      </label>
 
       <select id="minutes">
-        <option value="20">20 min</option>
-        <option value="30" selected>30 min</option>
-        <option value="45">45 min</option>
-        <option value="60">60 min</option>
+
+        <option value="20">
+          20 min
+        </option>
+
+        <option
+          value="30"
+          selected
+        >
+          30 min
+        </option>
+
+        <option value="45">
+          45 min
+        </option>
+
+        <option value="60">
+          60 min
+        </option>
+
       </select>
+
     </div>
 
   </div>
 
-  <div class="eyebrow" style="margin-top:14px">
+  <div
+    class="eyebrow"
+    style="margin-top:14px"
+  >
     Attrezzatura
   </div>
 
   <div class="checks">
 
     <label class="checkline">
-      <input type="checkbox" id="eqBand" checked>
+      <input
+        type="checkbox"
+        id="eqBand"
+        checked
+      >
       Elastico
     </label>
 
     <label class="checkline">
-      <input type="checkbox" id="eqWeights">
+      <input
+        type="checkbox"
+        id="eqWeights"
+      >
       Manubri/Kettlebell
     </label>
 
     <label class="checkline">
-      <input type="checkbox" id="eqBench">
+      <input
+        type="checkbox"
+        id="eqBench"
+      >
       Panca/step
     </label>
 
     <label class="checkline">
-      <input type="checkbox" id="eqPool">
+      <input
+        type="checkbox"
+        id="eqPool"
+      >
       Piscina
     </label>
 
     <label class="checkline">
-      <input type="checkbox" id="eqBall" checked>
+      <input
+        type="checkbox"
+        id="eqBall"
+        checked
+      >
       Palla da tennis
     </label>
 
     <label class="checkline">
-      <input type="checkbox" id="eqRoller" checked>
+      <input
+        type="checkbox"
+        id="eqRoller"
+        checked
+      >
       Foam roller
     </label>
 
     <label class="checkline">
-      <input type="checkbox" id="voiceSetting" checked>
+      <input
+        type="checkbox"
+        id="voiceSetting"
+        checked
+      >
       Coach vocale
     </label>
 
@@ -1768,7 +2539,7 @@ textarea{
   <p class="note">
     Salvataggio ridondante localStorage + IndexedDB.
     All'avvio viene utilizzata automaticamente la copia più recente.
-    Per uso a lungo termine esporta periodicamente il backup JSON.
+    Esporta periodicamente il backup JSON.
   </p>
 
 </div>
@@ -1776,6 +2547,7 @@ textarea{
 </section>
 
 </main>
+
 </div>
 </div>
 
@@ -1861,28 +2633,49 @@ textarea{
 
 </nav>
 
-<!-- SESSIONE -->
+<!-- ======================================================
+     SESSIONE GUIDATA
+     ====================================================== -->
 
-<div id="sessionModal" class="modal hidden">
+<div
+  id="sessionModal"
+  class="modal hidden"
+>
 
 <div class="modal-box">
 
   <div class="modal-head">
-    <h3 id="sessionTitle">Sessione</h3>
-    <button class="close" onclick="closeSession()">×</button>
+
+    <h3 id="sessionTitle">
+      Sessione
+    </h3>
+
+    <button
+      class="close"
+      onclick="closeSession()"
+    >
+      ×
+    </button>
+
   </div>
 
   <div class="progress">
     <span id="sessionProgress"></span>
   </div>
 
-  <div class="exercise-visual" id="exerciseVisual">
+  <div
+    class="exercise-visual"
+    id="exerciseVisual"
+  >
     💪
   </div>
 
   <h2 id="exerciseTitle"></h2>
 
-  <div class="small" id="exerciseDose"></div>
+  <div
+    class="small"
+    id="exerciseDose"
+  ></div>
 
   <div
     id="exerciseReason"
@@ -1894,7 +2687,10 @@ textarea{
     class="note"
   ></div>
 
-  <div class="timer" id="timerDisplay">
+  <div
+    class="timer"
+    id="timerDisplay"
+  >
     00:00
   </div>
 
@@ -1986,46 +2782,107 @@ textarea{
 </div>
 </div>
 
-<!-- POST SESSIONE -->
+<!-- ======================================================
+     POST SESSIONE
+     ====================================================== -->
 
-<div id="postModal" class="modal hidden">
+<div
+  id="postModal"
+  class="modal hidden"
+>
 
 <div class="modal-box">
 
   <div class="modal-head">
-    <h3>Risposta alla sessione</h3>
-    <button class="close" onclick="closePost()">×</button>
+
+    <h3>
+      Risposta alla sessione
+    </h3>
+
+    <button
+      class="close"
+      onclick="closePost()"
+    >
+      ×
+    </button>
+
   </div>
 
   <div class="small">
     Come sta la spalla subito dopo?
   </div>
 
-  <div class="pain-scale" id="postScale">
+  <div
+    class="pain-scale"
+    id="postScale"
+  >
+
     <button onclick="setPostPain(0)">0</button>
     <button onclick="setPostPain(1)">1</button>
     <button onclick="setPostPain(2)">2</button>
     <button onclick="setPostPain(3)">3</button>
     <button onclick="setPostPain(4)">4</button>
     <button onclick="setPostPain(5)">5+</button>
+
   </div>
 
-  <div class="field" style="margin-top:14px">
-    <label>RPE della sessione · 1 facile → 10 massimale</label>
+  <div
+    class="field"
+    style="margin-top:14px"
+  >
+
+    <label>
+      RPE della sessione · 1 facile → 10 massimale
+    </label>
 
     <select id="sessionRPE">
-      <option value="">Seleziona RPE</option>
-      <option value="1">1 · Facilissima</option>
-      <option value="2">2 · Molto facile</option>
-      <option value="3">3 · Facile</option>
-      <option value="4">4 · Moderata</option>
-      <option value="5">5 · Moderata+</option>
-      <option value="6">6 · Impegnativa</option>
-      <option value="7">7 · Dura ma controllata</option>
-      <option value="8">8 · Molto dura</option>
-      <option value="9">9 · Quasi massimale</option>
-      <option value="10">10 · Massimale</option>
+
+      <option value="">
+        Seleziona RPE
+      </option>
+
+      <option value="1">
+        1 · Facilissima
+      </option>
+
+      <option value="2">
+        2 · Molto facile
+      </option>
+
+      <option value="3">
+        3 · Facile
+      </option>
+
+      <option value="4">
+        4 · Moderata
+      </option>
+
+      <option value="5">
+        5 · Moderata+
+      </option>
+
+      <option value="6">
+        6 · Impegnativa
+      </option>
+
+      <option value="7">
+        7 · Dura ma controllata
+      </option>
+
+      <option value="8">
+        8 · Molto dura
+      </option>
+
+      <option value="9">
+        9 · Quasi massimale
+      </option>
+
+      <option value="10">
+        10 · Massimale
+      </option>
+
     </select>
+
   </div>
 
   <button
@@ -2045,18 +2902,35 @@ textarea{
 "use strict";
 
 /* =========================================================
-   ERJON HYBRID COACH AI · DEFINITIVE FOR LIFE
+   ERJON HYBRID COACH AI
+   DEFINITIVE FOR LIFE · V10.1
    ========================================================= */
 
-const APP_VERSION="6.0.0-DEFINITIVE";
-const SCHEMA_VERSION=6;
+const APP_VERSION =
+  "10.1.0-DEFINITIVE-FOR-LIFE";
 
-const KEY="erjonHybridCoachAI_Definitive_ForLife_v6";
-const DB_NAME="ErjonHybridCoachAI_Definitive_DB_v6";
-const STORE="appData";
-const RECORD="main";
+const SCHEMA_VERSION =
+  11;
 
-const LEGACY_KEYS=[
+const KEY =
+  "erjonHybridCoachAI_Definitive_ForLife_v10_1";
+
+const DB_NAME =
+  "ErjonHybridCoachAI_Definitive_DB_v10_1";
+
+const STORE =
+  "appData";
+
+const RECORD =
+  "main";
+
+const PHYSIO_CONFIRM_KEY =
+  "erjonDefinitivePhysioConfirmDate";
+
+const LEGACY_KEYS = [
+
+  "erjonHybridCoachAI_Definitive_ForLife_v10",
+  "erjonHybridCoachAI_Definitive_ForLife_v6",
   "erjonHybridCoachAI_ForLife_v5",
   "erjonHybridCoachAI_ForLife_v4",
   "erjonHybridCoachAI10_10_ForLife_v4",
@@ -2066,59 +2940,62 @@ const LEGACY_KEYS=[
   "hybridCoachAI10Plus_ForLife_v3",
   "hybridCoachAI10Plus_ForLife_v2",
   "strongShoulderForLife_v5_1"
+
 ];
 
 /* =========================================================
-   STATO SESSIONE
+   STATO APP
    ========================================================= */
 
-let selectedPain=null;
-let postPain=null;
+let selectedPain = null;
+let postPain = null;
 
-let mode=null;
-let readiness=0;
-let shoulderReadiness=0;
-let performanceReadiness=0;
+let mode = null;
 
-let blocked=false;
+let readiness = 0;
+let shoulderReadiness = 0;
+let performanceReadiness = 0;
 
-let currentWorkout=[];
-let currentIndex=0;
-let currentType="generated";
+let blocked = false;
 
-let sessionStartedAt=null;
-let completedSteps=[];
+let currentWorkout = [];
+let currentIndex = 0;
+let currentType = "generated";
 
-let timerLeft=0;
-let timerInitial=0;
-let timerId=null;
-let countdownId=null;
+let sessionStartedAt = null;
+let completedSteps = [];
 
-let timerRunning=false;
-let countdownRunning=false;
+let timerLeft = 0;
+let timerInitial = 0;
 
-let voiceEnabled=true;
+let timerId = null;
+let countdownId = null;
 
-let halfCuePlayed=false;
-let tenCuePlayed=false;
-let fiveCuePlayed=false;
+let timerRunning = false;
+let countdownRunning = false;
 
-let shoulderRoutine="reset";
-let militaryLevel="recovery";
-let runType="easy";
-let physioRoutine="workout1";
+let voiceEnabled = true;
 
-let wakeLock=null;
-let wakeLockWanted=false;
+let halfCuePlayed = false;
+let tenCuePlayed = false;
+let fiveCuePlayed = false;
 
-let autoFlow=false;
-let autoAdvanceId=null;
+let shoulderRoutine = "reset";
+let militaryLevel = "recovery";
+let runType = "easy";
+let physioRoutine = "workout1";
+
+let wakeLock = null;
+let wakeLockWanted = false;
+
+let autoFlow = false;
+let autoAdvanceId = null;
 
 /* =========================================================
    DATABASE ESERCIZI
    ========================================================= */
 
-const EX={};
+const EX = {};
 
 function add(
   id,
@@ -2128,10 +3005,11 @@ function add(
   i,
   c,
   x,
-  e="bodyweight",
-  meta={}
+  e = "bodyweight",
+  meta = {}
 ){
-  EX[id]={
+
+  EX[id] = {
     id,
     t,
     d,
@@ -2142,6 +3020,7 @@ function add(
     e,
     ...meta
   };
+
 }
 
 /* =========================================================
@@ -2348,7 +3227,9 @@ function add(
     "run",
     "Passo sostenuto, collo rilassato.",
     "bodyweight",
-    {runType:"easy"}
+    {
+      runType:"easy"
+    }
   ],
 
   [
@@ -2360,7 +3241,9 @@ function add(
     "run",
     "Ritmo conversazionale e sostenibile.",
     "bodyweight",
-    {runType:"easy"}
+    {
+      runType:"easy"
+    }
   ],
 
   [
@@ -2372,7 +3255,9 @@ function add(
     "run",
     "Forte ma sostenibile; niente sprint massimale.",
     "bodyweight",
-    {runType:"interval"}
+    {
+      runType:"interval"
+    }
   ],
 
   [
@@ -2384,7 +3269,9 @@ function add(
     "run",
     "Ritmo impegnativo ma controllato.",
     "bodyweight",
-    {runType:"tempo"}
+    {
+      runType:"tempo"
+    }
   ],
 
   [
@@ -2396,7 +3283,9 @@ function add(
     "hyrox",
     "Tra i blocchi usa stazioni senza overhead.",
     "bodyweight",
-    {runType:"hyrox"}
+    {
+      runType:"hyrox"
+    }
   ],
 
   [
@@ -2419,7 +3308,9 @@ function add(
     "Controllo leggero delle scapole, poi rilassa completamente."
   ]
 
-].forEach(v=>add(...v));
+].forEach(
+  v => add(...v)
+);
 
 /* =========================================================
    ESERCIZI CON ATTREZZATURA
@@ -2668,13 +3559,15 @@ function add(
     "pool"
   ]
 
-].forEach(v=>add(...v));
+].forEach(
+  v => add(...v)
+);
 
 /* =========================================================
    LIBRERIA ESTESA
    ========================================================= */
 
-const categorySeeds={
+const categorySeeds = {
 
   rehab:[
     "Scapular Clock",
@@ -2813,46 +3706,52 @@ const categorySeeds={
 
 };
 
-Object.entries(categorySeeds)
-.forEach(([cat,names])=>{
+Object
+  .entries(categorySeeds)
+  .forEach(
+    ([cat,names]) => {
 
-  names.forEach((name,idx)=>{
+      names.forEach(
+        (name,idx) => {
 
-    const id=`${cat}_${idx+1}`;
+          const id =
+            `${cat}_${idx+1}`;
 
-    if(EX[id]){
-      return;
+          if(EX[id]){
+            return;
+          }
+
+          add(
+            id,
+            name,
+            cat==="run" || cat==="hyrox"
+              ?"Blocco guidato"
+              :"2–3 serie",
+            cat==="run" || cat==="hyrox"
+              ?240
+              :120,
+            cat==="work"
+              ?"🍕"
+              :cat==="run"
+              ?"🏃"
+              :cat==="hyrox"
+              ?"🏁"
+              :cat==="legs"
+              ?"🦵"
+              :cat==="core"
+              ?"🧠"
+              :cat==="military"
+              ?"💪"
+              :"🧘",
+            cat,
+            "Esegui con tecnica controllata. Interrompi o regredisci se compare dolore oltre 2–3/10."
+          );
+
+        }
+      );
+
     }
-
-    add(
-      id,
-      name,
-      cat==="run"||cat==="hyrox"
-        ?"Blocco guidato"
-        :"2–3 serie",
-      cat==="run"||cat==="hyrox"
-        ?240
-        :120,
-      cat==="work"
-        ?"🍕"
-        :cat==="run"
-        ?"🏃"
-        :cat==="hyrox"
-        ?"🏁"
-        :cat==="legs"
-        ?"🦵"
-        :cat==="core"
-        ?"🧠"
-        :cat==="military"
-        ?"💪"
-        :"🧘",
-      cat,
-      "Esegui con tecnica controllata. Interrompi o regredisci se compare dolore oltre 2–3/10."
-    );
-
-  });
-
-});
+  );
 
 /* =========================================================
    FISIOTERAPIA ORIGINALE
@@ -2979,7 +3878,9 @@ Object.entries(categorySeeds)
     "Lascia cadere delicatamente il bacino in avanti mentre espiri."
   ]
 
-].forEach(v=>add(...v));
+].forEach(
+  v => add(...v)
+);
 
 function physioStep(
   id,
@@ -2988,10 +3889,10 @@ function physioStep(
   s,
   i,
   x,
-  extra={}
+  extra = {}
 ){
 
-  return{
+  return {
     id,
     t,
     d,
@@ -2999,10 +3900,10 @@ function physioStep(
     i,
     c:"physio",
     x,
-    e:extra.e||"bodyweight",
-    autoNext:extra.autoNext!==false,
+    e:extra.e || "bodyweight",
+    autoNext:extra.autoNext !== false,
     noCountdown:!!extra.noCountdown,
-    phase:extra.phase||"",
+    phase:extra.phase || "",
     reason:"Prescrizione fisioterapista · non modificata"
   };
 
@@ -3012,24 +3913,25 @@ function circuitSteps(
   prefix,
   title,
   names,
-  rounds=1,
-  warm=false
+  rounds = 1,
+  warm = false
 ){
 
-  const out=[];
+  const out = [];
 
   for(
-    let round=1;
-    round<=rounds;
+    let round = 1;
+    round <= rounds;
     round++
   ){
 
     names.forEach(
-      (name,index)=>{
+      (name,index) => {
 
-        const low=name.toLowerCase();
+        const low =
+          name.toLowerCase();
 
-        const body=
+        const body =
           /push-up|jump|wall sit/.test(low);
 
         out.push(
@@ -3069,7 +3971,7 @@ function buildPhysioFlow(which){
 
   if(which==="workout1"){
 
-    return[
+    return [
 
       {
         ...EX.physio1_mob1,
@@ -3267,7 +4169,7 @@ function buildPhysioFlow(which){
 
   }
 
-  return[
+  return [
 
     {
       ...EX.physio2_mob1,
@@ -3488,7 +4390,7 @@ function buildPhysioFlow(which){
    ROUTINE
    ========================================================= */
 
-const shoulder={
+const shoulder = {
 
   reset:[
     "breathing",
@@ -3532,7 +4434,7 @@ const shoulder={
 
 };
 
-const military={
+const military = {
 
   recovery:[
     "breathing",
@@ -3570,7 +4472,7 @@ const military={
 
 };
 
-const running={
+const running = {
 
   easy:[
     "breathing",
@@ -3611,7 +4513,7 @@ const running={
 
 };
 
-const specials={
+const specials = {
 
   prework:[
     "breathing",
@@ -3642,10 +4544,13 @@ const specials={
 
 function defaults(){
 
-  return{
+  return {
 
-    schemaVersion:SCHEMA_VERSION,
-    appVersion:APP_VERSION,
+    schemaVersion:
+      SCHEMA_VERSION,
+
+    appVersion:
+      APP_VERSION,
 
     sessions:[],
     activities:[],
@@ -3653,32 +4558,58 @@ function defaults(){
 
     note:"",
 
+    progression:{
+
+      byExercise:{},
+
+      lastProgressedId:
+        null,
+
+      totalProgressions:
+        0
+
+    },
+
     settings:{
 
-      birthDate:"1988-04-07",
-      athleteLevel:"intermediate",
+      birthDate:
+        "1988-04-07",
 
-      goal:"hybrid",
-      days:5,
-      minutes:30,
+      athleteLevel:
+        "intermediate",
+
+      goal:
+        "hybrid",
+
+      days:
+        5,
+
+      minutes:
+        30,
 
       equipment:{
+
         band:true,
         weights:false,
         bench:false,
         pool:false,
         ball:true,
         roller:true
+
       },
 
       voice:true
 
     },
 
-    createdAt:new Date().toISOString(),
-    updatedAt:new Date().toISOString(),
+    createdAt:
+      new Date().toISOString(),
 
-    lastBackupAt:null
+    updatedAt:
+      new Date().toISOString(),
+
+    lastBackupAt:
+      null
 
   };
 
@@ -3686,30 +4617,35 @@ function defaults(){
 
 function norm(v){
 
-  const b=defaults();
+  const b =
+    defaults();
 
   if(
     !v ||
-    typeof v!=="object"
+    typeof v !== "object"
   ){
     return b;
   }
 
-  const sourceSettings=
-    v.settings||
-    {};
+  const ss =
+    v.settings || {};
 
-  const legacyProfile=
-    v.profile||
-    {};
+  const lp =
+    v.profile || {};
 
-  return{
+  const pr =
+    v.progression || {};
+
+  return {
 
     ...b,
     ...v,
 
-    schemaVersion:SCHEMA_VERSION,
-    appVersion:APP_VERSION,
+    schemaVersion:
+      SCHEMA_VERSION,
+
+    appVersion:
+      APP_VERSION,
 
     sessions:
       Array.isArray(v.sessions)
@@ -3726,42 +4662,54 @@ function norm(v){
         ?v.tests
         :[],
 
+    progression:{
+
+      ...b.progression,
+      ...pr,
+
+      byExercise:{
+        ...(b.progression.byExercise || {}),
+        ...(pr.byExercise || {})
+      }
+
+    },
+
     settings:{
 
       ...b.settings,
-      ...sourceSettings,
+      ...ss,
 
       birthDate:
-        sourceSettings.birthDate||
-        legacyProfile.birthDate||
+        ss.birthDate ||
+        lp.birthDate ||
         b.settings.birthDate,
 
       athleteLevel:
-        sourceSettings.athleteLevel||
-        legacyProfile.level||
+        ss.athleteLevel ||
+        lp.level ||
         b.settings.athleteLevel,
 
       equipment:{
         ...b.settings.equipment,
-        ...(sourceSettings.equipment||{})
+        ...(ss.equipment || {})
       },
 
       voice:
-        sourceSettings.voice!==false
+        ss.voice !== false
 
     },
 
     createdAt:
-      v.createdAt||
-      v.created||
+      v.createdAt ||
+      v.created ||
       b.createdAt,
 
     updatedAt:
-      v.updatedAt||
+      v.updatedAt ||
       b.updatedAt,
 
     lastBackupAt:
-      v.lastBackupAt||
+      v.lastBackupAt ||
       null
 
   };
@@ -3772,21 +4720,17 @@ function data(){
 
   try{
 
-    const raw=
+    const raw =
       localStorage.getItem(KEY);
 
-    if(!raw){
-      return defaults();
-    }
-
-    return norm(
-      JSON.parse(raw)
-    );
+    return raw
+      ?norm(JSON.parse(raw))
+      :defaults();
 
   }catch(err){
 
     console.warn(
-      "Errore lettura dati",
+      "Errore lettura dati:",
       err
     );
 
@@ -3798,7 +4742,7 @@ function data(){
 
 function save(d){
 
-  const n=
+  const n =
     norm({
       ...d,
       updatedAt:new Date().toISOString()
@@ -3811,11 +4755,10 @@ function save(d){
 
   idbSet(n)
     .catch(
-      err=>
-        console.warn(
-          "Backup IndexedDB non riuscito",
-          err
-        )
+      err => console.warn(
+        "Backup IndexedDB non riuscito:",
+        err
+      )
     );
 
   return n;
@@ -3828,10 +4771,10 @@ function save(d){
 
 function escapeHtml(s){
 
-  return String(s??"")
+  return String(s ?? "")
     .replace(
       /[&<>"']/g,
-      m=>({
+      m => ({
         "&":"&amp;",
         "<":"&lt;",
         ">":"&gt;",
@@ -3842,11 +4785,13 @@ function escapeHtml(s){
 
 }
 
-function localDay(dt=new Date()){
+function localDay(
+  dt = new Date()
+){
 
-  return(
-    `${dt.getFullYear()}-`+
-    `${String(dt.getMonth()+1).padStart(2,"0")}-`+
+  return (
+    `${dt.getFullYear()}-` +
+    `${String(dt.getMonth()+1).padStart(2,"0")}-` +
     `${String(dt.getDate()).padStart(2,"0")}`
   );
 
@@ -3854,7 +4799,7 @@ function localDay(dt=new Date()){
 
 function dayIndex(){
 
-  const d=
+  const d =
     new Date().getDay();
 
   return d===0
@@ -3863,11 +4808,11 @@ function dayIndex(){
 
 }
 
-function ageFromBirthDate(dateString){
+function ageFromBirthDate(s){
 
-  const dob=
+  const dob =
     new Date(
-      dateString+"T00:00:00"
+      s+"T00:00:00"
     );
 
   if(
@@ -3878,60 +4823,257 @@ function ageFromBirthDate(dateString){
     return "—";
   }
 
-  const now=
+  const now =
     new Date();
 
-  let age=
-    now.getFullYear()-
+  let a =
+    now.getFullYear() -
     dob.getFullYear();
 
-  const beforeBirthday=
+  if(
+    now.getMonth() < dob.getMonth() ||
     (
-      now.getMonth()<
-      dob.getMonth()
+      now.getMonth() === dob.getMonth() &&
+      now.getDate() < dob.getDate()
     )
-    ||
-    (
-      now.getMonth()===
-      dob.getMonth()
-      &&
-      now.getDate()<
-      dob.getDate()
-    );
-
-  if(beforeBirthday){
-    age--;
+  ){
+    a--;
   }
 
   return Math.max(
     0,
-    age
+    a
   );
 
 }
 
 function formatSeconds(sec){
 
-  const s=
+  const s =
     Math.max(
       0,
       Math.round(
-        Number(sec)||0
+        Number(sec) || 0
       )
     );
 
-  const min=
-    Math.floor(
-      s/60
-    );
-
-  const rem=
-    s%60;
-
-  return(
-    `${min}:`+
-    `${String(rem).padStart(2,"0")}`
+  return (
+    `${Math.floor(s/60)}:` +
+    `${String(s%60).padStart(2,"0")}`
   );
+
+}
+
+/* =========================================================
+   LIVELLO ATLETA
+   ========================================================= */
+
+function currentAthleteLevel(){
+
+  return (
+    data()
+      .settings
+      .athleteLevel ||
+    "intermediate"
+  );
+
+}
+
+function minimumConfirmedForProgression(){
+
+  const level =
+    currentAthleteLevel();
+
+  if(level==="beginner"){
+    return 3;
+  }
+
+  return 2;
+
+}
+
+function applyAthleteBaseline(e){
+
+  const out = {
+    ...e
+  };
+
+  if(
+    !out ||
+    out.c==="physio" ||
+    out.c==="rehab" ||
+    out.c==="release" ||
+    out.c==="recovery" ||
+    out.c==="mobility" ||
+    out.c==="pool"
+  ){
+    return out;
+  }
+
+  const level =
+    currentAthleteLevel();
+
+  if(out.id==="runEasy"){
+
+    const mins =
+      level==="beginner"
+        ?20
+        :level==="advanced"
+        ?30
+        :25;
+
+    out.d =
+      `${mins} min`;
+
+    out.s =
+      mins*60;
+
+    return out;
+
+  }
+
+  if(out.id==="intervals"){
+
+    const reps =
+      level==="beginner"
+        ?5
+        :level==="advanced"
+        ?7
+        :6;
+
+    out.d =
+      `${reps}×2 min forte / 2 min facili`;
+
+    out.s =
+      reps*240;
+
+    return out;
+
+  }
+
+  if(out.id==="tempo"){
+
+    const block =
+      level==="beginner"
+        ?5
+        :level==="advanced"
+        ?7
+        :6;
+
+    out.d =
+      `3×${block} min / 2 min facili`;
+
+    out.s =
+      3*block*60 + 240;
+
+    return out;
+
+  }
+
+  if(out.id==="hyroxRun"){
+
+    const blocks =
+      level==="beginner"
+        ?3
+        :level==="advanced"
+        ?5
+        :4;
+
+    out.d =
+      `${blocks}×800 m con recupero`;
+
+    out.s =
+      1200 +
+      Math.max(
+        0,
+        blocks-3
+      )*300;
+
+    return out;
+
+  }
+
+  const range =
+    String(out.d)
+      .match(
+        /^(\d+)×(\d+)[–-](\d+)(.*)$/
+      );
+
+  if(range){
+
+    const sets =
+      Number(range[1]);
+
+    let low =
+      Number(range[2]);
+
+    let high =
+      Number(range[3]);
+
+    if(level==="beginner"){
+
+      low =
+        Math.max(
+          4,
+          low-1
+        );
+
+      high =
+        Math.max(
+          low,
+          high-1
+        );
+
+    }
+
+    if(level==="advanced"){
+
+      low++;
+      high++;
+
+    }
+
+    out.d =
+      `${sets}×${low}–${high}${range[4] || ""}`;
+
+    return out;
+
+  }
+
+  const exact =
+    String(out.d)
+      .match(
+        /^(\d+)×(\d+)(.*)$/
+      );
+
+  if(exact){
+
+    const sets =
+      Number(exact[1]);
+
+    let reps =
+      Number(exact[2]);
+
+    if(level==="beginner"){
+
+      reps =
+        Math.max(
+          4,
+          reps-1
+        );
+
+    }
+
+    if(level==="advanced"){
+      reps++;
+    }
+
+    out.d =
+      `${sets}×${reps}${exact[3] || ""}`;
+
+  }
+
+  return out;
 
 }
 
@@ -3941,36 +5083,30 @@ function formatSeconds(sec){
 
 function totalWeeks(){
 
-  const d=data();
-
-  const created=
+  const created =
     Date.parse(
-      d.createdAt
+      data().createdAt
     );
 
-  if(
-    !Number.isFinite(created)
-  ){
-    return 0;
-  }
-
-  return Math.max(
-    0,
-    Math.floor(
-      (
-        Date.now()-
-        created
+  return Number.isFinite(created)
+    ?Math.max(
+        0,
+        Math.floor(
+          (
+            Date.now()-
+            created
+          )
+          /
+          604800000
+        )
       )
-      /
-      604800000
-    )
-  );
+    :0;
 
 }
 
 function rawCycle(){
 
-  return(
+  return (
     totalWeeks()%4+
     1
   );
@@ -3979,44 +5115,87 @@ function rawCycle(){
 
 function cycleName(w){
 
-  return[
+  return [
     "Base",
     "Build",
     "Peak",
     "Deload"
-  ][w-1]||"Base";
+  ][w-1] || "Base";
 
 }
 
 /* =========================================================
-   FOLLOW-UP 24H
+   FOLLOW-UP SICURO
    ========================================================= */
 
-function lastSessionAwaitingFollowup(){
+function followupAgeHours(s){
 
-  const sessions=
+  const timestamp =
+    Date.parse(
+      s?.date
+    );
+
+  if(
+    !Number.isFinite(timestamp)
+  ){
+    return 0;
+  }
+
+  return (
+    Date.now() -
+    timestamp
+  )
+  /
+  3600000;
+
+}
+
+function isFollowupEligible(s){
+
+  if(
+    !s ||
+    s.nextDayReaction != null ||
+    !Number.isFinite(
+      Date.parse(s.date)
+    )
+  ){
+    return false;
+  }
+
+  const differentDay =
+    localDay(
+      new Date(s.date)
+    ) !==
+    localDay();
+
+  return (
+    differentDay ||
+    followupAgeHours(s)>=18
+  );
+
+}
+
+function pendingFollowup(){
+
+  const s =
     data().sessions;
 
   for(
-    let i=sessions.length-1;
+    let i=s.length-1;
     i>=0;
     i--
   ){
 
-    const s=
-      sessions[i];
-
     if(
-      s &&
-      (
-        s.nextDayReaction===null ||
-        s.nextDayReaction===undefined
-      )
+      s[i] &&
+      s[i].nextDayReaction==null
     ){
-      return{
+
+      return {
         index:i,
-        session:s
+        session:s[i]
       };
+
     }
 
   }
@@ -4025,242 +5204,223 @@ function lastSessionAwaitingFollowup(){
 
 }
 
-function commitPreviousFollowup(){
+function followupNeedsAnswer(){
 
-  const pending=
-    lastSessionAwaitingFollowup();
+  const p =
+    pendingFollowup();
 
-  if(!pending){
-    return false;
-  }
+  return !!(
+    p &&
+    isFollowupEligible(
+      p.session
+    )
+  );
 
-  const d=data();
+}
 
-  const reaction=
-    Number(
-      document
-        .getElementById("pain24")
-        .value
+function followupAnswerSelected(){
+
+  const select =
+    document.getElementById(
+      "pain24"
     );
 
-  d.sessions[
-    pending.index
-  ]={
-    ...d.sessions[
-      pending.index
-    ],
+  return !!(
+    select &&
+    select.value !== ""
+  );
 
-    nextDayReaction:
-      reaction,
+}
 
-    followUpAt:
-      new Date().toISOString()
-  };
+function updateFollowupUI(){
 
-  save(d);
+  const el =
+    document.getElementById(
+      "followupInfo"
+    );
 
-  return true;
+  const sel =
+    document.getElementById(
+      "pain24"
+    );
+
+  if(
+    !el ||
+    !sel
+  ){
+    return;
+  }
+
+  const p =
+    pendingFollowup();
+
+  if(!p){
+
+    sel.disabled =
+      true;
+
+    sel.value =
+      "";
+
+    el.textContent =
+      "Nessuna seduta in attesa di follow-up. Nessun dato verrà attribuito automaticamente.";
+
+    updateStartButtonState();
+
+    return;
+
+  }
+
+  const h =
+    followupAgeHours(
+      p.session
+    );
+
+  if(
+    isFollowupEligible(
+      p.session
+    )
+  ){
+
+    sel.disabled =
+      false;
+
+    el.textContent =
+      `Follow-up disponibile per ${
+        new Date(
+          p.session.date
+        )
+        .toLocaleString(
+          "it-IT"
+        )
+      } · ${p.session.type}. Seleziona obbligatoriamente la risposta prima di avviare la nuova seduta.`;
+
+  }else{
+
+    sel.disabled =
+      true;
+
+    sel.value =
+      "";
+
+    el.textContent =
+      `Follow-up non ancora eleggibile: sono trascorse circa ${
+        Math.max(
+          0,
+          Math.floor(h)
+        )
+      } ore. Potrai registrarlo dal giorno successivo o dopo almeno 18 ore.`;
+
+  }
+
+  updateStartButtonState();
 
 }
 
 /* =========================================================
-   STORICO E TOLLERANZA
+   SESSIONI CONFERMATE
    ========================================================= */
 
-function recentSessions(limit=10){
+function confirmedSessions(
+  limit = Infinity
+){
 
-  return(
-    data()
-      .sessions
-      .slice(-limit)
-  );
+  return data()
+    .sessions
+    .filter(
+      s =>
+        s &&
+        s.nextDayReaction != null &&
+        s.postPain != null
+    )
+    .slice(
+      -limit
+    );
 
 }
 
 function sessionTolerated(s){
 
-  const pre=
-    Number(
-      s?.prePain??0
-    );
-
-  const post=
-    Number(
-      s?.postPain??pre
-    );
-
-  const reaction=
-    s?.nextDayReaction;
-
-  const immediateGood=
-    (
-      post-pre
-    )<=1
-    &&
-    post<=3;
-
-  const followupKnown=
-    reaction!==null &&
-    reaction!==undefined;
-
-  const nextGood=
-    !followupKnown ||
-    Number(reaction)<3;
-
-  return(
-    immediateGood &&
-    nextGood
-  );
-
-}
-
-function recentTolerance(){
-
-  const s=
-    recentSessions(10);
-
-  if(!s.length){
-    return 0;
-  }
-
-  return(
-    s.filter(
-      sessionTolerated
-    ).length
-    /
-    s.length
-  );
-
-}
-
-function earlyDeloadActive(){
-
-  const complete=
-    data()
-      .sessions
-      .filter(
-        s=>
-          s &&
-          s.postPain!==null &&
-          s.postPain!==undefined
-      )
-      .slice(-2);
-
   if(
-    complete.length<2
+    !s ||
+    s.nextDayReaction == null ||
+    s.postPain == null
   ){
     return false;
   }
 
-  return complete.every(
-    s=>{
+  const pre =
+    Number(
+      s.prePain ?? 0
+    );
 
-      const pre=
-        Number(
-          s.prePain??0
-        );
+  const post =
+    Number(
+      s.postPain ?? pre
+    );
 
-      const post=
-        Number(
-          s.postPain??pre
-        );
+  const reaction =
+    Number(
+      s.nextDayReaction
+    );
 
-      const immediate=
-        (
-          post-pre
-        )>=2
-        ||
-        post>=4;
-
-      const nextDay=
-        Number(
-          s.nextDayReaction??0
-        )>=3;
-
-      return(
-        immediate||
-        nextDay
-      );
-
-    }
+  return (
+    post-pre <= 1 &&
+    post <= 3 &&
+    reaction < 3
   );
 
 }
 
-function cycle(){
-
-  if(
-    earlyDeloadActive()
-  ){
-    return 4;
-  }
-
-  const raw=
-    rawCycle();
-
-  const signal=
-    baseProgressionSignal();
-
-  if(
-    raw===3 &&
-    signal==="reduce"
-  ){
-    return 2;
-  }
-
-  return raw;
-
-}
-
 /* =========================================================
-   TRAINING LOAD
+   DELOAD
    ========================================================= */
 
-function recentLoad(days=7){
+function earlyDeloadActive(){
 
-  const cutoff=
-    Date.now()-
-    days*86400000;
+  const c =
+    confirmedSessions(2);
 
-  return data()
-    .sessions
-    .filter(
-      s=>
-        Date.parse(s.date)>=
-        cutoff
-    )
-    .reduce(
-      (sum,s)=>{
+  return (
+    c.length===2 &&
+    c.every(
+      s => {
 
-        const mins=
+        const pre =
           Number(
-            s.durationSec||0
-          )/60;
-
-        const rpe=
-          Number(
-            s.rpe||0
+            s.prePain ?? 0
           );
 
-        return(
-          sum+
-          mins*rpe
+        const post =
+          Number(
+            s.postPain ?? pre
+          );
+
+        const next =
+          Number(
+            s.nextDayReaction
+          );
+
+        return (
+          post-pre >= 2 ||
+          post >= 4 ||
+          next >= 3
         );
 
-      },
-      0
-    );
+      }
+    )
+  );
 
 }
 
 /* =========================================================
-   PROGRESSION SIGNAL
+   MOTORE DI PROGRESSIONE GLOBALE
    ========================================================= */
 
 function baseProgressionSignal(){
 
-  const s=
-    recentSessions(5);
+  const s =
+    confirmedSessions(5);
 
   if(!s.length){
     return "base";
@@ -4272,28 +5432,28 @@ function baseProgressionSignal(){
     return "deload";
   }
 
-  const tolerance=
+  const tolerance =
     s.filter(
       sessionTolerated
     ).length
     /
     s.length;
 
-  const avgPain=
+  const avgPain =
     s.reduce(
-      (a,b)=>
+      (a,b) =>
         a+
         Number(
-          b.prePain||0
+          b.prePain || 0
         ),
       0
     )
     /
     s.length;
 
-  const avgRPEEntries=
+  const rpeSessions =
     s.filter(
-      x=>
+      x =>
         Number.isFinite(
           Number(x.rpe)
         )
@@ -4301,35 +5461,39 @@ function baseProgressionSignal(){
         Number(x.rpe)>0
     );
 
-  const avgRPE=
-    avgRPEEntries.length
-      ?avgRPEEntries.reduce(
-          (a,b)=>
+  const avgRPE =
+    rpeSessions.length
+      ?rpeSessions.reduce(
+          (a,b) =>
             a+
             Number(b.rpe),
           0
         )
         /
-        avgRPEEntries.length
+        rpeSessions.length
       :null;
 
   if(
-    tolerance<.6 ||
-    avgPain>=3
+    tolerance < .6 ||
+    avgPain >= 3
   ){
     return "reduce";
   }
 
   if(
-    avgRPE!==null &&
-    avgRPE>=8.5
+    avgRPE !== null &&
+    avgRPE >= 8.5
   ){
     return "hold";
   }
 
   if(
-    tolerance>=.8 &&
-    avgPain<=2
+    s.length >=
+      minimumConfirmedForProgression()
+    &&
+    tolerance >= .8
+    &&
+    avgPain <= 2
   ){
     return "progress";
   }
@@ -4338,27 +5502,45 @@ function baseProgressionSignal(){
 
 }
 
-function progressionSignal(){
+function cycle(){
 
   if(
-    blocked
+    earlyDeloadActive()
   ){
+    return 4;
+  }
+
+  const raw =
+    rawCycle();
+
+  const sig =
+    baseProgressionSignal();
+
+  if(
+    raw===3 &&
+    sig==="reduce"
+  ){
+    return 2;
+  }
+
+  return raw;
+
+}
+
+function progressionSignal(){
+
+  if(blocked){
     return "blocked";
   }
 
   if(
-    mode==="recovery"
-  ){
-    return "reduce";
-  }
-
-  if(
+    mode==="recovery" ||
     mode==="safe"
   ){
     return "reduce";
   }
 
-  const base=
+  const base =
     baseProgressionSignal();
 
   if(
@@ -4374,56 +5556,640 @@ function progressionSignal(){
 
 function progressionText(){
 
-  const signal=
+  const s =
     progressionSignal();
 
-  if(
-    signal==="blocked"
-  ){
-    return(
+  if(s==="blocked"){
+
+    return (
       "Blocco di sicurezza: nessuna progressione oggi."
     );
+
   }
 
   if(
     earlyDeloadActive()
   ){
-    return(
+
+    return (
       "Deload anticipato: due risposte consecutive non ottimali. " +
-      "Volume ridotto e nessuna progressione finché il trend non torna favorevole."
+      "Volume ridotto, ma il livello permanente costruito viene conservato."
     );
+
   }
 
-  if(
-    signal==="reduce"
-  ){
-    return(
-      "Regressione controllata: oggi il coach riduce una variabile alla volta " +
-      "e privilegia tecnica, ROM tollerato e recupero."
+  if(s==="reduce"){
+
+    return (
+      "Regressione temporanea: oggi il coach riduce una variabile alla volta " +
+      "e privilegia tecnica, ROM tollerato e recupero. Il livello costruito non viene cancellato."
     );
+
   }
 
-  if(
-    signal==="hold"
-  ){
-    return(
+  if(s==="hold"){
+
+    return (
       "Carico stabile: mantieni la dose attuale. " +
-      "Il coach non aumenta il lavoro finché recupero e risposta non sono chiaramente favorevoli."
+      "Nessun aumento finché recupero, RPE e follow-up non sono chiaramente favorevoli."
     );
+
+  }
+
+  if(s==="progress"){
+
+    return (
+      "Progressione consentita: follow-up confermati e trend globale favorevole. " +
+      "Dopo una seduta ben tollerata verrà aumentata una sola variabile e il nuovo livello sarà memorizzato."
+    );
+
+  }
+
+  return (
+    `Fase base: costruisci tecnica e tolleranza. ${
+      currentAthleteLevel()==="beginner"
+        ?"Per il livello Principiante servono almeno tre follow-up confermati prima della progressione permanente."
+        :"Servono almeno due follow-up confermati prima della progressione permanente."
+    }`
+  );
+
+}
+
+/* =========================================================
+   PROGRESSIONE PERSISTENTE
+   ========================================================= */
+
+function getLevel(id){
+
+  return Math.max(
+    0,
+    Number(
+      data()
+        .progression
+        ?.byExercise
+        ?.[id] || 0
+    )
+  );
+
+}
+
+function maxProgressLevel(id){
+
+  if(id==="runEasy"){
+    return 12;
+  }
+
+  if(id==="intervals"){
+    return 6;
+  }
+
+  if(id==="tempo"){
+    return 6;
+  }
+
+  if(id==="hyroxRun"){
+    return 4;
+  }
+
+  return 6;
+
+}
+
+function canProgressExercise(id){
+
+  if(
+    !id ||
+    !EX[id]
+  ){
+    return false;
   }
 
   if(
-    signal==="progress"
+    getLevel(id) >=
+    maxProgressLevel(id)
   ){
-    return(
-      "Progressione consentita: ultime sedute ben tollerate. " +
-      "Il coach aumenta una sola variabile alla volta."
-    );
+    return false;
   }
 
-  return(
-    "Fase base: costruisci tecnica, controllo e tolleranza prima di aumentare il volume."
+  return true;
+
+}
+
+/* =========================================================
+   APPLICA LIVELLO PERSISTENTE
+   ========================================================= */
+
+function applyPersistentLevel(e){
+
+  const out = {
+    ...e
+  };
+
+  const level =
+    getLevel(
+      out.id
+    );
+
+  if(!level){
+    return out;
+  }
+
+  if(out.id==="runEasy"){
+
+    const baseMatch =
+      String(out.d)
+        .match(
+          /^(\d+)\s*min/
+        );
+
+    const base =
+      baseMatch
+        ?Number(baseMatch[1])
+        :25;
+
+    const mins =
+      Math.min(
+        60,
+        base + level*3
+      );
+
+    out.d =
+      `${mins} min`;
+
+    out.s =
+      mins*60;
+
+    return out;
+
+  }
+
+  if(out.id==="intervals"){
+
+    const baseMatch =
+      String(out.d)
+        .match(
+          /^(\d+)×/
+        );
+
+    const base =
+      baseMatch
+        ?Number(baseMatch[1])
+        :6;
+
+    const reps =
+      Math.min(
+        12,
+        base+level
+      );
+
+    out.d =
+      `${reps}×2 min forte / 2 min facili`;
+
+    out.s =
+      reps*240;
+
+    return out;
+
+  }
+
+  if(out.id==="tempo"){
+
+    const baseMatch =
+      String(out.d)
+        .match(
+          /^3×(\d+)/
+        );
+
+    const base =
+      baseMatch
+        ?Number(baseMatch[1])
+        :6;
+
+    const block =
+      Math.min(
+        12,
+        base+level
+      );
+
+    out.d =
+      `3×${block} min / 2 min facili`;
+
+    out.s =
+      3*block*60 + 240;
+
+    return out;
+
+  }
+
+  if(out.id==="hyroxRun"){
+
+    const baseMatch =
+      String(out.d)
+        .match(
+          /^(\d+)×/
+        );
+
+    const base =
+      baseMatch
+        ?Number(baseMatch[1])
+        :4;
+
+    const blocks =
+      Math.min(
+        8,
+        base+level
+      );
+
+    out.d =
+      `${blocks}×800 m con recupero`;
+
+    out.s =
+      1200 +
+      Math.max(
+        0,
+        blocks-3
+      )*300;
+
+    return out;
+
+  }
+
+  /*
+    Range tipo:
+    3×6–10
+    3×10–15
+
+    Vengono aumentati entrambi i limiti.
+    Evita il vecchio bug 3×11–10.
+  */
+
+  const range =
+    String(out.d)
+      .match(
+        /^(\d+)×(\d+)[–-](\d+)(.*)$/
+      );
+
+  if(range){
+
+    const sets =
+      Number(range[1]);
+
+    const baseLow =
+      Number(range[2]);
+
+    const baseHigh =
+      Number(range[3]);
+
+    const step =
+      Math.min(
+        level,
+        6
+      );
+
+    const low =
+      baseLow + step;
+
+    const high =
+      baseHigh + step;
+
+    out.d =
+      `${sets}×${low}–${high}${range[4] || ""}`;
+
+    return out;
+
+  }
+
+  /*
+    Dose classica:
+    3×10
+    2×8
+  */
+
+  const exact =
+    String(out.d)
+      .match(
+        /^(\d+)×(\d+)(.*)$/
+      );
+
+  if(exact){
+
+    const sets =
+      Number(exact[1]);
+
+    const base =
+      Number(exact[2]);
+
+    const reps =
+      base +
+      Math.min(
+        level,
+        6
+      );
+
+    out.d =
+      `${sets}×${reps}${exact[3] || ""}`;
+
+  }
+
+  return out;
+
+}
+
+/* =========================================================
+   SCELTA ESERCIZIO DA PROGREDIRE
+   ========================================================= */
+
+function selectProgressionCandidate(session){
+
+  const excluded = new Set([
+    "breathing",
+    "walk",
+    "walkFast",
+    "stretch",
+    "cat",
+    "thread",
+    "rollerThoracic",
+    "rollerLat",
+    "rollerQuads",
+    "ballScap",
+    "ballPec",
+    "ballLat",
+    "poolWalk",
+    "poolJog",
+    "poolScap",
+    "poolER",
+    "scapset"
+  ]);
+
+  const ids =
+    (
+      session.prescribedWorkout ||
+      []
+    )
+    .map(
+      x => x.id
+    )
+    .filter(
+      id =>
+        id &&
+        EX[id] &&
+        EX[id].c !== "physio" &&
+        !excluded.has(id) &&
+        canProgressExercise(id)
+    );
+
+  if(!ids.length){
+    return null;
+  }
+
+  const d =
+    data();
+
+  const last =
+    d.progression
+      ?.lastProgressedId;
+
+  let rotated = [
+    ...ids
+  ];
+
+  if(
+    last &&
+    rotated.includes(last)
+  ){
+
+    const pos =
+      rotated.indexOf(last);
+
+    rotated = [
+      ...rotated.slice(pos+1),
+      ...rotated.slice(0,pos+1)
+    ];
+
+  }
+
+  const minimum =
+    Math.min(
+      ...rotated.map(
+        id => getLevel(id)
+      )
+    );
+
+  return (
+    rotated.find(
+      id =>
+        getLevel(id)===minimum
+    )
+    ||
+    rotated[0]
   );
+
+}
+
+/* =========================================================
+   PROGRESSIONE DOPO FOLLOW-UP
+   ========================================================= */
+
+function applyProgressionFromSession(index){
+
+  const d =
+    data();
+
+  const s =
+    d.sessions[index];
+
+  if(
+    !s ||
+    s.progressionApplied ||
+    s.nextDayReaction==null
+  ){
+    return false;
+  }
+
+  /*
+    La seduta viene marcata come valutata
+    anche se NON genera progresso.
+    Così non potrà essere applicata due volte.
+  */
+
+  s.progressionApplied =
+    true;
+
+  s.progressionAppliedAt =
+    new Date().toISOString();
+
+  /*
+    La progressione permanente è permessa
+    soltanto quando sono contemporaneamente veri:
+
+    1. seduta individuale tollerata
+    2. RPE <= 8
+    3. trend globale = progress
+    4. nessun Deload anticipato
+    5. nessun blocco/safe/recovery corrente
+  */
+
+  const globallyReady =
+    baseProgressionSignal()==="progress";
+
+  const individuallyReady =
+    sessionTolerated(s) &&
+    Number(s.rpe || 0)<=8;
+
+  const safeToProgress =
+    individuallyReady &&
+    globallyReady &&
+    !earlyDeloadActive();
+
+  if(safeToProgress){
+
+    const id =
+      selectProgressionCandidate(s);
+
+    if(id){
+
+      const max =
+        maxProgressLevel(id);
+
+      const current =
+        Number(
+          d.progression
+            .byExercise[id] || 0
+        );
+
+      const next =
+        Math.min(
+          max,
+          current+1
+        );
+
+      if(next>current){
+
+        d.progression
+          .byExercise[id] =
+            next;
+
+        d.progression
+          .lastProgressedId =
+            id;
+
+        d.progression
+          .totalProgressions =
+            Number(
+              d.progression
+                .totalProgressions || 0
+            )
+            +
+            1;
+
+        s.progressedExerciseId =
+          id;
+
+        s.progressedExerciseTitle =
+          EX[id]?.t || id;
+
+        s.progressedToLevel =
+          next;
+
+      }
+
+    }
+
+  }
+
+  save(d);
+
+  return safeToProgress;
+
+}
+
+/* =========================================================
+   COMMIT FOLLOW-UP
+   ========================================================= */
+
+function commitPreviousFollowup(){
+
+  const p =
+    pendingFollowup();
+
+  if(
+    !p ||
+    !isFollowupEligible(
+      p.session
+    )
+  ){
+    return {
+      committed:false,
+      progressed:false
+    };
+  }
+
+  const select =
+    document.getElementById(
+      "pain24"
+    );
+
+  if(
+    !select ||
+    select.value === ""
+  ){
+
+    return {
+      committed:false,
+      progressed:false,
+      missing:true
+    };
+
+  }
+
+  const reaction =
+    Number(
+      select.value
+    );
+
+  if(
+    ![0,1,3].includes(reaction)
+  ){
+
+    return {
+      committed:false,
+      progressed:false,
+      missing:true
+    };
+
+  }
+
+  const d =
+    data();
+
+  d.sessions[p.index] = {
+
+    ...d.sessions[p.index],
+
+    nextDayReaction:
+      reaction,
+
+    followUpAt:
+      new Date().toISOString()
+
+  };
+
+  save(d);
+
+  const progressed =
+    applyProgressionFromSession(
+      p.index
+    );
+
+  select.value =
+    "";
+
+  updateFollowupUI();
+
+  return {
+    committed:true,
+    progressed
+  };
 
 }
 
@@ -4433,15 +6199,15 @@ function progressionText(){
 
 function eqAvailable(id){
 
-  const e=
+  const e =
     EX[id];
 
-  const eq=
+  const eq =
     data()
       .settings
       .equipment;
 
-  return(
+  return (
     e?.e==="bodyweight" ||
     !e?.e ||
     !!eq[e.e]
@@ -4457,7 +6223,7 @@ function substitute(id){
     return id;
   }
 
-  const m={
+  const map = {
 
     external:"iso",
 
@@ -4505,8 +6271,8 @@ function substitute(id){
 
   };
 
-  return(
-    m[id]||
+  return (
+    map[id] ||
     id
   );
 
@@ -4514,10 +6280,10 @@ function substitute(id){
 
 function unique(ids){
 
-  const seen=
+  const seen =
     new Set();
 
-  return(
+  return (
     Array.isArray(ids)
       ?ids
       :[]
@@ -4526,7 +6292,7 @@ function unique(ids){
     substitute
   )
   .filter(
-    id=>
+    id =>
       EX[id] &&
       !seen.has(id) &&
       (
@@ -4543,11 +6309,11 @@ function replace(
   to
 ){
 
-  const i=
+  const i =
     arr.indexOf(from);
 
   if(i>=0){
-    arr[i]=to;
+    arr[i] = to;
   }
 
 }
@@ -4557,12 +6323,12 @@ function enhance(
   type
 ){
 
-  const eq=
+  const eq =
     data()
       .settings
       .equipment;
 
-  const o=[
+  const o = [
     ...(
       Array.isArray(ids)
         ?ids
@@ -4578,9 +6344,7 @@ function enhance(
     ].includes(type)
   ){
 
-    if(
-      eq.weights
-    ){
+    if(eq.weights){
 
       replace(
         o,
@@ -4608,9 +6372,7 @@ function enhance(
 
     }
 
-    if(
-      eq.bench
-    ){
+    if(eq.bench){
 
       replace(
         o,
@@ -4659,9 +6421,7 @@ function enhance(
 
   }
 
-  if(
-    type==="rehab"
-  ){
+  if(type==="rehab"){
 
     if(
       eq.band &&
@@ -4679,29 +6439,21 @@ function enhance(
 
     }
 
-    if(
-      eq.ball
-    ){
+    if(eq.ball){
       o.push("ballScap");
     }
 
-    if(
-      eq.roller
-    ){
+    if(eq.roller){
       o.push("rollerThoracic");
     }
 
   }
 
-  if(
-    type==="recovery"
-  ){
+  if(type==="recovery"){
 
-    if(
-      eq.pool
-    ){
+    if(eq.pool){
 
-      return[
+      return [
         "poolWalk",
         "poolScap",
         "poolER",
@@ -4710,9 +6462,7 @@ function enhance(
 
     }
 
-    if(
-      eq.roller
-    ){
+    if(eq.roller){
 
       o.splice(
         Math.min(
@@ -4725,9 +6475,7 @@ function enhance(
 
     }
 
-    if(
-      eq.ball
-    ){
+    if(eq.ball){
 
       o.splice(
         Math.min(
@@ -4747,44 +6495,16 @@ function enhance(
 }
 
 /* =========================================================
-   LIVELLO ATLETA
-   ========================================================= */
-
-function athleteLevelFactor(){
-
-  const level=
-    data()
-      .settings
-      .athleteLevel;
-
-  if(
-    level==="beginner"
-  ){
-    return .9;
-  }
-
-  if(
-    level==="advanced"
-  ){
-    return 1.05;
-  }
-
-  return 1;
-
-}
-
-/* =========================================================
-   PROGRESSIONE ESERCIZI
+   RIDUZIONE TEMPORANEA
    ========================================================= */
 
 function adjustRepDose(
   dose,
-  signal,
-  cat
+  signal
 ){
 
   if(
-    typeof dose!=="string"
+    typeof dose !== "string"
   ){
     return dose;
   }
@@ -4797,55 +6517,21 @@ function adjustRepDose(
     if(
       /^3×/.test(dose)
     ){
-      return(
-        dose.replace(
-          /^3×/,
-          "2×"
-        )
+
+      return dose.replace(
+        /^3×/,
+        "2×"
       );
+
     }
 
     if(
       /^2×/.test(dose)
     ){
-      return(
-        dose.replace(
-          /^2×/,
-          "1–2×"
-        )
-      );
-    }
 
-    return dose;
-
-  }
-
-  if(
-    signal==="progress" &&
-    [
-      "legs",
-      "military",
-      "core",
-      "rehab",
-      "hyrox"
-    ].includes(cat)
-  ){
-
-    const m=
-      dose.match(
-        /^(\d+)×(\d+)(.*)$/
-      );
-
-    if(m){
-
-      const sets=
-        Number(m[1]);
-
-      const reps=
-        Number(m[2]);
-
-      return(
-        `${sets}×${reps+1}${m[3]||""}`
+      return dose.replace(
+        /^2×/,
+        "1–2×"
       );
 
     }
@@ -4856,307 +6542,237 @@ function adjustRepDose(
 
 }
 
-function runningProgress(
-  e,
-  signal
-){
-
-  const out={
-    ...e
-  };
-
-  const level=
-    athleteLevelFactor();
-
-  if(
-    signal==="deload" ||
-    signal==="reduce"
-  ){
-
-    if(
-      e.id==="runEasy"
-    ){
-
-      out.d=
-        "20 min";
-
-      out.s=
-        1200;
-
-      out.reason=
-        "↓ volume Z2 · recupero / risposta non ottimale";
-
-    }
-
-    else if(
-      e.id==="intervals"
-    ){
-
-      out.d=
-        "5×2 min forte / 2 min facili";
-
-      out.s=
-        1200;
-
-      out.reason=
-        "↓ una ripetuta · recupero / risposta non ottimale";
-
-    }
-
-    else if(
-      e.id==="tempo"
-    ){
-
-      out.d=
-        "3×5 min / 2 min facili";
-
-      out.s=
-        1140;
-
-      out.reason=
-        "↓ tempo di lavoro · recupero / risposta non ottimale";
-
-    }
-
-    else if(
-      e.id==="hyroxRun"
-    ){
-
-      out.d=
-        "3×800 m con recupero";
-
-      out.s=
-        1200;
-
-      out.reason=
-        "↓ un blocco Hyrox · recupero / risposta non ottimale";
-
-    }
-
-    return out;
-
-  }
-
-  if(
-    signal==="progress"
-  ){
-
-    if(
-      e.id==="runEasy"
-    ){
-
-      const mins=
-        level>1
-          ?32
-          :30;
-
-      out.d=
-        `${mins} min`;
-
-      out.s=
-        mins*60;
-
-      out.reason=
-        `↑ Z2 a ${mins} min · ultime sedute ben tollerate`;
-
-    }
-
-    else if(
-      e.id==="intervals"
-    ){
-
-      const reps=
-        level>1
-          ?8
-          :7;
-
-      out.d=
-        `${reps}×2 min forte / 2 min facili`;
-
-      out.s=
-        reps*240;
-
-      out.reason=
-        `↑ ${reps-6} ripetuta/e · ultime sedute ben tollerate`;
-
-    }
-
-    else if(
-      e.id==="tempo"
-    ){
-
-      out.d=
-        "3×7 min / 2 min facili";
-
-      out.s=
-        1500;
-
-      out.reason=
-        "↑ +1 min per blocco · ultime sedute ben tollerate";
-
-    }
-
-    else if(
-      e.id==="hyroxRun"
-    ){
-
-      out.d=
-        "5×800 m con recupero";
-
-      out.s=
-        1800;
-
-      out.reason=
-        "↑ +1 blocco Hyrox · ultime sedute ben tollerate";
-
-    }
-
-    return out;
-
-  }
-
-  out.reason=
-    signal==="hold"
-      ?"→ dose stabile · qualità prima del volume"
-      :"→ dose base · costruzione tecnica";
-
-  return out;
-
-}
+/* =========================================================
+   CREA ESERCIZIO ADATTATO
+   ========================================================= */
 
 function exercise(id){
 
-  const source=
+  const source =
     EX[id];
 
   if(!source){
     return null;
   }
 
-  let e={
-    ...source
-  };
+  if(source.c==="physio"){
 
-  if(
-    e.c==="physio"
-  ){
-
-    return{
-      ...e,
+    return {
+      ...source,
       reason:
-        e.reason||
+        source.reason ||
         "Prescrizione fisioterapista · non modificata"
     };
 
   }
 
-  let signal=
-    progressionSignal();
+  /*
+    Ordine corretto:
+    1. dose base
+    2. livello atleta
+    3. livello permanente
+    4. eventuale riduzione temporanea
+  */
 
-  if(
-    earlyDeloadActive()
-  ){
-    signal="deload";
-  }
+  let e =
+    applyAthleteBaseline({
+      ...source
+    });
 
-  if(
-    e.runType ||
-    [
-      "runEasy",
-      "intervals",
-      "tempo",
-      "hyroxRun"
-    ].includes(e.id)
-  ){
+  e =
+    applyPersistentLevel(e);
 
-    return(
-      runningProgress(
-        e,
-        signal
-      )
+  const permanentLevel =
+    getLevel(
+      e.id
     );
 
-  }
+  const signal =
+    earlyDeloadActive()
+      ?"deload"
+      :progressionSignal();
 
-  const original=
+  const originalDose =
     e.d;
 
-  e.d=
+  e.d =
     adjustRepDose(
       e.d,
-      signal,
-      e.c
+      signal
     );
 
+  /*
+    Running in Reduce/Deload:
+    riduciamo temporaneamente dal livello attuale,
+    senza cancellarlo.
+  */
+
   if(
-    e.d!==original
+    signal==="reduce" ||
+    signal==="deload"
   ){
 
-    e.reason=
-      (
-        signal==="reduce" ||
-        signal==="deload"
-      )
-      ?"↓ volume · Safe/Recovery/Deload"
-      :"↑ +1 ripetizione · ultime sedute ben tollerate";
+    if(e.id==="runEasy"){
 
-  }else{
+      const current =
+        Number(
+          String(e.d)
+            .match(
+              /^(\d+)/
+            )
+            ?.[1] || 25
+        );
 
-    if(
-      cycle()===4 ||
-      signal==="deload"
-    ){
+      const mins =
+        Math.max(
+          20,
+          current-5
+        );
 
-      e.reason=
-        "↓ Deload · mantieni qualità e lascia margine";
+      e.d =
+        `${mins} min`;
 
-    }
-
-    else if(
-      mode==="safe"
-    ){
-
-      e.reason=
-        "↓ Safe Mode · ROM e carico conservativi";
+      e.s =
+        mins*60;
 
     }
 
-    else if(
-      signal==="progress"
-    ){
+    else if(e.id==="intervals"){
 
-      e.reason=
-        "→ dose mantenuta · questa variabile non viene aumentata oggi";
+      const current =
+        Number(
+          String(e.d)
+            .match(
+              /^(\d+)×/
+            )
+            ?.[1] || 6
+        );
+
+      const reps =
+        Math.max(
+          4,
+          current-1
+        );
+
+      e.d =
+        `${reps}×2 min forte / 2 min facili`;
+
+      e.s =
+        reps*240;
 
     }
 
-    else{
+    else if(e.id==="tempo"){
 
-      e.reason=
-        "→ dose stabile · qualità prima del volume";
+      const current =
+        Number(
+          String(e.d)
+            .match(
+              /^3×(\d+)/
+            )
+            ?.[1] || 6
+        );
+
+      const block =
+        Math.max(
+          4,
+          current-1
+        );
+
+      e.d =
+        `3×${block} min / 2 min facili`;
+
+      e.s =
+        3*block*60 + 240;
 
     }
+
+    else if(e.id==="hyroxRun"){
+
+      const current =
+        Number(
+          String(e.d)
+            .match(
+              /^(\d+)×/
+            )
+            ?.[1] || 4
+        );
+
+      const blocks =
+        Math.max(
+          3,
+          current-1
+        );
+
+      e.d =
+        `${blocks}×800 m con recupero`;
+
+      e.s =
+        1200 +
+        Math.max(
+          0,
+          blocks-3
+        )*300;
+
+    }
+
+    e.reason =
+      permanentLevel>0
+        ?`↓ riduzione temporanea · livello permanente ${permanentLevel} conservato`
+        :"↓ riduzione temporanea · Safe/Recovery/Deload";
+
+    return e;
 
   }
+
+  if(permanentLevel>0){
+
+    e.reason =
+      `↑ livello permanente ${permanentLevel}/${maxProgressLevel(e.id)} · costruito con follow-up confermati`;
+
+    return e;
+
+  }
+
+  if(e.d !== originalDose){
+
+    e.reason =
+      "↓ dose temporaneamente adattata";
+
+    return e;
+
+  }
+
+  if(signal==="progress"){
+
+    e.reason =
+      "→ livello attuale · la prossima progressione verrà salvata solo dopo un follow-up favorevole";
+
+    return e;
+
+  }
+
+  e.reason =
+    "→ dose stabile · qualità prima del volume";
 
   return e;
 
 }
 
 /* =========================================================
-   DURATA REALE
+   DURATA
    ========================================================= */
 
 function workoutSeconds(list){
 
-  return(
-    list||[]
+  return (
+    list || []
   )
   .reduce(
-    (sum,e)=>
+    (sum,e) =>
       sum+
       Number(
-        e?.s||0
+        e?.s || 0
       ),
     0
   );
@@ -5168,50 +6784,40 @@ function fitToTime(
   minutes
 ){
 
-  const prepared=
+  const prepared =
     unique(ids)
-      .map(exercise)
+      .map(
+        exercise
+      )
       .filter(Boolean);
 
-  if(
-    !prepared.length
-  ){
-    return[];
+  if(!prepared.length){
+    return [];
   }
 
-  const target=
-    Number(minutes||30)*
-    60;
+  const target =
+    Number(
+      minutes || 30
+    )*60;
 
-  /*
-    Permettiamo un margine del 10%.
-    Gli esercizi vengono mantenuti nell'ordine programmato.
-  */
-
-  const max=
+  const max =
     target*1.10;
 
-  const out=[];
+  const out = [];
 
-  let total=0;
+  let total = 0;
 
   for(
     const e
     of prepared
   ){
 
-    const sec=
+    const sec =
       Number(
-        e.s||0
+        e.s || 0
       );
 
-    /*
-      Un blocco principale di corsa può superare da solo
-      una seduta breve: lo manteniamo perché è il cuore
-      della sessione.
-    */
-
-    const mainRun=
+    const main =
       [
         "runEasy",
         "intervals",
@@ -5224,13 +6830,14 @@ function fitToTime(
     if(
       out.length>=3 &&
       total+sec>max &&
-      !mainRun
+      !main
     ){
       continue;
     }
 
     out.push(e);
-    total+=sec;
+
+    total += sec;
 
     if(
       total>=target &&
@@ -5246,43 +6853,42 @@ function fitToTime(
 }
 
 function renderDuration(
-  targetId,
+  id,
   list
 ){
 
-  const target=
-    document.getElementById(
-      targetId
-    );
+  const el =
+    document.getElementById(id);
 
-  if(!target){
+  if(!el){
     return;
   }
 
-  const estimated=
+  const estimated =
     workoutSeconds(list);
 
-  const desired=
+  const desired =
     Number(
-      data().settings.minutes
+      data()
+        .settings
+        .minutes
     )*60;
 
-  const delta=
-    estimated-desired;
+  const delta =
+    estimated -
+    desired;
 
-  const difference=
-    Math.abs(delta);
-
-  const note=
-    difference<=180
+  const note =
+    Math.abs(delta)<=180
       ?"molto vicino al tempo scelto"
       :delta>0
       ?"leggermente più lungo del target"
       :"più breve del target";
 
-  target.innerHTML=
+  el.innerHTML =
     `
       <div class="duration-banner">
+
         <span>
           Durata stimata
         </span>
@@ -5294,8 +6900,35 @@ function renderDuration(
         <span>
           ${escapeHtml(note)}
         </span>
+
       </div>
     `;
+
+}
+
+/* =========================================================
+   STATO PULSANTE AVVIO
+   ========================================================= */
+
+function updateStartButtonState(){
+
+  const start =
+    document.getElementById(
+      "startToday"
+    );
+
+  if(!start){
+    return;
+  }
+
+  const followupMissing =
+    followupNeedsAnswer() &&
+    !followupAnswerSelected();
+
+  start.disabled =
+    selectedPain===null ||
+    blocked ||
+    followupMissing;
 
 }
 
@@ -5305,14 +6938,15 @@ function renderDuration(
 
 function setPain(v){
 
-  selectedPain=v;
+  selectedPain =
+    v;
 
   document
     .querySelectorAll(
       "#painScale button"
     )
     .forEach(
-      (b,i)=>
+      (b,i) =>
         b.classList.toggle(
           "active",
           i===v
@@ -5334,15 +6968,25 @@ function setPain(v){
   "night"
 ]
 .forEach(
-  id=>{
+  id => {
 
     document
       .getElementById(id)
       .addEventListener(
         "change",
-        ()=>
-          selectedPain!==null &&
-          evaluate()
+        () => {
+
+          if(id==="pain24"){
+            updateStartButtonState();
+          }
+
+          if(
+            selectedPain!==null
+          ){
+            evaluate();
+          }
+
+        }
       );
 
   }
@@ -5356,32 +7000,45 @@ function evaluate(){
     return;
   }
 
-  const g=
-    id=>
+  const g =
+    id =>
       Number(
         document
           .getElementById(id)
-          .value
+          .value || 0
       );
 
-  blocked=
+  blocked =
     g("weakness")>=5 ||
     g("tingling")>=5 ||
     g("night")>=5;
 
-  shoulderReadiness=
+  const followupPenalty =
+    (
+      !document
+        .getElementById("pain24")
+        .disabled
+      &&
+      document
+        .getElementById("pain24")
+        .value !== ""
+    )
+      ?g("pain24")*10
+      :0;
+
+  shoulderReadiness =
     Math.max(
       0,
       Math.round(
         100
         -selectedPain*16
-        -g("pain24")*10
+        -followupPenalty
         -g("stiff")*5
         -g("night")*6
       )
     );
 
-  performanceReadiness=
+  performanceReadiness =
     Math.max(
       0,
       Math.round(
@@ -5392,14 +7049,9 @@ function evaluate(){
       )
     );
 
-  /*
-    La spalla pesa di più perché il programma
-    deve essere shoulder-safe.
-  */
-
-  readiness=
+  readiness =
     Math.round(
-      shoulderReadiness*.65+
+      shoulderReadiness*.65 +
       performanceReadiness*.35
     );
 
@@ -5407,51 +7059,49 @@ function evaluate(){
     .getElementById(
       "shoulderReadinessValue"
     )
-    .textContent=
+    .textContent =
       shoulderReadiness+"%";
 
   document
     .getElementById(
       "performanceReadinessValue"
     )
-    .textContent=
+    .textContent =
       performanceReadiness+"%";
 
-  const b=
-    document
-      .getElementById(
-        "modeBox"
-      );
+  const box =
+    document.getElementById(
+      "modeBox"
+    );
 
-  const forcedDeload=
+  const forced =
     earlyDeloadActive();
 
   if(blocked){
 
-    mode="blocked";
+    mode =
+      "blocked";
 
-    b.className=
+    box.className =
       "mode red";
 
-    b.innerHTML=
-      "<strong>⛔ BLOCCO DI SICUREZZA</strong><br>"+
+    box.innerHTML =
+      "<strong>⛔ BLOCCO DI SICUREZZA</strong><br>" +
       "Serve una valutazione clinica prima di allenare la spalla.";
 
   }
 
-  else if(
-    forcedDeload
-  ){
+  else if(forced){
 
-    mode="recovery";
+    mode =
+      "recovery";
 
-    b.className=
+    box.className =
       "mode red";
 
-    b.innerHTML=
-      "<strong>🔻 DELOAD ANTICIPATO</strong><br>"+
-      "Due risposte consecutive non ottimali: "+
-      "volume e intensità vengono ridotti.";
+    box.innerHTML =
+      "<strong>🔻 DELOAD ANTICIPATO</strong><br>" +
+      "Due risposte consecutive non ottimali: volume e intensità ridotti.";
 
   }
 
@@ -5460,13 +7110,14 @@ function evaluate(){
     shoulderReadiness<45
   ){
 
-    mode="recovery";
+    mode =
+      "recovery";
 
-    b.className=
+    box.className =
       "mode red";
 
-    b.innerHTML=
-      "<strong>🔴 RECOVERY</strong><br>"+
+    box.innerHTML =
+      "<strong>🔴 RECOVERY</strong><br>" +
       "Mobilità dolce, gambe, core e cardio leggero.";
 
   }
@@ -5477,27 +7128,29 @@ function evaluate(){
     performanceReadiness<55
   ){
 
-    mode="safe";
+    mode =
+      "safe";
 
-    b.className=
+    box.className =
       "mode yellow";
 
-    b.innerHTML=
-      "<strong>🟡 SAFE MODE</strong><br>"+
+    box.innerHTML =
+      "<strong>🟡 SAFE MODE</strong><br>" +
       "La spalla e/o la performance non giustificano progressione oggi.";
 
   }
 
   else{
 
-    mode="build";
+    mode =
+      "build";
 
-    b.className=
+    box.className =
       "mode green";
 
-    b.innerHTML=
-      "<strong>🟢 BUILD MODE</strong><br>"+
-      "Progressione controllata consentita.";
+    box.innerHTML =
+      "<strong>🟢 BUILD MODE</strong><br>" +
+      "Progressione controllata consentita se anche lo storico confermato è favorevole.";
 
   }
 
@@ -5505,7 +7158,7 @@ function evaluate(){
     .getElementById(
       "headerStatus"
     )
-    .textContent=
+    .textContent =
       blocked
         ?"SESSIONE BLOCCATA"
         :mode.toUpperCase();
@@ -5514,7 +7167,7 @@ function evaluate(){
     .getElementById(
       "todayTitle"
     )
-    .textContent=
+    .textContent =
       blocked
         ?"Valutazione clinica consigliata"
         :mode==="recovery"
@@ -5527,31 +7180,26 @@ function evaluate(){
     .getElementById(
       "todayMessage"
     )
-    .textContent=
+    .textContent =
       blocked
         ?"Non usare l'app per allenare la spalla con questi sintomi."
         :(
-          `Spalla ${shoulderReadiness}% · `+
-          `Performance ${performanceReadiness}% · `+
-          `Motore ${progressionSignal()}.`
+          `Spalla ${shoulderReadiness}% · ` +
+          `Performance ${performanceReadiness}% · ` +
+          `Motore ${progressionSignal()} · ` +
+          `Livello ${currentAthleteLevel()}.`
         );
-
-  document
-    .getElementById(
-      "startToday"
-    )
-    .disabled=
-      blocked;
 
   document
     .getElementById(
       "progressionAdvice"
     )
-    .textContent=
+    .textContent =
       progressionText();
 
   generateToday();
   renderPreviews();
+  updateStartButtonState();
   dashboard(false);
 
 }
@@ -5562,7 +7210,7 @@ function evaluate(){
 
 function template(goal){
 
-  const t={
+  const t = {
 
     longevity:[
       "strength",
@@ -5616,8 +7264,8 @@ function template(goal){
 
   };
 
-  return(
-    t[goal]||
+  return (
+    t[goal] ||
     t.hybrid
   );
 
@@ -5625,7 +7273,7 @@ function template(goal){
 
 function mask(n){
 
-  return(
+  return (
     {
       3:[1,0,1,0,1,0,0],
       4:[1,1,0,1,0,1,0],
@@ -5640,7 +7288,7 @@ function mask(n){
 
 function plan(type){
 
-  const m={
+  const map = {
 
     rehab:
       shoulder.reset,
@@ -5679,20 +7327,18 @@ function plan(type){
 
   };
 
-  let ids=[
+  let ids = [
     ...(
-      m[type]||
-      m.recovery
+      map[type] ||
+      map.recovery
     )
   ];
 
-  if(
-    mode==="safe"
-  ){
+  if(mode==="safe"){
 
-    ids=
+    ids =
       ids.filter(
-        id=>
+        id =>
           ![
             "thrust",
             "mountain"
@@ -5701,13 +7347,11 @@ function plan(type){
 
   }
 
-  if(
-    mode==="recovery"
-  ){
+  if(mode==="recovery"){
 
-    ids=
+    ids =
       ids.filter(
-        id=>
+        id =>
           ![
             "inclinePush",
             "carry",
@@ -5722,6 +7366,10 @@ function plan(type){
 
 }
 
+/* =========================================================
+   GENERA OGGI
+   ========================================================= */
+
 function generateToday(){
 
   if(
@@ -5730,30 +7378,30 @@ function generateToday(){
     return;
   }
 
-  const d=
+  const d =
     data();
 
-  const i=
+  const i =
     dayIndex();
 
-  const training=
+  const training =
     mask(
       d.settings.days
     )[i];
 
-  const scheduled=
+  const scheduled =
     template(
       d.settings.goal
     )[i];
 
-  const type=
+  const type =
     !training
       ?"recovery"
       :mode==="recovery"
       ?"recovery"
       :scheduled;
 
-  let ids=
+  let ids =
     mode==="recovery"
       ?[
           "breathing",
@@ -5765,7 +7413,7 @@ function generateToday(){
         ]
       :plan(type);
 
-  ids=
+  ids =
     enhance(
       ids,
       type
@@ -5776,25 +7424,24 @@ function generateToday(){
     earlyDeloadActive()
   ){
 
-    ids=
+    ids =
       ids.filter(
-        (_,idx)=>
+        (_,idx) =>
           idx%3!==2
       );
 
   }
 
-  currentWorkout=
+  currentWorkout =
     fitToTime(
       ids,
       d.settings.minutes
     );
 
   render(
-    document
-      .getElementById(
-        "todayWorkout"
-      ),
+    document.getElementById(
+      "todayWorkout"
+    ),
     currentWorkout
   );
 
@@ -5806,7 +7453,7 @@ function generateToday(){
 }
 
 /* =========================================================
-   RENDER WORKOUT
+   RENDER
    ========================================================= */
 
 function render(
@@ -5818,28 +7465,27 @@ function render(
     return;
   }
 
-  const safeList=
+  const arr =
     Array.isArray(list)
       ?list
       :[];
 
-  target.innerHTML=
-    safeList.length
-      ?safeList.map(
-          (e,i)=>{
+  target.innerHTML =
+    arr.length
+      ?arr.map(
+          (e,i) => {
 
-            const reason=
-              e.reason||
-              "";
+            const reason =
+              e.reason || "";
 
-            const reasonClass=
+            const cls =
               reason.startsWith("↑")
                 ?"up"
                 :reason.startsWith("↓")
                 ?"down"
                 :"neutral";
 
-            return`
+            return `
               <div class="workout-item">
 
                 <div>
@@ -5857,7 +7503,7 @@ function render(
                   ${
                     reason
                       ?`
-                        <div class="reason ${reasonClass}">
+                        <div class="reason ${cls}">
                           ${escapeHtml(reason)}
                         </div>
                       `
@@ -5869,8 +7515,7 @@ function render(
                 <div class="tag">
                   ${escapeHtml(
                     String(
-                      e.c||
-                      ""
+                      e.c || ""
                     ).toUpperCase()
                   )}
                 </div>
@@ -5904,17 +7549,16 @@ function showPage(name){
     "settings"
   ]
   .forEach(
-    p=>{
+    p => {
 
-      const el=
-        document
-          .getElementById(
-            "page-"+p
-          );
+      const e =
+        document.getElementById(
+          "page-"+p
+        );
 
-      if(el){
+      if(e){
 
-        el.classList.toggle(
+        e.classList.toggle(
           "hidden",
           p!==name
         );
@@ -5929,40 +7573,30 @@ function showPage(name){
       ".nav button"
     )
     .forEach(
-      b=>
+      b =>
         b.classList.toggle(
           "active",
           b.dataset.page===name
         )
     );
 
-  if(
-    name==="plan"
-  ){
+  if(name==="plan"){
     renderWeek();
   }
 
-  if(
-    name==="progress"
-  ){
+  if(name==="progress"){
     renderProgress();
   }
 
-  if(
-    name==="tests"
-  ){
+  if(name==="tests"){
     renderTests();
   }
 
-  if(
-    name==="library"
-  ){
+  if(name==="library"){
     renderLibrary();
   }
 
-  if(
-    name==="physio"
-  ){
+  if(name==="physio"){
     renderPhysioPreview();
   }
 
@@ -5987,7 +7621,7 @@ function segment(btn){
       "button"
     )
     .forEach(
-      b=>
+      b =>
         b.classList.remove(
           "active"
         )
@@ -6004,10 +7638,11 @@ function selectShoulder(
   btn
 ){
 
-  shoulderRoutine=
+  shoulderRoutine =
     type;
 
   segment(btn);
+
   renderPreviews();
 
 }
@@ -6017,10 +7652,11 @@ function selectMilitary(
   btn
 ){
 
-  militaryLevel=
+  militaryLevel =
     type;
 
   segment(btn);
+
   renderPreviews();
 
 }
@@ -6030,10 +7666,11 @@ function selectRun(
   btn
 ){
 
-  runType=
+  runType =
     type;
 
   segment(btn);
+
   renderPreviews();
 
 }
@@ -6043,10 +7680,11 @@ function selectPhysio(
   btn
 ){
 
-  physioRoutine=
+  physioRoutine =
     type;
 
   segment(btn);
+
   renderPhysioPreview();
 
 }
@@ -6057,18 +7695,10 @@ function selectPhysio(
 
 function renderPhysioPreview(){
 
-  const target=
-    document
-      .getElementById(
-        "physioPreview"
-      );
-
-  if(!target){
-    return;
-  }
-
   render(
-    target,
+    document.getElementById(
+      "physioPreview"
+    ),
     buildPhysioFlow(
       physioRoutine
     )
@@ -6076,23 +7706,26 @@ function renderPhysioPreview(){
 
 }
 
-function previewFit(ids,type){
+function previewFit(
+  ids,
+  type
+){
 
-  return(
-    fitToTime(
-      enhance(
-        ids,
-        type
-      ),
-      data().settings.minutes
-    )
+  return fitToTime(
+    enhance(
+      ids,
+      type
+    ),
+    data()
+      .settings
+      .minutes
   );
 
 }
 
 function renderPreviews(){
 
-  let s=[
+  let s = [
     ...shoulder[
       shoulderRoutine
     ]
@@ -6102,7 +7735,7 @@ function renderPreviews(){
     shoulderRoutine==="build"
   ){
 
-    s=
+    s =
       enhance(
         s,
         "rehab"
@@ -6111,17 +7744,18 @@ function renderPreviews(){
   }
 
   render(
-    document
-      .getElementById(
-        "shoulderPreview"
-      ),
+    document.getElementById(
+      "shoulderPreview"
+    ),
     fitToTime(
       s,
-      data().settings.minutes
+      data()
+        .settings
+        .minutes
     )
   );
 
-  let m=
+  let m =
     mode==="recovery" ||
     blocked
       ?military.recovery
@@ -6131,13 +7765,11 @@ function renderPreviews(){
           ]
         ];
 
-  if(
-    mode==="safe"
-  ){
+  if(mode==="safe"){
 
-    m=
+    m =
       m.filter(
-        id=>
+        id =>
           ![
             "thrust",
             "mountain"
@@ -6147,17 +7779,16 @@ function renderPreviews(){
   }
 
   render(
-    document
-      .getElementById(
-        "militaryPreview"
-      ),
+    document.getElementById(
+      "militaryPreview"
+    ),
     previewFit(
       m,
       "military"
     )
   );
 
-  let r=
+  let r =
     mode==="recovery" &&
     ![
       "easy",
@@ -6171,10 +7802,9 @@ function renderPreviews(){
         ];
 
   render(
-    document
-      .getElementById(
-        "runningPreview"
-      ),
+    document.getElementById(
+      "runningPreview"
+    ),
     previewFit(
       r,
       runType==="hyrox"
@@ -6193,20 +7823,20 @@ function renderPreviews(){
 
 function renderWeek(){
 
-  const d=
+  const d =
     data();
 
-  const tpl=
+  const tpl =
     template(
       d.settings.goal
     );
 
-  const mk=
+  const mk =
     mask(
       d.settings.days
     );
 
-  const names=[
+  const names = [
     "Lun",
     "Mar",
     "Mer",
@@ -6216,22 +7846,15 @@ function renderWeek(){
     "Dom"
   ];
 
-  const lab={
+  const labels = {
 
     strength:"Forza totale",
-
     easy:"Corsa Z2",
-
     rehab:"Spalla & mobilità",
-
     recovery:"Recupero",
-
     interval:"Intervalli",
-
     hyrox:"Hyrox Safe",
-
     military:"Military Safe",
-
     tempo:"Tempo Run"
 
   };
@@ -6240,11 +7863,11 @@ function renderWeek(){
     .getElementById(
       "weekGrid"
     )
-    .innerHTML=
+    .innerHTML =
       names.map(
-        (n,i)=>{
+        (n,i) => {
 
-          let type=
+          let type =
             mk[i]
               ?tpl[i]
               :"recovery";
@@ -6259,10 +7882,13 @@ function renderWeek(){
               "tempo"
             ].includes(type)
           ){
-            type="recovery";
+
+            type =
+              "recovery";
+
           }
 
-          return`
+          return `
             <div class="day-card ${i===dayIndex()?"today":""}">
 
               <strong>
@@ -6271,7 +7897,7 @@ function renderWeek(){
 
               <p>
                 ${escapeHtml(
-                  lab[type]||
+                  labels[type] ||
                   type
                 )}
               </p>
@@ -6313,31 +7939,75 @@ function requiredCheck(){
   }
 
   /*
-    Qui il follow-up viene applicato alla seduta PRECEDENTE.
+    FIX IMPORTANTE:
+    se esiste un follow-up eleggibile
+    la risposta NON può essere implicita.
   */
 
+  if(
+    followupNeedsAnswer() &&
+    !followupAnswerSelected()
+  ){
+
+    alert(
+      "Prima di iniziare devi indicare come hai risposto alla seduta precedente."
+    );
+
+    document
+      .getElementById(
+        "pain24"
+      )
+      .focus();
+
+    return false;
+
+  }
+
   commitPreviousFollowup();
+
+  /*
+    Il follow-up appena salvato potrebbe:
+    - autorizzare una progressione
+    - attivare un Deload
+    - cambiare il trend globale
+
+    quindi rivalutiamo il motore.
+  */
+
+  if(
+    selectedPain!==null
+  ){
+    evaluate();
+  }
 
   return true;
 
 }
 
 /* =========================================================
-   AVVIO WORKOUT
+   AVVIO ALLENAMENTI
    ========================================================= */
 
 function startGeneratedWorkout(){
 
   if(
-    requiredCheck()
+    !requiredCheck()
   ){
-
-    startWorkout(
-      currentWorkout,
-      "Piano giornaliero"
-    );
-
+    return;
   }
+
+  /*
+    FIX:
+    currentWorkout deve essere rigenerato DOPO
+    l'eventuale nuovo livello permanente.
+  */
+
+  generateToday();
+
+  startWorkout(
+    currentWorkout,
+    "Piano giornaliero"
+  );
 
 }
 
@@ -6349,7 +8019,7 @@ function startShoulder(){
     return;
   }
 
-  let ids=[
+  let ids = [
     ...shoulder[
       shoulderRoutine
     ]
@@ -6360,7 +8030,7 @@ function startShoulder(){
     shoulderRoutine==="build"
   ){
 
-    ids=
+    ids =
       shoulder.reset;
 
   }
@@ -6369,7 +8039,7 @@ function startShoulder(){
     shoulderRoutine==="build"
   ){
 
-    ids=
+    ids =
       enhance(
         ids,
         "rehab"
@@ -6380,7 +8050,9 @@ function startShoulder(){
   startWorkout(
     fitToTime(
       ids,
-      data().settings.minutes
+      data()
+        .settings
+        .minutes
     ),
     "Shoulder Rehab"
   );
@@ -6395,7 +8067,7 @@ function startMilitary(){
     return;
   }
 
-  let ids=
+  let ids =
     mode==="recovery"
       ?military.recovery
       :[
@@ -6404,13 +8076,11 @@ function startMilitary(){
           ]
         ];
 
-  if(
-    mode==="safe"
-  ){
+  if(mode==="safe"){
 
-    ids=
+    ids =
       ids.filter(
-        id=>
+        id =>
           ![
             "thrust",
             "mountain"
@@ -6425,7 +8095,9 @@ function startMilitary(){
         ids,
         "military"
       ),
-      data().settings.minutes
+      data()
+        .settings
+        .minutes
     ),
     "Military Safe"
   );
@@ -6440,7 +8112,7 @@ function startRunning(){
     return;
   }
 
-  let ids=
+  let ids =
     mode==="recovery" &&
     ![
       "easy",
@@ -6463,7 +8135,9 @@ function startRunning(){
           ?"recovery"
           :"easy"
       ),
-      data().settings.minutes
+      data()
+        .settings
+        .minutes
     ),
     "Running & Hyrox"
   );
@@ -6482,14 +8156,16 @@ function startSpecial(type){
 
   }
 
-  const ids=
+  const ids =
     unique(
       specials[type]
     );
 
   startWorkout(
     ids
-      .map(exercise)
+      .map(
+        exercise
+      )
       .filter(Boolean),
     type
   );
@@ -6508,7 +8184,7 @@ function startPhysio(){
     return;
   }
 
-  const list=
+  const list =
     buildPhysioFlow(
       physioRoutine
     );
@@ -6520,7 +8196,7 @@ function startPhysio(){
       .weights
   ){
 
-    const ok=
+    const ok =
       confirm(
         "Questa scheda contiene esercizi con manubri o bilanciere. " +
         "Vuoi aprire comunque la guida fedele al programma originale?"
@@ -6532,28 +8208,25 @@ function startPhysio(){
 
   }
 
-  const confirmKey=
-    "erjonDefinitivePhysioConfirmDate";
-
-  const lastConfirm=
+  const last =
     localStorage.getItem(
-      confirmKey
+      PHYSIO_CONFIRM_KEY
     );
 
-  const ninetyDays=
+  const ninety =
     90*
     86400000;
 
   if(
-    !lastConfirm ||
+    !last ||
     (
       Date.now()-
-      Date.parse(lastConfirm)
+      Date.parse(last)
     )>
-    ninetyDays
+    ninety
   ){
 
-    const ok=
+    const ok =
       confirm(
         "Confermi di aver verificato che questa vecchia scheda del fisioterapista " +
         "sia ancora adatta alla tua situazione attuale?"
@@ -6564,7 +8237,7 @@ function startPhysio(){
     }
 
     localStorage.setItem(
-      confirmKey,
+      PHYSIO_CONFIRM_KEY,
       new Date().toISOString()
     );
 
@@ -6586,7 +8259,7 @@ function startPhysio(){
 
 async function requestWakeLock(){
 
-  wakeLockWanted=
+  wakeLockWanted =
     true;
 
   if(
@@ -6600,7 +8273,7 @@ async function requestWakeLock(){
 
   try{
 
-    wakeLock=
+    wakeLock =
       await navigator
         .wakeLock
         .request(
@@ -6610,8 +8283,8 @@ async function requestWakeLock(){
     wakeLock
       .addEventListener(
         "release",
-        ()=>{
-          wakeLock=null;
+        () => {
+          wakeLock = null;
         }
       );
 
@@ -6620,7 +8293,7 @@ async function requestWakeLock(){
   }catch(err){
 
     console.warn(
-      "Wake Lock non disponibile",
+      "Wake Lock non disponibile:",
       err
     );
 
@@ -6632,7 +8305,7 @@ async function requestWakeLock(){
 
 async function releaseWakeLock(){
 
-  wakeLockWanted=
+  wakeLockWanted =
     false;
 
   if(wakeLock){
@@ -6641,7 +8314,8 @@ async function releaseWakeLock(){
       await wakeLock.release();
     }catch{}
 
-    wakeLock=null;
+    wakeLock =
+      null;
 
   }
 
@@ -6650,7 +8324,7 @@ async function releaseWakeLock(){
 document
   .addEventListener(
     "visibilitychange",
-    ()=>{
+    () => {
 
       if(
         document.visibilityState==="visible" &&
@@ -6666,13 +8340,13 @@ document
   );
 
 /* =========================================================
-   SESSIONE GUIDATA
+   SESSIONE
    ========================================================= */
 
 function startWorkout(
   list,
   type,
-  isAutoFlow=false
+  isAutoFlow = false
 ){
 
   if(
@@ -6692,24 +8366,26 @@ function startWorkout(
     autoAdvanceId
   );
 
-  autoFlow=
+  autoFlow =
     !!isAutoFlow;
 
-  currentWorkout=
+  currentWorkout =
     list.map(
-      x=>({
+      x => ({
         ...x
       })
     );
 
-  currentIndex=0;
+  currentIndex =
+    0;
 
-  currentType=
+  currentType =
     type;
 
-  completedSteps=[];
+  completedSteps =
+    [];
 
-  sessionStartedAt=
+  sessionStartedAt =
     Date.now();
 
   document
@@ -6721,30 +8397,7 @@ function startWorkout(
       "hidden"
     );
 
-  requestWakeLock()
-    .then(
-      ok=>{
-
-        const status=
-          document
-            .getElementById(
-              "voiceStatus"
-            );
-
-        if(
-          status &&
-          ok
-        ){
-
-          status.textContent=
-            voiceEnabled
-              ?"Voce attiva · schermo mantenuto acceso"
-              :"Voce disattivata · schermo mantenuto acceso";
-
-        }
-
-      }
-    );
+  requestWakeLock();
 
   renderSession();
 
@@ -6752,7 +8405,7 @@ function startWorkout(
 
 function renderSession(){
 
-  const e=
+  const e =
     currentWorkout[
       currentIndex
     ];
@@ -6760,6 +8413,7 @@ function renderSession(){
   if(!e){
 
     closeSession();
+
     return;
 
   }
@@ -6768,7 +8422,7 @@ function renderSession(){
     .getElementById(
       "sessionTitle"
     )
-    .textContent=
+    .textContent =
       `${currentIndex+1}/${currentWorkout.length} · ${currentType}`;
 
   document
@@ -6776,7 +8430,7 @@ function renderSession(){
       "sessionProgress"
     )
     .style
-    .width=
+    .width =
       (
         (
           currentIndex+1
@@ -6792,35 +8446,33 @@ function renderSession(){
     .getElementById(
       "exerciseVisual"
     )
-    .textContent=
-      e.i||"💪";
+    .textContent =
+      e.i || "💪";
 
   document
     .getElementById(
       "exerciseTitle"
     )
-    .textContent=
-      e.t||"";
+    .textContent =
+      e.t || "";
 
   document
     .getElementById(
       "exerciseDose"
     )
-    .textContent=
-      e.d||"";
+    .textContent =
+      e.d || "";
 
-  const reason=
-    document
-      .getElementById(
-        "exerciseReason"
-      );
+  const reason =
+    document.getElementById(
+      "exerciseReason"
+    );
 
-  reason.textContent=
-    e.reason||
-    "";
+  reason.textContent =
+    e.reason || "";
 
-  reason.className=
-    "reason "+
+  reason.className =
+    "reason " +
     (
       e.reason?.startsWith("↑")
         ?"up"
@@ -6833,15 +8485,15 @@ function renderSession(){
     .getElementById(
       "exerciseInstructions"
     )
-    .textContent=
-      e.x||"";
+    .textContent =
+      e.x || "";
 
-  timerLeft=
+  timerLeft =
     Number(
-      e.s||90
+      e.s || 90
     );
 
-  timerInitial=
+  timerInitial =
     timerLeft;
 
   resetTimer(false);
@@ -6849,7 +8501,7 @@ function renderSession(){
   updateVoiceUI();
 
   setTimeout(
-    ()=>
+    () =>
       speak(
         `${e.t}. ${e.d}.`,
         true
@@ -6861,18 +8513,15 @@ function renderSession(){
 
 function markStepCompleted(){
 
-  const e=
+  const e =
     currentWorkout[
       currentIndex
     ];
 
-  if(!e){
-    return;
-  }
-
   if(
+    !e ||
     completedSteps.some(
-      x=>
+      x =>
         x.index===
         currentIndex
     )
@@ -6886,21 +8535,21 @@ function markStepCompleted(){
       currentIndex,
 
     id:
-      e.id||"",
+      e.id || "",
 
     title:
-      e.t||"",
+      e.t || "",
 
     dose:
-      e.d||"",
+      e.d || "",
 
     seconds:
       Number(
-        e.s||0
+        e.s || 0
       ),
 
     reason:
-      e.reason||""
+      e.reason || ""
 
   });
 
@@ -6979,7 +8628,8 @@ function closeSession(){
     autoAdvanceId
   );
 
-  autoFlow=false;
+  autoFlow =
+    false;
 
   stopTimer();
 
@@ -7006,7 +8656,7 @@ function closeSession(){
 
 function speak(
   text,
-  interrupt=false
+  interrupt = false
 ){
 
   if(
@@ -7029,38 +8679,38 @@ function speak(
 
     }
 
-    const u=
+    const u =
       new SpeechSynthesisUtterance(
         text
       );
 
-    u.lang=
+    u.lang =
       "it-IT";
 
-    u.rate=
+    u.rate =
       1.03;
 
-    u.pitch=
+    u.pitch =
       1;
 
-    u.volume=
+    u.volume =
       1;
 
-    const voices=
+    const voices =
       window
         .speechSynthesis
         .getVoices();
 
-    const it=
+    const it =
       voices.find(
-        v=>
+        v =>
           v.lang
             ?.toLowerCase()
             .startsWith("it")
       );
 
     if(it){
-      u.voice=it;
+      u.voice = it;
     }
 
     window
@@ -7070,7 +8720,7 @@ function speak(
   }catch(err){
 
     console.warn(
-      "Voce non disponibile",
+      "Voce non disponibile:",
       err
     );
 
@@ -7080,30 +8730,28 @@ function speak(
 
 function updateVoiceUI(){
 
-  const b=
-    document
-      .getElementById(
-        "voiceBtn"
-      );
+  const btn =
+    document.getElementById(
+      "voiceBtn"
+    );
 
-  const s=
-    document
-      .getElementById(
-        "voiceStatus"
-      );
+  const status =
+    document.getElementById(
+      "voiceStatus"
+    );
 
-  if(b){
+  if(btn){
 
-    b.textContent=
+    btn.textContent =
       voiceEnabled
         ?"🔊 Voce attiva"
         :"🔇 Voce disattivata";
 
   }
 
-  if(s){
+  if(status){
 
-    s.textContent=
+    status.textContent =
       voiceEnabled
         ?"Countdown e indicazioni vocali attivi"
         :"Indicazioni vocali disattivate";
@@ -7114,23 +8762,22 @@ function updateVoiceUI(){
 
 function persistVoice(){
 
-  const d=
+  const d =
     data();
 
-  d.settings.voice=
+  d.settings.voice =
     voiceEnabled;
 
   save(d);
 
-  const c=
-    document
-      .getElementById(
-        "voiceSetting"
-      );
+  const c =
+    document.getElementById(
+      "voiceSetting"
+    );
 
   if(c){
 
-    c.checked=
+    c.checked =
       voiceEnabled;
 
   }
@@ -7139,16 +8786,13 @@ function persistVoice(){
 
 function toggleVoice(){
 
-  voiceEnabled=
+  voiceEnabled =
     !voiceEnabled;
 
   persistVoice();
-
   updateVoiceUI();
 
-  if(
-    voiceEnabled
-  ){
+  if(voiceEnabled){
 
     speak(
       "Voce attiva",
@@ -7167,7 +8811,7 @@ function toggleVoice(){
 
 function repeatVoiceInstruction(){
 
-  const e=
+  const e =
     currentWorkout[
       currentIndex
     ];
@@ -7189,9 +8833,14 @@ function repeatVoiceInstruction(){
 
 function resetVoiceCues(){
 
-  halfCuePlayed=false;
-  tenCuePlayed=false;
-  fiveCuePlayed=false;
+  halfCuePlayed =
+    false;
+
+  tenCuePlayed =
+    false;
+
+  fiveCuePlayed =
+    false;
 
 }
 
@@ -7204,27 +8853,26 @@ function beginCountdown(){
     return;
   }
 
-  countdownRunning=
+  countdownRunning =
     true;
 
-  let c=3;
+  let c =
+    3;
 
-  const display=
-    document
-      .getElementById(
-        "timerDisplay"
-      );
+  const display =
+    document.getElementById(
+      "timerDisplay"
+    );
 
-  const btn=
-    document
-      .getElementById(
-        "timerBtn"
-      );
+  const btn =
+    document.getElementById(
+      "timerBtn"
+    );
 
-  btn.textContent=
+  btn.textContent =
     "Preparati";
 
-  display.textContent=
+  display.textContent =
     "3";
 
   speak(
@@ -7232,15 +8880,15 @@ function beginCountdown(){
     true
   );
 
-  countdownId=
+  countdownId =
     setInterval(
-      ()=>{
+      () => {
 
         c--;
 
         if(c===2){
 
-          display.textContent=
+          display.textContent =
             "2";
 
           speak(
@@ -7253,7 +8901,7 @@ function beginCountdown(){
 
         if(c===1){
 
-          display.textContent=
+          display.textContent =
             "1";
 
           speak(
@@ -7268,13 +8916,13 @@ function beginCountdown(){
           countdownId
         );
 
-        countdownId=
+        countdownId =
           null;
 
-        countdownRunning=
+        countdownRunning =
           false;
 
-        display.textContent=
+        display.textContent =
           "VIA";
 
         speak(
@@ -7294,31 +8942,27 @@ function beginCountdown(){
 
 function startRealTimer(){
 
-  if(
-    timerRunning
-  ){
+  if(timerRunning){
     return;
   }
 
-  timerRunning=
+  timerRunning =
     true;
 
   document
     .getElementById(
       "timerBtn"
     )
-    .textContent=
+    .textContent =
       "Pausa";
 
   updateTimer();
 
-  timerId=
+  timerId =
     setInterval(
-      ()=>{
+      () => {
 
-        if(
-          timerLeft>0
-        ){
+        if(timerLeft>0){
 
           timerLeft--;
 
@@ -7328,9 +8972,7 @@ function startRealTimer(){
 
         }
 
-        if(
-          timerLeft<=0
-        ){
+        if(timerLeft<=0){
 
           finishTimer();
 
@@ -7344,9 +8986,7 @@ function startRealTimer(){
 
 function toggleTimer(){
 
-  if(
-    countdownRunning
-  ){
+  if(countdownRunning){
 
     cancelCountdown();
 
@@ -7354,7 +8994,7 @@ function toggleTimer(){
       .getElementById(
         "timerBtn"
       )
-      .textContent=
+      .textContent =
         "Avvia timer";
 
     updateTimer();
@@ -7363,9 +9003,7 @@ function toggleTimer(){
 
   }
 
-  if(
-    timerRunning
-  ){
+  if(timerRunning){
 
     stopTimer(false);
 
@@ -7373,7 +9011,7 @@ function toggleTimer(){
       .getElementById(
         "timerBtn"
       )
-      .textContent=
+      .textContent =
         "Riprendi";
 
     speak(
@@ -7385,12 +9023,8 @@ function toggleTimer(){
 
   }
 
-  if(
-    timerLeft<=0
-  ){
-
+  if(timerLeft<=0){
     resetTimer();
-
   }
 
   if(
@@ -7415,14 +9049,14 @@ function toggleTimer(){
 
 function addTimerSeconds(sec){
 
-  timerLeft=
+  timerLeft =
     Math.max(
       0,
       timerLeft+
-      Number(sec||0)
+      Number(sec || 0)
     );
 
-  timerInitial=
+  timerInitial =
     Math.max(
       timerInitial,
       timerLeft
@@ -7443,10 +9077,10 @@ function isRecoveryStep(e){
     return false;
   }
 
-  return(
+  return (
     /recupero|riposa|preparazione carichi/i
       .test(
-        e.t||""
+        e.t || ""
       )
     ||
     e.i==="⏸️"
@@ -7458,7 +9092,7 @@ function isRecoveryStep(e){
 
 function skipRecovery(){
 
-  const e=
+  const e =
     currentWorkout[
       currentIndex
     ];
@@ -7477,7 +9111,6 @@ function skipRecovery(){
   }
 
   stopTimer();
-
   nextStep();
 
 }
@@ -7491,7 +9124,7 @@ function announceTimerCues(){
     return;
   }
 
-  const half=
+  const half =
     Math.floor(
       timerInitial/2
     );
@@ -7502,7 +9135,8 @@ function announceTimerCues(){
     timerInitial>=40
   ){
 
-    halfCuePlayed=true;
+    halfCuePlayed =
+      true;
 
     speak(
       "Metà"
@@ -7515,7 +9149,8 @@ function announceTimerCues(){
     timerLeft===10
   ){
 
-    tenCuePlayed=true;
+    tenCuePlayed =
+      true;
 
     speak(
       "Dieci secondi"
@@ -7528,7 +9163,8 @@ function announceTimerCues(){
     timerLeft===5
   ){
 
-    fiveCuePlayed=true;
+    fiveCuePlayed =
+      true;
 
     speak(
       "Cinque"
@@ -7536,21 +9172,15 @@ function announceTimerCues(){
 
   }
 
-  if(
-    timerLeft===3
-  ){
+  if(timerLeft===3){
     speak("Tre");
   }
 
-  if(
-    timerLeft===2
-  ){
+  if(timerLeft===2){
     speak("Due");
   }
 
-  if(
-    timerLeft===1
-  ){
+  if(timerLeft===1){
     speak("Uno");
   }
 
@@ -7562,22 +9192,27 @@ function finishTimer(){
     timerId
   );
 
-  timerId=null;
-  timerRunning=false;
-  timerLeft=0;
+  timerId =
+    null;
+
+  timerRunning =
+    false;
+
+  timerLeft =
+    0;
 
   document
     .getElementById(
       "timerDisplay"
     )
-    .textContent=
+    .textContent =
       "FINE";
 
   document
     .getElementById(
       "timerBtn"
     )
-    .textContent=
+    .textContent =
       "Ripeti timer";
 
   speak(
@@ -7600,10 +9235,10 @@ function finishTimer(){
     currentWorkout[
       currentIndex
     ]
-    ?.autoNext!==false
+    ?.autoNext !== false
   ){
 
-    autoAdvanceId=
+    autoAdvanceId =
       setTimeout(
         autoAdvancePhysio,
         650
@@ -7615,9 +9250,7 @@ function finishTimer(){
 
 function autoAdvancePhysio(){
 
-  if(
-    !autoFlow
-  ){
+  if(!autoFlow){
     return;
   }
 
@@ -7632,23 +9265,19 @@ function autoAdvancePhysio(){
 
     renderSession();
 
-    const e=
+    const e =
       currentWorkout[
         currentIndex
       ];
 
     setTimeout(
-      ()=>{
+      () => {
 
-        if(
-          !autoFlow
-        ){
+        if(!autoFlow){
           return;
         }
 
-        if(
-          e.noCountdown
-        ){
+        if(e.noCountdown){
 
           startRealTimer();
 
@@ -7676,8 +9305,11 @@ function cancelCountdown(){
     countdownId
   );
 
-  countdownId=null;
-  countdownRunning=false;
+  countdownId =
+    null;
+
+  countdownRunning =
+    false;
 
   window
     .speechSynthesis
@@ -7686,55 +9318,61 @@ function cancelCountdown(){
 }
 
 function stopTimer(
-  resetButton=true
+  resetButton = true
 ){
 
   clearInterval(
     timerId
   );
 
-  timerId=null;
-  timerRunning=false;
+  timerId =
+    null;
+
+  timerRunning =
+    false;
 
   cancelCountdown();
 
-  if(
-    resetButton
-  ){
+  if(resetButton){
 
-    document
-      .getElementById(
+    const btn =
+      document.getElementById(
         "timerBtn"
-      )
-      .textContent=
+      );
+
+    if(btn){
+
+      btn.textContent =
         "Avvia timer";
+
+    }
 
   }
 
 }
 
 function resetTimer(
-  reset=true
+  reset = true
 ){
 
   stopTimer();
 
   if(reset){
 
-    timerLeft=
+    timerLeft =
       Number(
         currentWorkout[
           currentIndex
         ]
-        ?.s||90
+        ?.s || 90
       );
 
-    timerInitial=
+    timerInitial =
       timerLeft;
 
   }else{
 
-    timerInitial=
+    timerInitial =
       timerLeft;
 
   }
@@ -7746,19 +9384,24 @@ function resetTimer(
 
 function updateTimer(){
 
-  document
-    .getElementById(
+  const el =
+    document.getElementById(
       "timerDisplay"
-    )
-    .textContent=
-      `${String(
-        Math.floor(
-          timerLeft/60
-        )
-      ).padStart(2,"0")}:`+
-      `${String(
-        timerLeft%60
-      ).padStart(2,"0")}`;
+    );
+
+  if(!el){
+    return;
+  }
+
+  el.textContent =
+    `${String(
+      Math.floor(
+        timerLeft/60
+      )
+    ).padStart(2,"0")}:` +
+    `${String(
+      timerLeft%60
+    ).padStart(2,"0")}`;
 
 }
 
@@ -7768,14 +9411,15 @@ function updateTimer(){
 
 function openPost(){
 
-  postPain=null;
+  postPain =
+    null;
 
   document
     .querySelectorAll(
       "#postScale button"
     )
     .forEach(
-      b=>
+      b =>
         b.classList.remove(
           "active"
         )
@@ -7785,13 +9429,14 @@ function openPost(){
     .getElementById(
       "sessionRPE"
     )
-    .value="";
+    .value =
+      "";
 
   document
     .getElementById(
       "saveSessionBtn"
     )
-    .disabled=
+    .disabled =
       true;
 
   document
@@ -7820,14 +9465,15 @@ function closePost(){
 
 function setPostPain(v){
 
-  postPain=v;
+  postPain =
+    v;
 
   document
     .querySelectorAll(
       "#postScale button"
     )
     .forEach(
-      (b,i)=>
+      (b,i) =>
         b.classList.toggle(
           "active",
           i===v
@@ -7849,7 +9495,7 @@ document
 
 function validatePost(){
 
-  const rpe=
+  const r =
     Number(
       document
         .getElementById(
@@ -7862,19 +9508,19 @@ function validatePost(){
     .getElementById(
       "saveSessionBtn"
     )
-    .disabled=
+    .disabled =
       !(
         postPain!==null &&
-        Number.isFinite(rpe) &&
-        rpe>=1 &&
-        rpe<=10
+        Number.isFinite(r) &&
+        r>=1 &&
+        r<=10
       );
 
 }
 
 function saveCompletedSession(){
 
-  const rpe=
+  const rpe =
     Number(
       document
         .getElementById(
@@ -7898,10 +9544,10 @@ function saveCompletedSession(){
 
   }
 
-  const d=
+  const d =
     data();
 
-  const durationSec=
+  const durationSec =
     sessionStartedAt
       ?Math.max(
           0,
@@ -7916,31 +9562,36 @@ function saveCompletedSession(){
         )
       :0;
 
-  const snapshot=
+  const snapshot =
     currentWorkout.map(
-      (e,i)=>({
+      (e,i) => ({
 
         index:i,
 
         id:
-          e.id||"",
+          e.id || "",
 
         title:
-          e.t||"",
+          e.t || "",
 
         dose:
-          e.d||"",
+          e.d || "",
 
         seconds:
           Number(
-            e.s||0
+            e.s || 0
           ),
 
         category:
-          e.c||"",
+          e.c || "",
 
         reason:
-          e.reason||""
+          e.reason || "",
+
+        permanentLevel:
+          getLevel(
+            e.id
+          )
 
       })
     );
@@ -7966,17 +9617,14 @@ function saveCompletedSession(){
 
     postPain,
 
-    /*
-      IMPORTANTISSIMO:
-      il follow-up di questa seduta non è ancora noto.
-      Verrà compilato dal check successivo.
-    */
-
     nextDayReaction:
       null,
 
     followUpAt:
       null,
+
+    progressionApplied:
+      false,
 
     mode,
 
@@ -8006,7 +9654,7 @@ function saveCompletedSession(){
 
     sessionLoad:
       Math.round(
-        durationSec/60*
+        durationSec/60 *
         rpe
       ),
 
@@ -8036,10 +9684,11 @@ function saveCompletedSession(){
 
   closePost();
 
+  updateFollowupUI();
   dashboard(true);
 
   alert(
-    "Sessione salvata. La risposta a 24 ore verrà collegata a questa seduta al prossimo check."
+    "Sessione salvata. La progressione permanente resterà bloccata finché questa seduta non avrà un follow-up eleggibile e favorevole."
   );
 
 }
@@ -8050,7 +9699,7 @@ function saveCompletedSession(){
 
 function logActivity(type){
 
-  const d=
+  const d =
     data();
 
   d.activities.push({
@@ -8092,11 +9741,11 @@ function streak(s){
     return 0;
   }
 
-  const dates=[
+  const dates = [
     ...new Set(
       s
         .map(
-          x=>x.day
+          x => x.day
         )
         .filter(Boolean)
     )
@@ -8104,9 +9753,10 @@ function streak(s){
   .sort()
   .reverse();
 
-  let count=0;
+  let count =
+    0;
 
-  let cursor=
+  let cursor =
     new Date();
 
   cursor.setHours(
@@ -8121,13 +9771,12 @@ function streak(s){
     of dates
   ){
 
-    const dt=
+    const dt =
       new Date(
-        ds+
-        "T00:00:00"
+        ds+"T00:00:00"
       );
 
-    const diff=
+    const diff =
       Math.round(
         (
           cursor-dt
@@ -8142,7 +9791,9 @@ function streak(s){
     ){
 
       count++;
-      cursor=dt;
+
+      cursor =
+        dt;
 
     }else{
 
@@ -8161,64 +9812,64 @@ function streak(s){
    ========================================================= */
 
 function dashboard(
-  full=true
+  full = true
 ){
 
-  const d=
+  const d =
     data();
 
-  const all=
+  const all =
     d.sessions;
 
-  const recent=
-    all.slice(-10);
+  const confirmed =
+    confirmedSessions(10);
 
-  const n=
+  const n =
     all.length;
 
-  const avg=
-    recent.length
-      ?recent.reduce(
-          (a,b)=>
+  const avg =
+    confirmed.length
+      ?confirmed.reduce(
+          (a,b) =>
             a+
             Number(
-              b.prePain||0
+              b.prePain || 0
             ),
           0
         )
         /
-        recent.length
+        confirmed.length
       :null;
 
-  const good=
-    recent.length
-      ?recent.filter(
+  const good =
+    confirmed.length
+      ?confirmed.filter(
           sessionTolerated
         ).length
         /
-        recent.length
+        confirmed.length
       :0;
 
-  const score=
-    recent.length
+  const score =
+    confirmed.length
       ?Math.max(
           10,
           Math.min(
             100,
             Math.round(
               100
-              -(avg||0)*12
+              -(avg || 0)*12
               +good*20
             )
           )
         )
       :50;
 
-  const w=
+  const w =
     cycle();
 
-  voiceEnabled=
-    d.settings.voice!==false;
+  voiceEnabled =
+    d.settings.voice !== false;
 
   document
     .getElementById(
@@ -8234,39 +9885,39 @@ function dashboard(
     .getElementById(
       "scoreValue"
     )
-    .textContent=
+    .textContent =
       score+"%";
 
   document
     .getElementById(
       "scoreLabel"
     )
-    .textContent=
-      recent.length
+    .textContent =
+      confirmed.length
         ?good>=.8
           ?"Tolleranza buona"
           :"Tolleranza da costruire"
-        :"Dati iniziali";
+        :"Servono follow-up confermati";
 
   document
     .getElementById(
       "statSessions"
     )
-    .textContent=
+    .textContent =
       n;
 
   document
     .getElementById(
       "statStreak"
     )
-    .textContent=
+    .textContent =
       streak(all);
 
   document
     .getElementById(
       "phaseTitle"
     )
-    .textContent=
+    .textContent =
       n<20
         ?"Recovery Warrior"
         :n<60
@@ -8277,18 +9928,18 @@ function dashboard(
     .getElementById(
       "phaseText"
     )
-    .textContent=
+    .textContent =
       n<20
         ?"Recupero spalla e basi solide."
         :n<60
         ?"Forza, corsa e resistenza progressive."
-        :"Mantenimento atletico permanente con progressione ciclica.";
+        :"Mantenimento atletico permanente con progressione persistente.";
 
   document
     .getElementById(
       "cycleTitle"
     )
-    .textContent=
+    .textContent =
       earlyDeloadActive()
         ?"Deload anticipato"
         :"Settimana "+cycleName(w);
@@ -8297,9 +9948,9 @@ function dashboard(
     .getElementById(
       "cycleText"
     )
-    .textContent=
+    .textContent =
       earlyDeloadActive()
-        ?"Due sessioni consecutive non ottimali: volume ridotto."
+        ?"Due sessioni consecutive non ottimali: volume ridotto, livello permanente conservato."
         :w===1
         ?"Tecnica e volume moderato."
         :w===2
@@ -8313,48 +9964,41 @@ function dashboard(
       "cycleProgress"
     )
     .style
-    .width=
+    .width =
       w/4*100+"%";
-
-  const age=
-    ageFromBirthDate(
-      d.settings.birthDate
-    );
 
   document
     .getElementById(
       "profileAge"
     )
-    .textContent=
-      age;
+    .textContent =
+      ageFromBirthDate(
+        d.settings.birthDate
+      );
 
   document
     .getElementById(
       "profileLevel"
     )
-    .textContent=
+    .textContent =
       d.settings.athleteLevel==="advanced"
         ?"Avanzato"
         :d.settings.athleteLevel==="beginner"
         ?"Principiante"
         :"Intermedio";
 
-  const goalLabels={
-
-    hybrid:"Hybrid",
-    hyrox:"Hyrox",
-    military:"Military",
-    run10k:"10 km",
-    longevity:"Longevità"
-
-  };
-
   document
     .getElementById(
       "profileGoalMini"
     )
-    .textContent=
-      goalLabels[
+    .textContent =
+      ({
+        hybrid:"Hybrid",
+        hyrox:"Hyrox",
+        military:"Military",
+        run10k:"10 km",
+        longevity:"Longevità"
+      })[
         d.settings.goal
       ]
       ||
@@ -8364,7 +10008,7 @@ function dashboard(
     .getElementById(
       "progressionAdvice"
     )
-    .textContent=
+    .textContent =
       selectedPain===null
         ?"Completa il check per conoscere il carico consigliato."
         :progressionText();
@@ -8377,6 +10021,7 @@ function dashboard(
     renderPreviews();
     updateVoiceUI();
     updateBackupInfo();
+    updateFollowupUI();
 
   }
 
@@ -8388,6 +10033,8 @@ function dashboard(
 
   }
 
+  updateStartButtonState();
+
 }
 
 /* =========================================================
@@ -8396,35 +10043,30 @@ function dashboard(
 
 function equipmentSummary(){
 
-  const e=
+  const e =
     data()
       .settings
       .equipment;
 
-  const labels={
+  const labels = {
 
     band:"Elastico",
-
     weights:"Pesi",
-
     bench:"Panca",
-
     pool:"Piscina",
-
     ball:"Palla",
-
     roller:"Roller"
 
   };
 
-  const active=
+  const active =
     Object
       .entries(e)
       .filter(
-        ([,v])=>v
+        ([,v]) => v
       )
       .map(
-        ([k])=>
+        ([k]) =>
           labels[k]
       );
 
@@ -8432,14 +10074,14 @@ function equipmentSummary(){
     .getElementById(
       "equipmentSummary"
     )
-    .innerHTML=
+    .innerHTML =
       (
         active.length
           ?active
           :["Solo corpo libero"]
       )
       .map(
-        x=>
+        x =>
           `<span>${escapeHtml(x)}</span>`
       )
       .join("");
@@ -8452,21 +10094,21 @@ function equipmentSummary(){
 
 function renderLibrary(){
 
-  const cat=
+  const cat =
     document
       .getElementById(
         "libCategory"
       )
       .value;
 
-  const eq=
+  const eq =
     document
       .getElementById(
         "libEquipment"
       )
       .value;
 
-  const q=
+  const q =
     document
       .getElementById(
         "libSearch"
@@ -8475,11 +10117,11 @@ function renderLibrary(){
       .trim()
       .toLowerCase();
 
-  const list=
+  const list =
     Object
       .values(EX)
       .filter(
-        e=>
+        e =>
           (
             cat==="all" ||
             e.c===cat
@@ -8493,13 +10135,13 @@ function renderLibrary(){
           (
             !q ||
             String(
-              e.t||""
+              e.t || ""
             )
             .toLowerCase()
             .includes(q)
             ||
             String(
-              e.d||""
+              e.d || ""
             )
             .toLowerCase()
             .includes(q)
@@ -8510,17 +10152,17 @@ function renderLibrary(){
     .getElementById(
       "libraryCount"
     )
-    .textContent=
+    .textContent =
       `${list.length} esercizi disponibili su ${Object.keys(EX).length}`;
 
   document
     .getElementById(
       "libraryGrid"
     )
-    .innerHTML=
+    .innerHTML =
       list.length
         ?list.map(
-            e=>`
+            e => `
               <div class="lib-card">
 
                 <h4>
@@ -8553,53 +10195,53 @@ function renderLibrary(){
 
 function renderProgress(){
 
-  const d=
+  const d =
     data();
 
-  const s=
+  const s =
     d.sessions;
 
-  const n=
+  const n =
     s.length;
 
-  const recent=
-    s.slice(-10);
+  const confirmed =
+    confirmedSessions(10);
 
-  const avg=
-    recent.length
-      ?recent.reduce(
-          (a,b)=>
+  const avg =
+    confirmed.length
+      ?confirmed.reduce(
+          (a,b) =>
             a+
             Number(
-              b.prePain||0
+              b.prePain || 0
             ),
           0
         )
         /
-        recent.length
+        confirmed.length
       :null;
 
-  const good=
-    recent.length
-      ?recent.filter(
+  const good =
+    confirmed.length
+      ?confirmed.filter(
           sessionTolerated
         ).length
         /
-        recent.length
+        confirmed.length
       :0;
 
   document
     .getElementById(
       "pSessions"
     )
-    .textContent=
+    .textContent =
       n;
 
   document
     .getElementById(
       "pPain"
     )
-    .textContent=
+    .textContent =
       avg===null
         ?"—"
         :avg.toFixed(1);
@@ -8608,7 +10250,7 @@ function renderProgress(){
     .getElementById(
       "pGood"
     )
-    .textContent=
+    .textContent =
       Math.round(
         good*100
       )
@@ -8618,14 +10260,14 @@ function renderProgress(){
     .getElementById(
       "pStreak"
     )
-    .textContent=
+    .textContent =
       streak(s);
 
   document
     .getElementById(
       "history"
     )
-    .innerHTML=
+    .innerHTML =
       s.length
         ?[
             ...s
@@ -8636,34 +10278,30 @@ function renderProgress(){
             100
           )
           .map(
-            x=>{
+            x => {
 
-              const snap=
-                (
-                  x.prescribedWorkout||
-                  []
-                )
-                .slice(
-                  0,
-                  4
-                )
-                .map(
-                  e=>
-                    `${e.title}: ${e.dose}`
-                )
-                .join(" · ");
-
-              const follow=
-                x.nextDayReaction===null ||
-                x.nextDayReaction===undefined
-                  ?"24h: in attesa"
+              const follow =
+                x.nextDayReaction==null
+                  ?"follow-up: in attesa"
                   :Number(x.nextDayReaction)>=3
-                  ?"24h: peggiorata"
+                  ?"follow-up: peggiorata"
                   :Number(x.nextDayReaction)>=1
-                  ?"24h: lieve peggioramento"
-                  :"24h: stabile/migliore";
+                  ?"follow-up: lieve peggioramento"
+                  :"follow-up: stabile/migliore";
 
-              return`
+              const progress =
+                x.progressedExerciseId
+                  ?(
+                    ` · progresso: ${
+                      x.progressedExerciseTitle ||
+                      x.progressedExerciseId
+                    } → livello ${
+                      x.progressedToLevel
+                    }`
+                  )
+                  :"";
+
+              return `
                 <div class="workout-item">
 
                   <div>
@@ -8679,38 +10317,31 @@ function renderProgress(){
                       )}
                       ·
                       ${escapeHtml(
-                        x.type||
-                        ""
+                        x.type || ""
                       )}
                     </strong>
 
                     <br>
 
                     <span>
-                      ${
-                        escapeHtml(
-                          String(
-                            x.prePain??"—"
-                          )
+                      ${escapeHtml(
+                        String(
+                          x.prePain ?? "—"
                         )
-                      }/10
+                      )}/10
                       →
-                      ${
-                        escapeHtml(
-                          String(
-                            x.postPain??"—"
-                          )
+                      ${escapeHtml(
+                        String(
+                          x.postPain ?? "—"
                         )
-                      }/10
+                      )}/10
 
                       · RPE
-                      ${
-                        escapeHtml(
-                          String(
-                            x.rpe??"—"
-                          )
+                      ${escapeHtml(
+                        String(
+                          x.rpe ?? "—"
                         )
-                      }
+                      )}
 
                       ·
                       ${escapeHtml(follow)}
@@ -8719,26 +10350,22 @@ function renderProgress(){
                     <div class="reason neutral">
 
                       Spalla
-                      ${
-                        escapeHtml(
-                          String(
-                            x.shoulderReadiness??
-                            x.readiness??
-                            "—"
-                          )
+                      ${escapeHtml(
+                        String(
+                          x.shoulderReadiness ??
+                          x.readiness ??
+                          "—"
                         )
-                      }%
+                      )}%
 
                       · Performance
-                      ${
-                        escapeHtml(
-                          String(
-                            x.performanceReadiness??
-                            x.readiness??
-                            "—"
-                          )
+                      ${escapeHtml(
+                        String(
+                          x.performanceReadiness ??
+                          x.readiness ??
+                          "—"
                         )
-                      }%
+                      )}%
 
                       ${
                         x.durationSec
@@ -8752,32 +10379,15 @@ function renderProgress(){
                           :""
                       }
 
-                    </div>
+                      ${escapeHtml(progress)}
 
-                    ${
-                      snap
-                        ?`
-                          <div class="reason neutral">
-                            ${escapeHtml(snap)}
-                            ${
-                              (
-                                x.prescribedWorkout||
-                                []
-                              ).length>4
-                                ?" …"
-                                :""
-                            }
-                          </div>
-                        `
-                        :""
-                    }
+                    </div>
 
                   </div>
 
                   <div class="tag">
                     ${escapeHtml(
-                      x.mode||
-                      ""
+                      x.mode || ""
                     )}
                   </div>
 
@@ -8793,39 +10403,40 @@ function renderProgress(){
     .getElementById(
       "note"
     )
-    .value=
-      d.note||
-      "";
+    .value =
+      d.note || "";
 
-  const chart=
-    document
-      .getElementById(
-        "painChart"
-      );
+  const recent =
+    s.slice(-10);
 
-  chart.innerHTML=
+  const chart =
+    document.getElementById(
+      "painChart"
+    );
+
+  chart.innerHTML =
     recent.length
       ?recent.map(
-          x=>{
+          x => {
 
-            const v=
+            const v =
               Math.max(
                 0,
                 Math.min(
                   5,
                   Number(
-                    x.prePain||0
+                    x.prePain || 0
                   )
                 )
               );
 
-            const h=
+            const h =
               Math.max(
                 4,
                 v/5*100
               );
 
-            return`
+            return `
               <div class="bar-wrap">
 
                 <div class="bar-value">
@@ -8840,8 +10451,7 @@ function renderProgress(){
                 <div class="bar-label">
                   ${escapeHtml(
                     String(
-                      x.day||
-                      ""
+                      x.day || ""
                     ).slice(5)
                   )}
                 </div>
@@ -8861,10 +10471,10 @@ function renderProgress(){
 
 function saveNote(){
 
-  const d=
+  const d =
     data();
 
-  d.note=
+  d.note =
     document
       .getElementById(
         "note"
@@ -8885,7 +10495,7 @@ function saveNote(){
 
 function saveMonthlyTest(){
 
-  const shoulder=
+  const shoulder =
     Number(
       document
         .getElementById(
@@ -8894,7 +10504,7 @@ function saveMonthlyTest(){
         .value
     );
 
-  const wallPush=
+  const wallPush =
     Number(
       document
         .getElementById(
@@ -8903,7 +10513,7 @@ function saveMonthlyTest(){
         .value
     );
 
-  const squat=
+  const squat =
     Number(
       document
         .getElementById(
@@ -8912,7 +10522,7 @@ function saveMonthlyTest(){
         .value
     );
 
-  const km=
+  const km =
     Number(
       document
         .getElementById(
@@ -8925,15 +10535,12 @@ function saveMonthlyTest(){
     !Number.isFinite(shoulder) ||
     shoulder<0 ||
     shoulder>10 ||
-
     !Number.isFinite(wallPush) ||
     wallPush<0 ||
     wallPush>100 ||
-
     !Number.isFinite(squat) ||
     squat<0 ||
     squat>100 ||
-
     !Number.isFinite(km) ||
     km<180 ||
     km>1200
@@ -8947,7 +10554,7 @@ function saveMonthlyTest(){
 
   }
 
-  const d=
+  const d =
     data();
 
   d.tests.push({
@@ -8982,25 +10589,24 @@ function saveMonthlyTest(){
 
 function renderTests(){
 
-  const t=[
+  const t = [
     ...data().tests
   ]
   .reverse();
 
-  const el=
-    document
-      .getElementById(
-        "testsHistory"
-      );
+  const el =
+    document.getElementById(
+      "testsHistory"
+    );
 
   if(!el){
     return;
   }
 
-  el.innerHTML=
+  el.innerHTML =
     t.length
       ?t.map(
-          x=>`
+          x => `
             <div class="workout-item">
 
               <div>
@@ -9030,7 +10636,8 @@ function renderTests(){
                   )}:${escapeHtml(
                     String(
                       x.km%60
-                    ).padStart(
+                    )
+                    .padStart(
                       2,
                       "0"
                     )
@@ -9056,7 +10663,7 @@ function renderTests(){
 
 function loadSettings(){
 
-  const s=
+  const s =
     data()
       .settings;
 
@@ -9064,30 +10671,30 @@ function loadSettings(){
     .getElementById(
       "birthDate"
     )
-    .value=
-      s.birthDate||
+    .value =
+      s.birthDate ||
       "1988-04-07";
 
   document
     .getElementById(
       "athleteLevel"
     )
-    .value=
-      s.athleteLevel||
+    .value =
+      s.athleteLevel ||
       "intermediate";
 
   document
     .getElementById(
       "goal"
     )
-    .value=
+    .value =
       s.goal;
 
   document
     .getElementById(
       "days"
     )
-    .value=
+    .value =
       String(
         s.days
       );
@@ -9096,7 +10703,7 @@ function loadSettings(){
     .getElementById(
       "minutes"
     )
-    .value=
+    .value =
       String(
         s.minutes
       );
@@ -9105,67 +10712,66 @@ function loadSettings(){
     .getElementById(
       "eqBand"
     )
-    .checked=
+    .checked =
       !!s.equipment.band;
 
   document
     .getElementById(
       "eqWeights"
     )
-    .checked=
+    .checked =
       !!s.equipment.weights;
 
   document
     .getElementById(
       "eqBench"
     )
-    .checked=
+    .checked =
       !!s.equipment.bench;
 
   document
     .getElementById(
       "eqPool"
     )
-    .checked=
+    .checked =
       !!s.equipment.pool;
 
   document
     .getElementById(
       "eqBall"
     )
-    .checked=
+    .checked =
       !!s.equipment.ball;
 
   document
     .getElementById(
       "eqRoller"
     )
-    .checked=
+    .checked =
       !!s.equipment.roller;
 
   document
     .getElementById(
       "voiceSetting"
     )
-    .checked=
-      s.voice!==false;
+    .checked =
+      s.voice !== false;
 
   document
     .getElementById(
       "note"
     )
-    .value=
-      data().note||
-      "";
+    .value =
+      data().note || "";
 
 }
 
 function saveSettings(){
 
-  const d=
+  const d =
     data();
 
-  d.settings={
+  d.settings = {
 
     birthDate:
       document
@@ -9263,7 +10869,7 @@ function saveSettings(){
 
   };
 
-  voiceEnabled=
+  voiceEnabled =
     d.settings.voice;
 
   save(d);
@@ -9288,31 +10894,28 @@ function saveSettings(){
 
 function updateBackupInfo(){
 
-  const d=
+  const d =
     data();
 
-  const el=
-    document
-      .getElementById(
-        "backupInfo"
-      );
+  const el =
+    document.getElementById(
+      "backupInfo"
+    );
 
   if(!el){
     return;
   }
 
-  if(
-    !d.lastBackupAt
-  ){
+  if(!d.lastBackupAt){
 
-    el.textContent=
+    el.textContent =
       "Backup non ancora eseguito. Esporta periodicamente un JSON.";
 
     return;
 
   }
 
-  const days=
+  const days =
     Math.floor(
       (
         Date.now()-
@@ -9324,40 +10927,31 @@ function updateBackupInfo(){
       86400000
     );
 
-  if(
+  el.textContent =
     days>30
-  ){
-
-    el.textContent=
-      `Ultimo backup ${days} giorni fa. Consigliato esportarne uno nuovo.`;
-
-  }else{
-
-    el.textContent=
-      `Ultimo backup: ${
-        new Date(
-          d.lastBackupAt
-        )
-        .toLocaleString(
-          "it-IT"
-        )
-      }.`;
-
-  }
+      ?`Ultimo backup ${days} giorni fa. Consigliato esportarne uno nuovo.`
+      :`Ultimo backup: ${
+          new Date(
+            d.lastBackupAt
+          )
+          .toLocaleString(
+            "it-IT"
+          )
+        }.`;
 
 }
 
 function exportData(){
 
-  const d=
+  const d =
     data();
 
-  d.lastBackupAt=
+  d.lastBackupAt =
     new Date().toISOString();
 
   save(d);
 
-  const payload={
+  const payload = {
 
     meta:{
 
@@ -9365,7 +10959,7 @@ function exportData(){
         "Erjon Hybrid Coach AI",
 
       edition:
-        "Definitive For Life",
+        "Definitive For Life 10/10",
 
       appVersion:
         APP_VERSION,
@@ -9382,7 +10976,7 @@ function exportData(){
 
   };
 
-  const blob=
+  const blob =
     new Blob(
       [
         JSON.stringify(
@@ -9396,27 +10990,26 @@ function exportData(){
       }
     );
 
-  const url=
+  const url =
     URL.createObjectURL(
       blob
     );
 
-  const a=
-    document
-      .createElement(
-        "a"
-      );
+  const a =
+    document.createElement(
+      "a"
+    );
 
-  a.href=
+  a.href =
     url;
 
-  a.download=
+  a.download =
     `erjon-hybrid-coach-definitive-backup-${localDay()}.json`;
 
   a.click();
 
   setTimeout(
-    ()=>
+    () =>
       URL.revokeObjectURL(
         url
       ),
@@ -9433,9 +11026,9 @@ document
   )
   .addEventListener(
     "change",
-    event=>{
+    event => {
 
-      const file=
+      const file =
         event
           .target
           .files
@@ -9445,26 +11038,26 @@ document
         return;
       }
 
-      const reader=
+      const reader =
         new FileReader();
 
-      reader.onload=
-        ()=>{
+      reader.onload =
+        () => {
 
           try{
 
-            const parsed=
+            const parsed =
               JSON.parse(
                 reader.result
               );
 
-            const imported=
+            const imported =
               parsed?.data &&
               parsed?.meta
                 ?parsed.data
                 :parsed;
 
-            const n=
+            const n =
               norm(
                 imported
               );
@@ -9478,7 +11071,7 @@ document
             ){
 
               throw new Error(
-                "Struttura non valida"
+                "Struttura backup non valida"
               );
 
             }
@@ -9490,6 +11083,7 @@ document
             renderTests();
             renderLibrary();
             renderPhysioPreview();
+            updateFollowupUI();
 
             alert(
               "Backup importato con successo."
@@ -9498,6 +11092,7 @@ document
           }catch(err){
 
             console.warn(
+              "Import backup:",
               err
             );
 
@@ -9507,7 +11102,8 @@ document
 
           }
 
-          event.target.value="";
+          event.target.value =
+            "";
 
         };
 
@@ -9519,64 +11115,55 @@ document
   );
 
 /* =========================================================
-   RESET COMPLETO
+   RESET
    ========================================================= */
 
 async function resetData(){
 
   if(
     !confirm(
-      "Cancellare definitivamente tutti i dati? " +
-      "Prima di procedere è consigliato esportare un backup."
+      "Cancellare definitivamente tutti i dati? Prima di procedere è consigliato esportare un backup."
     )
   ){
     return;
   }
 
-  localStorage.removeItem(
-    KEY
+  [
+    KEY,
+    ...LEGACY_KEYS,
+    PHYSIO_CONFIRM_KEY
+  ]
+  .forEach(
+    k =>
+      localStorage.removeItem(k)
   );
 
   try{
 
-    const db=
-      await openDB();
+    indexedDB.deleteDatabase(
+      DB_NAME
+    );
 
-    await new Promise(
-      (resolve,reject)=>{
+    const oldDBs = [
+      "ErjonHybridCoachAI_Definitive_DB_v10",
+      "ErjonHybridCoachAI_Definitive_DB_v6",
+      "ErjonHybridCoachAI10PlusDB_v3"
+    ];
 
-        const tx=
-          db.transaction(
-            STORE,
-            "readwrite"
-          );
+    oldDBs.forEach(
+      name => {
 
-        tx
-          .objectStore(
-            STORE
-          )
-          .delete(
-            RECORD
-          );
-
-        tx.oncomplete=
-          ()=>resolve();
-
-        tx.onerror=
-          ()=>
-            reject(
-              tx.error
-            );
+        try{
+          indexedDB.deleteDatabase(name);
+        }catch{}
 
       }
     );
 
-    db.close();
-
   }catch(err){
 
     console.warn(
-      "Reset IndexedDB",
+      "Reset IndexedDB:",
       err
     );
 
@@ -9593,7 +11180,7 @@ async function resetData(){
 function openDB(){
 
   return new Promise(
-    (resolve,reject)=>{
+    (resolve,reject) => {
 
       if(
         !(
@@ -9612,16 +11199,16 @@ function openDB(){
 
       }
 
-      const r=
+      const r =
         indexedDB.open(
           DB_NAME,
           1
         );
 
-      r.onupgradeneeded=
-        e=>{
+      r.onupgradeneeded =
+        e => {
 
-          const db=
+          const db =
             e.target.result;
 
           if(
@@ -9640,14 +11227,14 @@ function openDB(){
 
         };
 
-      r.onsuccess=
-        ()=>
+      r.onsuccess =
+        () =>
           resolve(
             r.result
           );
 
-      r.onerror=
-        ()=>
+      r.onerror =
+        () =>
           reject(
             r.error
           );
@@ -9659,13 +11246,13 @@ function openDB(){
 
 async function idbSet(d){
 
-  const db=
+  const db =
     await openDB();
 
   return new Promise(
-    (resolve,reject)=>{
+    (resolve,reject) => {
 
-      const tx=
+      const tx =
         db.transaction(
           STORE,
           "readwrite"
@@ -9680,25 +11267,23 @@ async function idbSet(d){
           RECORD
         );
 
-      tx.oncomplete=
-        ()=>{
+      tx.oncomplete =
+        () => {
 
           db.close();
           resolve();
 
         };
 
-      tx.onerror=
-        ()=>{
+      tx.onerror =
+        () => {
 
-          const error=
+          const err =
             tx.error;
 
           db.close();
 
-          reject(
-            error
-          );
+          reject(err);
 
         };
 
@@ -9709,19 +11294,19 @@ async function idbSet(d){
 
 async function idbGet(){
 
-  const db=
+  const db =
     await openDB();
 
   return new Promise(
-    (resolve,reject)=>{
+    (resolve,reject) => {
 
-      const tx=
+      const tx =
         db.transaction(
           STORE,
           "readonly"
         );
 
-      const r=
+      const r =
         tx
           .objectStore(
             STORE
@@ -9730,8 +11315,8 @@ async function idbGet(){
             RECORD
           );
 
-      r.onsuccess=
-        ()=>{
+      r.onsuccess =
+        () => {
 
           db.close();
 
@@ -9743,17 +11328,15 @@ async function idbGet(){
 
         };
 
-      r.onerror=
-        ()=>{
+      r.onerror =
+        () => {
 
-          const error=
+          const err =
             r.error;
 
           db.close();
 
-          reject(
-            error
-          );
+          reject(err);
 
         };
 
@@ -9763,7 +11346,7 @@ async function idbGet(){
 }
 
 /* =========================================================
-   MIGRAZIONE VECCHIE VERSIONI
+   MIGRAZIONE
    ========================================================= */
 
 function migrateLegacy(){
@@ -9783,111 +11366,33 @@ function migrateLegacy(){
 
     try{
 
-      const rawText=
+      const txt =
         localStorage.getItem(k);
 
-      if(!rawText){
+      if(!txt){
         continue;
       }
 
-      const raw=
-        JSON.parse(
-          rawText
-        );
+      const raw =
+        JSON.parse(txt);
 
       if(!raw){
         continue;
       }
 
-      const d=
-        defaults();
+      const d =
+        norm(raw);
 
-      if(
-        Array.isArray(
-          raw.sessions
-        )
-      ){
-        d.sessions=
-          raw.sessions;
-      }
+      d.appVersion =
+        APP_VERSION;
 
-      if(
-        Array.isArray(
-          raw.activities
-        )
-      ){
-        d.activities=
-          raw.activities;
-      }
-
-      if(
-        Array.isArray(
-          raw.tests
-        )
-      ){
-        d.tests=
-          raw.tests;
-      }
-
-      if(
-        typeof raw.note==="string"
-      ){
-        d.note=
-          raw.note;
-      }
-
-      const oldSettings=
-        raw.settings||
-        {};
-
-      const oldProfile=
-        raw.profile||
-        {};
-
-      d.settings={
-
-        ...d.settings,
-        ...oldSettings,
-
-        birthDate:
-          oldSettings.birthDate||
-          oldProfile.birthDate||
-          d.settings.birthDate,
-
-        athleteLevel:
-          oldSettings.athleteLevel||
-          oldProfile.level||
-          d.settings.athleteLevel,
-
-        equipment:{
-          ...d.settings.equipment,
-          ...(oldSettings.equipment||{})
-        }
-
-      };
-
-      /*
-        Manteniamo la data iniziale:
-        il ciclo non riparte da zero dopo la migrazione.
-      */
-
-      d.createdAt=
-        raw.createdAt||
-        raw.created||
-        d.createdAt;
-
-      d.updatedAt=
-        raw.updatedAt||
-        new Date().toISOString();
-
-      d.lastBackupAt=
-        raw.lastBackupAt||
-        null;
+      d.schemaVersion =
+        SCHEMA_VERSION;
 
       save(d);
 
       console.info(
-        "Migrazione completata da",
+        "Migrazione completata da:",
         k
       );
 
@@ -9908,7 +11413,7 @@ function migrateLegacy(){
 }
 
 /* =========================================================
-   HYDRATION
+   HYDRATE
    ========================================================= */
 
 async function hydrate(){
@@ -9917,22 +11422,20 @@ async function hydrate(){
 
   try{
 
-    const indexed=
+    const indexed =
       await idbGet();
 
-    const local=
+    const local =
       data();
 
-    const indexedTime=
+    const indexedTime =
       Date.parse(
-        indexed?.updatedAt||
-        0
+        indexed?.updatedAt || 0
       );
 
-    const localTime=
+    const localTime =
       Date.parse(
-        local.updatedAt||
-        0
+        local.updatedAt || 0
       );
 
     if(
@@ -9958,7 +11461,7 @@ async function hydrate(){
   }catch(err){
 
     console.warn(
-      "Hydrate fallback localStorage",
+      "Hydrate fallback localStorage:",
       err
     );
 
@@ -9973,11 +11476,11 @@ async function hydrate(){
 window
   .addEventListener(
     "error",
-    e=>{
+    e => {
 
       console.warn(
         "Errore applicazione:",
-        e.error||
+        e.error ||
         e.message
       );
 
@@ -9987,7 +11490,7 @@ window
 window
   .addEventListener(
     "unhandledrejection",
-    e=>{
+    e => {
 
       console.warn(
         "Promise non gestita:",
@@ -10004,9 +11507,25 @@ window
 document
   .addEventListener(
     "DOMContentLoaded",
-    async()=>{
+    async () => {
 
       await hydrate();
+
+      /*
+        Stato follow-up prima del dashboard,
+        così nessun valore predefinito può essere
+        interpretato come risposta positiva.
+      */
+
+      const pain24 =
+        document.getElementById(
+          "pain24"
+        );
+
+      pain24.value =
+        "";
+
+      updateFollowupUI();
 
       dashboard(true);
 
@@ -10036,6 +11555,8 @@ document
       renderPhysioPreview();
       updateVoiceUI();
       updateBackupInfo();
+      updateFollowupUI();
+      updateStartButtonState();
 
     }
   );
