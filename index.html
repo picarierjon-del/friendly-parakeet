@@ -992,6 +992,8 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
 .pain-chart-legend{display:flex;gap:15px;justify-content:flex-end;margin-bottom:5px;font-size:.65rem;color:var(--muted)}.pain-chart-legend span:before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:var(--blue)}.pain-chart-legend span:last-child:before{background:var(--green)}.dual-bars{height:100%;display:flex;align-items:flex-end;gap:3px;width:100%;justify-content:center}.bar.post{background:linear-gradient(180deg,var(--green),#18aa7a)}.trend-summary{margin-top:12px;padding:12px;border-radius:13px;background:rgba(4,13,21,.42);border:1px solid var(--line);font-size:.73rem;color:#b9ccd7;line-height:1.5}
 
+.master-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}.master-stat{padding:11px;border:1px solid var(--line);border-radius:13px;background:rgba(4,13,21,.48);min-width:0}.master-stat strong{display:block;font-size:1.05rem;letter-spacing:-.04em}.master-stat span{display:block;margin-top:3px;font-size:.57rem;color:var(--muted);line-height:1.25}.master-panel{margin-top:10px;padding:12px;border:1px solid rgba(83,200,255,.22);border-radius:14px;background:var(--bluebg);font-size:.75rem;line-height:1.5}.system-fatigue{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.fatigue-zone{padding:10px;border:1px solid var(--line);border-radius:12px;background:rgba(4,13,21,.48)}.fatigue-zone strong{display:block;font-size:1rem}.fatigue-zone span{font-size:.57rem;color:var(--muted)}.fatigue-meter,.master-curve{height:6px;margin-top:7px;border-radius:999px;overflow:hidden;background:rgba(124,163,186,.14)}.fatigue-meter i,.master-curve i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red))}.master-curve i{background:linear-gradient(90deg,var(--blue),var(--green))}.prediction-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.prediction-card{padding:11px;border:1px solid var(--line);border-radius:13px;background:rgba(4,13,21,.48)}.prediction-card strong{display:block;font-size:1.05rem}.prediction-card span{font-size:.58rem;color:var(--muted)}.planner-row{display:grid;grid-template-columns:80px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.planner-row:last-child{border-bottom:0}.live-reg{margin-top:12px;padding:12px;border:1px solid rgba(83,200,255,.24);border-radius:14px;background:rgba(83,200,255,.06)}.load-capture{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+
 @media(min-width:981px){
   .sidebar{position:sticky;top:102px;align-self:start;max-height:calc(100vh - 128px);overflow:auto;padding-right:3px;scrollbar-width:thin;scrollbar-color:rgba(83,200,255,.22) transparent}
 }
@@ -1078,6 +1080,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   .toast-region{top:auto;bottom:calc(90px + env(safe-area-inset-bottom));right:10px;width:calc(100% - 20px)}
   .onboarding-box{padding:17px;border-radius:18px}.onboarding-step h2{font-size:1.36rem}
   .modal{padding:10px}.modal-box{border-radius:18px;padding:15px}
+  .master-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.system-fatigue{grid-template-columns:repeat(2,minmax(0,1fr))}.prediction-grid,.load-capture{grid-template-columns:1fr}.planner-row{grid-template-columns:64px 1fr auto}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -1255,6 +1258,30 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     Completa il check: il coach spiegherà quali segnali hanno determinato tipo, intensità e durata della seduta.
   </p>
   <div class="decision-signals" id="decisionSignals" aria-live="polite"></div>
+</div>
+
+<div class="card" id="masterCoachCard">
+  <div class="eyebrow">Hybrid Longevity Master Engine</div>
+  <div class="master-grid">
+    <div class="master-stat"><strong id="masterAction">—</strong><span>DECISIONE</span></div>
+    <div class="master-stat"><strong id="masterFatigue">—</strong><span>FATICA</span></div>
+    <div class="master-stat"><strong id="masterPrediction">—</strong><span>PREVISIONE</span></div>
+    <div class="master-stat"><strong id="masterAC">—</strong><span>ACUTO : CRONICO</span></div>
+    <div class="master-stat"><strong id="masterFitness">—</strong><span>FITNESS</span></div>
+    <div class="master-stat"><strong id="masterDebt">—</strong><span>FATIGUE DEBT</span></div>
+  </div>
+  <div id="masterExplanation" class="master-panel">Completa il check per attivare la decisione integrata.</div>
+  <div class="prediction-grid">
+    <div class="prediction-card"><strong id="personalResponseScore">—</strong><span>RISPOSTA PERSONALE</span><div class="small" id="personalResponseText">In apprendimento.</div></div>
+    <div class="prediction-card"><strong id="fitnessModelScore">—</strong><span>FITNESS LONG-TERM</span><div class="master-curve"><i id="fitnessModelBar"></i></div></div>
+    <div class="prediction-card"><strong id="fatigueModelScore">—</strong><span>FATICA SHORT-TERM</span><div class="fatigue-meter"><i id="fatigueModelBar"></i></div></div>
+  </div>
+  <div class="system-fatigue">
+    <div class="fatigue-zone"><strong id="fatUpper">—</strong><span>UPPER / SPALLA</span><div class="fatigue-meter"><i id="fatUpperBar"></i></div></div>
+    <div class="fatigue-zone"><strong id="fatLower">—</strong><span>LOWER BODY</span><div class="fatigue-meter"><i id="fatLowerBar"></i></div></div>
+    <div class="fatigue-zone"><strong id="fatCardio">—</strong><span>CARDIO</span><div class="fatigue-meter"><i id="fatCardioBar"></i></div></div>
+    <div class="fatigue-zone"><strong id="fatSystemic">—</strong><span>SISTEMICA</span><div class="fatigue-meter"><i id="fatSystemicBar"></i></div></div>
+  </div>
 </div>
 
 <div class="card period-card">
@@ -1445,6 +1472,13 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   <p class="small" id="periodizationText">
     Costruzione delle basi.
   </p>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Long-Term Adaptive Planner</div>
+  <h2>Prossime 8 settimane</h2>
+  <p class="small">Il calendario propone la fase; risposta personale, fatica e previsione possono consolidarla o posticiparla.</p>
+  <div id="longTermPlanner" style="margin-top:10px"></div>
 </div>
 
 <div class="card">
@@ -2031,6 +2065,22 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   <div id="exerciseReason" class="reason neutral"></div>
   <div id="exerciseInstructions" class="note"></div>
 
+  <div id="exerciseLoadBox" class="load-capture hidden">
+    <div class="field"><label for="exerciseWeightKg">Carico reale utilizzato · kg</label><input id="exerciseWeightKg" type="number" min="0" step="0.5" inputmode="decimal" placeholder="es. 16"></div>
+    <div><div class="small">Progressione consigliata</div><strong id="exerciseLoadAdvice">—</strong></div>
+  </div>
+
+  <div class="live-reg">
+    <div class="small"><strong>Autoregolazione live</strong> · feedback opzionale dopo un blocco importante.</div>
+    <div class="grid3" style="margin-top:8px">
+      <div class="field"><label for="blockRPE">RPE blocco</label><select id="blockRPE"><option value="">—</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+      <div class="field"><label for="blockPain">Dolore</label><select id="blockPain"><option value="">—</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5+</option></select></div>
+      <div class="field"><label for="blockTechnique">Tecnica</label><select id="blockTechnique"><option value="">—</option><option value="good">Buona</option><option value="fair">Discreta</option><option value="poor">Scarsa</option></select></div>
+    </div>
+    <button class="btn blue full" style="margin-top:8px" onclick="autoRegulateRemaining()">Adatta il resto della seduta</button>
+    <div id="autoRegResult" class="reason neutral"></div>
+  </div>
+
   <div class="timer" id="timerDisplay">
     00:00
   </div>
@@ -2195,10 +2245,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "12.0.0-PREMIUM-UX";
+  "13.0.0-HYBRID-LONGEVITY-MASTER";
 
 const SCHEMA_VERSION =
-  13;
+  14;
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -3899,11 +3949,20 @@ function defaults(){
     sessions:[],
     activities:[],
     tests:[],
+    readinessHistory:[],
+    performance:[],
+
+    fatigueDebt:0,
+
+    programStartDate:
+      localDay(),
 
     note:"",
 
     progression:{
       byExercise:{},
+      loadHistory:{},
+      exercisePerformance:{},
       lastProgressedId:null,
       totalProgressions:0
     },
@@ -4000,6 +4059,16 @@ function norm(v){
         ?v.tests
         :[],
 
+    readinessHistory:
+      Array.isArray(v.readinessHistory)
+        ?v.readinessHistory
+        :[],
+
+    performance:
+      Array.isArray(v.performance)
+        ?v.performance
+        :[],
+
     progression:{
 
       ...b.progression,
@@ -4008,6 +4077,16 @@ function norm(v){
       byExercise:{
         ...(b.progression.byExercise || {}),
         ...(pr.byExercise || {})
+      },
+
+      loadHistory:{
+        ...(b.progression.loadHistory || {}),
+        ...(pr.loadHistory || {})
+      },
+
+      exercisePerformance:{
+        ...(b.progression.exercisePerformance || {}),
+        ...(pr.exercisePerformance || {})
       }
 
     },
@@ -4048,7 +4127,14 @@ function norm(v){
 
     lastBackupAt:
       v.lastBackupAt ||
-      null
+      null,
+
+    fatigueDebt:
+      Number(v.fatigueDebt || 0),
+
+    programStartDate:
+      v.programStartDate ||
+      b.programStartDate
 
   };
 
@@ -6111,13 +6197,16 @@ function progressionSignal(){
 
 function progressionText(){
 
+  const master =
+    masterDecisionModel();
+
   const signal =
     progressionSignal();
 
   if(signal==="blocked"){
 
     return (
-      "Blocco di sicurezza: nessuna progressione oggi."
+      `Blocco di sicurezza: nessuna progressione oggi. Master ${master.action}.`
     );
 
   }
@@ -6127,7 +6216,7 @@ function progressionText(){
   ){
 
     return (
-      "Deload anticipato: due risposte consecutive non ottimali. " +
+      `Deload anticipato · Master ${master.action}: due risposte consecutive non ottimali. ` +
       "La settimana programmata viene temporaneamente sostituita con lavoro più leggero."
     );
 
@@ -6138,7 +6227,7 @@ function progressionText(){
   ){
 
     return (
-      "Deload programmato del macro ciclo: volume ridotto per consolidare gli adattamenti. " +
+      `Deload programmato · Master ${master.action}: volume ridotto per consolidare gli adattamenti. ` +
       "Il livello permanente costruito viene conservato."
     );
 
@@ -6147,7 +6236,7 @@ function progressionText(){
   if(signal==="reduce"){
 
     return (
-      "Regressione temporanea: readiness o spalla non giustificano il carico previsto. " +
+      `Regressione temporanea · Master ${master.action} ${Math.round(master.score)}/100: readiness, carico o spalla non giustificano la dose prevista. ` +
       "Il coach riduce la seduta senza cancellare il livello costruito."
     );
 
@@ -6156,7 +6245,7 @@ function progressionText(){
   if(signal==="hold"){
 
     return (
-      "Carico stabile: mantieni la dose attuale. " +
+      `Carico stabile · Master ${master.action} ${Math.round(master.score)}/100: mantieni la dose attuale. ` +
       "Nessun aumento finché follow-up, dolore e RPE non sono chiaramente favorevoli."
     );
 
@@ -6165,7 +6254,7 @@ function progressionText(){
   if(signal==="progress"){
 
     return (
-      "Progressione consentita: trend globale favorevole. " +
+      `Progressione consentita · Master ${master.action} ${Math.round(master.score)}/100: trend globale favorevole. ` +
       "Dopo una seduta ben tollerata verrà aumentata una sola variabile permanente."
     );
 
@@ -7551,6 +7640,129 @@ function effectiveSessionType(){
    GENERA OGGI
    ========================================================= */
 
+/* =========================================================
+   HYBRID LONGEVITY MASTER ENGINE
+   ========================================================= */
+
+const masterClamp = (n,a=0,b=100) => Math.max(a,Math.min(b,Number(n)||0));
+const masterAvg = list => list.length ? list.reduce((a,b)=>a+Number(b||0),0)/list.length : 0;
+const masterDaysAgo = value => {
+  const d = new Date(value);
+  if(Number.isNaN(d.getTime())) return Infinity;
+  const now = new Date();
+  const a = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const b = new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  return Math.round((a-b)/86400000);
+};
+
+function masterSessionLoad(s){
+  if(Number.isFinite(Number(s?.sessionLoad))) return Number(s.sessionLoad);
+  return Math.max(0,Number(s?.durationSec||s?.estimatedDurationSec||0)/60*Number(s?.rpe||0));
+}
+
+function masterLoadWindow(days){
+  return data().sessions.filter(s=>masterDaysAgo(s.date)>=0&&masterDaysAgo(s.date)<=days).reduce((sum,s)=>sum+masterSessionLoad(s),0);
+}
+
+function masterWeeklyLoads(){
+  const sessions=data().sessions;
+  return Array.from({length:6},(_,w)=>sessions.filter(s=>{const n=masterDaysAgo(s.date);return n>=w*7&&n<(w+1)*7}).reduce((sum,s)=>sum+masterSessionLoad(s),0));
+}
+
+function masterFatigueModel(){
+  const d=data(), confirmed=confirmedSessions(10), acute=masterLoadWindow(7);
+  const chronicWeeks=masterWeeklyLoads().slice(1,5).filter(Boolean);
+  const chronic=masterAvg(chronicWeeks)||1, ratio=acute/Math.max(chronic,1);
+  const pain=masterAvg(confirmed.map(s=>Number(s.prePain||0)));
+  const daily=Array.from({length:7},(_,i)=>d.sessions.filter(s=>masterDaysAgo(s.date)===i).reduce((a,s)=>a+masterSessionLoad(s),0));
+  const mean=masterAvg(daily), sd=Math.sqrt(masterAvg(daily.map(x=>(x-mean)**2)));
+  const monotony=sd?mean/sd:0;
+  const hard=d.sessions.filter(s=>masterDaysAgo(s.date)<=7&&(Number(s.rpe)>=8||/interval|tempo|hyrox|military/i.test(String(s.type)))).length;
+  let debt=Number(d.fatigueDebt||0);
+  let score=78-pain*6-Math.max(0,ratio-1)*18-Math.max(0,monotony-1.7)*8-Math.max(0,hard-3)*5-debt*5;
+  score=masterClamp(score,10,100);
+  return{score,acute,chronic,ratio,monotony,debt,hard};
+}
+
+function fitnessFatigueModel(){
+  const sessions=data().sessions;
+  const weighted=(days,decay)=>{let sum=0,wSum=0;sessions.forEach(s=>{const n=masterDaysAgo(s.date);if(n<0||n>days)return;const w=Math.exp(-n/decay);sum+=masterSessionLoad(s)*w;wSum+=w});return wSum?sum/wSum:0};
+  const fitness=masterClamp(weighted(60,18)/7), fatigue=masterClamp(weighted(14,4.5)/5.2);
+  return{fitness,fatigue,form:masterClamp(50+(fitness-fatigue)*.7),state:fatigue>fitness+22?"FATICA ALTA":fitness>fatigue+18?"FRESCO":fitness>=55&&fatigue>=55?"OVERREACH FUNZIONALE":"BILANCIATO"};
+}
+
+function personalResponseModel(){
+  const list=confirmedSessions(30);
+  if(list.length<5) return{score:50,confidence:"BASSA",hardTolerance:.5,recoveryHours:36,why:"Servono almeno 5 follow-up confermati."};
+  const good=list.filter(sessionTolerated), hard=list.filter(s=>Number(s.rpe)>=8), hardGood=hard.filter(sessionTolerated);
+  const score=masterClamp(good.length/list.length*70+(hard.length?hardGood.length/hard.length:.5)*30,20,100);
+  return{score,confidence:list.length>=15?"ALTA":"MEDIA",hardTolerance:hard.length?hardGood.length/hard.length:.5,recoveryHours:score>=85?24:score>=70?36:score>=55?48:60,why:`${good.length}/${list.length} sedute tollerate; recupero stimato ${score>=85?24:score>=70?36:score>=55?48:60}h.`};
+}
+
+function systemFatigueModel(){
+  const zones={upper:0,lower:0,cardio:0,systemic:0}, chronic={upper:0,lower:0,cardio:0,systemic:0};
+  const zoneFor=c=>/rehab|military|physio|release/.test(c)?"upper":/legs/.test(c)?"lower":/run|hyrox|pool/.test(c)?"cardio":"systemic";
+  data().sessions.filter(s=>masterDaysAgo(s.date)<=28).forEach(s=>{
+    const items=s.prescribedWorkout||[], load=masterSessionLoad(s), counts={upper:0,lower:0,cardio:0,systemic:0};
+    if(items.length)items.forEach(x=>counts[zoneFor(String(x.category||EX[x.id]?.c||""))]++);else counts.systemic=1;
+    const total=Math.max(1,Object.values(counts).reduce((a,b)=>a+b,0));
+    Object.keys(zones).forEach(k=>{const share=load*counts[k]/total;chronic[k]+=share;if(masterDaysAgo(s.date)<=7)zones[k]+=share});
+  });
+  const out={};Object.keys(zones).forEach(k=>out[k]=masterClamp(25+zones[k]/Math.max(chronic[k]/4,1)*28));
+  if(selectedPain!==null)out.upper=masterClamp(out.upper+selectedPain*9+(100-(shoulderReadiness||100))*.28);
+  out.systemic=masterClamp(out.systemic+(100-masterFatigueModel().score)*.35);
+  return out;
+}
+
+function performancePrediction(){
+  const list=confirmedSessions(40), fit=fitnessFatigueModel(), personal=personalResponseModel();
+  const daily=selectedPain===null?65:masterClamp(85-selectedPain*11-Number(document.getElementById("sleep")?.value||0)*7-Number(document.getElementById("energy")?.value||0)*7-Number(document.getElementById("stiff")?.value||0)*4-Number(document.getElementById("workload")?.value||0)*5-(blocked?50:0));
+  if(list.length<6)return{score:masterClamp(50+(daily-50)*.25+(fit.form-50)*.25),confidence:"BASSA",text:"Servono 6 sessioni confermate per una previsione personale."};
+  const score=masterClamp(50+(daily-50)*.38+(fit.form-50)*.32+(personal.score-50)*.3,10,95);
+  return{score,confidence:list.length>=15?"ALTA":"MEDIA",text:score>=75?"Alta probabilità di risposta positiva.":score>=55?"Prestazione probabilmente stabile.":score>=40?"Prestazione incerta: consolida.":"Probabile rendimento ridotto: recupera."};
+}
+
+function masterDecisionModel(){
+  const fatigue=masterFatigueModel(), fit=fitnessFatigueModel(), personal=personalResponseModel(), prediction=performancePrediction();
+  const daily=selectedPain===null?65:masterClamp(readiness);
+  let score=fatigue.score*.3+daily*.25+prediction.score*.2+fit.form*.15+personal.score*.1,action="MANTIENI";
+  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68||fatigue.ratio>1.55)action="CONTROLLA";else if(score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(score>=74&&prediction.score>=60)action="PROGREDISCI";
+  const brakes=[];if(fatigue.ratio>1.45)brakes.push(`A:C ${fatigue.ratio.toFixed(2)}`);if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<50)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
+  return{action,score:masterClamp(score),fatigue,fit,personal,prediction,daily,brakes};
+}
+
+function masterPeriodization(){
+  const base=periodizationStage().name.toUpperCase(),md=masterDecisionModel();
+  if(["STOP","DELOAD","RECUPERA"].includes(md.action))return{planned:base,effective:"DELOAD",reason:"Recupero prioritario"};
+  if(base.includes("PEAK")&&["CONTROLLA","MANTIENI"].includes(md.action))return{planned:base,effective:"BUILD",reason:"Peak posticipato"};
+  return{planned:base,effective:base,reason:"Fase confermata dal motore Master"};
+}
+
+function masterWorkoutMultiplier(){
+  const action=masterDecisionModel().action;
+  return action==="DELOAD"?.62:action==="RECUPERA"?.72:action==="CONTROLLA"?.88:action==="SPINGI"?1.04:1;
+}
+
+function applyMasterToWorkout(list){
+  const factor=masterWorkoutMultiplier(),action=masterDecisionModel().action;
+  return(list||[]).map(e=>({...e,s:Math.max(30,Math.round(Number(e.s||90)*factor)),reason:`${e.reason||"Dose base"} · Master ${action}`}));
+}
+
+function renderMasterEngine(){
+  const md=masterDecisionModel(),sys=systemFatigueModel(),phase=masterPeriodization();
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val};
+  set("masterAction",md.action);set("masterFatigue",Math.round(md.fatigue.score));set("masterPrediction",Math.round(md.prediction.score));set("masterAC",md.fatigue.ratio.toFixed(2));set("masterFitness",Math.round(md.fit.fitness));set("masterDebt",md.fatigue.debt.toFixed(1));set("personalResponseScore",Math.round(md.personal.score)+"/100");set("personalResponseText",`${md.personal.confidence} · ${md.personal.why}`);set("fitnessModelScore",Math.round(md.fit.fitness)+"/100");set("fatigueModelScore",Math.round(md.fit.fatigue)+"/100");
+  const exp=document.getElementById("masterExplanation");if(exp)exp.innerHTML=`<strong>${escapeHtml(md.action)} · ${Math.round(md.score)}/100</strong><br>${escapeHtml(md.prediction.text)} ${md.brakes.length?"Freni: "+escapeHtml(md.brakes.join(" · ")):"Nessun freno dominante."}<br><span class="small">Fase ${escapeHtml(phase.effective)} · ${escapeHtml(phase.reason)}.</span>`;
+  [["fitnessModelBar",md.fit.fitness],["fatigueModelBar",md.fit.fatigue],["fatUpperBar",sys.upper],["fatLowerBar",sys.lower],["fatCardioBar",sys.cardio],["fatSystemicBar",sys.systemic]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.style.width=masterClamp(v)+"%"});
+  [["fatUpper",sys.upper],["fatLower",sys.lower],["fatCardio",sys.cardio],["fatSystemic",sys.systemic]].forEach(([id,v])=>set(id,Math.round(v)+"%"));
+  renderLongTermPlanner();
+}
+
+function renderLongTermPlanner(){
+  const el=document.getElementById("longTermPlanner");if(!el)return;const md=masterDecisionModel(),names=["FOUNDATION","BUILD","PEAK","DELOAD"];
+  el.innerHTML=Array.from({length:8},(_,i)=>{const planned=names[(periodizationWeek()-1+i)%4];let effective=planned,why="Calendario";if(i<2&&["DELOAD","RECUPERA"].includes(md.action)){effective="DELOAD";why="Master recovery"}else if(planned==="PEAK"&&md.prediction.score<60){effective="BUILD";why="Peak posticipato"}return`<div class="planner-row"><strong>${i?"+"+i+" sett.":"ORA"}</strong><div><b>${effective}</b><div class="small">${why} · pianificata ${planned}</div></div><span class="tag">W${periodizationWeek()+i}</span></div>`}).join("");
+}
+
 function updateDecisionExplanation(){
 
   const text = document.getElementById("decisionExplanation");
@@ -7638,6 +7850,11 @@ function generateToday(){
     fitToTime(
       ids,
       d.settings.minutes
+    );
+
+  currentWorkout =
+    applyMasterToWorkout(
+      currentWorkout
     );
 
   render(
@@ -8052,6 +8269,7 @@ function evaluate(){
 
   generateToday();
   updateDecisionExplanation();
+  renderMasterEngine();
   renderPreviews();
   updateStartButtonState();
   dashboard(false);
@@ -9090,6 +9308,22 @@ function renderSession(){
     .textContent =
       e.x || "";
 
+  const loadBox=document.getElementById("exerciseLoadBox");
+  const loadInput=document.getElementById("exerciseWeightKg");
+  const advice=document.getElementById("exerciseLoadAdvice");
+  const loadExercise=["goblet","rdl","rowDB","carry"].includes(e.id);
+  if(loadBox)loadBox.classList.toggle("hidden",!loadExercise);
+  if(loadInput){
+    const history=data().progression.loadHistory?.[e.id]||[];
+    const last=history.at(-1);
+    loadInput.value=last?.kg||"";
+    loadInput.dataset.exerciseId=e.id||"";
+    if(advice)advice.textContent=last?`Riferimento ${last.kg} kg. Aumenta una sola leva solo con tecnica buona, RPE ≤8 e dolore ≤2.`:"Prima esposizione: registra un carico tecnico e controllato.";
+  }
+
+  ["blockRPE","blockPain","blockTechnique"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=""});
+  const autoResult=document.getElementById("autoRegResult");if(autoResult)autoResult.textContent="";
+
   timerLeft =
     Number(
       e.s || 90
@@ -9151,7 +9385,12 @@ function markStepCompleted(){
       ),
 
     reason:
-      e.reason || ""
+      e.reason || "",
+
+    weightKg:
+      ["goblet","rdl","rowDB","carry"].includes(e.id)
+        ?Number(document.getElementById("exerciseWeightKg")?.value||0)||null
+        :null
 
   });
 
@@ -9201,6 +9440,24 @@ function nextStep(){
 
   }
 
+}
+
+function autoRegulateRemaining(){
+  const rpe=Number(document.getElementById("blockRPE")?.value||0);
+  const painRaw=document.getElementById("blockPain")?.value;
+  const pain=painRaw===""?null:Number(painRaw);
+  const technique=document.getElementById("blockTechnique")?.value||"";
+  const result=document.getElementById("autoRegResult");
+  if(!rpe&&pain===null&&!technique){if(result)result.textContent="Inserisci almeno un feedback.";return}
+  const remaining=currentWorkout.slice(currentIndex+1);
+  if(!remaining.length){if(result)result.textContent="Non ci sono altri blocchi da adattare.";return}
+  let factor=1,action="MANTIENI";
+  if((pain!==null&&pain>=4)||rpe>=9.5||technique==="poor"){factor=.65;action="RIDUCI NETTAMENTE"}
+  else if((pain!==null&&pain>=3)||rpe>=9||technique==="fair"){factor=.82;action="CONTROLLA"}
+  else if(rpe&&rpe<=7&&(pain===null||pain<=2)&&technique==="good"&&["SPINGI","PROGREDISCI"].includes(masterDecisionModel().action)){factor=1.03;action="CONSOLIDA"}
+  currentWorkout=currentWorkout.slice(0,currentIndex+1).concat(remaining.map(e=>({...e,s:Math.max(30,Math.round(Number(e.s||90)*factor)),reason:`${e.reason||""} · Autoregolazione ${action.toLowerCase()}`})));
+  if(result)result.textContent=`${action}: il resto della seduta è stato ricalibrato al ${Math.round(factor*100)}%.`;
+  speak(`Coach: ${action}`,true);
 }
 
 function prevStep(){
@@ -10176,10 +10433,15 @@ function saveCompletedSession(){
         permanentLevel:
           getLevel(
             e.id
-          )
+          ),
+
+        weightKg:
+          completedSteps.find(x=>x.index===index)?.weightKg || null
 
       })
     );
+
+  const masterSnapshot=masterDecisionModel();
 
   d.sessions.push({
 
@@ -10237,6 +10499,21 @@ function saveCompletedSession(){
     progressionSignal:
       progressionSignal(),
 
+    masterAction:
+      masterSnapshot.action,
+
+    masterScore:
+      Math.round(masterSnapshot.score),
+
+    fitnessScore:
+      Math.round(masterSnapshot.fit.fitness),
+
+    fatigueScore:
+      Math.round(masterSnapshot.fit.fatigue),
+
+    performancePrediction:
+      Math.round(masterSnapshot.prediction.score),
+
     durationSec,
 
     estimatedDurationSec:
@@ -10276,6 +10553,22 @@ function saveCompletedSession(){
       APP_VERSION
 
   });
+
+  snapshot
+    .filter(step=>Number(step.weightKg)>0)
+    .forEach(step=>{
+      if(!d.progression.loadHistory[step.id])d.progression.loadHistory[step.id]=[];
+      d.progression.loadHistory[step.id].push({date:new Date().toISOString(),kg:Number(step.weightKg),rpe,postPain,dose:step.dose});
+      d.progression.loadHistory[step.id]=d.progression.loadHistory[step.id].slice(-100);
+    });
+
+  d.performance.unshift({date:new Date().toISOString(),metric:rpe?Math.round(durationSec/60*rpe):0,type:currentType});
+  d.readinessHistory.unshift({date:new Date().toISOString(),readiness,shoulderReadiness,performanceReadiness});
+  d.performance=d.performance.slice(0,200);
+  d.readinessHistory=d.readinessHistory.slice(0,200);
+
+  if(masterSnapshot.fatigue.score<55)d.fatigueDebt=Math.min(5,Number(d.fatigueDebt||0)+.5);
+  else if(masterSnapshot.fatigue.score>75)d.fatigueDebt=Math.max(0,Number(d.fatigueDebt||0)-.2);
 
   save(d);
 
@@ -10612,6 +10905,7 @@ function dashboard(
     updateVoiceUI();
     updateBackupInfo();
     updateFollowupUI();
+    renderMasterEngine();
 
   }
 
@@ -10620,6 +10914,8 @@ function dashboard(
   ){
 
     generateToday();
+
+    renderMasterEngine();
 
   }
 
