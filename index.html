@@ -73,17 +73,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 .planner-row{display:grid;grid-template-columns:120px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
 .planner-row:last-child{border-bottom:0}
 .response-chip{display:inline-flex;padding:5px 8px;border-radius:999px;background:var(--greenbg);color:#9af1ce;font-size:.64rem;margin:3px}
-@media(max-width:680px){.engine-grid{grid-template-columns:repeat(2,1fr)}.planner-row{grid-template-columns:1fr}} 
-.predict-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.predict-card{background:#071522;border:1px solid var(--line);border-radius:12px;padding:10px}
-.predict-card strong{display:block;font-size:1.05rem}
-.predict-card span{font-size:.62rem;color:var(--muted)}
-.curve{height:10px;background:#1a2e42;border-radius:999px;overflow:hidden;margin-top:7px}
-.curve i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green))}
-.curve.fatigue i{background:linear-gradient(90deg,var(--yellow),var(--red))}
-@media(max-width:680px){.predict-grid{grid-template-columns:1fr}}
-
-</style>
+@media(max-width:680px){.engine-grid{grid-template-columns:repeat(2,1fr)}.planner-row{grid-template-columns:1fr}} </style>
 </head>
 <body>
 <div id="startupSplash" class="splash"><div class="splash-box"><div class="spinner"></div><h2>Sincronizzazione For Life</h2><div class="small" id="splashText">Controllo IndexedDB e localStorageâ¦</div></div></div> <div class="app">
@@ -99,26 +89,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 </aside> <main class="main"> <section id="page-today">
 <div class="card hero"> <div class="hero-grid"> <div> <div class="eyebrow">Digital Coach adattivo giornaliero</div> <h2 id="todayTitle">Completa il check prima di allenarti</h2> <p class="small" id="todayMessage">Hybrid Longevity + motore Master: spalla, follow-up, fatica, performance, progressione, readiness, lavoro, ciclo reale e storico.</p> </div> <div class="readiness-pair"> <div class="readiness"><strong id="shoulderReadinessValue">â</strong><span>SPALLA</span></div> <div class="readiness"><strong id="performanceReadinessValue">â</strong><span>PERFORMANCE</span></div> </div> </div>
 </div> <div class="card"> <div class="eyebrow">Check quotidiano </div> <div class="small">Valuta la fitta una sola volta durante salita e discesa del braccio. Il follow-up viene attribuito solo a una seduta precedente eleggibile.</div> <div class="pain-scale" id="painScale"> <button onclick="setPain(0)">0</button><button onclick="setPain(1)">1</button><button onclick="setPain(2)">2</button> <button onclick="setPain(3)">3</button><button onclick="setPain(4)">4</button><button onclick="setPain(5)">5+</button> </div> <div class="grid3" style="margin-top:10px"> <div class="field"><label>Risposta ultima seduta</label><select id="pain24"><option value="0">Uguale o migliore</option><option value="1">Leggermente peggiore</option><option value="3">Chiaramente peggiore</option></select></div> <div class="field"><label>Sonno</label><select id="sleep"><option value="0">Buono</option><option value="1">Discreto</option><option value="2">Scarso</option></select></div> <div class="field"><label>RigiditÃ </label><select id="stiff"><option value="0">Bassa</option><option value="1">Media</option><option value="2">Alta</option></select></div> <div class="field"><label>Energia</label><select id="energy"><option value="0">Alta</option><option value="1">Media</option><option value="2">Bassa</option></select></div> <div class="field"><label>Carico lavoro oggi</label><select id="workload"><option value="0">Normale</option><option value="1">Turno intenso</option><option value="2">Turno molto pesante</option></select></div> <div class="field"><label>Forza braccio</label><select id="weakness"><option value="0">Normale</option><option value="5">Nuova debolezza</option></select></div> <div class="field"><label>Formicolio</label><select id="tingling"><option value="0">No</option><option value="5">Persistente</option></select></div> <div class="field"><label>Dolore notturno</label><select id="night"><option value="0">No</option><option value="2">Lieve</option><option value="5">Mi sveglia</option></select></div> </div> <div id="followupInfo" class="info" style="margin-top:10px"></div> <div id="modeBox" class="mode yellow" style="margin-top:10px"><strong>CHECK INCOMPLETO</strong><br>Seleziona il dolore.</div>
-</div> <div class="card"> <div class="eyebrow">Decisione Digital Coach Master</div> <div class="grid6"> <div class="stat"><strong id="mFatigue">â</strong><span>FATICA</span></div> <div class="stat"><strong id="mPerf">â</strong><span>PERFORMANCE</span></div> <div class="stat"><strong id="mProg">â</strong><span>PROGRESSIONE</span></div> <div class="stat"><strong id="mDaily">â</strong><span>READINESS OGGI</span></div> <div class="stat"><strong id="mAC">â</strong><span>A:C</span></div> <div class="stat"><strong id="mDebt">â</strong><span>FATIGUE DEBT</span></div> </div> <div id="masterDecision" class="info" style="margin-top:10px">Completa il check per la decisione integrata.</div>
-  <div class="predict-grid">
-    <div class="predict-card">
-      <strong id="predictionScore">â</strong>
-      <span>PERFORMANCE PREDICTION</span>
-      <div class="small" id="predictionText">In attesa di storico sufficiente.</div>
-    </div>
-    <div class="predict-card">
-      <strong id="fitnessScore">â</strong>
-      <span>FITNESS LONG-TERM</span>
-      <div class="curve"><i id="fitnessBar"></i></div>
-    </div>
-    <div class="predict-card">
-      <strong id="fatigueScore2">â</strong>
-      <span>FATIGUE SHORT-TERM</span>
-      <div class="curve fatigue"><i id="fatigueBar2"></i></div>
-    </div>
-  </div>
-  <div id="deloadIntelligence" class="builder-note">Adaptive Deload Intelligence in attesa di dati.</div>
- <div class="engine-grid" style="margin-top:10px"> <div class="engine-card"><strong id="loadMechanical">â</strong><span>MECCANICO</span></div> <div class="engine-card"><strong id="loadMuscular">â</strong><span>MUSCOLARE</span></div> <div class="engine-card"><strong id="loadCardio2">â</strong><span>CARDIO</span></div> <div class="engine-card"><strong id="loadDensity">â</strong><span>DENSITÃ</span></div> <div class="engine-card"><strong id="personalResponse">â</strong><span>RISPOSTA PERSONALE</span></div> </div> <div id="personalResponseWhy" class="builder-note">Il Personal Response Model inizierÃ  a personalizzarsi con lo storico.</div> <div class="system-fatigue"> <div class="fatigue-zone"><strong id="fatUpper">â</strong><span>UPPER / SPALLA</span><div class="fatigue-meter"><i id="fatUpperBar"></i></div></div> <div class="fatigue-zone"><strong id="fatLower">â</strong><span>LOWER BODY</span><div class="fatigue-meter"><i id="fatLowerBar"></i></div></div> <div class="fatigue-zone"><strong id="fatCardio">â</strong><span>CARDIO</span><div class="fatigue-meter"><i id="fatCardioBar"></i></div></div> <div class="fatigue-zone"><strong id="fatSystemic">â</strong><span>SISTEMICA</span><div class="fatigue-meter"><i id="fatSystemicBar"></i></div></div> </div> </div> <div class="card"> <div class="eyebrow">Motore di progressione</div> <div id="progressionAdvice" class="info">Completa il check.</div>
+</div> <div class="card"> <div class="eyebrow">Decisione Digital Coach Master</div> <div class="grid6"> <div class="stat"><strong id="mFatigue">â</strong><span>FATICA</span></div> <div class="stat"><strong id="mPerf">â</strong><span>PERFORMANCE</span></div> <div class="stat"><strong id="mProg">â</strong><span>PROGRESSIONE</span></div> <div class="stat"><strong id="mDaily">â</strong><span>READINESS OGGI</span></div> <div class="stat"><strong id="mAC">â</strong><span>A:C</span></div> <div class="stat"><strong id="mDebt">â</strong><span>FATIGUE DEBT</span></div> </div> <div id="masterDecision" class="info" style="margin-top:10px">Completa il check per la decisione integrata.</div> <div class="engine-grid" style="margin-top:10px"> <div class="engine-card"><strong id="loadMechanical">â</strong><span>MECCANICO</span></div> <div class="engine-card"><strong id="loadMuscular">â</strong><span>MUSCOLARE</span></div> <div class="engine-card"><strong id="loadCardio2">â</strong><span>CARDIO</span></div> <div class="engine-card"><strong id="loadDensity">â</strong><span>DENSITÃ</span></div> <div class="engine-card"><strong id="personalResponse">â</strong><span>RISPOSTA PERSONALE</span></div> </div> <div id="personalResponseWhy" class="builder-note">Il Personal Response Model inizierÃ  a personalizzarsi con lo storico.</div> <div class="system-fatigue"> <div class="fatigue-zone"><strong id="fatUpper">â</strong><span>UPPER / SPALLA</span><div class="fatigue-meter"><i id="fatUpperBar"></i></div></div> <div class="fatigue-zone"><strong id="fatLower">â</strong><span>LOWER BODY</span><div class="fatigue-meter"><i id="fatLowerBar"></i></div></div> <div class="fatigue-zone"><strong id="fatCardio">â</strong><span>CARDIO</span><div class="fatigue-meter"><i id="fatCardioBar"></i></div></div> <div class="fatigue-zone"><strong id="fatSystemic">â</strong><span>SISTEMICA</span><div class="fatigue-meter"><i id="fatSystemicBar"></i></div></div> </div> </div> <div class="card"> <div class="eyebrow">Motore di progressione</div> <div id="progressionAdvice" class="info">Completa il check.</div>
 </div> <div class="card"> <div class="eyebrow">Piano generato oggi</div> <div id="todayDuration"></div> <div id="todayWorkout" class="workout-list"><div class="small">Il piano apparirÃ  dopo il check.</div></div><div id="builderWhy" class="builder-note">Session Builder in attesa del check.</div> <button id="startToday" class="btn full" style="margin-top:12px" onclick="startGeneratedWorkout()" disabled>AVVIA ALLENAMENTO</button>
 </div> <div class="card"> <div class="eyebrow">Moduli personali </div> <div class="module-grid"> <div class="module" onclick="showPage('shoulder')"><div class="ico">ð©º</div><h3>Shoulder Rehab</h3><p>Cuffia, scapola, palla, roller e piscina.</p></div> <div class="module" onclick="showPage('military')"><div class="ico">ðª</div><h3>Military Safe</h3><p>Forza adattata alla spalla e attrezzatura.</p></div> <div class="module" onclick="showPage('running')"><div class="ico">ð</div><h3>Running & Hyrox</h3><p>Z2, intervalli, tempo e Hyrox.</p></div> <div class="module" onclick="showPage('work')"><div class="ico">ð</div><h3>Pizzaiolo Mode</h3><p>Pre-turno, micro-reset e post-turno.</p></div> </div>
 </div>
@@ -273,218 +244,7 @@ function masterProgression(){ const levels=Object.values(state.progression.byExe
 }
 function masterDaily(){ if(selectedPain==null)return{score:65}; const sl=+$("sleep").value,en=+$("energy").value,st=+$("stiff").value,wo=+$("workload").value; let s=85-selectedPain*11-sl*7-en*7-st*4-wo*5;s-=blocked?50:0;return{score:clamp(s,5,100)}
 }
-
-/* =========================================================
-   FITNESS vs FATIGUE MODEL
-   ========================================================= */
-function trainingImpulse(s){
-  const mins=Math.max(1,(+s.durationSec||+s.estimatedDurationSec||0)/60);
-  const rpe=clamp(+s.rpe||5,1,10);
-  return mins*rpe;
-}
-function expWeightedLoad(days,decay){
-  let sum=0,weight=0;
-  state.sessions.forEach(s=>{
-    const d=calendarDaysAgo(s.date);
-    if(d<0||d>days)return;
-    const w=Math.exp(-d/decay);
-    sum+=trainingImpulse(s)*w;
-    weight+=w;
-  });
-  return weight?sum/weight:0;
-}
-function fitnessFatigueModel(){
-  const fitnessRaw=expWeightedLoad(60,18);
-  const fatigueRaw=expWeightedLoad(14,4.5);
-  const fitness=clamp(fitnessRaw/7,0,100);
-  const fatigue=clamp(fatigueRaw/5.2,0,100);
-  const form=clamp(50+(fitness-fatigue)*.7,0,100);
-  let stateLabel="BALANCED";
-  if(fatigue>fitness+22)stateLabel="HIGH FATIGUE";
-  else if(fitness>fatigue+18)stateLabel="FRESH";
-  else if(fitness>=55&&fatigue>=55)stateLabel="FUNCTIONAL OVERREACH";
-  return{fitness,fatigue,form,stateLabel,fitnessRaw,fatigueRaw};
-}
-
-/* =========================================================
-   PERSONAL PERFORMANCE PREDICTION
-   ========================================================= */
-function performancePrediction(){
-  const confirmed=confirmedSessions(40);
-  if(confirmed.length<6){
-    return{
-      score:50,confidence:"LOW",delta:0,
-      text:"Servono almeno 6 sessioni confermate per una previsione personale affidabile."
-    };
-  }
-
-  const today=masterDaily();
-  const fit=fitnessFatigueModel();
-  const pr=personalResponseModel();
-
-  const samples=confirmed.map(s=>{
-    const rd=Number.isFinite(+s.readiness)?+s.readiness/10:5;
-    const good=sessionTolerated(s)?1:0;
-    return{rd,good,rpe:+s.rpe||6,post:+s.postPain||0};
-  });
-
-  const goodAvg=avg(samples.filter(x=>x.good).map(x=>x.rd))||5;
-  const badAvg=avg(samples.filter(x=>!x.good).map(x=>x.rd))||goodAvg;
-
-  let score=50;
-  score+=(today.score-50)*.35;
-  score+=(fit.form-50)*.30;
-  score+=(pr.score-50)*.20;
-
-  const readinessGap=(today.score/10)-goodAvg;
-  score+=readinessGap*4;
-
-  score=clamp(score,10,95);
-  const delta=score-50;
-
-  let text="ProbabilitÃ  di prestazione stabile.";
-  if(score>=80)text="Alta probabilitÃ  di rendere sopra il tuo livello medio recente.";
-  else if(score>=68)text="Buona probabilitÃ  di performance positiva.";
-  else if(score>=55)text="Performance probabilmente stabile: meglio consolidare.";
-  else if(score>=40)text="Performance incerta: evita progressioni aggressive.";
-  else text="Alta probabilitÃ  di rendimento ridotto: prioritÃ  al recupero.";
-
-  return{
-    score,
-    confidence:confirmed.length>=15?"HIGH":"MEDIUM",
-    delta,
-    goodReadiness:goodAvg,
-    badReadiness:badAvg,
-    text
-  };
-}
-
-/* =========================================================
-   ADAPTIVE DELOAD INTELLIGENCE
-   ========================================================= */
-function adaptiveDeloadIntelligence(){
-  const fit=fitnessFatigueModel();
-  const pred=performancePrediction();
-  const f=masterFatigue();
-  const pr=personalResponseModel();
-
-  let type="NONE";
-  let action="MANTIENI";
-  const reasons=[];
-
-  const functionalOverreach=
-    fit.stateLabel==="FUNCTIONAL OVERREACH" &&
-    pred.score>=55 &&
-    f.debt<2.8;
-
-  const negativeTrend=
-    pred.score<45 ||
-    f.score<45 ||
-    pr.score<50;
-
-  if(fit.fatigue>=80 && pred.score<45){
-    type="PROTECTIVE";
-    action="DELOAD";
-    reasons.push("fatica alta + previsione performance bassa");
-  }else if(functionalOverreach){
-    type="PLANNED";
-    action="CONSOLIDATE";
-    reasons.push("overreaching funzionale: fitness alta ma fatica temporaneamente elevata");
-  }else if(negativeTrend && fit.fatigue>fit.fitness+10){
-    type="EARLY";
-    action="REDUCE";
-    reasons.push("trend negativo con fatica superiore alla fitness");
-  }else if(fit.stateLabel==="FRESH" && pred.score>=70){
-    type="NONE";
-    action="PROGRESS";
-    reasons.push("fitness favorevole e fatica sotto controllo");
-  }else{
-    reasons.push("nessun segnale sufficiente per scarico automatico");
-  }
-
-  return{
-    type,action,reasons,
-    functionalOverreach,
-    fitness:fit.fitness,
-    fatigue:fit.fatigue,
-    prediction:pred.score
-  };
-}
-
-
-function masterDecision(){
-  const f=masterFatigue(),p=masterPerformance(),g=masterProgression(),d=masterDaily(),
-        pr=personalResponseModel(),l2=adaptiveLoadStatus(),
-        pred=performancePrediction(),ff=fitnessFatigueModel(),deload=adaptiveDeloadIntelligence();
-
-  const loadPenalty=
-    Math.max(0,l2.mechanical-1.35)*6+
-    Math.max(0,l2.muscular-1.35)*6+
-    Math.max(0,l2.cardio-1.45)*5+
-    Math.max(0,l2.density-1.5)*4;
-
-  let combined=
-    f.score*.24+
-    p.score*.14+
-    g.score*.10+
-    d.score*.22+
-    pr.score*.10+
-    pred.score*.12+
-    ff.form*.08-
-    loadPenalty;
-
-  let action="MANTIENI";
-
-  if(blocked||deload.action==="DELOAD"){
-    action="DELOAD";
-  }else if(deload.action==="REDUCE"){
-    action="RECUPERA";
-  }else if(deload.action==="CONSOLIDATE"){
-    action="CONTROLLA";
-  }else if(f.score<50||d.score<50||pr.score<45){
-    action="RECUPERA";
-  }else if(combined<65||l2.density>1.7){
-    action="CONTROLLA";
-  }else if(
-    combined>=82 &&
-    p.trend>=0 &&
-    f.ratio<1.4 &&
-    d.score>=80 &&
-    pr.hardTolerance>=.7 &&
-    pred.score>=72 &&
-    ff.fatigue<82
-  ){
-    action="SPINGI";
-  }else if(combined>=74&&p.trend>=-2&&pred.score>=60){
-    action="PROGREDISCI";
-  }
-
-  const positives=[],brakes=[];
-
-  if(d.score>=80)positives.push("readiness giornaliera alta");
-  if(f.score>=75)positives.push("fatica globale sotto controllo");
-  if(p.trend>3)positives.push(`performance +${p.trend.toFixed(1)}%`);
-  if(g.recent>=2)positives.push("progressioni recenti");
-  if(pr.score>=75)positives.push("risposta personale favorevole");
-  if(pred.score>=70)positives.push(`prediction ${Math.round(pred.score)}/100`);
-  if(ff.fitness>ff.fatigue+10)positives.push("fitness superiore alla fatica");
-
-  if(d.score<60)brakes.push("readiness giornaliera bassa");
-  if(f.ratio>1.5)brakes.push(`A:C ${f.ratio.toFixed(2)}`);
-  if(f.debt>=2)brakes.push(`fatigue debt ${f.debt.toFixed(1)}`);
-  if(p.trend<-3)brakes.push(`performance ${p.trend.toFixed(1)}%`);
-  if(l2.mechanical>1.5)brakes.push(`carico meccanico ${l2.mechanical.toFixed(2)}Ã`);
-  if(l2.muscular>1.5)brakes.push(`carico muscolare ${l2.muscular.toFixed(2)}Ã`);
-  if(l2.cardio>1.6)brakes.push(`carico cardio ${l2.cardio.toFixed(2)}Ã`);
-  if(pr.score<60)brakes.push("risposta personale prudente");
-  if(pred.score<50)brakes.push(`prediction ${Math.round(pred.score)}/100`);
-  if(ff.fatigue>ff.fitness+15)brakes.push("fatigue superiore alla fitness");
-
-  return{
-    f,p,g,d,pr,l2,pred,ff,deload,
-    combined:clamp(combined,0,100),
-    action,positives,brakes
-  };
+function masterDecision(){ const f=masterFatigue(),p=masterPerformance(),g=masterProgression(),d=masterDaily(),pr=personalResponseModel(),l2=adaptiveLoadStatus(); const loadPenalty=Math.max(0,l2.mechanical-1.35)*6+Math.max(0,l2.muscular-1.35)*6+Math.max(0,l2.cardio-1.45)*5+Math.max(0,l2.density-1.5)*4; let combined=f.score*.32+p.score*.17+g.score*.12+d.score*.26+pr.score*.13-loadPenalty,action="MANTIENI"; if(blocked||f.score<35||d.score<35||l2.mechanical>2.1||l2.muscular>2.1)action="DELOAD"; else if(f.score<50||d.score<50||pr.score<45)action="RECUPERA"; else if(combined<65||l2.density>1.7)action="CONTROLLA"; else if(combined>=82&&p.trend>=0&&f.ratio<1.4&&d.score>=80&&pr.hardTolerance>=.7)action="SPINGI"; else if(combined>=74&&p.trend>=-2)action="PROGREDISCI"; const positives=[],brakes=[]; if(d.score>=80)positives.push("readiness giornaliera alta"); if(f.score>=75)positives.push("fatica globale sotto controllo"); if(p.trend>3)positives.push(`performance +${p.trend.toFixed(1)}%`); if(g.recent>=2)positives.push("progressioni recenti"); if(pr.score>=75)positives.push("risposta personale favorevole"); if(d.score<60)brakes.push("readiness giornaliera bassa"); if(f.ratio>1.5)brakes.push(`A:C ${f.ratio.toFixed(2)}`); if(f.debt>=2)brakes.push(`fatigue debt ${f.debt.toFixed(1)}`); if(p.trend<-3)brakes.push(`performance ${p.trend.toFixed(1)}%`); if(l2.mechanical>1.5)brakes.push(`carico meccanico ${l2.mechanical.toFixed(2)}Ã`); if(l2.muscular>1.5)brakes.push(`carico muscolare ${l2.muscular.toFixed(2)}Ã`); if(l2.cardio>1.6)brakes.push(`carico cardio ${l2.cardio.toFixed(2)}Ã`); if(pr.score<60)brakes.push("risposta personale prudente"); return{f,p,g,d,pr,l2,combined:clamp(combined,0,100),action,positives,brakes}
 }
 function effectivePhase(){const raw=rawCalendarPhase(),m=masterDecision();if(["DELOAD","RECUPERA"].includes(m.action))return"DELOAD";if(raw==="PEAK"&&["CONTROLLA","MANTIENI"].includes(m.action))return"BUILD";return raw} /* ========================================================= ADAPTIVE TRAINING LOAD 2.0 ========================================================= */
 function categoryLoadWeights(cat){ const m={ run:{mechanical:.45,muscular:.35,cardio:1,density:.65}, hyrox:{mechanical:.75,muscular:.75,cardio:.95,density:1}, legs:{mechanical:1,muscular:1,cardio:.35,density:.55}, military:{mechanical:.75,muscular:.85,cardio:.55,density:.8}, rehab:{mechanical:.25,muscular:.35,cardio:.1,density:.2}, core:{mechanical:.35,muscular:.55,cardio:.2,density:.4}, pool:{mechanical:.25,muscular:.35,cardio:.8,density:.45}, recovery:{mechanical:.1,muscular:.15,cardio:.25,density:.1}, mobility:{mechanical:.08,muscular:.1,cardio:.08,density:.08}, release:{mechanical:.05,muscular:.08,cardio:.03,density:.05}, physio:{mechanical:.35,muscular:.45,cardio:.2,density:.3} }; return m[cat]||{mechanical:.45,muscular:.5,cardio:.35,density:.45};
@@ -507,28 +267,7 @@ function personalResponseModel(){ const confirmed=confirmedSessions(30); if(conf
 }
 function personalModifierForType(type){ const p=personalResponseModel(); if(p.confidence==="LOW")return 1; if(p.weakType&&String(type).toLowerCase().includes(String(p.weakType).toLowerCase()))return clamp(.82+p.weakRate*.18,.82,1); return p.score>=80?1.03:p.score<60?.92:1;
 } /* ========================================================= LONG-TERM ADAPTIVE PLANNER ========================================================= */
-function longTermPlan(){
-  const md=masterDecision(),pr=personalResponseModel(),weeks=weeksSinceProgramStart(),
-        adl=adaptiveDeloadIntelligence();
-  const phases=["BASE","BUILD","PEAK","DELOAD"];
-  const out=[];
-  for(let i=0;i<8;i++){
-    const calendar=phases[(weeks+i)%4];
-    let effective=calendar,why="Calendario";
-    if(i===0){
-      effective=effectivePhase();why="Decisione corrente";
-    }else if((adl.action==="DELOAD"||adl.action==="REDUCE")&&i<=1){
-      effective="DELOAD";why="Adaptive Deload Intelligence";
-    }else if(adl.action==="CONSOLIDATE"&&i===1){
-      effective="BUILD";why="Consolidamento dopo overreaching funzionale";
-    }else if(calendar==="PEAK"&&(md.action==="CONTROLLA"||pr.score<60||md.pred.score<55)){
-      effective="BUILD";why="Peak posticipato";
-    }else if(calendar==="BUILD"&&md.action==="DELOAD"){
-      effective="BASE";why="Ricostruzione";
-    }
-    out.push({week:weeks+i+1,calendar,effective,why});
-  }
-  return out;
+function longTermPlan(){ const md=masterDecision(),pr=personalResponseModel(),weeks=weeksSinceProgramStart(); const phases=["BASE","BUILD","PEAK","DELOAD"]; const out=[]; for(let i=0;i<8;i++){ const calendar=phases[(weeks+i)%4]; let effective=calendar,why="Calendario"; if(i===0){ effective=effectivePhase();why="Decisione corrente"; }else if(["DELOAD","RECUPERA"].includes(md.action)&&i<=1){ effective="DELOAD";why="Fatica / readiness"; }else if(calendar==="PEAK"&&(md.action==="CONTROLLA"||pr.score<60)){ effective="BUILD";why="Peak posticipato"; }else if(calendar==="BUILD"&&md.action==="DELOAD"){ effective="BASE";why="Ricostruzione"; } out.push({week:weeks+i+1,calendar,effective,why}); } return out;
 }
 function renderLongTermPlanner(){ const el=$("longTermPlanner");if(!el)return; el.innerHTML=longTermPlan().map((x,i)=>`<div class="planner-row"><strong>${i===0?"ORA":"+"+i+" sett."}</strong><div><b>${x.effective}</b><div class="small">${x.why} Â· calendario ${x.calendar}</div></div><span class="tag">W${x.week}</span></div>`).join("");
 } /* ========================================================= LONGEVITY ENGINE Â· SYSTEM FATIGUE + LOAD MEMORY ========================================================= */
@@ -644,17 +383,7 @@ function validatePost(){const r=+$("sessionRPE").value;$("saveSessionBtn").disab
 function saveCompletedSession(){ if(!guardReady())return;const rpe=+$("sessionRPE").value;if(postPain==null||rpe<1||rpe>10)return; const durationSec=sessionStartedAt?Math.max(0,Math.round((Date.now()-sessionStartedAt)/1000)):0,snapshot=currentWorkout.map((e,i)=>{const done=completedSteps.find(x=>x.index===i);return{index:i,id:e.id,title:e.t,dose:e.d,seconds:+e.s||0,category:e.c,reason:e.reason||"",weightKg:done?.weightKg??null}}); const s={id:crypto.randomUUID?.()||String(Date.now()),date:new Date().toISOString(),day:localDateKey(),type:currentType,prePain:selectedPain,postPain,nextDayReaction:null,followUpAt:null,progressionApplied:false,mode,readiness,shoulderReadiness,performanceReadiness,calendarPhase:rawCalendarPhase(),effectivePhase:effectivePhase(),durationSec,estimatedDurationSec:workoutSeconds(currentWorkout),rpe,sessionLoad:Math.round(durationSec/60*rpe),goal:state.settings.goal,athleteLevel:state.settings.athleteLevel,prescribedWorkout:snapshot,completedSteps:[...completedSteps],equipment:{...state.settings.equipment},appVersion:APP_VERSION}; state.sessions.push(s); snapshot.forEach(x=>recordExerciseLoad(x,x.weightKg,rpe,postPain));const metric=s.sessionLoad/Math.max(1,durationSec/60);state.performance.unshift({id:"p-"+Date.now(),date:s.date,day:s.day,domain:String(currentType).toLowerCase(),metric,rpe}); state.readinessHistory.unshift({id:"r-"+Date.now(),date:s.date,day:s.day,shoulderReadiness,performanceReadiness,integrated:masterDaily().score}); updateExercisePerformanceStore();state.fatigueDebt=masterFatigue().debt;save();closePost();updateFollowupUI();dashboard(true);alert("Sessione salvata. Il Master ricalibrerÃ  la settimana e attenderÃ  il follow-up eleggibile.")
 } /* ========================================================= DASHBOARD ========================================================= */
 function streak(s){if(!s.length)return 0;const dates=[...new Set(s.map(x=>x.day).filter(Boolean))].sort().reverse();let count=0,c=localMidnight();for(const ds of dates){const dt=localMidnight(ds+"T00:00:00"),diff=Math.round((c-dt)/86400000);if(diff===0||diff===1){count++;c=dt}else break}return count}
-function dashboard(full=true){ const conf=confirmedSessions(10),good=conf.length?conf.filter(sessionTolerated).length/conf.length:0,avgPain=conf.length?avg(conf.map(x=>+x.prePain||0)):null,score=conf.length?clamp(Math.round(100-(avgPain||0)*12+good*20),10,100):50,md=masterDecision(),phase=effectivePhase(); $("scoreRing").style.setProperty("--p",score);$("scoreValue").textContent=score+"%";$("scoreLabel").textContent=conf.length?(good>=.8?"Tolleranza buona":"Tolleranza da costruire"):"Servono follow-up"; $("statSessions").textContent=state.sessions.length;$("statStreak").textContent=streak(state.sessions);$("profileAge").textContent=ageFromBirthDate(state.settings.birthDate);$("profileLevel").textContent=state.settings.athleteLevel==="advanced"?"Avanzato":state.settings.athleteLevel==="beginner"?"Principiante":"Intermedio";$("profileGoalMini").textContent=({hybrid:"Hybrid",hyrox:"Hyrox",military:"Military",run10k:"10 km",longevity:"LongevitÃ "})[state.settings.goal]||"Hybrid"; $("cycleTitle").textContent=phase;$("cycleText").textContent=`Calendario ${rawCalendarPhase()} Â· settimana reale ${weeksSinceProgramStart()+1}. Il Coach puÃ² congelare o retrocedere la fase.`;$("cycleProgress").style.width=({"BASE":25,"BUILD":50,"PEAK":75,"DELOAD":100})[phase]+"%"; $("coachSidebar").textContent=md.action;$("coachSidebarWhy").textContent=md.brakes.length?md.brakes.join(" Â· "):md.positives.join(" Â· ")||"Consolidamento."; $("mFatigue").textContent=Math.round(md.f.score);$("mPerf").textContent=Math.round(md.p.score);$("mProg").textContent=Math.round(md.g.score);$("mDaily").textContent=Math.round(md.d.score);$("mAC").textContent=md.f.ratio.toFixed(2);$("mDebt").textContent=md.f.debt.toFixed(1); const sf=systemFatigue(); [["fatUpper","fatUpperBar",sf.upper],["fatLower","fatLowerBar",sf.lower],["fatCardio","fatCardioBar",sf.cardio],["fatSystemic","fatSystemicBar",sf.systemic]].forEach(([a,b,v])=>{if($(a))$(a).textContent=Math.round(v)+"%";if($(b))$(b).style.width=clamp(v,0,100)+"%"}); const l2=adaptiveLoadStatus(),prm=personalResponseModel(); if($("loadMechanical"))$("loadMechanical").textContent=l2.mechanical.toFixed(2)+"Ã"; if($("loadMuscular"))$("loadMuscular").textContent=l2.muscular.toFixed(2)+"Ã"; if($("loadCardio2"))$("loadCardio2").textContent=l2.cardio.toFixed(2)+"Ã"; if($("loadDensity"))$("loadDensity").textContent=l2.density.toFixed(2)+"Ã"; if($("personalResponse"))$("personalResponse").textContent=Math.round(prm.score)+"/100"; if($("personalResponseWhy"))$("personalResponseWhy").textContent=`Personal Response Â· ${prm.confidence}: ${prm.why}`; renderLongTermPlanner();
-  const pred=performancePrediction(),ff=fitnessFatigueModel(),adl=adaptiveDeloadIntelligence();
-  if($("predictionScore"))$("predictionScore").textContent=Math.round(pred.score)+"/100";
-  if($("predictionText"))$("predictionText").textContent=`${pred.text} Â· confidenza ${pred.confidence}`;
-  if($("fitnessScore"))$("fitnessScore").textContent=Math.round(ff.fitness)+"/100";
-  if($("fatigueScore2"))$("fatigueScore2").textContent=Math.round(ff.fatigue)+"/100";
-  if($("fitnessBar"))$("fitnessBar").style.width=clamp(ff.fitness,0,100)+"%";
-  if($("fatigueBar2"))$("fatigueBar2").style.width=clamp(ff.fatigue,0,100)+"%";
-  if($("deloadIntelligence"))$("deloadIntelligence").textContent=
-    `Adaptive Deload: ${adl.type} Â· ${adl.action} Â· ${adl.reasons.join(" Â· ")}`;
- $("masterDecision").innerHTML=`<strong>${esc(md.action)} Â· ${Math.round(md.combined)}/100</strong><br>${md.brakes.length?`Freni: ${esc(md.brakes.join(" Â· "))}. `:""}${md.positives.length?`A favore: ${esc(md.positives.join(" Â· "))}.`:""}<br><span class="small">Fatica, sicurezza e risposta personale hanno prioritÃ . Prediction e Fitness-vs-Fatigue evitano sia scarichi prematuri sia progressioni eccessive. Una sola leva per volta.</span>`; if(full){loadSettings();equipmentSummary();renderWeek();renderPreviews();renderTests();renderLibrary();renderPhysioPreview();renderLongTermPlanner();updateFollowupUI();updateVoiceUI();updateBackupInfo();applyContrast();updateSystemStatus()} if(selectedPain!==null){generateToday();$("progressionAdvice").textContent=progressionText()}
+function dashboard(full=true){ const conf=confirmedSessions(10),good=conf.length?conf.filter(sessionTolerated).length/conf.length:0,avgPain=conf.length?avg(conf.map(x=>+x.prePain||0)):null,score=conf.length?clamp(Math.round(100-(avgPain||0)*12+good*20),10,100):50,md=masterDecision(),phase=effectivePhase(); $("scoreRing").style.setProperty("--p",score);$("scoreValue").textContent=score+"%";$("scoreLabel").textContent=conf.length?(good>=.8?"Tolleranza buona":"Tolleranza da costruire"):"Servono follow-up"; $("statSessions").textContent=state.sessions.length;$("statStreak").textContent=streak(state.sessions);$("profileAge").textContent=ageFromBirthDate(state.settings.birthDate);$("profileLevel").textContent=state.settings.athleteLevel==="advanced"?"Avanzato":state.settings.athleteLevel==="beginner"?"Principiante":"Intermedio";$("profileGoalMini").textContent=({hybrid:"Hybrid",hyrox:"Hyrox",military:"Military",run10k:"10 km",longevity:"LongevitÃ "})[state.settings.goal]||"Hybrid"; $("cycleTitle").textContent=phase;$("cycleText").textContent=`Calendario ${rawCalendarPhase()} Â· settimana reale ${weeksSinceProgramStart()+1}. Il Coach puÃ² congelare o retrocedere la fase.`;$("cycleProgress").style.width=({"BASE":25,"BUILD":50,"PEAK":75,"DELOAD":100})[phase]+"%"; $("coachSidebar").textContent=md.action;$("coachSidebarWhy").textContent=md.brakes.length?md.brakes.join(" Â· "):md.positives.join(" Â· ")||"Consolidamento."; $("mFatigue").textContent=Math.round(md.f.score);$("mPerf").textContent=Math.round(md.p.score);$("mProg").textContent=Math.round(md.g.score);$("mDaily").textContent=Math.round(md.d.score);$("mAC").textContent=md.f.ratio.toFixed(2);$("mDebt").textContent=md.f.debt.toFixed(1); const sf=systemFatigue(); [["fatUpper","fatUpperBar",sf.upper],["fatLower","fatLowerBar",sf.lower],["fatCardio","fatCardioBar",sf.cardio],["fatSystemic","fatSystemicBar",sf.systemic]].forEach(([a,b,v])=>{if($(a))$(a).textContent=Math.round(v)+"%";if($(b))$(b).style.width=clamp(v,0,100)+"%"}); const l2=adaptiveLoadStatus(),prm=personalResponseModel(); if($("loadMechanical"))$("loadMechanical").textContent=l2.mechanical.toFixed(2)+"Ã"; if($("loadMuscular"))$("loadMuscular").textContent=l2.muscular.toFixed(2)+"Ã"; if($("loadCardio2"))$("loadCardio2").textContent=l2.cardio.toFixed(2)+"Ã"; if($("loadDensity"))$("loadDensity").textContent=l2.density.toFixed(2)+"Ã"; if($("personalResponse"))$("personalResponse").textContent=Math.round(prm.score)+"/100"; if($("personalResponseWhy"))$("personalResponseWhy").textContent=`Personal Response Â· ${prm.confidence}: ${prm.why}`; renderLongTermPlanner(); $("masterDecision").innerHTML=`<strong>${esc(md.action)} Â· ${Math.round(md.combined)}/100</strong><br>${md.brakes.length?`Freni: ${esc(md.brakes.join(" Â· "))}. `:""}${md.positives.length?`A favore: ${esc(md.positives.join(" Â· "))}.`:""}<br><span class="small">Fatica, sicurezza e risposta personale hanno prioritÃ  sulla performance. Il Coach aumenta una sola leva per volta.</span>`; if(full){loadSettings();equipmentSummary();renderWeek();renderPreviews();renderTests();renderLibrary();renderPhysioPreview();renderLongTermPlanner();updateFollowupUI();updateVoiceUI();updateBackupInfo();applyContrast();updateSystemStatus()} if(selectedPain!==null){generateToday();$("progressionAdvice").textContent=progressionText()}
 }
 function equipmentSummary(){const e=state.settings.equipment,l={band:"Elastico",weights:"Pesi",bench:"Panca",pool:"Piscina",ball:"Palla",roller:"Roller"},a=Object.entries(e).filter(([,v])=>v).map(([k])=>l[k]);$("equipmentSummary").innerHTML=(a.length?a:["Solo corpo libero"]).map(x=>`<span>${x}</span>`).join("")}
 function updateSystemStatus(){if(!$("sysDb"))return;$("sysDb").textContent=storageMode.includes("IndexedDB")?"SYNC OK":"FALLBACK";$("sysSave").textContent=state.lastSuccessfulSaveAt?new Date(state.lastSuccessfulSaveAt).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"}):"â";$("sysPhase").textContent=effectivePhase();$("sysCoach").textContent=masterDecision().action;$("systemStatusText").innerHTML=`DB: <b>${esc(storageMode)}</b> Â· settimana reale <b>${weeksSinceProgramStart()+1}</b> Â· fase calendario <b>${rawCalendarPhase()}</b> Â· fase effettiva <b>${effectivePhase()}</b> Â· risposta personale <b>${Math.round(personalResponseModel().score)}/100</b> Â· ultimo salvataggio <b>${state.lastSuccessfulSaveAt?new Date(state.lastSuccessfulSaveAt).toLocaleString("it-IT"):"â"}</b>.`} /* ========================================================= LIBRARY / PROGRESS / TESTS ========================================================= */
