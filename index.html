@@ -1996,6 +1996,24 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
 </div>
 
+<div class="card">
+  <div class="eyebrow">Diagnostica e integrità</div>
+  <div class="grid4">
+    <div class="stat"><strong id="diagStorage">—</strong><span>ARCHIVIO</span></div>
+    <div class="stat"><strong id="diagTests">—</strong><span>SELF-TEST</span></div>
+    <div class="stat"><strong id="diagData">—</strong><span>DATI</span></div>
+    <div class="stat"><strong id="diagVersion">—</strong><span>VERSIONE</span></div>
+  </div>
+  <div id="diagnosticText" class="info" style="margin-top:10px">Diagnostica in attesa.</div>
+  <button class="btn secondary full" style="margin-top:10px" onclick="runDiagnostics(true)">Esegui controllo completo</button>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Trasparenza del motore</div>
+  <h3>Soglie prudenziali, non diagnosi clinica</h3>
+  <p class="small">Il Master combina readiness, dolore, sonno, energia, lavoro, follow-up, RPE e storico. A:C oltre 1,45, fatica superiore alla fitness, dolore elevato o previsione sotto 50 frenano la progressione. Queste soglie sono euristiche conservative: devono essere personalizzate e revisionate con un professionista qualificato.</p>
+</div>
+
 </section>
 
 <section id="page-training" class="hidden">
@@ -2245,7 +2263,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "13.0.0-HYBRID-LONGEVITY-MASTER";
+  "13.1.0-HYBRID-LONGEVITY-HARDENED";
 
 const SCHEMA_VERSION =
   14;
@@ -2309,6 +2327,7 @@ let countdownId = null;
 
 let timerRunning = false;
 let countdownRunning = false;
+let timerDeadline = null;
 
 let voiceEnabled = true;
 
@@ -2328,6 +2347,14 @@ let autoFlow = false;
 let autoAdvanceId = null;
 
 let generatedSessionType = "recovery";
+
+const runtimeHealth={
+  idbOk:null,
+  lastSaveOk:null,
+  lastSaveAt:null,
+  tests:[],
+  errors:[]
+};
 
 /* =========================================================
    DATABASE ESERCIZI
@@ -4172,18 +4199,30 @@ function save(d){
       updatedAt:new Date().toISOString()
     });
 
-  localStorage.setItem(
-    KEY,
-    JSON.stringify(n)
-  );
+  try{
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(n)
+    );
+    runtimeHealth.lastSaveOk=true;
+    runtimeHealth.lastSaveAt=n.updatedAt;
+  }catch(err){
+    runtimeHealth.lastSaveOk=false;
+    runtimeHealth.errors.push(`localStorage: ${err.message||err}`);
+    notify?.("Salvataggio locale non riuscito. Esporta subito un backup.","error");
+  }
 
   idbSet(n)
+    .then(()=>{runtimeHealth.idbOk=true})
     .catch(
-      err =>
+      err => {
+        runtimeHealth.idbOk=false;
+        runtimeHealth.errors.push(`IndexedDB: ${err.message||err}`);
         console.warn(
           "IndexedDB:",
           err
-        )
+        );
+      }
     );
 
   return n;
@@ -9797,6 +9836,9 @@ function startRealTimer(){
   timerRunning =
     true;
 
+  timerDeadline =
+    Date.now()+timerLeft*1000;
+
   document
     .getElementById(
       "timerBtn"
@@ -9812,7 +9854,7 @@ function startRealTimer(){
 
         if(timerLeft>0){
 
-          timerLeft--;
+          timerLeft=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));
 
           updateTimer();
 
@@ -9909,6 +9951,8 @@ function addTimerSeconds(sec){
       timerInitial,
       timerLeft
     );
+
+  if(timerRunning)timerDeadline=Date.now()+timerLeft*1000;
 
   updateTimer();
 
@@ -10045,6 +10089,9 @@ function finishTimer(){
 
   timerRunning =
     false;
+
+  timerDeadline =
+    null;
 
   timerLeft =
     0;
@@ -10571,6 +10618,8 @@ function saveCompletedSession(){
   else if(masterSnapshot.fatigue.score>75)d.fatigueDebt=Math.max(0,Number(d.fatigueDebt||0)-.2);
 
   save(d);
+
+  clearSessionDraft();
 
   closePost();
 
@@ -12364,9 +12413,14 @@ async function hydrate(){
         local
       );
 
+      runtimeHealth.idbOk=true;
+
     }
 
   }catch(err){
+
+    runtimeHealth.idbOk=false;
+    runtimeHealth.errors.push(`Hydrate: ${err.message||err}`);
 
     console.warn(
       "Hydrate:",
@@ -12375,6 +12429,62 @@ async function hydrate(){
 
   }
 
+}
+
+/* =========================================================
+   SELF-TEST E INTEGRITÀ DATI
+   ========================================================= */
+
+function validateDataIntegrity(input=data()){
+  const issues=[];
+  if(!input||typeof input!=="object")issues.push("radice dati non valida");
+  if(!Array.isArray(input.sessions))issues.push("sessioni non valide");
+  if(!Array.isArray(input.activities))issues.push("attività non valide");
+  if(!Array.isArray(input.tests))issues.push("test non validi");
+  if(!input.settings||typeof input.settings!=="object")issues.push("impostazioni mancanti");
+  const ids=new Set();
+  (input.sessions||[]).forEach((s,index)=>{
+    if(!s||typeof s!=="object")issues.push(`sessione ${index+1} non valida`);
+    if(s?.id&&ids.has(s.id))issues.push(`ID sessione duplicato ${s.id}`);
+    if(s?.id)ids.add(s.id);
+    if(s?.date&&!Number.isFinite(Date.parse(s.date)))issues.push(`data sessione ${index+1} non valida`);
+    if(s?.rpe!=null&&(Number(s.rpe)<1||Number(s.rpe)>10))issues.push(`RPE sessione ${index+1} fuori scala`);
+    if(s?.prePain!=null&&(Number(s.prePain)<0||Number(s.prePain)>5))issues.push(`dolore sessione ${index+1} fuori scala`);
+  });
+  return{ok:issues.length===0,issues:issues.slice(0,12),checked:(input.sessions||[]).length};
+}
+
+function runSelfTests(){
+  const tests=[];
+  const test=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(err){tests.push({name,ok:false,error:String(err.message||err)})}};
+  test("clamp",()=>masterClamp(120)===100&&masterClamp(-5)===0);
+  test("normalizzazione",()=>Array.isArray(norm({}).sessions)&&!!norm({}).settings);
+  test("periodizzazione",()=>!!masterPeriodization().effective);
+  test("decisione finita",()=>Number.isFinite(masterDecisionModel().score));
+  test("durata workout",()=>workoutSeconds([{s:60},{s:90}])===150);
+  test("escape HTML",()=>escapeHtml("<x>")==="&lt;x&gt;");
+  test("elementi critici",()=>["page-today","startToday","sessionModal","postModal","painScale"].every(id=>document.getElementById(id)));
+  runtimeHealth.tests=tests;
+  return tests;
+}
+
+function runDiagnostics(showToast=false){
+  const tests=runSelfTests(),integrity=validateDataIntegrity(),passed=tests.filter(x=>x.ok).length;
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+  set("diagStorage",runtimeHealth.idbOk===true?"RIDONDANTE":runtimeHealth.lastSaveOk===false?"ERRORE":"FALLBACK");
+  set("diagTests",`${passed}/${tests.length}`);
+  set("diagData",integrity.ok?"INTEGRI":"VERIFICA");
+  set("diagVersion",APP_VERSION.split("-")[0]);
+  const text=document.getElementById("diagnosticText");
+  if(text){
+    const failed=tests.filter(x=>!x.ok).map(x=>x.name);
+    text.className=integrity.ok&&failed.length===0?"info":"warning";
+    text.textContent=integrity.ok&&failed.length===0
+      ?`Controlli superati: ${passed}/${tests.length}. ${integrity.checked} sessioni verificate. Ultimo salvataggio: ${runtimeHealth.lastSaveAt?new Date(runtimeHealth.lastSaveAt).toLocaleString("it-IT"):"non ancora eseguito"}.`
+      :`Attenzione. Test falliti: ${failed.join(", ")||"nessuno"}. Problemi dati: ${integrity.issues.join(" · ")||"nessuno"}.`;
+  }
+  if(showToast)notify(integrity.ok&&passed===tests.length?"Diagnostica completata: tutto regolare.":"Diagnostica completata: controlla gli avvisi.",integrity.ok&&passed===tests.length?"success":"error");
+  return{tests,integrity};
 }
 
 /* =========================================================
@@ -12513,6 +12623,9 @@ window.addEventListener(
   "error",
   event => {
 
+    runtimeHealth.errors.push(String(event.message||"Errore applicazione"));
+    runtimeHealth.errors=runtimeHealth.errors.slice(-20);
+
     console.warn(
       "Errore applicazione:",
       event.error ||
@@ -12526,6 +12639,9 @@ window.addEventListener(
   "unhandledrejection",
   event => {
 
+    runtimeHealth.errors.push(String(event.reason?.message||event.reason||"Promise non gestita"));
+    runtimeHealth.errors=runtimeHealth.errors.slice(-20);
+
     console.warn(
       "Promise non gestita:",
       event.reason
@@ -12533,6 +12649,20 @@ window.addEventListener(
 
   }
 );
+
+function saveSessionDraft(){
+  if(!sessionStartedAt||!currentWorkout.length)return;
+  try{
+    sessionStorage.setItem(`${KEY}_sessionDraft`,JSON.stringify({savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
+  }catch(err){console.warn("Bozza sessione:",err)}
+}
+
+function clearSessionDraft(){
+  try{sessionStorage.removeItem(`${KEY}_sessionDraft`)}catch{}
+}
+
+window.addEventListener("pagehide",saveSessionDraft);
+window.addEventListener("beforeunload",saveSessionDraft);
 
 /* =========================================================
    START
@@ -12595,6 +12725,16 @@ document.addEventListener(
     updateStartButtonState();
     updateDecisionExplanation();
     improveAccessibility();
+    runDiagnostics(false);
+
+    try{
+      const draft=JSON.parse(sessionStorage.getItem(`${KEY}_sessionDraft`)||"null");
+      if(draft&&Date.now()-Date.parse(draft.savedAt)<86400000){
+        notify("È stata rilevata una sessione interrotta. I dati salvati restano integri; avvia nuovamente la sessione desiderata.");
+      }else if(draft){
+        clearSessionDraft();
+      }
+    }catch{clearSessionDraft()}
 
     if(!data().settings.onboardingComplete){
       openOnboarding();
