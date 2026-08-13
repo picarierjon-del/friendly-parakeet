@@ -2129,11 +2129,11 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 </div>
 
 <nav class="nav" aria-label="Navigazione principale">
-  <button class="active" data-page="today" onclick="showPage('today')"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
-  <button data-page="plan" onclick="showPage('plan')"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
-  <button data-page="training" data-related="shoulder,military,running,work" onclick="showPage('training')"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
-  <button data-page="progress" onclick="showPage('progress')"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
-  <button data-page="more" data-related="library,physio,tests,settings" onclick="showPage('more')"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
+  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
+  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
+  <button type="button" data-page="training" data-related="shoulder,military,running,work"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
+  <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
+  <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
 </nav>
 
 <div id="sessionModal" class="modal hidden">
@@ -2315,7 +2315,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
       <div class="safety-callout"><strong>Stop e valutazione</strong><p>Nuova debolezza, formicolio persistente o dolore notturno che ti sveglia bloccano automaticamente la seduta per la spalla.</p></div>
       <label class="checkline onboarding-field"><input type="checkbox" id="onboardSafety"> Ho letto e compreso che l’app non sostituisce medico o fisioterapista.</label>
     </section>
-    <div class="onboarding-actions"><button class="btn secondary hidden" id="onboardBack" onclick="onboardingBack()">Indietro</button><button class="btn" id="onboardNext" onclick="onboardingNext()">Continua</button></div>
+    <div class="onboarding-actions"><button type="button" class="btn secondary" id="onboardLater" onclick="dismissOnboarding()">Configura dopo</button><button type="button" class="btn secondary hidden" id="onboardBack" onclick="onboardingBack()">Indietro</button><button type="button" class="btn" id="onboardNext" onclick="onboardingNext()">Continua</button></div>
   </div>
 </div>
 
@@ -2338,7 +2338,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.3.0-HYBRID-CYCLING-PWA";
+  "14.3.1-HYBRID-CYCLING-NAV-FIX";
 
 const SCHEMA_VERSION =
   17;
@@ -12672,12 +12672,7 @@ function openDB(){
   return new Promise(
     (resolve,reject) => {
 
-      if(
-        !(
-          "indexedDB"
-          in window
-        )
-      ){
+      if(!window.indexedDB){
 
         reject(
           new Error(
@@ -13051,4 +13046,458 @@ function exportTechnicalReport(){
 
 /* =========================================================
    ERROR LOG
-   =================================
+   ========================================================= */
+
+/* =========================================================
+   UX · ONBOARDING · FEEDBACK · ACCESSIBILITÀ
+   ========================================================= */
+
+let onboardingStep = 0;
+let deferredInstallPrompt = null;
+
+function notify(message,type="success"){
+  const region = document.getElementById("toastRegion");
+  if(!region){ return; }
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.setAttribute("role",type==="error"?"alert":"status");
+  toast.textContent = String(message || "");
+  region.appendChild(toast);
+  setTimeout(()=>toast.remove(),4200);
+}
+
+function customConfirm(message,title="Conferma operazione"){
+  return new Promise(resolve=>{
+    const modal = document.getElementById("confirmModal");
+    const accept = document.getElementById("confirmAccept");
+    const cancel = document.getElementById("confirmCancel");
+    document.getElementById("confirmTitle").textContent = title;
+    document.getElementById("confirmText").textContent = message;
+    modal.classList.remove("hidden");
+    const done = value => {
+      modal.classList.add("hidden");
+      accept.onclick = null;
+      cancel.onclick = null;
+      resolve(value);
+    };
+    accept.onclick = ()=>done(true);
+    cancel.onclick = ()=>done(false);
+    cancel.focus();
+  });
+}
+
+function renderOnboarding(){
+  document.querySelectorAll(".onboarding-step").forEach((el,index)=>el.classList.toggle("hidden",index!==onboardingStep));
+  document.querySelectorAll(".onboarding-progress span").forEach((el,index)=>el.classList.toggle("active",index<=onboardingStep));
+  document.getElementById("onboardBack").classList.toggle("hidden",onboardingStep===0);
+  document.getElementById("onboardNext").textContent = onboardingStep===2 ? "Inizia" : "Continua";
+}
+
+function openOnboarding(){
+  const d = data();
+  onboardingStep = 0;
+  document.getElementById("onboardGoal").value = d.settings.goal;
+  document.getElementById("onboardLevel").value = d.settings.athleteLevel;
+  document.getElementById("onboardDays").value = String(d.settings.days);
+  document.getElementById("onboardMinutes").value = String(d.settings.minutes);
+  document.getElementById("onboardSafety").checked = false;
+  renderOnboarding();
+  document.getElementById("onboardingModal").classList.remove("hidden");
+  document.getElementById("onboardGoal").focus();
+}
+
+function dismissOnboarding(){
+  document.getElementById("onboardingModal").classList.add("hidden");
+  notify("Configurazione rimandata. Puoi riaprirla da Altro → Profilo, dati e backup.");
+  document.querySelector('.nav button[data-page="today"]')?.focus();
+}
+
+function onboardingBack(){
+  onboardingStep = Math.max(0,onboardingStep-1);
+  renderOnboarding();
+}
+
+function onboardingNext(){
+  if(onboardingStep<2){
+    onboardingStep++;
+    renderOnboarding();
+    document.querySelector(`.onboarding-step[data-step="${onboardingStep}"] select, .onboarding-step[data-step="${onboardingStep}"] input`)?.focus();
+    return;
+  }
+  if(!document.getElementById("onboardSafety").checked){
+    notify("Conferma di aver letto la regola di sicurezza.","error");
+    return;
+  }
+  const d = data();
+  d.settings.goal = document.getElementById("onboardGoal").value;
+  d.settings.athleteLevel = document.getElementById("onboardLevel").value;
+  d.settings.days = Number(document.getElementById("onboardDays").value);
+  d.settings.minutes = Number(document.getElementById("onboardMinutes").value);
+  d.settings.onboardingComplete = true;
+  save(d);
+  document.getElementById("onboardingModal").classList.add("hidden");
+  dashboard(true);
+  notify("Profilo configurato. Il piano è pronto.");
+}
+
+function improveAccessibility(){
+  document.querySelectorAll(".modal").forEach(modal=>{
+    if(!modal.hasAttribute("role")){
+      modal.setAttribute("role","dialog");
+      modal.setAttribute("aria-modal","true");
+    }
+  });
+  document.querySelectorAll(".close").forEach(button=>button.setAttribute("aria-label","Chiudi finestra"));
+  document.querySelectorAll(".pain-scale").forEach(scale=>{
+    scale.setAttribute("role","group");
+    scale.setAttribute("aria-label","Scala del dolore");
+    scale.querySelectorAll("button").forEach(button=>button.setAttribute("aria-pressed",button.classList.contains("active")?"true":"false"));
+  });
+}
+
+function syncPainAria(){
+  document.querySelectorAll(".pain-scale button").forEach(button=>button.setAttribute("aria-pressed",button.classList.contains("active")?"true":"false"));
+}
+
+window.addEventListener("beforeinstallprompt",event=>{
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  notify("L’app può essere installata dalla schermata Home.");
+});
+
+async function installApp(){
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    return;
+  }
+  notify("Apri il menu del browser e scegli “Aggiungi a schermata Home”. Se il file è aperto localmente, puoi anche conservarlo per l’uso offline.");
+}
+
+function downloadTextFile(name,content,type="text/plain"){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+
+function pwaManifestText(){
+  return JSON.stringify({
+    name:"Erjon Hybrid Coach AI",
+    short_name:"Erjon Coach",
+    description:"Coach adattivo personale per allenamento ibrido, corsa, recupero e spalla.",
+    id:"./",
+    start_url:"./index.html",
+    scope:"./",
+    display:"standalone",
+    orientation:"any",
+    background_color:"#050b12",
+    theme_color:"#061827",
+    lang:"it",
+    icons:[{src:"./icon.svg",sizes:"any",type:"image/svg+xml",purpose:"any maskable"}]
+  },null,2);
+}
+
+function pwaIconText(){
+  return [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">',
+    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2ee6a6"/><stop offset="1" stop-color="#53c8ff"/></linearGradient></defs>',
+    '<rect width="512" height="512" rx="112" fill="#061827"/><path d="M256 70 418 130v102c0 104-67 171-162 210C161 403 94 336 94 232V130l162-60Z" fill="url(#g)"/>',
+    '<path d="m181 255 48 48 105-112" fill="none" stroke="#061827" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>',
+    '</svg>'
+  ].join('');
+}
+
+function serviceWorkerText(){
+  const cacheName=`erjon-coach-${APP_VERSION}`;
+  return [
+    `'use strict';`,
+    `const CACHE_NAME=${JSON.stringify(cacheName)};`,
+    `const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg'];`,
+    `self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});`,
+    `self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});`,
+    `self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response}).catch(()=>caches.match(event.request).then(hit=>hit||caches.match('./index.html'))));return}event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response}))) });`,
+    `self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='SHOW_NOTIFICATION')self.registration.showNotification(event.data.title||'Erjon Coach',{body:event.data.body||'',tag:event.data.tag||'coach-reminder',renotify:false,data:{url:'./index.html'}})});`,
+    `self.addEventListener('periodicsync',event=>{if(event.tag==='coach-smart-reminders')event.waitUntil(self.registration.showNotification('Erjon Coach',{body:'Apri il coach per controllare allenamento, recupero e backup.',tag:'coach-periodic',data:{url:'./index.html'}}))});`,
+    `self.addEventListener('notificationclick',event=>{event.notification.close();event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const client of list){if('focus'in client)return client.focus()}return clients.openWindow(event.notification.data?.url||'./index.html')}))});`
+  ].join('\n');
+}
+
+async function downloadPwaFiles(){
+  const ok=await customConfirm("Verranno scaricati service-worker.js, manifest.webmanifest e icon.svg. Salvali accanto all’HTML rinominato index.html e pubblica la cartella via HTTPS.","Preparare il pacchetto PWA?");
+  if(!ok)return;
+  downloadTextFile("service-worker.js",serviceWorkerText(),"text/javascript");
+  setTimeout(()=>downloadTextFile("manifest.webmanifest",pwaManifestText(),"application/manifest+json"),250);
+  setTimeout(()=>downloadTextFile("icon.svg",pwaIconText(),"image/svg+xml"),500);
+  notify("File PWA generati. Pubblicali insieme a index.html.");
+}
+
+async function registerPwa(){
+  if(!("serviceWorker" in navigator)||!window.isSecureContext){updateDeviceStatus();return null}
+  try{
+    const registration=await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
+    await navigator.serviceWorker.ready;
+    runtimeHealth.serviceWorkerOk=true;
+    if("periodicSync" in registration&&"Notification" in window&&Notification.permission==="granted"){
+      try{await registration.periodicSync.register("coach-smart-reminders",{minInterval:12*60*60*1000})}catch{}
+    }
+    updateDeviceStatus();
+    return registration;
+  }catch(err){
+    runtimeHealth.serviceWorkerOk=false;
+    runtimeHealth.errors.push(`Service Worker: ${err.message||err}`);
+    updateDeviceStatus();
+    return null;
+  }
+}
+
+async function showCoachNotification(title,body,tag="coach-reminder"){
+  if(!("Notification" in window)||Notification.permission!=="granted")return false;
+  try{
+    const registration=await navigator.serviceWorker?.getRegistration?.();
+    if(registration){await registration.showNotification(title,{body,tag,renotify:false,data:{url:"./index.html"}})}
+    else new Notification(title,{body,tag});
+    return true;
+  }catch{return false}
+}
+
+async function enableNotifications(){
+  if(!("Notification" in window)){notify("Notifiche non supportate da questo browser.","error");updateDeviceStatus();return}
+  const permission=await Notification.requestPermission();
+  if(permission==="granted"){
+    const d=data();d.settings.reminders.enabled=true;save(d);
+    document.getElementById("smartReminders").checked=true;
+    await registerPwa();scheduleSmartReminders();
+    await showCoachNotification("Erjon Coach","Promemoria attivati correttamente.","coach-test");
+    haptic("save");
+  }else notify("Permesso notifiche non concesso.","error");
+  updateDeviceStatus();
+}
+
+function smartReminderMessage(){
+  const md=masterDecisionModel();
+  if(data().settings.reminders?.recoveryAlerts&&["STOP","DELOAD","RECUPERA"].includes(md.action)){
+    return md.action==="STOP"?"Sono presenti segnali di stop: apri l’app e controlla il check di sicurezza.":"Il carico recente suggerisce recupero: apri l’app per la seduta adattata.";
+  }
+  return `Oggi: ${sessionLabel(scheduledSessionType())}. Apri il coach e completa il check.`;
+}
+
+function scheduleSmartReminders(){
+  clearTimeout(smartReminderTimer);
+  const reminders=data().settings.reminders;
+  if(!reminders?.enabled||!("Notification" in window)||Notification.permission!=="granted")return;
+  const [hour,minute]=String(reminders.time||"18:00").split(":").map(Number);
+  const next=new Date();next.setHours(hour||0,minute||0,0,0);if(next<=new Date())next.setDate(next.getDate()+1);
+  smartReminderTimer=setTimeout(async()=>{
+    await showCoachNotification("Erjon Coach",smartReminderMessage(),"coach-daily");
+    scheduleSmartReminders();
+  },Math.min(next-Date.now(),2147483647));
+}
+
+function checkBackupReminder(){
+  const d=data(),days=Number(d.settings.reminders?.backupDays||30);
+  const age=d.lastBackupAt?(Date.now()-Date.parse(d.lastBackupAt))/86400000:Infinity;
+  if(age>=days){
+    notify(d.lastBackupAt?`Il backup ha più di ${days} giorni. Creane uno nuovo.`:"Crea il primo backup JSON per proteggere lo storico.","error");
+    if(d.settings.reminders?.enabled)showCoachNotification("Backup Erjon Coach","È il momento di salvare una nuova copia dello storico.","coach-backup");
+  }
+}
+
+function updateDeviceStatus(){
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+  const standalone=window.matchMedia?.("(display-mode: standalone)")?.matches||navigator.standalone===true;
+  set("pwaStatus",standalone?"INSTALLATA":runtimeHealth.serviceWorkerOk?"OFFLINE":"DA CONFIG.");
+  set("notificationStatus",!("Notification" in window)?"NO":Notification.permission==="granted"?"ATTIVE":Notification.permission==="denied"?"BLOCCATE":"DA ATTIVARE");
+  set("wakeStatus",wakeLock?"ATTIVO":("wakeLock" in navigator?"PRONTO":"NO"));
+  set("hapticStatus","vibrate" in navigator?"PRONTA":"NO");
+  const info=document.getElementById("pwaInfo");
+  if(info)info.textContent=!window.isSecureContext?"Apri il file tramite HTTPS per installazione, Service Worker e funzioni avanzate. Il semplice file locale continua a funzionare senza installazione.":runtimeHealth.serviceWorkerOk?"Service Worker attivo: app shell disponibile offline.":"Pubblica service-worker.js, manifest.webmanifest e icon.svg accanto a index.html, poi ricarica.";
+}
+
+async function testDeviceFeedback(){
+  haptic("start");
+  const sessionActive=!document.getElementById("sessionModal")?.classList.contains("hidden");
+  if("wakeLock" in navigator){await requestWakeLock();setTimeout(()=>{if(!sessionActive)releaseWakeLock()},1500)}
+  const shown=await showCoachNotification("Test Erjon Coach","Aptica, notifica e stato dispositivo verificati.","coach-device-test");
+  notify(shown?"Test inviato.":"Aptica testata. Abilita le notifiche per completare il test.",shown?"success":"error");
+  updateDeviceStatus();
+}
+
+document.addEventListener("keydown",event=>{
+  if(event.key!=="Escape"){ return; }
+  if(!document.getElementById("sessionModal").classList.contains("hidden")){ requestCloseSession(); return; }
+  if(!document.getElementById("postModal").classList.contains("hidden")){ closePost(); return; }
+  if(!document.getElementById("confirmModal").classList.contains("hidden")){ document.getElementById("confirmCancel").click(); }
+});
+
+document.addEventListener("click",event=>{
+  const button=event.target.closest?.(".nav button[data-page]");
+  if(!button)return;
+  event.preventDefault();
+  haptic("tap");
+  showPage(button.dataset.page);
+});
+
+window.addEventListener(
+  "error",
+  event => {
+
+    runtimeHealth.errors.push(String(event.message||"Errore applicazione"));
+    runtimeHealth.errors=runtimeHealth.errors.slice(-20);
+
+    console.warn(
+      "Errore applicazione:",
+      event.error ||
+      event.message
+    );
+
+  }
+);
+
+window.addEventListener(
+  "unhandledrejection",
+  event => {
+
+    runtimeHealth.errors.push(String(event.reason?.message||event.reason||"Promise non gestita"));
+    runtimeHealth.errors=runtimeHealth.errors.slice(-20);
+
+    console.warn(
+      "Promise non gestita:",
+      event.reason
+    );
+
+  }
+);
+
+function saveSessionDraft(){
+  if(!sessionStartedAt||!currentWorkout.length)return;
+  try{
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
+  }catch(err){console.warn("Bozza sessione:",err)}
+}
+
+function clearSessionDraft(){
+  try{
+    localStorage.removeItem(DRAFT_KEY);
+    sessionStorage.removeItem(`${KEY}_sessionDraft`);
+  }catch{}
+}
+
+async function restoreSessionDraftIfAvailable(){
+  let draft=null;
+  try{draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||sessionStorage.getItem(`${KEY}_sessionDraft`)||"null")}catch{clearSessionDraft();return false}
+  if(!draft||!Array.isArray(draft.currentWorkout)||!draft.currentWorkout.length)return false;
+  if(Date.now()-Date.parse(draft.savedAt)>7*86400000){clearSessionDraft();return false}
+  const resume=await customConfirm("È disponibile una sessione interrotta. Vuoi riprenderla dal punto salvato?","Riprendere la sessione?");
+  if(!resume){clearSessionDraft();return false}
+  currentWorkout=draft.currentWorkout.map(e=>({...e}));
+  currentIndex=Math.max(0,Math.min(currentWorkout.length-1,Number(draft.currentIndex||0)));
+  currentType=draft.currentType||"Sessione ripristinata";
+  generatedSessionType=draft.generatedSessionType||generatedSessionType;
+  completedSteps=Array.isArray(draft.completedSteps)?draft.completedSteps:[];
+  sessionStartedAt=Number(draft.sessionStartedAt)||Date.now();
+  selectedPain=draft.selectedPain==null?selectedPain:Number(draft.selectedPain);
+  mode=draft.mode||mode;
+  readiness=Number(draft.readiness||0);
+  shoulderReadiness=Number(draft.shoulderReadiness||0);
+  performanceReadiness=Number(draft.performanceReadiness||0);
+  document.getElementById("sessionModal").classList.remove("hidden");
+  requestWakeLock();
+  renderSession();
+  notify("Sessione ripristinata.");
+  return true;
+}
+
+window.addEventListener("pagehide",saveSessionDraft);
+window.addEventListener("beforeunload",saveSessionDraft);
+
+/* =========================================================
+   START
+   ========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    window.alert = message =>
+      notify(
+        message,
+        /non valid|errore|controlla|manca|impossibile/i.test(String(message))
+          ?"error"
+          :"success"
+      );
+
+    await hydrate();
+
+    await registerPwa();
+
+    const manualDate=document.getElementById("manualActivityDate");
+    if(manualDate){
+      const now=new Date();
+      now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+      manualDate.value=now.toISOString().slice(0,16);
+    }
+
+    const pain24 =
+      document.getElementById(
+        "pain24"
+      );
+
+    pain24.value =
+      "";
+
+    updateFollowupUI();
+
+    dashboard(true);
+
+    selectShoulder(
+      "reset",
+      document.querySelector(
+        "#page-shoulder .segment button"
+      )
+    );
+
+    selectMilitary(
+      "recovery",
+      document.querySelector(
+        "#page-military .segment button"
+      )
+    );
+
+    selectRun(
+      "easy",
+      document.querySelector(
+        "#page-running .segment button"
+      )
+    );
+
+    renderTests();
+    renderLibrary();
+    renderPhysioPreview();
+    updateVoiceUI();
+    updateBackupInfo();
+    updateFollowupUI();
+    renderWeek();
+    updateStartButtonState();
+    updateDecisionExplanation();
+    improveAccessibility();
+    runDiagnostics(false);
+    updateDeviceStatus();
+    scheduleSmartReminders();
+    checkBackupReminder();
+
+    const sessionRestored=await restoreSessionDraftIfAvailable();
+
+    if(!sessionRestored&&!data().settings.onboardingComplete){
+      openOnboarding();
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
