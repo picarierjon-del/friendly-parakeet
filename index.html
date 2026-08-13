@@ -1994,6 +1994,17 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     <p>I dati restano nel browser di questo dispositivo e nel backup che scegli di esportare. Per proteggerli usa il blocco schermo del dispositivo e non condividere il file JSON.</p>
   </div>
 
+  <div class="eyebrow" style="margin-top:16px">Calibrazione prudenziale Master</div>
+  <div class="grid3">
+    <div class="field"><label for="thresholdAC">Soglia A:C di cautela</label><input id="thresholdAC" type="number" min="1.1" max="2" step="0.05" value="1.45"></div>
+    <div class="field"><label for="thresholdPrediction">Previsione minima</label><input id="thresholdPrediction" type="number" min="30" max="70" step="1" value="50"></div>
+    <div class="field"><label for="thresholdMinSessions">Sessioni per personalizzare</label><input id="thresholdMinSessions" type="number" min="5" max="30" step="1" value="6"></div>
+  </div>
+  <div class="checks" style="margin-top:10px">
+    <label class="checkline"><input type="checkbox" id="deviceTested"> Test manuale completato sul mio iPhone</label>
+    <label class="checkline"><input type="checkbox" id="clinicalReviewed"> Soglie revisionate con un professionista</label>
+  </div>
+
 </div>
 
 <div class="card">
@@ -2006,6 +2017,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   </div>
   <div id="diagnosticText" class="info" style="margin-top:10px">Diagnostica in attesa.</div>
   <button class="btn secondary full" style="margin-top:10px" onclick="runDiagnostics(true)">Esegui controllo completo</button>
+  <button class="btn secondary full" style="margin-top:8px" onclick="exportTechnicalReport()">Esporta report tecnico</button>
 </div>
 
 <div class="card">
@@ -2263,7 +2275,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "13.1.0-HYBRID-LONGEVITY-HARDENED";
+  "14.0.0-HYBRID-LONGEVITY-AUDITED";
 
 const SCHEMA_VERSION =
   14;
@@ -4022,7 +4034,18 @@ function defaults(){
 
       voice:true,
 
-      onboardingComplete:false
+      onboardingComplete:false,
+
+      masterThresholds:{
+        acCaution:1.45,
+        predictionMin:50,
+        minSessions:6
+      },
+
+      validation:{
+        deviceTested:false,
+        clinicalReviewed:false
+      }
 
     },
 
@@ -4136,6 +4159,16 @@ function norm(v){
       equipment:{
         ...b.settings.equipment,
         ...(ss.equipment || {})
+      },
+
+      masterThresholds:{
+        ...b.settings.masterThresholds,
+        ...(ss.masterThresholds || {})
+      },
+
+      validation:{
+        ...b.settings.validation,
+        ...(ss.validation || {})
       },
 
       voice:
@@ -7754,19 +7787,22 @@ function systemFatigueModel(){
 }
 
 function performancePrediction(){
+  const thresholds=data().settings.masterThresholds||defaults().settings.masterThresholds;
   const list=confirmedSessions(40), fit=fitnessFatigueModel(), personal=personalResponseModel();
   const daily=selectedPain===null?65:masterClamp(85-selectedPain*11-Number(document.getElementById("sleep")?.value||0)*7-Number(document.getElementById("energy")?.value||0)*7-Number(document.getElementById("stiff")?.value||0)*4-Number(document.getElementById("workload")?.value||0)*5-(blocked?50:0));
-  if(list.length<6)return{score:masterClamp(50+(daily-50)*.25+(fit.form-50)*.25),confidence:"BASSA",text:"Servono 6 sessioni confermate per una previsione personale."};
+  if(list.length<thresholds.minSessions)return{score:masterClamp(50+(daily-50)*.25+(fit.form-50)*.25),confidence:"BASSA",text:`Servono ${thresholds.minSessions} sessioni confermate per una previsione personale.`};
   const score=masterClamp(50+(daily-50)*.38+(fit.form-50)*.32+(personal.score-50)*.3,10,95);
   return{score,confidence:list.length>=15?"ALTA":"MEDIA",text:score>=75?"Alta probabilità di risposta positiva.":score>=55?"Prestazione probabilmente stabile.":score>=40?"Prestazione incerta: consolida.":"Probabile rendimento ridotto: recupera."};
 }
 
 function masterDecisionModel(){
+  const thresholds=data().settings.masterThresholds||defaults().settings.masterThresholds;
   const fatigue=masterFatigueModel(), fit=fitnessFatigueModel(), personal=personalResponseModel(), prediction=performancePrediction();
   const daily=selectedPain===null?65:masterClamp(readiness);
   let score=fatigue.score*.3+daily*.25+prediction.score*.2+fit.form*.15+personal.score*.1,action="MANTIENI";
-  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68||fatigue.ratio>1.55)action="CONTROLLA";else if(score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(score>=74&&prediction.score>=60)action="PROGREDISCI";
-  const brakes=[];if(fatigue.ratio>1.45)brakes.push(`A:C ${fatigue.ratio.toFixed(2)}`);if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<50)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
+  const enoughData=confirmedSessions(40).length>=thresholds.minSessions;
+  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68||fatigue.ratio>thresholds.acCaution+.1)action="CONTROLLA";else if(enoughData&&score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(enoughData&&score>=74&&prediction.score>=60)action="PROGREDISCI";
+  const brakes=[];if(!enoughData)brakes.push("storico insufficiente: modalità prudenziale");if(fatigue.ratio>thresholds.acCaution)brakes.push(`A:C ${fatigue.ratio.toFixed(2)}`);if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<thresholds.predictionMin)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
   return{action,score:masterClamp(score),fatigue,fit,personal,prediction,daily,brakes};
 }
 
@@ -11715,6 +11751,12 @@ function loadSettings(){
     .value =
       data().note || "";
 
+  document.getElementById("thresholdAC").value=s.masterThresholds?.acCaution??1.45;
+  document.getElementById("thresholdPrediction").value=s.masterThresholds?.predictionMin??50;
+  document.getElementById("thresholdMinSessions").value=s.masterThresholds?.minSessions??6;
+  document.getElementById("deviceTested").checked=!!s.validation?.deviceTested;
+  document.getElementById("clinicalReviewed").checked=!!s.validation?.clinicalReviewed;
+
 }
 
 function saveSettings(){
@@ -11816,7 +11858,21 @@ function saveSettings(){
         .getElementById(
           "voiceSetting"
         )
-        .checked
+        .checked,
+
+    onboardingComplete:
+      d.settings.onboardingComplete===true,
+
+    masterThresholds:{
+      acCaution:masterClamp(Number(document.getElementById("thresholdAC").value||1.45),1.1,2),
+      predictionMin:masterClamp(Number(document.getElementById("thresholdPrediction").value||50),30,70),
+      minSessions:Math.round(masterClamp(Number(document.getElementById("thresholdMinSessions").value||6),5,30))
+    },
+
+    validation:{
+      deviceTested:document.getElementById("deviceTested").checked,
+      clinicalReviewed:document.getElementById("clinicalReviewed").checked
+    }
 
   };
 
@@ -12470,6 +12526,7 @@ function runSelfTests(){
 
 function runDiagnostics(showToast=false){
   const tests=runSelfTests(),integrity=validateDataIntegrity(),passed=tests.filter(x=>x.ok).length;
+  const capabilities=browserCapabilityAudit();
   const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
   set("diagStorage",runtimeHealth.idbOk===true?"RIDONDANTE":runtimeHealth.lastSaveOk===false?"ERRORE":"FALLBACK");
   set("diagTests",`${passed}/${tests.length}`);
@@ -12480,11 +12537,23 @@ function runDiagnostics(showToast=false){
     const failed=tests.filter(x=>!x.ok).map(x=>x.name);
     text.className=integrity.ok&&failed.length===0?"info":"warning";
     text.textContent=integrity.ok&&failed.length===0
-      ?`Controlli superati: ${passed}/${tests.length}. ${integrity.checked} sessioni verificate. Ultimo salvataggio: ${runtimeHealth.lastSaveAt?new Date(runtimeHealth.lastSaveAt).toLocaleString("it-IT"):"non ancora eseguito"}.`
+      ?`Controlli superati: ${passed}/${tests.length}. ${integrity.checked} sessioni verificate. Browser ${capabilities.supported}/${capabilities.total}. Validazione: ${data().settings.validation?.deviceTested?"iPhone verificato":"iPhone da verificare"} · ${data().settings.validation?.clinicalReviewed?"revisione professionale registrata":"revisione professionale assente"}.`
       :`Attenzione. Test falliti: ${failed.join(", ")||"nessuno"}. Problemi dati: ${integrity.issues.join(" · ")||"nessuno"}.`;
   }
   if(showToast)notify(integrity.ok&&passed===tests.length?"Diagnostica completata: tutto regolare.":"Diagnostica completata: controlla gli avvisi.",integrity.ok&&passed===tests.length?"success":"error");
   return{tests,integrity};
+}
+
+function browserCapabilityAudit(){
+  const checks={localStorage:!!window.localStorage,indexedDB:"indexedDB" in window,speech:"speechSynthesis" in window,wakeLock:"wakeLock" in navigator,crypto:!!window.crypto?.randomUUID,files:!!window.FileReader,visibility:"visibilityState" in document,storageEstimate:!!navigator.storage?.estimate};
+  return{checks,supported:Object.values(checks).filter(Boolean).length,total:Object.keys(checks).length,userAgent:navigator.userAgent,standalone:window.matchMedia?.("(display-mode: standalone)")?.matches||navigator.standalone===true};
+}
+
+function exportTechnicalReport(){
+  const diagnostic=runDiagnostics(false),browser=browserCapabilityAudit(),d=data(),md=masterDecisionModel();
+  const report={generatedAt:new Date().toISOString(),appVersion:APP_VERSION,schemaVersion:SCHEMA_VERSION,diagnostic,browser,validation:d.settings.validation,thresholds:d.settings.masterThresholds,dataSummary:{sessions:d.sessions.length,confirmed:confirmedSessions(999).length,activities:d.activities.length,tests:d.tests.length,lastUpdated:d.updatedAt},masterSnapshot:{action:md.action,score:Math.round(md.score),fatigue:Math.round(md.fatigue.score),prediction:Math.round(md.prediction.score),fitness:Math.round(md.fit.fitness),acuteChronic:Number(md.fatigue.ratio.toFixed(2)),brakes:md.brakes},disclaimer:"Le soglie sono euristiche prudenziali e non costituiscono diagnosi o prescrizione clinica."};
+  const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=`erjon-coach-report-${localDay()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify("Report tecnico esportato.");
 }
 
 /* =========================================================
