@@ -1450,8 +1450,8 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
     <button type="button" class="module" onclick="showPage('running')">
       <div class="ico"><svg class="ui-icon"><use href="#i-run"></use></svg></div>
-      <h3>Running & Hyrox</h3>
-      <p>Z2, intervalli, soglia, Hyrox Engine e simulazioni.</p>
+      <h3>Endurance & Cycling</h3>
+      <p>Corsa, Hyrox, MTB, bici da corsa, cyclette e piscina.</p>
     </button>
 
     <button type="button" class="module" onclick="showPage('work')">
@@ -1566,7 +1566,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 <section id="page-running" class="hidden">
 
 <div class="card">
-  <div class="eyebrow">Running & Hyrox</div>
+  <div class="eyebrow">Endurance · Running · Cycling · Hyrox</div>
   <h2>Motore aerobico e performance ibrida</h2>
 
   <p class="small">
@@ -1583,12 +1583,15 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     <button onclick="selectRun('tempo',this)">Tempo</button>
     <button onclick="selectRun('hyrox',this)">Hyrox Safe</button>
     <button onclick="selectRun('pool',this)">Pool Cardio</button>
+    <button onclick="selectRun('mtb',this)">Mountain Bike</button>
+    <button onclick="selectRun('roadBike',this)">Bici da corsa</button>
+    <button onclick="selectRun('indoorBike',this)">Cyclette</button>
   </div>
 
   <div id="runningPreview" class="workout-list"></div>
 
   <button class="btn blue full" style="margin-top:12px" onclick="startRunning()">
-    Avvia sessione
+    Avvia sessione endurance
   </button>
 
 </div>
@@ -1653,6 +1656,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
         <option value="legs">Gambe</option>
         <option value="core">Core</option>
         <option value="run">Corsa</option>
+        <option value="cycling">Ciclismo</option>
         <option value="hyrox">Hyrox</option>
         <option value="pool">Piscina</option>
         <option value="work">Pizzaiolo</option>
@@ -1784,6 +1788,28 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 </section>
 
 <section id="page-progress" class="hidden">
+
+<div class="card">
+  <div class="eyebrow">Attività da altre app</div>
+  <h2>Aggiungi attività manualmente</h2>
+  <p class="small">Registra allenamenti svolti con Garmin, Strava, Apple Fitness, Zwift o qualsiasi altra app. Durata × RPE entrerà nel carico del Master Engine.</p>
+
+  <div class="grid3" style="margin-top:12px">
+    <div class="field"><label for="manualActivityType">Attività</label><select id="manualActivityType"><option value="mtb">Mountain Bike</option><option value="roadBike">Bici da corsa</option><option value="indoorBike">Cyclette / indoor bike</option><option value="runExternal">Corsa</option><option value="walkExternal">Camminata</option><option value="strengthExternal">Forza / palestra</option><option value="swimExternal">Nuoto</option><option value="hyroxExternal">Hyrox / functional</option><option value="sportExternal">Altro sport</option><option value="recoveryExternal">Recupero / mobilità</option></select></div>
+    <div class="field"><label for="manualActivityDate">Data e ora</label><input id="manualActivityDate" type="datetime-local"></div>
+    <div class="field"><label for="manualActivitySource">App sorgente</label><input id="manualActivitySource" maxlength="60" placeholder="es. Strava, Garmin, Zwift"></div>
+    <div class="field"><label for="manualActivityMinutes">Durata · minuti</label><input id="manualActivityMinutes" type="number" min="1" max="1440" inputmode="numeric" value="45"></div>
+    <div class="field"><label for="manualActivityRPE">RPE · 1–10</label><input id="manualActivityRPE" type="number" min="1" max="10" step="1" inputmode="numeric" value="6"></div>
+    <div class="field"><label for="manualActivityDistance">Distanza · km (opzionale)</label><input id="manualActivityDistance" type="number" min="0" max="1000" step="0.1" inputmode="decimal"></div>
+    <div class="field"><label for="manualActivityElevation">Dislivello · m (opzionale)</label><input id="manualActivityElevation" type="number" min="0" max="20000" step="1" inputmode="numeric"></div>
+    <div class="field"><label for="manualActivityPrePain">Dolore prima · 0–5</label><input id="manualActivityPrePain" type="number" min="0" max="5" step="1" inputmode="numeric" value="0"></div>
+    <div class="field"><label for="manualActivityPostPain">Dolore dopo · 0–5</label><input id="manualActivityPostPain" type="number" min="0" max="5" step="1" inputmode="numeric" value="0"></div>
+  </div>
+
+  <label class="checkline" style="margin-top:10px"><input type="checkbox" id="manualActivityFollowup" checked> Richiedi domani il follow-up della spalla</label>
+  <div class="field" style="margin-top:10px"><label for="manualActivityNotes">Note</label><textarea id="manualActivityNotes" maxlength="1000" placeholder="Percorso, intensità, sensazioni, dati utili..."></textarea></div>
+  <button class="btn blue full" style="margin-top:10px" onclick="saveManualActivity()">Salva attività manuale</button>
+</div>
 
 <div class="card">
 
@@ -2074,7 +2100,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   <div class="training-hub">
     <button class="hub-card accent-green" onclick="showPage('shoulder')"><svg class="ui-icon"><use href="#i-heart"></use></svg><span><strong>Spalla & recupero</strong><small>Rehab, mobilità, palla, roller e piscina</small></span><b>→</b></button>
     <button class="hub-card accent-blue" onclick="showPage('military')"><svg class="ui-icon"><use href="#i-train"></use></svg><span><strong>Forza & Military</strong><small>Progressioni sicure e fallback corpo libero</small></span><b>→</b></button>
-    <button class="hub-card accent-purple" onclick="showPage('running')"><svg class="ui-icon"><use href="#i-run"></use></svg><span><strong>Corsa & Hyrox</strong><small>Z2, intervalli, soglia e specificità</small></span><b>→</b></button>
+    <button class="hub-card accent-purple" onclick="showPage('running')"><svg class="ui-icon"><use href="#i-run"></use></svg><span><strong>Endurance & Cycling</strong><small>Corsa, Hyrox, MTB, bici da corsa e cyclette</small></span><b>→</b></button>
     <button class="hub-card accent-orange" onclick="showPage('work')"><svg class="ui-icon"><use href="#i-work"></use></svg><span><strong>Modalità lavoro</strong><small>Pre-turno, micro-reset e decompressione</small></span><b>→</b></button>
   </div>
 </section>
@@ -2312,10 +2338,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.2.0-HYBRID-LONGEVITY-PWA";
+  "14.3.0-HYBRID-CYCLING-PWA";
 
 const SCHEMA_VERSION =
-  16;
+  17;
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -2782,6 +2808,63 @@ function add(
   ],
 
   [
+    "mtbRide",
+    "Mountain Bike · Trail controllato",
+    "45 min · Z2 con salite controllate",
+    2700,
+    "🚵",
+    "cycling",
+    "Scegli un percorso gestibile. Cadenza fluida, presa morbida, discese entro il tuo livello tecnico e niente rischi inutili.",
+    "bodyweight",
+    {runType:"mtb"}
+  ],
+
+  [
+    "roadRide",
+    "Bici da corsa · Fondo Z2",
+    "50 min · ritmo conversazionale",
+    3000,
+    "🚴",
+    "cycling",
+    "Mantieni cadenza regolare e postura sostenibile. Evita tratti ad alto traffico e intensità non controllabili.",
+    "bodyweight",
+    {runType:"roadBike"}
+  ],
+
+  [
+    "indoorRide",
+    "Cyclette · Aerobico controllato",
+    "35 min · Z2",
+    2100,
+    "🚲",
+    "Regola sella e resistenza. Mantieni una cadenza fluida senza irrigidire collo, mani o spalle.",
+    "bodyweight",
+    {runType:"indoorBike"}
+  ],
+
+  [
+    "bikeIntervals",
+    "Intervalli in bici",
+    "6×2 min sostenuti / 2 min facili",
+    1440,
+    "⚡",
+    "cycling",
+    "Usa la cyclette o un tratto sicuro e regolare. Sforzo sostenuto, mai sprint massimale su strada o trail.",
+    "bodyweight"
+  ],
+
+  [
+    "bikeCooldown",
+    "Defaticamento in bici",
+    "5 min facili",
+    300,
+    "🌬️",
+    "cycling",
+    "Riduci gradualmente resistenza e ritmo; respira profondamente e rilassa la presa.",
+    "bodyweight"
+  ],
+
+  [
     "stretch",
     "Stretching dolce pettorale",
     "2×30 sec",
@@ -3152,6 +3235,21 @@ const categorySeeds = {
     "Recovery Jog 20 min"
   ],
 
+  cycling:[
+    "MTB tecnica facile",
+    "MTB fondo Z2",
+    "MTB salite controllate",
+    "Bici da corsa fondo facile",
+    "Bici da corsa progressivo",
+    "Cyclette recupero 20 min",
+    "Cyclette Z2 35 min",
+    "Cyclette intervalli 6×2 min",
+    "Cadenza agile 90 rpm",
+    "Tempo bike controllato",
+    "Bike brick breve",
+    "Defaticamento in bici"
+  ],
+
   hyrox:[
     "Run + Squat",
     "Run + Affondi",
@@ -3227,6 +3325,8 @@ Object
               ?"🍕"
               :cat==="run"
               ?"🏃"
+              :cat==="cycling"
+              ?"🚴"
               :cat==="hyrox"
               ?"🏁"
               :cat==="legs"
@@ -4002,6 +4102,28 @@ const running = {
     "poolJog",
     "poolScap",
     "breathing"
+  ],
+
+  mtb:[
+    "breathing",
+    "mtbRide",
+    "bikeCooldown",
+    "stretch"
+  ],
+
+  roadBike:[
+    "breathing",
+    "roadRide",
+    "bikeCooldown",
+    "stretch"
+  ],
+
+  indoorBike:[
+    "breathing",
+    "indoorRide",
+    "bikeIntervals",
+    "bikeCooldown",
+    "stretch"
   ]
 
 };
@@ -5348,6 +5470,10 @@ const SESSION_LABELS = {
   interval:"Intervalli",
   tempo:"Tempo Run",
   threshold:"Soglia",
+  mtb:"Mountain Bike",
+  roadBike:"Bici da corsa",
+  indoorBike:"Cyclette",
+  cycling:"Ciclismo",
 
   rehab:"Spalla & mobilità",
   mobility:"Mobilità / Recovery",
@@ -5891,6 +6017,15 @@ function applyAthleteBaseline(e){
 
   }
 
+  if(["mtbRide","roadRide","indoorRide"].includes(out.id)){
+    const base={mtbRide:45,roadRide:50,indoorRide:35}[out.id];
+    const mins=level==="beginner"?Math.max(20,base-10):level==="advanced"?base+15:base;
+    const suffix=out.id==="mtbRide"?" · Z2 con salite controllate":out.id==="roadRide"?" · ritmo conversazionale":" · Z2";
+    out.d=`${mins} min${suffix}`;
+    out.s=mins*60;
+    return out;
+  }
+
   const range =
     String(out.d)
       .match(
@@ -6005,6 +6140,7 @@ function isFollowupEligible(s){
 
   if(
     !s ||
+    s.followupRequired===false ||
     s.nextDayReaction!=null ||
     !Number.isFinite(
       Date.parse(s.date)
@@ -6040,6 +6176,7 @@ function pendingFollowup(){
 
     if(
       sessions[i] &&
+      sessions[i].followupRequired!==false &&
       sessions[i].nextDayReaction==null
     ){
 
@@ -7686,7 +7823,11 @@ function fitToTime(
         "threshold",
         "hyroxRun",
         "poolJog",
-        "walkFast"
+        "walkFast",
+        "mtbRide",
+        "roadRide",
+        "indoorRide",
+        "bikeIntervals"
       ].includes(e.id);
 
     if(
@@ -7896,7 +8037,7 @@ function masterFatigueModel(){
   const daily=Array.from({length:7},(_,i)=>d.sessions.filter(s=>masterDaysAgo(s.date)===i).reduce((a,s)=>a+masterSessionLoad(s),0));
   const mean=masterAvg(daily), sd=Math.sqrt(masterAvg(daily.map(x=>(x-mean)**2)));
   const monotony=sd?mean/sd:0;
-  const hard=d.sessions.filter(s=>masterDaysAgo(s.date)<=7&&(Number(s.rpe)>=8||/interval|tempo|hyrox|military/i.test(String(s.type)))).length;
+  const hard=d.sessions.filter(s=>masterDaysAgo(s.date)<=7&&(Number(s.rpe)>=8||/interval|tempo|hyrox|military|mountain bike|bici da corsa|cyclette/i.test(String(s.type)))).length;
   let debt=Number(d.fatigueDebt||0);
   let score=78-pain*6-Math.max(0,ratio-1)*18-Math.max(0,monotony-1.7)*8-Math.max(0,hard-3)*5-debt*5;
   score=masterClamp(score,10,100);
@@ -7920,10 +8061,10 @@ function personalResponseModel(){
 
 function systemFatigueModel(){
   const zones={upper:0,lower:0,cardio:0,systemic:0}, chronic={upper:0,lower:0,cardio:0,systemic:0};
-  const zoneFor=c=>/rehab|military|physio|release/.test(c)?"upper":/legs/.test(c)?"lower":/run|hyrox|pool/.test(c)?"cardio":"systemic";
+  const zoneFor=c=>/rehab|military|physio|release/.test(c)?"upper":/legs/.test(c)?"lower":/run|hyrox|pool|cycling/.test(c)?"cardio":"systemic";
   data().sessions.filter(s=>masterDaysAgo(s.date)<=28).forEach(s=>{
     const items=s.prescribedWorkout||[], load=masterSessionLoad(s), counts={upper:0,lower:0,cardio:0,systemic:0};
-    if(items.length)items.forEach(x=>counts[zoneFor(String(x.category||EX[x.id]?.c||""))]++);else counts.systemic=1;
+    if(items.length)items.forEach(x=>counts[zoneFor(String(x.category||EX[x.id]?.c||""))]++);else counts[zoneFor(String(s.trainingCategory||s.generatedSessionType||"systemic"))]=1;
     const total=Math.max(1,Object.values(counts).reduce((a,b)=>a+b,0));
     Object.keys(zones).forEach(k=>{const share=load*counts[k]/total;chronic[k]+=share;if(masterDaysAgo(s.date)<=7)zones[k]+=share});
   });
@@ -7969,7 +8110,7 @@ function applyMasterToWorkout(list){
   const factor=masterWorkoutMultiplier(),action=masterDecisionModel().action;
   return(list||[]).map(source=>{
     const e={...source};
-    const timed=/run|hyrox|pool|recovery/.test(String(e.c||""))||/min|sec/i.test(String(e.d||""));
+    const timed=/run|hyrox|pool|cycling|recovery/.test(String(e.c||""))||/min|sec/i.test(String(e.d||""));
     if(factor<1&&timed)e.s=Math.max(30,Math.round(Number(e.s||90)*factor));
     if(factor<1&&!timed)e.d=adjustRepDose(String(e.d||""),"reduce");
     e.reason=`${e.reason||"Dose base"} · Master ${action}`;
@@ -8783,13 +8924,17 @@ function renderPreviews(){
     )
   );
 
+  const cyclingSelected=["mtb","roadBike","indoorBike"].includes(runType);
+
   let runIds =
     mode==="recovery" &&
     ![
       "easy",
       "pool"
     ].includes(runType)
-      ?running.easy
+      ?cyclingSelected
+        ?["breathing","indoorRide","bikeCooldown","stretch"]
+        :running.easy
       :[
           ...running[
             runType
@@ -8806,6 +8951,8 @@ function renderPreviews(){
         ?"hyroxEngine"
         :runType==="pool"
         ?"recovery"
+        :cyclingSelected
+        ?"cycling"
         :"easy"
     )
   );
@@ -9163,13 +9310,17 @@ function startRunning(){
     return;
   }
 
+  const cyclingSelected=["mtb","roadBike","indoorBike"].includes(runType);
+
   let ids =
     mode==="recovery" &&
     ![
       "easy",
       "pool"
     ].includes(runType)
-      ?running.easy
+      ?cyclingSelected
+        ?["breathing","indoorRide","bikeCooldown","stretch"]
+        :running.easy
       :[
           ...running[
             runType
@@ -9184,13 +9335,17 @@ function startRunning(){
           ?"hyroxEngine"
           :runType==="pool"
           ?"recovery"
+          :cyclingSelected
+          ?"cycling"
           :"easy"
       ),
       data()
         .settings
         .minutes
     ),
-    "Running & Hyrox"
+    cyclingSelected
+      ?sessionLabel(runType)
+      :"Running & Hyrox"
   );
 
 }
@@ -10878,6 +11033,90 @@ function logActivity(type){
 
 }
 
+function manualActivityLabel(type){
+  return ({
+    mtb:"Mountain Bike",
+    roadBike:"Bici da corsa",
+    indoorBike:"Cyclette / indoor bike",
+    runExternal:"Corsa esterna",
+    walkExternal:"Camminata esterna",
+    strengthExternal:"Forza / palestra esterna",
+    swimExternal:"Nuoto esterno",
+    hyroxExternal:"Hyrox / functional esterno",
+    sportExternal:"Altro sport",
+    recoveryExternal:"Recupero / mobilità esterna"
+  })[type]||"Attività esterna";
+}
+
+function saveManualActivity(){
+  const type=document.getElementById("manualActivityType").value;
+  const dateValue=document.getElementById("manualActivityDate").value;
+  const date=dateValue?new Date(dateValue):new Date();
+  const minutes=Number(document.getElementById("manualActivityMinutes").value);
+  const rpe=Number(document.getElementById("manualActivityRPE").value);
+  const distance=Number(document.getElementById("manualActivityDistance").value||0);
+  const elevation=Number(document.getElementById("manualActivityElevation").value||0);
+  const prePain=Number(document.getElementById("manualActivityPrePain").value);
+  const postPain=Number(document.getElementById("manualActivityPostPain").value);
+  const followupRequired=document.getElementById("manualActivityFollowup").checked;
+  const source=document.getElementById("manualActivitySource").value.trim();
+  const notes=document.getElementById("manualActivityNotes").value.trim();
+
+  if(Number.isNaN(date.getTime())||!Number.isFinite(minutes)||minutes<1||minutes>1440||!Number.isFinite(rpe)||rpe<1||rpe>10||distance<0||distance>1000||elevation<0||elevation>20000||prePain<0||prePain>5||postPain<0||postPain>5){
+    notify("Controlla data, durata, RPE, distanza, dislivello e dolore.","error");
+    return;
+  }
+
+  const d=data();
+  const label=manualActivityLabel(type);
+  const durationSec=Math.round(minutes*60);
+
+  d.sessions.push({
+    id:crypto.randomUUID?.()||`manual-${Date.now()}`,
+    date:date.toISOString(),
+    day:localDay(date),
+    type:label,
+    generatedSessionType:type,
+    trainingCategory:["mtb","roadBike","indoorBike"].includes(type)?"cycling":["runExternal","walkExternal","swimExternal","hyroxExternal"].includes(type)?"run cardio":type==="strengthExternal"?"legs military":type==="recoveryExternal"?"recovery":"systemic",
+    external:true,
+    manualEntry:true,
+    sourceApp:source||"Inserimento manuale",
+    notes,
+    distanceKm:distance||null,
+    elevationM:elevation||null,
+    prePain:followupRequired?prePain:null,
+    postPain:followupRequired?postPain:null,
+    nextDayReaction:null,
+    followUpAt:null,
+    followupRequired,
+    progressionApplied:!followupRequired,
+    mode:"external",
+    readiness:null,
+    shoulderReadiness:null,
+    performanceReadiness:null,
+    durationSec,
+    estimatedDurationSec:durationSec,
+    rpe,
+    sessionLoad:Math.round(minutes*rpe),
+    goal:d.settings.goal,
+    athleteLevel:d.settings.athleteLevel,
+    prescribedWorkout:[],
+    completedSteps:[],
+    appVersion:APP_VERSION
+  });
+
+  d.sessions.sort((a,b)=>Date.parse(a.date||0)-Date.parse(b.date||0));
+  d.performance.unshift({date:date.toISOString(),metric:Math.round(minutes*rpe),type:label,external:true});
+  d.performance=d.performance.slice(0,200);
+  save(d);
+  haptic("save");
+  updateFollowupUI();
+  dashboard(true);
+  renderProgress();
+  document.getElementById("manualActivityNotes").value="";
+  notify(`${label} salvata: ${minutes} min · RPE ${rpe} · carico ${Math.round(minutes*rpe)}.`);
+}
+
 /* =========================================================
    STREAK
    ========================================================= */
@@ -11431,7 +11670,9 @@ function renderProgress(){
             session => {
 
               const follow =
-                session.nextDayReaction==null
+                session.followupRequired===false
+                  ?"follow-up: non richiesto"
+                  :session.nextDayReaction==null
                   ?"follow-up: in attesa"
                   :Number(session.nextDayReaction)>=3
                   ?"follow-up: peggiorata"
@@ -11455,6 +11696,10 @@ function renderProgress(){
                 session.macroWeek
                   ?` · W${session.macroWeek}/12 ${session.macroStage || ""}`
                   :"";
+
+              const externalMeta=session.external
+                ?` · ${session.sourceApp||"manuale"}${session.distanceKm?` · ${session.distanceKm} km`:""}${session.elevationM?` · ${session.elevationM} m D+`:""}${session.sessionLoad?` · carico ${session.sessionLoad}`:""}`
+                :"";
 
               return `
                 <div class="workout-item">
@@ -11528,13 +11773,17 @@ function renderProgress(){
 
                       ${escapeHtml(macro)}
                       ${escapeHtml(progress)}
+                      ${escapeHtml(externalMeta)}
+                      ${session.notes?` · ${escapeHtml(session.notes)}`:""}
                     </div>
 
                   </div>
 
                   <div class="tag">
                     ${escapeHtml(
-                      session.mode || ""
+                      session.external
+                        ?"ESTERNA"
+                        :session.mode || ""
                     )}
                   </div>
 
@@ -11554,7 +11803,9 @@ function renderProgress(){
       d.note || "";
 
   const recent =
-    sessions.slice(-10);
+    sessions
+      .filter(session=>session.prePain!=null&&session.postPain!=null)
+      .slice(-10);
 
   const chart =
     document.getElementById(
@@ -12760,6 +13011,8 @@ function runSelfTests(){
   test("durata workout",()=>workoutSeconds([{s:60},{s:90}])===150);
   test("escape HTML",()=>escapeHtml("<x>")==="&lt;x&gt;");
   test("elementi critici",()=>["page-today","startToday","sessionModal","postModal","painScale"].every(id=>document.getElementById(id)));
+  test("ciclismo",()=>["mtbRide","roadRide","indoorRide","bikeIntervals"].every(id=>EX[id]));
+  test("attività manuali",()=>["manualActivityType","manualActivityMinutes","manualActivityRPE","manualActivityDate"].every(id=>document.getElementById(id)));
   runtimeHealth.tests=tests;
   return tests;
 }
@@ -12798,437 +13051,4 @@ function exportTechnicalReport(){
 
 /* =========================================================
    ERROR LOG
-   ========================================================= */
-
-/* =========================================================
-   UX · ONBOARDING · FEEDBACK · ACCESSIBILITÀ
-   ========================================================= */
-
-let onboardingStep = 0;
-let deferredInstallPrompt = null;
-
-function notify(message,type="success"){
-  const region = document.getElementById("toastRegion");
-  if(!region){ return; }
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.setAttribute("role",type==="error"?"alert":"status");
-  toast.textContent = String(message || "");
-  region.appendChild(toast);
-  setTimeout(()=>toast.remove(),4200);
-}
-
-function customConfirm(message,title="Conferma operazione"){
-  return new Promise(resolve=>{
-    const modal = document.getElementById("confirmModal");
-    const accept = document.getElementById("confirmAccept");
-    const cancel = document.getElementById("confirmCancel");
-    document.getElementById("confirmTitle").textContent = title;
-    document.getElementById("confirmText").textContent = message;
-    modal.classList.remove("hidden");
-    const done = value => {
-      modal.classList.add("hidden");
-      accept.onclick = null;
-      cancel.onclick = null;
-      resolve(value);
-    };
-    accept.onclick = ()=>done(true);
-    cancel.onclick = ()=>done(false);
-    cancel.focus();
-  });
-}
-
-function renderOnboarding(){
-  document.querySelectorAll(".onboarding-step").forEach((el,index)=>el.classList.toggle("hidden",index!==onboardingStep));
-  document.querySelectorAll(".onboarding-progress span").forEach((el,index)=>el.classList.toggle("active",index<=onboardingStep));
-  document.getElementById("onboardBack").classList.toggle("hidden",onboardingStep===0);
-  document.getElementById("onboardNext").textContent = onboardingStep===2 ? "Inizia" : "Continua";
-}
-
-function openOnboarding(){
-  const d = data();
-  onboardingStep = 0;
-  document.getElementById("onboardGoal").value = d.settings.goal;
-  document.getElementById("onboardLevel").value = d.settings.athleteLevel;
-  document.getElementById("onboardDays").value = String(d.settings.days);
-  document.getElementById("onboardMinutes").value = String(d.settings.minutes);
-  document.getElementById("onboardSafety").checked = false;
-  renderOnboarding();
-  document.getElementById("onboardingModal").classList.remove("hidden");
-  document.getElementById("onboardGoal").focus();
-}
-
-function onboardingBack(){
-  onboardingStep = Math.max(0,onboardingStep-1);
-  renderOnboarding();
-}
-
-function onboardingNext(){
-  if(onboardingStep<2){
-    onboardingStep++;
-    renderOnboarding();
-    document.querySelector(`.onboarding-step[data-step="${onboardingStep}"] select, .onboarding-step[data-step="${onboardingStep}"] input`)?.focus();
-    return;
-  }
-  if(!document.getElementById("onboardSafety").checked){
-    notify("Conferma di aver letto la regola di sicurezza.","error");
-    return;
-  }
-  const d = data();
-  d.settings.goal = document.getElementById("onboardGoal").value;
-  d.settings.athleteLevel = document.getElementById("onboardLevel").value;
-  d.settings.days = Number(document.getElementById("onboardDays").value);
-  d.settings.minutes = Number(document.getElementById("onboardMinutes").value);
-  d.settings.onboardingComplete = true;
-  save(d);
-  document.getElementById("onboardingModal").classList.add("hidden");
-  dashboard(true);
-  notify("Profilo configurato. Il piano è pronto.");
-}
-
-function improveAccessibility(){
-  document.querySelectorAll(".modal").forEach(modal=>{
-    if(!modal.hasAttribute("role")){
-      modal.setAttribute("role","dialog");
-      modal.setAttribute("aria-modal","true");
-    }
-  });
-  document.querySelectorAll(".close").forEach(button=>button.setAttribute("aria-label","Chiudi finestra"));
-  document.querySelectorAll(".pain-scale").forEach(scale=>{
-    scale.setAttribute("role","group");
-    scale.setAttribute("aria-label","Scala del dolore");
-    scale.querySelectorAll("button").forEach(button=>button.setAttribute("aria-pressed",button.classList.contains("active")?"true":"false"));
-  });
-}
-
-function syncPainAria(){
-  document.querySelectorAll(".pain-scale button").forEach(button=>button.setAttribute("aria-pressed",button.classList.contains("active")?"true":"false"));
-}
-
-window.addEventListener("beforeinstallprompt",event=>{
-  event.preventDefault();
-  deferredInstallPrompt = event;
-  notify("L’app può essere installata dalla schermata Home.");
-});
-
-async function installApp(){
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    return;
-  }
-  notify("Apri il menu del browser e scegli “Aggiungi a schermata Home”. Se il file è aperto localmente, puoi anche conservarlo per l’uso offline.");
-}
-
-function downloadTextFile(name,content,type="text/plain"){
-  const blob=new Blob([content],{type});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;a.download=name;a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1200);
-}
-
-function pwaManifestText(){
-  return JSON.stringify({
-    name:"Erjon Hybrid Coach AI",
-    short_name:"Erjon Coach",
-    description:"Coach adattivo personale per allenamento ibrido, corsa, recupero e spalla.",
-    id:"./",
-    start_url:"./index.html",
-    scope:"./",
-    display:"standalone",
-    orientation:"any",
-    background_color:"#050b12",
-    theme_color:"#061827",
-    lang:"it",
-    icons:[{src:"./icon.svg",sizes:"any",type:"image/svg+xml",purpose:"any maskable"}]
-  },null,2);
-}
-
-function pwaIconText(){
-  return [
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">',
-    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2ee6a6"/><stop offset="1" stop-color="#53c8ff"/></linearGradient></defs>',
-    '<rect width="512" height="512" rx="112" fill="#061827"/><path d="M256 70 418 130v102c0 104-67 171-162 210C161 403 94 336 94 232V130l162-60Z" fill="url(#g)"/>',
-    '<path d="m181 255 48 48 105-112" fill="none" stroke="#061827" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>',
-    '</svg>'
-  ].join('');
-}
-
-function serviceWorkerText(){
-  const cacheName=`erjon-coach-${APP_VERSION}`;
-  return [
-    `'use strict';`,
-    `const CACHE_NAME=${JSON.stringify(cacheName)};`,
-    `const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg'];`,
-    `self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});`,
-    `self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});`,
-    `self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response}).catch(()=>caches.match(event.request).then(hit=>hit||caches.match('./index.html'))));return}event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response}))) });`,
-    `self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='SHOW_NOTIFICATION')self.registration.showNotification(event.data.title||'Erjon Coach',{body:event.data.body||'',tag:event.data.tag||'coach-reminder',renotify:false,data:{url:'./index.html'}})});`,
-    `self.addEventListener('periodicsync',event=>{if(event.tag==='coach-smart-reminders')event.waitUntil(self.registration.showNotification('Erjon Coach',{body:'Apri il coach per controllare allenamento, recupero e backup.',tag:'coach-periodic',data:{url:'./index.html'}}))});`,
-    `self.addEventListener('notificationclick',event=>{event.notification.close();event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const client of list){if('focus'in client)return client.focus()}return clients.openWindow(event.notification.data?.url||'./index.html')}))});`
-  ].join('\n');
-}
-
-async function downloadPwaFiles(){
-  const ok=await customConfirm("Verranno scaricati service-worker.js, manifest.webmanifest e icon.svg. Salvali accanto all’HTML rinominato index.html e pubblica la cartella via HTTPS.","Preparare il pacchetto PWA?");
-  if(!ok)return;
-  downloadTextFile("service-worker.js",serviceWorkerText(),"text/javascript");
-  setTimeout(()=>downloadTextFile("manifest.webmanifest",pwaManifestText(),"application/manifest+json"),250);
-  setTimeout(()=>downloadTextFile("icon.svg",pwaIconText(),"image/svg+xml"),500);
-  notify("File PWA generati. Pubblicali insieme a index.html.");
-}
-
-async function registerPwa(){
-  if(!("serviceWorker" in navigator)||!window.isSecureContext){updateDeviceStatus();return null}
-  try{
-    const registration=await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
-    await navigator.serviceWorker.ready;
-    runtimeHealth.serviceWorkerOk=true;
-    if("periodicSync" in registration&&"Notification" in window&&Notification.permission==="granted"){
-      try{await registration.periodicSync.register("coach-smart-reminders",{minInterval:12*60*60*1000})}catch{}
-    }
-    updateDeviceStatus();
-    return registration;
-  }catch(err){
-    runtimeHealth.serviceWorkerOk=false;
-    runtimeHealth.errors.push(`Service Worker: ${err.message||err}`);
-    updateDeviceStatus();
-    return null;
-  }
-}
-
-async function showCoachNotification(title,body,tag="coach-reminder"){
-  if(!("Notification" in window)||Notification.permission!=="granted")return false;
-  try{
-    const registration=await navigator.serviceWorker?.getRegistration?.();
-    if(registration){await registration.showNotification(title,{body,tag,renotify:false,data:{url:"./index.html"}})}
-    else new Notification(title,{body,tag});
-    return true;
-  }catch{return false}
-}
-
-async function enableNotifications(){
-  if(!("Notification" in window)){notify("Notifiche non supportate da questo browser.","error");updateDeviceStatus();return}
-  const permission=await Notification.requestPermission();
-  if(permission==="granted"){
-    const d=data();d.settings.reminders.enabled=true;save(d);
-    document.getElementById("smartReminders").checked=true;
-    await registerPwa();scheduleSmartReminders();
-    await showCoachNotification("Erjon Coach","Promemoria attivati correttamente.","coach-test");
-    haptic("save");
-  }else notify("Permesso notifiche non concesso.","error");
-  updateDeviceStatus();
-}
-
-function smartReminderMessage(){
-  const md=masterDecisionModel();
-  if(data().settings.reminders?.recoveryAlerts&&["STOP","DELOAD","RECUPERA"].includes(md.action)){
-    return md.action==="STOP"?"Sono presenti segnali di stop: apri l’app e controlla il check di sicurezza.":"Il carico recente suggerisce recupero: apri l’app per la seduta adattata.";
-  }
-  return `Oggi: ${sessionLabel(scheduledSessionType())}. Apri il coach e completa il check.`;
-}
-
-function scheduleSmartReminders(){
-  clearTimeout(smartReminderTimer);
-  const reminders=data().settings.reminders;
-  if(!reminders?.enabled||!("Notification" in window)||Notification.permission!=="granted")return;
-  const [hour,minute]=String(reminders.time||"18:00").split(":").map(Number);
-  const next=new Date();next.setHours(hour||0,minute||0,0,0);if(next<=new Date())next.setDate(next.getDate()+1);
-  smartReminderTimer=setTimeout(async()=>{
-    await showCoachNotification("Erjon Coach",smartReminderMessage(),"coach-daily");
-    scheduleSmartReminders();
-  },Math.min(next-Date.now(),2147483647));
-}
-
-function checkBackupReminder(){
-  const d=data(),days=Number(d.settings.reminders?.backupDays||30);
-  const age=d.lastBackupAt?(Date.now()-Date.parse(d.lastBackupAt))/86400000:Infinity;
-  if(age>=days){
-    notify(d.lastBackupAt?`Il backup ha più di ${days} giorni. Creane uno nuovo.`:"Crea il primo backup JSON per proteggere lo storico.","error");
-    if(d.settings.reminders?.enabled)showCoachNotification("Backup Erjon Coach","È il momento di salvare una nuova copia dello storico.","coach-backup");
-  }
-}
-
-function updateDeviceStatus(){
-  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
-  const standalone=window.matchMedia?.("(display-mode: standalone)")?.matches||navigator.standalone===true;
-  set("pwaStatus",standalone?"INSTALLATA":runtimeHealth.serviceWorkerOk?"OFFLINE":"DA CONFIG.");
-  set("notificationStatus",!("Notification" in window)?"NO":Notification.permission==="granted"?"ATTIVE":Notification.permission==="denied"?"BLOCCATE":"DA ATTIVARE");
-  set("wakeStatus",wakeLock?"ATTIVO":("wakeLock" in navigator?"PRONTO":"NO"));
-  set("hapticStatus","vibrate" in navigator?"PRONTA":"NO");
-  const info=document.getElementById("pwaInfo");
-  if(info)info.textContent=!window.isSecureContext?"Apri il file tramite HTTPS per installazione, Service Worker e funzioni avanzate. Il semplice file locale continua a funzionare senza installazione.":runtimeHealth.serviceWorkerOk?"Service Worker attivo: app shell disponibile offline.":"Pubblica service-worker.js, manifest.webmanifest e icon.svg accanto a index.html, poi ricarica.";
-}
-
-async function testDeviceFeedback(){
-  haptic("start");
-  const sessionActive=!document.getElementById("sessionModal")?.classList.contains("hidden");
-  if("wakeLock" in navigator){await requestWakeLock();setTimeout(()=>{if(!sessionActive)releaseWakeLock()},1500)}
-  const shown=await showCoachNotification("Test Erjon Coach","Aptica, notifica e stato dispositivo verificati.","coach-device-test");
-  notify(shown?"Test inviato.":"Aptica testata. Abilita le notifiche per completare il test.",shown?"success":"error");
-  updateDeviceStatus();
-}
-
-document.addEventListener("keydown",event=>{
-  if(event.key!=="Escape"){ return; }
-  if(!document.getElementById("sessionModal").classList.contains("hidden")){ requestCloseSession(); return; }
-  if(!document.getElementById("postModal").classList.contains("hidden")){ closePost(); return; }
-  if(!document.getElementById("confirmModal").classList.contains("hidden")){ document.getElementById("confirmCancel").click(); }
-});
-
-window.addEventListener(
-  "error",
-  event => {
-
-    runtimeHealth.errors.push(String(event.message||"Errore applicazione"));
-    runtimeHealth.errors=runtimeHealth.errors.slice(-20);
-
-    console.warn(
-      "Errore applicazione:",
-      event.error ||
-      event.message
-    );
-
-  }
-);
-
-window.addEventListener(
-  "unhandledrejection",
-  event => {
-
-    runtimeHealth.errors.push(String(event.reason?.message||event.reason||"Promise non gestita"));
-    runtimeHealth.errors=runtimeHealth.errors.slice(-20);
-
-    console.warn(
-      "Promise non gestita:",
-      event.reason
-    );
-
-  }
-);
-
-function saveSessionDraft(){
-  if(!sessionStartedAt||!currentWorkout.length)return;
-  try{
-    localStorage.setItem(DRAFT_KEY,JSON.stringify({savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
-  }catch(err){console.warn("Bozza sessione:",err)}
-}
-
-function clearSessionDraft(){
-  try{
-    localStorage.removeItem(DRAFT_KEY);
-    sessionStorage.removeItem(`${KEY}_sessionDraft`);
-  }catch{}
-}
-
-async function restoreSessionDraftIfAvailable(){
-  let draft=null;
-  try{draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||sessionStorage.getItem(`${KEY}_sessionDraft`)||"null")}catch{clearSessionDraft();return false}
-  if(!draft||!Array.isArray(draft.currentWorkout)||!draft.currentWorkout.length)return false;
-  if(Date.now()-Date.parse(draft.savedAt)>7*86400000){clearSessionDraft();return false}
-  const resume=await customConfirm("È disponibile una sessione interrotta. Vuoi riprenderla dal punto salvato?","Riprendere la sessione?");
-  if(!resume){clearSessionDraft();return false}
-  currentWorkout=draft.currentWorkout.map(e=>({...e}));
-  currentIndex=Math.max(0,Math.min(currentWorkout.length-1,Number(draft.currentIndex||0)));
-  currentType=draft.currentType||"Sessione ripristinata";
-  generatedSessionType=draft.generatedSessionType||generatedSessionType;
-  completedSteps=Array.isArray(draft.completedSteps)?draft.completedSteps:[];
-  sessionStartedAt=Number(draft.sessionStartedAt)||Date.now();
-  selectedPain=draft.selectedPain==null?selectedPain:Number(draft.selectedPain);
-  mode=draft.mode||mode;
-  readiness=Number(draft.readiness||0);
-  shoulderReadiness=Number(draft.shoulderReadiness||0);
-  performanceReadiness=Number(draft.performanceReadiness||0);
-  document.getElementById("sessionModal").classList.remove("hidden");
-  requestWakeLock();
-  renderSession();
-  notify("Sessione ripristinata.");
-  return true;
-}
-
-window.addEventListener("pagehide",saveSessionDraft);
-window.addEventListener("beforeunload",saveSessionDraft);
-
-/* =========================================================
-   START
-   ========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    window.alert = message =>
-      notify(
-        message,
-        /non valid|errore|controlla|manca|impossibile/i.test(String(message))
-          ?"error"
-          :"success"
-      );
-
-    await hydrate();
-
-    await registerPwa();
-
-    const pain24 =
-      document.getElementById(
-        "pain24"
-      );
-
-    pain24.value =
-      "";
-
-    updateFollowupUI();
-
-    dashboard(true);
-
-    selectShoulder(
-      "reset",
-      document.querySelector(
-        "#page-shoulder .segment button"
-      )
-    );
-
-    selectMilitary(
-      "recovery",
-      document.querySelector(
-        "#page-military .segment button"
-      )
-    );
-
-    selectRun(
-      "easy",
-      document.querySelector(
-        "#page-running .segment button"
-      )
-    );
-
-    renderTests();
-    renderLibrary();
-    renderPhysioPreview();
-    updateVoiceUI();
-    updateBackupInfo();
-    updateFollowupUI();
-    renderWeek();
-    updateStartButtonState();
-    updateDecisionExplanation();
-    improveAccessibility();
-    runDiagnostics(false);
-    updateDeviceStatus();
-    scheduleSmartReminders();
-    checkBackupReminder();
-
-    const sessionRestored=await restoreSessionDraftIfAvailable();
-
-    if(!sessionRestored&&!data().settings.onboardingComplete){
-      openOnboarding();
-    }
-
-  }
-);
-
-</script>
-
-</body>
-</html>
+   =================================
