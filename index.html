@@ -10,7 +10,8 @@
 <meta name="apple-mobile-web-app-title" content="Erjon Coach AI">
 <meta name="description" content="Coach adattivo personale per allenamento ibrido, corsa, recupero e salute della spalla.">
 <meta name="color-scheme" content="dark">
-<link rel="manifest" href='data:application/manifest+json,{"name":"Erjon Hybrid Coach AI","short_name":"Erjon Coach","start_url":".","display":"standalone","background_color":"%23050b12","theme_color":"%23050b12","lang":"it"}'>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 
 <title>Erjon Hybrid Coach AI · Premium Adaptive Coach</title>
 
@@ -1961,6 +1962,14 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
       Importa JSON
     </button>
 
+    <button class="btn blue" onclick="shareBackup()">
+      Condividi / salva nel cloud
+    </button>
+
+    <button class="btn secondary" onclick="downloadPwaFiles()">
+      Scarica file PWA
+    </button>
+
   </div>
 
   <input
@@ -2005,6 +2014,34 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     <label class="checkline"><input type="checkbox" id="clinicalReviewed"> Soglie revisionate con un professionista</label>
   </div>
 
+</div>
+
+<div class="card">
+  <div class="eyebrow">Offline, promemoria e dispositivo</div>
+  <div class="grid4">
+    <div class="stat"><strong id="pwaStatus">—</strong><span>PWA / OFFLINE</span></div>
+    <div class="stat"><strong id="notificationStatus">—</strong><span>NOTIFICHE</span></div>
+    <div class="stat"><strong id="wakeStatus">—</strong><span>SCHERMO ATTIVO</span></div>
+    <div class="stat"><strong id="hapticStatus">—</strong><span>APTICA</span></div>
+  </div>
+
+  <div class="checks" style="margin-top:12px">
+    <label class="checkline"><input type="checkbox" id="smartReminders"> Promemoria smart attivi</label>
+    <label class="checkline"><input type="checkbox" id="recoveryAlerts"> Avvisi recupero e fatica</label>
+  </div>
+
+  <div class="grid2" style="margin-top:10px">
+    <div class="field"><label for="reminderHour">Ora promemoria</label><input id="reminderHour" type="time" value="18:00"></div>
+    <div class="field"><label for="backupReminderDays">Ricorda backup ogni</label><select id="backupReminderDays"><option value="7">7 giorni</option><option value="14">14 giorni</option><option value="30" selected>30 giorni</option><option value="60">60 giorni</option></select></div>
+  </div>
+
+  <div class="grid2" style="margin-top:10px">
+    <button class="btn blue" onclick="enableNotifications()">Abilita notifiche</button>
+    <button class="btn secondary" onclick="testDeviceFeedback()">Test aptica e notifica</button>
+  </div>
+
+  <div id="pwaInfo" class="info" style="margin-top:10px">Controllo funzionalità in corso.</div>
+  <p class="note">I promemoria locali vengono pianificati quando l’app è aperta o supportata dal sistema. Le vere push a browser chiuso richiedono un servizio push esterno. Per l’offline completo pubblica via HTTPS anche i file PWA scaricati da questa schermata.</p>
 </div>
 
 <div class="card">
@@ -2275,10 +2312,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.1.0-HYBRID-LONGEVITY-PERSISTENT";
+  "14.2.0-HYBRID-LONGEVITY-PWA";
 
 const SCHEMA_VERSION =
-  15;
+  16;
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -2375,6 +2412,21 @@ const runtimeHealth={
 };
 
 let idbWriteQueue=Promise.resolve();
+let smartReminderTimer=null;
+
+const HAPTIC_PATTERNS={
+  tap:[18],
+  start:[45,35,90],
+  block:[35,25,35],
+  save:[30,25,70],
+  warning:[110,70,110],
+  finish:[180,100,180,100,260]
+};
+
+function haptic(type="tap"){
+  if(!("vibrate" in navigator))return false;
+  try{return navigator.vibrate(HAPTIC_PATTERNS[type]||HAPTIC_PATTERNS.tap)}catch{return false}
+}
 
 /* =========================================================
    DATABASE ESERCIZI
@@ -4053,6 +4105,15 @@ function defaults(){
       validation:{
         deviceTested:false,
         clinicalReviewed:false
+      },
+
+      reminders:{
+        enabled:false,
+        recoveryAlerts:true,
+        time:"18:00",
+        backupDays:30,
+        lastTrainingNoticeDay:null,
+        lastRecoveryNoticeDay:null
       }
 
     },
@@ -4183,6 +4244,11 @@ function norm(v){
       validation:{
         ...b.settings.validation,
         ...(ss.validation || {})
+      },
+
+      reminders:{
+        ...b.settings.reminders,
+        ...(ss.reminders || {})
       },
 
       voice:
@@ -9269,8 +9335,11 @@ async function requestWakeLock(){
       "release",
       () => {
         wakeLock = null;
+        updateDeviceStatus();
       }
     );
+
+    updateDeviceStatus();
 
     return true;
 
@@ -9300,6 +9369,8 @@ async function releaseWakeLock(){
 
     wakeLock =
       null;
+
+    updateDeviceStatus();
 
   }
 
@@ -9565,6 +9636,8 @@ function nextStep(){
 
   stopTimer();
 
+  haptic("block");
+
   markStepCompleted();
 
   if(
@@ -9632,6 +9705,7 @@ function autoRegulateRemaining(){
     return e;
   }));
   if(result)result.textContent=factor<1?`${action}: durata dei blocchi a tempo e volume degli esercizi compatibili sono stati ridotti. Carichi e difficoltà non aumentano automaticamente.`:`${action}: mantieni la dose prescritta; nessun aumento automatico durante la seduta.`;
+  haptic(factor<1?"warning":"save");
   speak(`Coach: ${action}`,true);
 }
 
@@ -9883,6 +9957,8 @@ function beginCountdown(){
 
   countdownRunning =
     true;
+
+  haptic("start");
 
   let count =
     3;
@@ -10256,15 +10332,7 @@ function finishTimer(){
     true
   );
 
-  navigator
-    .vibrate
-    ?.([
-      180,
-      100,
-      180,
-      100,
-      250
-    ]);
+  haptic("finish");
 
   if(
     autoFlow &&
@@ -10759,6 +10827,8 @@ function saveCompletedSession(){
   else if(masterSnapshot.fatigue.score>75)d.fatigueDebt=Math.max(0,Number(d.fatigueDebt||0)-.2);
 
   save(d);
+
+  haptic("save");
 
   clearSessionDraft();
 
@@ -11861,6 +11931,10 @@ function loadSettings(){
   document.getElementById("thresholdMinSessions").value=s.masterThresholds?.minSessions??6;
   document.getElementById("deviceTested").checked=!!s.validation?.deviceTested;
   document.getElementById("clinicalReviewed").checked=!!s.validation?.clinicalReviewed;
+  document.getElementById("smartReminders").checked=!!s.reminders?.enabled;
+  document.getElementById("recoveryAlerts").checked=s.reminders?.recoveryAlerts!==false;
+  document.getElementById("reminderHour").value=s.reminders?.time||"18:00";
+  document.getElementById("backupReminderDays").value=String(s.reminders?.backupDays||30);
 
 }
 
@@ -11977,6 +12051,14 @@ function saveSettings(){
     validation:{
       deviceTested:document.getElementById("deviceTested").checked,
       clinicalReviewed:document.getElementById("clinicalReviewed").checked
+    },
+
+    reminders:{
+      ...d.settings.reminders,
+      enabled:document.getElementById("smartReminders").checked,
+      recoveryAlerts:document.getElementById("recoveryAlerts").checked,
+      time:document.getElementById("reminderHour").value||"18:00",
+      backupDays:Math.round(masterClamp(Number(document.getElementById("backupReminderDays").value||30),7,60))
     }
 
   };
@@ -11985,6 +12067,9 @@ function saveSettings(){
     d.settings.voice;
 
   save(d);
+
+  scheduleSmartReminders();
+  updateDeviceStatus();
 
   dashboard(true);
 
@@ -12041,8 +12126,10 @@ function updateBackupInfo(){
       86400000
     );
 
+  const reminderDays=Number(d.settings.reminders?.backupDays||BACKUP_REMINDER_DAYS);
+
   el.textContent =
-    days>30
+    days>reminderDays
       ?`Ultimo backup ${days} giorni fa. Consigliato esportarne uno nuovo.`
       :`Ultimo backup: ${
           new Date(
@@ -12119,6 +12206,47 @@ function exportData(){
       ),
     1000
   );
+
+  updateBackupInfo();
+
+}
+
+async function shareBackup(){
+
+  let d=data();
+  d.lastBackupAt=new Date().toISOString();
+  d=save(d);
+
+  const payload={
+    meta:{
+      app:"Erjon Hybrid Coach AI",
+      edition:"Adaptive Periodization For Life",
+      appVersion:APP_VERSION,
+      schemaVersion:SCHEMA_VERSION,
+      exportedAt:new Date().toISOString(),
+      dataHash:storageHash(d)
+    },
+    data:d
+  };
+
+  const file=new File(
+    [JSON.stringify(payload,null,2)],
+    `erjon-hybrid-coach-backup-${localDay()}.json`,
+    {type:"application/json"}
+  );
+
+  try{
+    if(navigator.canShare?.({files:[file]})){
+      await navigator.share({title:"Backup Erjon Hybrid Coach AI",text:"Backup personale cifrabile e salvabile su Drive, iCloud o altro cloud scelto.",files:[file]});
+      notify("Backup condiviso. Verifica che sia stato salvato nella destinazione scelta.");
+    }else{
+      exportData();
+      notify("Condivisione file non supportata: backup scaricato localmente.");
+    }
+    haptic("save");
+  }catch(err){
+    if(err?.name!=="AbortError")notify("Condivisione non riuscita. Usa Esporta JSON.","error");
+  }
 
   updateBackupInfo();
 
@@ -12657,7 +12785,7 @@ function runDiagnostics(showToast=false){
 }
 
 function browserCapabilityAudit(){
-  const checks={localStorage:!!window.localStorage,indexedDB:"indexedDB" in window,speech:"speechSynthesis" in window,wakeLock:"wakeLock" in navigator,crypto:!!window.crypto?.randomUUID,files:!!window.FileReader,visibility:"visibilityState" in document,storageEstimate:!!navigator.storage?.estimate};
+  const checks={localStorage:!!window.localStorage,indexedDB:"indexedDB" in window,serviceWorker:"serviceWorker" in navigator,notifications:"Notification" in window,haptics:"vibrate" in navigator,share:"share" in navigator,speech:"speechSynthesis" in window,wakeLock:"wakeLock" in navigator,crypto:!!window.crypto?.randomUUID,files:!!window.FileReader,visibility:"visibilityState" in document,storageEstimate:!!navigator.storage?.estimate};
   return{checks,supported:Object.values(checks).filter(Boolean).length,total:Object.keys(checks).length,userAgent:navigator.userAgent,standalone:window.matchMedia?.("(display-mode: standalone)")?.matches||navigator.standalone===true};
 }
 
@@ -12793,6 +12921,156 @@ async function installApp(){
   notify("Apri il menu del browser e scegli “Aggiungi a schermata Home”. Se il file è aperto localmente, puoi anche conservarlo per l’uso offline.");
 }
 
+function downloadTextFile(name,content,type="text/plain"){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1200);
+}
+
+function pwaManifestText(){
+  return JSON.stringify({
+    name:"Erjon Hybrid Coach AI",
+    short_name:"Erjon Coach",
+    description:"Coach adattivo personale per allenamento ibrido, corsa, recupero e spalla.",
+    id:"./",
+    start_url:"./index.html",
+    scope:"./",
+    display:"standalone",
+    orientation:"any",
+    background_color:"#050b12",
+    theme_color:"#061827",
+    lang:"it",
+    icons:[{src:"./icon.svg",sizes:"any",type:"image/svg+xml",purpose:"any maskable"}]
+  },null,2);
+}
+
+function pwaIconText(){
+  return [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">',
+    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2ee6a6"/><stop offset="1" stop-color="#53c8ff"/></linearGradient></defs>',
+    '<rect width="512" height="512" rx="112" fill="#061827"/><path d="M256 70 418 130v102c0 104-67 171-162 210C161 403 94 336 94 232V130l162-60Z" fill="url(#g)"/>',
+    '<path d="m181 255 48 48 105-112" fill="none" stroke="#061827" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>',
+    '</svg>'
+  ].join('');
+}
+
+function serviceWorkerText(){
+  const cacheName=`erjon-coach-${APP_VERSION}`;
+  return [
+    `'use strict';`,
+    `const CACHE_NAME=${JSON.stringify(cacheName)};`,
+    `const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg'];`,
+    `self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});`,
+    `self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});`,
+    `self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response}).catch(()=>caches.match(event.request).then(hit=>hit||caches.match('./index.html'))));return}event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response}))) });`,
+    `self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='SHOW_NOTIFICATION')self.registration.showNotification(event.data.title||'Erjon Coach',{body:event.data.body||'',tag:event.data.tag||'coach-reminder',renotify:false,data:{url:'./index.html'}})});`,
+    `self.addEventListener('periodicsync',event=>{if(event.tag==='coach-smart-reminders')event.waitUntil(self.registration.showNotification('Erjon Coach',{body:'Apri il coach per controllare allenamento, recupero e backup.',tag:'coach-periodic',data:{url:'./index.html'}}))});`,
+    `self.addEventListener('notificationclick',event=>{event.notification.close();event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const client of list){if('focus'in client)return client.focus()}return clients.openWindow(event.notification.data?.url||'./index.html')}))});`
+  ].join('\n');
+}
+
+async function downloadPwaFiles(){
+  const ok=await customConfirm("Verranno scaricati service-worker.js, manifest.webmanifest e icon.svg. Salvali accanto all’HTML rinominato index.html e pubblica la cartella via HTTPS.","Preparare il pacchetto PWA?");
+  if(!ok)return;
+  downloadTextFile("service-worker.js",serviceWorkerText(),"text/javascript");
+  setTimeout(()=>downloadTextFile("manifest.webmanifest",pwaManifestText(),"application/manifest+json"),250);
+  setTimeout(()=>downloadTextFile("icon.svg",pwaIconText(),"image/svg+xml"),500);
+  notify("File PWA generati. Pubblicali insieme a index.html.");
+}
+
+async function registerPwa(){
+  if(!("serviceWorker" in navigator)||!window.isSecureContext){updateDeviceStatus();return null}
+  try{
+    const registration=await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
+    await navigator.serviceWorker.ready;
+    runtimeHealth.serviceWorkerOk=true;
+    if("periodicSync" in registration&&"Notification" in window&&Notification.permission==="granted"){
+      try{await registration.periodicSync.register("coach-smart-reminders",{minInterval:12*60*60*1000})}catch{}
+    }
+    updateDeviceStatus();
+    return registration;
+  }catch(err){
+    runtimeHealth.serviceWorkerOk=false;
+    runtimeHealth.errors.push(`Service Worker: ${err.message||err}`);
+    updateDeviceStatus();
+    return null;
+  }
+}
+
+async function showCoachNotification(title,body,tag="coach-reminder"){
+  if(!("Notification" in window)||Notification.permission!=="granted")return false;
+  try{
+    const registration=await navigator.serviceWorker?.getRegistration?.();
+    if(registration){await registration.showNotification(title,{body,tag,renotify:false,data:{url:"./index.html"}})}
+    else new Notification(title,{body,tag});
+    return true;
+  }catch{return false}
+}
+
+async function enableNotifications(){
+  if(!("Notification" in window)){notify("Notifiche non supportate da questo browser.","error");updateDeviceStatus();return}
+  const permission=await Notification.requestPermission();
+  if(permission==="granted"){
+    const d=data();d.settings.reminders.enabled=true;save(d);
+    document.getElementById("smartReminders").checked=true;
+    await registerPwa();scheduleSmartReminders();
+    await showCoachNotification("Erjon Coach","Promemoria attivati correttamente.","coach-test");
+    haptic("save");
+  }else notify("Permesso notifiche non concesso.","error");
+  updateDeviceStatus();
+}
+
+function smartReminderMessage(){
+  const md=masterDecisionModel();
+  if(data().settings.reminders?.recoveryAlerts&&["STOP","DELOAD","RECUPERA"].includes(md.action)){
+    return md.action==="STOP"?"Sono presenti segnali di stop: apri l’app e controlla il check di sicurezza.":"Il carico recente suggerisce recupero: apri l’app per la seduta adattata.";
+  }
+  return `Oggi: ${sessionLabel(scheduledSessionType())}. Apri il coach e completa il check.`;
+}
+
+function scheduleSmartReminders(){
+  clearTimeout(smartReminderTimer);
+  const reminders=data().settings.reminders;
+  if(!reminders?.enabled||!("Notification" in window)||Notification.permission!=="granted")return;
+  const [hour,minute]=String(reminders.time||"18:00").split(":").map(Number);
+  const next=new Date();next.setHours(hour||0,minute||0,0,0);if(next<=new Date())next.setDate(next.getDate()+1);
+  smartReminderTimer=setTimeout(async()=>{
+    await showCoachNotification("Erjon Coach",smartReminderMessage(),"coach-daily");
+    scheduleSmartReminders();
+  },Math.min(next-Date.now(),2147483647));
+}
+
+function checkBackupReminder(){
+  const d=data(),days=Number(d.settings.reminders?.backupDays||30);
+  const age=d.lastBackupAt?(Date.now()-Date.parse(d.lastBackupAt))/86400000:Infinity;
+  if(age>=days){
+    notify(d.lastBackupAt?`Il backup ha più di ${days} giorni. Creane uno nuovo.`:"Crea il primo backup JSON per proteggere lo storico.","error");
+    if(d.settings.reminders?.enabled)showCoachNotification("Backup Erjon Coach","È il momento di salvare una nuova copia dello storico.","coach-backup");
+  }
+}
+
+function updateDeviceStatus(){
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+  const standalone=window.matchMedia?.("(display-mode: standalone)")?.matches||navigator.standalone===true;
+  set("pwaStatus",standalone?"INSTALLATA":runtimeHealth.serviceWorkerOk?"OFFLINE":"DA CONFIG.");
+  set("notificationStatus",!("Notification" in window)?"NO":Notification.permission==="granted"?"ATTIVE":Notification.permission==="denied"?"BLOCCATE":"DA ATTIVARE");
+  set("wakeStatus",wakeLock?"ATTIVO":("wakeLock" in navigator?"PRONTO":"NO"));
+  set("hapticStatus","vibrate" in navigator?"PRONTA":"NO");
+  const info=document.getElementById("pwaInfo");
+  if(info)info.textContent=!window.isSecureContext?"Apri il file tramite HTTPS per installazione, Service Worker e funzioni avanzate. Il semplice file locale continua a funzionare senza installazione.":runtimeHealth.serviceWorkerOk?"Service Worker attivo: app shell disponibile offline.":"Pubblica service-worker.js, manifest.webmanifest e icon.svg accanto a index.html, poi ricarica.";
+}
+
+async function testDeviceFeedback(){
+  haptic("start");
+  const sessionActive=!document.getElementById("sessionModal")?.classList.contains("hidden");
+  if("wakeLock" in navigator){await requestWakeLock();setTimeout(()=>{if(!sessionActive)releaseWakeLock()},1500)}
+  const shown=await showCoachNotification("Test Erjon Coach","Aptica, notifica e stato dispositivo verificati.","coach-device-test");
+  notify(shown?"Test inviato.":"Aptica testata. Abilita le notifiche per completare il test.",shown?"success":"error");
+  updateDeviceStatus();
+}
+
 document.addEventListener("keydown",event=>{
   if(event.key!=="Escape"){ return; }
   if(!document.getElementById("sessionModal").classList.contains("hidden")){ requestCloseSession(); return; }
@@ -12891,6 +13169,8 @@ document.addEventListener(
 
     await hydrate();
 
+    await registerPwa();
+
     const pain24 =
       document.getElementById(
         "pain24"
@@ -12935,6 +13215,9 @@ document.addEventListener(
     updateDecisionExplanation();
     improveAccessibility();
     runDiagnostics(false);
+    updateDeviceStatus();
+    scheduleSmartReminders();
+    checkBackupReminder();
 
     const sessionRestored=await restoreSessionDraftIfAvailable();
 
