@@ -7,13 +7,13 @@
 <meta name="theme-color" content="#061827">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Erjon Coach AI">
+<meta name="apple-mobile-web-app-title" content="Erjon Picari Coach">
 <meta name="description" content="Coach adattivo personale per allenamento ibrido, corsa, recupero e salute della spalla.">
 <meta name="color-scheme" content="dark">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Hybrid Coach AI · Premium Adaptive Coach</title>
+<title>Erjon Picari Hybrid Coach AI · Premium Adaptive Coach</title>
 
 <style>
 :root{
@@ -1112,7 +1112,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   <div class="logo" aria-hidden="true"><svg class="ui-icon"><use href="#i-shield"></use></svg></div>
 
   <div class="brand">
-    <h1>ERJON HYBRID COACH AI · ADAPTIVE PERIODIZATION</h1>
+    <h1>ERJON PICARI HYBRID COACH AI</h1>
     <small>For Life · Shoulder Safe · Hybrid · Hyrox · Running · Military · Fisio · Pizzaiolo</small>
   </div>
 
@@ -1956,16 +1956,62 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     </label>
 
     <label class="checkline">
+      <input type="checkbox" id="eqMtb">
+      Mountain bike
+    </label>
+
+    <label class="checkline">
+      <input type="checkbox" id="eqRoadBike">
+      Bici da corsa
+    </label>
+
+    <label class="checkline">
+      <input type="checkbox" id="eqIndoorBike">
+      Cyclette / spin bike
+    </label>
+
+    <label class="checkline">
+      <input type="checkbox" id="eqBikeTrainer">
+      Rulli indoor
+    </label>
+
+    <label class="checkline">
       <input type="checkbox" id="voiceSetting" checked>
       Coach vocale
     </label>
 
   </div>
 
+  <div class="eyebrow" style="margin-top:14px">Preferenze ciclismo</div>
+
+  <div class="checks">
+    <label class="checkline">
+      <input type="checkbox" id="cyclingInPlan">
+      Usa la bici nel piano settimanale
+    </label>
+
+    <div class="field">
+      <label for="cyclingMaxSessions">Massimo sedute bici/settimana</label>
+      <select id="cyclingMaxSessions"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
+    </div>
+
+    <div class="field">
+      <label for="cyclingLevel">Livello ciclismo</label>
+      <select id="cyclingLevel"><option value="beginner">Principiante</option><option value="intermediate" selected>Intermedio</option><option value="advanced">Avanzato</option></select>
+    </div>
+
+    <label class="checkline">
+      <input type="checkbox" id="cyclingRunSubstitution" checked>
+      Può sostituire corsa facile o recupero
+    </label>
+  </div>
+
   <div class="info" style="margin-top:10px">
     Se non selezioni Elastico, Pesi o Panca, le sedute Military e forza
     vengono costruite a corpo libero. Nessun esercizio viene mostrato come
-    “non disponibile”: il coach lo sostituisce automaticamente.
+    “non disponibile”: il coach lo sostituisce automaticamente. Le sedute bici
+    entrano nel piano soltanto se abilitate e se è disponibile almeno una bici;
+    i rulli richiedono anche la bici da corsa.
   </div>
 
   <button class="btn full" style="margin-top:12px" onclick="saveSettings()">
@@ -2338,10 +2384,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.3.1-HYBRID-CYCLING-NAV-FIX";
+  "14.4.0-PICARI-CYCLING-EQUIPMENT";
 
 const SCHEMA_VERSION =
-  17;
+  18;
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -2815,7 +2861,7 @@ function add(
     "🚵",
     "cycling",
     "Scegli un percorso gestibile. Cadenza fluida, presa morbida, discese entro il tuo livello tecnico e niente rischi inutili.",
-    "bodyweight",
+    "mtb",
     {runType:"mtb"}
   ],
 
@@ -2827,7 +2873,7 @@ function add(
     "🚴",
     "cycling",
     "Mantieni cadenza regolare e postura sostenibile. Evita tratti ad alto traffico e intensità non controllabili.",
-    "bodyweight",
+    "roadBike",
     {runType:"roadBike"}
   ],
 
@@ -2838,7 +2884,7 @@ function add(
     2100,
     "🚲",
     "Regola sella e resistenza. Mantieni una cadenza fluida senza irrigidire collo, mani o spalle.",
-    "bodyweight",
+    "indoorBike",
     {runType:"indoorBike"}
   ],
 
@@ -4211,7 +4257,18 @@ function defaults(){
         bench:false,
         pool:false,
         ball:true,
-        roller:true
+        roller:true,
+        mtb:false,
+        roadBike:false,
+        indoorBike:false,
+        bikeTrainer:false
+      },
+
+      cycling:{
+        enabled:false,
+        maxSessions:2,
+        level:"intermediate",
+        substituteEasyRun:true
       },
 
       voice:true,
@@ -4356,6 +4413,11 @@ function norm(v){
       equipment:{
         ...b.settings.equipment,
         ...(ss.equipment || {})
+      },
+
+      cycling:{
+        ...b.settings.cycling,
+        ...(ss.cycling || {})
       },
 
       masterThresholds:{
@@ -5443,14 +5505,53 @@ function getWeekTemplate(
     PERIODIZATION[goal] ||
     PERIODIZATION.hybrid;
 
-  return (
+  const base = [
+    ...(
     block[
       periodizationWeek()-1
     ]
     ||
     block[0]
-  );
+    )
+  ];
 
+  return applyCyclingPreferencesToWeek(base);
+
+}
+
+function availableCyclingTypesForSettings(settings){
+  const eq=settings?.equipment||{};
+  const types=[];
+  if(eq.mtb)types.push("mtb");
+  if(eq.roadBike)types.push("roadBike");
+  if(eq.indoorBike||(eq.roadBike&&eq.bikeTrainer))types.push("indoorBike");
+  return types;
+}
+
+function availableCyclingTypes(){
+  return availableCyclingTypesForSettings(data().settings);
+}
+
+function cyclingTypeAvailable(type){
+  return availableCyclingTypes().includes(type);
+}
+
+function applyCyclingPreferencesToWeek(base){
+  const settings=data().settings;
+  const pref=settings.cycling||{};
+  const available=availableCyclingTypes();
+  if(!pref.enabled||!pref.substituteEasyRun||!available.length)return base;
+
+  const max=Math.max(1,Math.min(4,Number(pref.maxSessions)||2));
+  const candidates=[];
+  base.forEach((type,index)=>{
+    if(["easy","recovery"].includes(type)&&index!==2)candidates.push(index);
+  });
+
+  candidates.slice(0,max).forEach((index,position)=>{
+    base[index]=available[position%available.length];
+  });
+  return base;
 }
 
 /* =========================================================
@@ -6019,7 +6120,8 @@ function applyAthleteBaseline(e){
 
   if(["mtbRide","roadRide","indoorRide"].includes(out.id)){
     const base={mtbRide:45,roadRide:50,indoorRide:35}[out.id];
-    const mins=level==="beginner"?Math.max(20,base-10):level==="advanced"?base+15:base;
+    const cyclingLevel=data().settings.cycling?.level||level;
+    const mins=cyclingLevel==="beginner"?Math.max(20,base-10):cyclingLevel==="advanced"?base+15:base;
     const suffix=out.id==="mtbRide"?" · Z2 con salite controllate":out.id==="roadRide"?" · ritmo conversazionale":" · Z2";
     out.d=`${mins} min${suffix}`;
     out.s=mins*60;
@@ -7497,6 +7599,27 @@ function plan(type){
       "stretch"
     ],
 
+    mtb:[
+      "breathing",
+      "mtbRide",
+      "bikeCooldown",
+      "stretch"
+    ],
+
+    roadBike:[
+      "breathing",
+      "roadRide",
+      "bikeCooldown",
+      "stretch"
+    ],
+
+    indoorBike:[
+      "breathing",
+      "indoorRide",
+      "bikeCooldown",
+      "stretch"
+    ],
+
     strength:
       bodyweight
         ?bodyweightMilitaryStrength()
@@ -8786,6 +8909,19 @@ function selectRun(
   type,
   btn
 ){
+
+  if(["mtb","roadBike","indoorBike"].includes(type)&&!cyclingTypeAvailable(type)){
+    notify(
+      type==="mtb"
+        ?"Seleziona Mountain bike negli attrezzi."
+        :type==="roadBike"
+        ?"Seleziona Bici da corsa negli attrezzi."
+        :"Seleziona Cyclette oppure Bici da corsa + rulli negli attrezzi.",
+      "error"
+    );
+    showPage("settings");
+    return;
+  }
 
   runType =
     type;
@@ -11439,7 +11575,11 @@ function equipmentSummary(){
     bench:"Panca",
     pool:"Piscina",
     ball:"Palla",
-    roller:"Roller"
+    roller:"Roller",
+    mtb:"Mountain bike",
+    roadBike:"Bici da corsa",
+    indoorBike:"Cyclette",
+    bikeTrainer:"Rulli indoor"
   };
 
   const active =
@@ -11452,7 +11592,8 @@ function equipmentSummary(){
       .map(
         ([key]) =>
           labels[key]
-      );
+      )
+      .filter(Boolean);
 
   if(
     onlyBodyweightTraining()
@@ -12163,6 +12304,15 @@ function loadSettings(){
     .checked =
       !!s.equipment.roller;
 
+  document.getElementById("eqMtb").checked=!!s.equipment.mtb;
+  document.getElementById("eqRoadBike").checked=!!s.equipment.roadBike;
+  document.getElementById("eqIndoorBike").checked=!!s.equipment.indoorBike;
+  document.getElementById("eqBikeTrainer").checked=!!s.equipment.bikeTrainer;
+  document.getElementById("cyclingInPlan").checked=!!s.cycling?.enabled;
+  document.getElementById("cyclingMaxSessions").value=String(s.cycling?.maxSessions||2);
+  document.getElementById("cyclingLevel").value=s.cycling?.level||"intermediate";
+  document.getElementById("cyclingRunSubstitution").checked=s.cycling?.substituteEasyRun!==false;
+
   document
     .getElementById(
       "voiceSetting"
@@ -12279,8 +12429,20 @@ function saveSettings(){
           .getElementById(
             "eqRoller"
           )
-          .checked
+          .checked,
 
+      mtb:document.getElementById("eqMtb").checked,
+      roadBike:document.getElementById("eqRoadBike").checked,
+      indoorBike:document.getElementById("eqIndoorBike").checked,
+      bikeTrainer:document.getElementById("eqBikeTrainer").checked
+
+    },
+
+    cycling:{
+      enabled:document.getElementById("cyclingInPlan").checked,
+      maxSessions:Math.round(masterClamp(Number(document.getElementById("cyclingMaxSessions").value||2),1,4)),
+      level:document.getElementById("cyclingLevel").value||"intermediate",
+      substituteEasyRun:document.getElementById("cyclingRunSubstitution").checked
     },
 
     voice:
@@ -12313,6 +12475,12 @@ function saveSettings(){
     }
 
   };
+
+  if(d.settings.cycling.enabled&&!availableCyclingTypesForSettings(d.settings).length){
+    d.settings.cycling.enabled=false;
+    document.getElementById("cyclingInPlan").checked=false;
+    notify("Piano bici disattivato: seleziona almeno MTB, bici da corsa o cyclette.","error");
+  }
 
   voiceEnabled =
     d.settings.voice;
@@ -12406,7 +12574,7 @@ function exportData(){
   const payload = {
 
     meta:{
-      app:"Erjon Hybrid Coach AI",
+      app:"Erjon Picari Hybrid Coach AI",
       edition:"Adaptive Periodization For Life",
       appVersion:APP_VERSION,
       schemaVersion:SCHEMA_VERSION,
@@ -12470,7 +12638,7 @@ async function shareBackup(){
 
   const payload={
     meta:{
-      app:"Erjon Hybrid Coach AI",
+      app:"Erjon Picari Hybrid Coach AI",
       edition:"Adaptive Periodization For Life",
       appVersion:APP_VERSION,
       schemaVersion:SCHEMA_VERSION,
@@ -12488,7 +12656,7 @@ async function shareBackup(){
 
   try{
     if(navigator.canShare?.({files:[file]})){
-      await navigator.share({title:"Backup Erjon Hybrid Coach AI",text:"Backup personale cifrabile e salvabile su Drive, iCloud o altro cloud scelto.",files:[file]});
+      await navigator.share({title:"Backup Erjon Picari Hybrid Coach AI",text:"Backup personale cifrabile e salvabile su Drive, iCloud o altro cloud scelto.",files:[file]});
       notify("Backup condiviso. Verifica che sia stato salvato nella destinazione scelta.");
     }else{
       exportData();
@@ -13185,8 +13353,8 @@ function downloadTextFile(name,content,type="text/plain"){
 
 function pwaManifestText(){
   return JSON.stringify({
-    name:"Erjon Hybrid Coach AI",
-    short_name:"Erjon Coach",
+    name:"Erjon Picari Hybrid Coach AI",
+    short_name:"Picari Coach",
     description:"Coach adattivo personale per allenamento ibrido, corsa, recupero e spalla.",
     id:"./",
     start_url:"./index.html",
@@ -13219,8 +13387,8 @@ function serviceWorkerText(){
     `self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});`,
     `self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});`,
     `self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response}).catch(()=>caches.match(event.request).then(hit=>hit||caches.match('./index.html'))));return}event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response}))) });`,
-    `self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='SHOW_NOTIFICATION')self.registration.showNotification(event.data.title||'Erjon Coach',{body:event.data.body||'',tag:event.data.tag||'coach-reminder',renotify:false,data:{url:'./index.html'}})});`,
-    `self.addEventListener('periodicsync',event=>{if(event.tag==='coach-smart-reminders')event.waitUntil(self.registration.showNotification('Erjon Coach',{body:'Apri il coach per controllare allenamento, recupero e backup.',tag:'coach-periodic',data:{url:'./index.html'}}))});`,
+    `self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='SHOW_NOTIFICATION')self.registration.showNotification(event.data.title||'Picari Coach',{body:event.data.body||'',tag:event.data.tag||'coach-reminder',renotify:false,data:{url:'./index.html'}})});`,
+    `self.addEventListener('periodicsync',event=>{if(event.tag==='coach-smart-reminders')event.waitUntil(self.registration.showNotification('Picari Coach',{body:'Apri il coach per controllare allenamento, recupero e backup.',tag:'coach-periodic',data:{url:'./index.html'}}))});`,
     `self.addEventListener('notificationclick',event=>{event.notification.close();event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const client of list){if('focus'in client)return client.focus()}return clients.openWindow(event.notification.data?.url||'./index.html')}))});`
   ].join('\n');
 }
@@ -13270,7 +13438,7 @@ async function enableNotifications(){
     const d=data();d.settings.reminders.enabled=true;save(d);
     document.getElementById("smartReminders").checked=true;
     await registerPwa();scheduleSmartReminders();
-    await showCoachNotification("Erjon Coach","Promemoria attivati correttamente.","coach-test");
+    await showCoachNotification("Picari Coach","Promemoria attivati correttamente.","coach-test");
     haptic("save");
   }else notify("Permesso notifiche non concesso.","error");
   updateDeviceStatus();
@@ -13291,7 +13459,7 @@ function scheduleSmartReminders(){
   const [hour,minute]=String(reminders.time||"18:00").split(":").map(Number);
   const next=new Date();next.setHours(hour||0,minute||0,0,0);if(next<=new Date())next.setDate(next.getDate()+1);
   smartReminderTimer=setTimeout(async()=>{
-    await showCoachNotification("Erjon Coach",smartReminderMessage(),"coach-daily");
+    await showCoachNotification("Picari Coach",smartReminderMessage(),"coach-daily");
     scheduleSmartReminders();
   },Math.min(next-Date.now(),2147483647));
 }
@@ -13301,7 +13469,7 @@ function checkBackupReminder(){
   const age=d.lastBackupAt?(Date.now()-Date.parse(d.lastBackupAt))/86400000:Infinity;
   if(age>=days){
     notify(d.lastBackupAt?`Il backup ha più di ${days} giorni. Creane uno nuovo.`:"Crea il primo backup JSON per proteggere lo storico.","error");
-    if(d.settings.reminders?.enabled)showCoachNotification("Backup Erjon Coach","È il momento di salvare una nuova copia dello storico.","coach-backup");
+    if(d.settings.reminders?.enabled)showCoachNotification("Backup Picari Coach","È il momento di salvare una nuova copia dello storico.","coach-backup");
   }
 }
 
@@ -13320,7 +13488,7 @@ async function testDeviceFeedback(){
   haptic("start");
   const sessionActive=!document.getElementById("sessionModal")?.classList.contains("hidden");
   if("wakeLock" in navigator){await requestWakeLock();setTimeout(()=>{if(!sessionActive)releaseWakeLock()},1500)}
-  const shown=await showCoachNotification("Test Erjon Coach","Aptica, notifica e stato dispositivo verificati.","coach-device-test");
+  const shown=await showCoachNotification("Test Picari Coach","Aptica, notifica e stato dispositivo verificati.","coach-device-test");
   notify(shown?"Test inviato.":"Aptica testata. Abilita le notifiche per completare il test.",shown?"success":"error");
   updateDeviceStatus();
 }
