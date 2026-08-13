@@ -1100,9 +1100,12 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 .wow-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.wow-mini{padding:9px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)}.wow-mini strong{display:block;font-size:.9rem}.wow-mini span{font-size:.54rem;color:var(--muted)}
 .momentum-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.momentum-day{text-align:center}.momentum-dot{height:7px;border-radius:99px;background:rgba(128,167,188,.13);margin-bottom:5px}.momentum-day.done .momentum-dot{background:linear-gradient(90deg,var(--green),var(--blue));box-shadow:0 0 12px rgba(46,230,166,.25)}.momentum-day.today .momentum-dot{outline:2px solid rgba(255,255,255,.38);outline-offset:2px}.momentum-day span{font-size:.52rem;color:var(--muted)}
 .achievement-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.achievement{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:11px;background:rgba(184,165,255,.08);border:1px solid rgba(184,165,255,.13);color:#d8ceff;font-size:.62rem;font-weight:800}.achievement.locked{filter:saturate(.2);opacity:.46}
+.experience-switch{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:13px;background:rgba(3,12,20,.55)}.experience-switch button{border:0;border-radius:9px;padding:7px 9px;background:transparent;color:var(--muted);font-size:.62rem;font-weight:850}.experience-switch button.active{color:#fff;background:linear-gradient(135deg,rgba(46,230,166,.17),rgba(83,200,255,.13))}
+body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:10px;border:1px solid var(--line);border-radius:14px;background:rgba(3,12,20,.35);overflow:hidden}.advanced-check summary{padding:12px;cursor:pointer;color:#d6e5ed;font-size:.72rem;font-weight:850;list-style:none}.advanced-check summary::-webkit-details-marker{display:none}.advanced-check summary:after{content:"+";float:right;color:var(--blue)}.advanced-check[open] summary:after{content:"–"}.advanced-check-body{padding:0 12px 12px}
+.calibration-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.calibration-stat{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(4,13,21,.48)}.calibration-stat strong{display:block;font-size:1.15rem}.calibration-stat span{font-size:.58rem;color:var(--muted)}.balance-row{display:grid;grid-template-columns:95px 1fr auto;gap:9px;align-items:center;margin-top:9px;font-size:.68rem}.balance-track{height:7px;border-radius:99px;background:rgba(128,167,188,.14);overflow:hidden}.balance-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:inherit}.formula-note{padding:11px;border-left:3px solid var(--blue);background:rgba(83,200,255,.055);border-radius:0 11px 11px 0;font-size:.68rem;color:#b8ceda;line-height:1.5}
 .celebration-layer{position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden}.celebration-bit{position:absolute;left:50%;top:52%;width:8px;height:14px;border-radius:3px;background:var(--green);animation:celebrate 1.25s cubic-bezier(.2,.8,.2,1) forwards}
 @keyframes wow-pulse{50%{transform:scale(.72);opacity:.7}}@keyframes wow-shine{0%,72%{transform:translateX(-42%)}88%,100%{transform:translateX(42%)}}@keyframes celebrate{0%{opacity:1;transform:translate(-50%,-50%) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
-@media(max-width:780px){.wow-shell{grid-template-columns:1fr;padding:17px}.wow-title{font-size:1.65rem}.wow-pulse-card{padding:14px}.wow-actions .btn{flex:1;min-width:125px}}
+@media(max-width:780px){.wow-shell{grid-template-columns:1fr;padding:17px}.wow-title{font-size:1.65rem}.wow-pulse-card{padding:14px}.wow-actions .btn{flex:1;min-width:125px}.calibration-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.experience-switch{position:fixed;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:55;box-shadow:0 10px 30px rgba(0,0,0,.35)}}
 
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
@@ -1138,6 +1141,11 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
   <div class="pill" id="headerStatus">
     CHECK NON COMPLETATO
+  </div>
+
+  <div class="experience-switch" aria-label="Livello interfaccia">
+    <button type="button" id="simpleModeBtn" onclick="setExperienceMode('simple')">Semplice</button>
+    <button type="button" id="expertModeBtn" onclick="setExperienceMode('expert')">Esperto</button>
   </div>
 </header>
 
@@ -1293,7 +1301,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   </div>
 </div>
 
-<div class="card decision-card" id="decisionCard">
+<div class="card decision-card expert-only" id="decisionCard">
   <div class="decision-head">
     <div>
       <div class="eyebrow">Decisione trasparente</div>
@@ -1307,13 +1315,13 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   <div class="decision-signals" id="decisionSignals" aria-live="polite"></div>
 </div>
 
-<div class="card" id="masterCoachCard">
+<div class="card expert-only" id="masterCoachCard">
   <div class="eyebrow">Hybrid Longevity Master Engine</div>
   <div class="master-grid">
     <div class="master-stat"><strong id="masterAction">—</strong><span>DECISIONE</span></div>
     <div class="master-stat"><strong id="masterFatigue">—</strong><span>FATICA</span></div>
     <div class="master-stat"><strong id="masterPrediction">—</strong><span>PREVISIONE</span></div>
-    <div class="master-stat"><strong id="masterAC">—</strong><span>ACUTO : CRONICO</span></div>
+    <div class="master-stat"><strong id="masterAC">—</strong><span>VARIAZIONE CARICO*</span></div>
     <div class="master-stat"><strong id="masterFitness">—</strong><span>FITNESS</span></div>
     <div class="master-stat"><strong id="masterDebt">—</strong><span>FATIGUE DEBT</span></div>
   </div>
@@ -1329,6 +1337,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     <div class="fatigue-zone"><strong id="fatCardio">—</strong><span>CARDIO</span><div class="fatigue-meter"><i id="fatCardioBar"></i></div></div>
     <div class="fatigue-zone"><strong id="fatSystemic">—</strong><span>SISTEMICA</span><div class="fatigue-meter"><i id="fatSystemicBar"></i></div></div>
   </div>
+  <p class="formula-note" style="margin-top:10px">* Indicatore descrittivo del cambiamento di carico, non previsione di infortunio e non causa automatica di riduzione.</p>
 </div>
 
 <div class="card period-card">
@@ -1381,15 +1390,6 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     </div>
 
     <div class="field">
-      <label>Rigidità</label>
-      <select id="stiff">
-        <option value="0">Bassa</option>
-        <option value="1">Media</option>
-        <option value="2">Alta</option>
-      </select>
-    </div>
-
-    <div class="field">
       <label>Energia</label>
       <select id="energy">
         <option value="0">Alta</option>
@@ -1398,41 +1398,18 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
       </select>
     </div>
 
-    <div class="field">
-      <label>Carico lavoro oggi</label>
-      <select id="workload">
-        <option value="0">Normale</option>
-        <option value="1">Turno intenso</option>
-        <option value="2">Turno molto pesante</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Forza braccio</label>
-      <select id="weakness">
-        <option value="0">Normale</option>
-        <option value="5">Nuova debolezza</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Formicolio</label>
-      <select id="tingling">
-        <option value="0">No</option>
-        <option value="5">Persistente</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Dolore notturno</label>
-      <select id="night">
-        <option value="0">No</option>
-        <option value="2">Lieve</option>
-        <option value="5">Mi sveglia</option>
-      </select>
-    </div>
-
   </div>
+
+  <details class="advanced-check" id="advancedCheck">
+    <summary>Segnali di attenzione e contesto</summary>
+    <div class="advanced-check-body grid3">
+      <div class="field"><label>Rigidità</label><select id="stiff"><option value="0">Bassa</option><option value="1">Media</option><option value="2">Alta</option></select></div>
+      <div class="field"><label>Carico lavoro oggi</label><select id="workload"><option value="0">Normale</option><option value="1">Turno intenso</option><option value="2">Turno molto pesante</option></select></div>
+      <div class="field"><label>Forza braccio</label><select id="weakness"><option value="0">Normale</option><option value="5">Nuova debolezza</option></select></div>
+      <div class="field"><label>Formicolio</label><select id="tingling"><option value="0">No</option><option value="5">Persistente</option></select></div>
+      <div class="field"><label>Dolore notturno</label><select id="night"><option value="0">No</option><option value="2">Lieve</option><option value="5">Mi sveglia</option></select></div>
+    </div>
+  </details>
 
   <div id="followupInfo" class="info" style="margin-top:10px">
     Nessuna seduta in attesa di follow-up.
@@ -1895,6 +1872,29 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   </div>
 </div>
 
+<div class="card" id="calibrationCard">
+  <div class="eyebrow">Calibrazione personale</div>
+  <h2>Quanto ti conosce il coach?</h2>
+  <p class="small" id="calibrationIntro">Servono almeno 10 sessioni valutate per una calibrazione utile.</p>
+  <div class="calibration-grid">
+    <div class="calibration-stat"><strong id="calibrationCount">0/10</strong><span>VALUTAZIONI</span></div>
+    <div class="calibration-stat"><strong id="calibrationRight">—</strong><span>CONSIGLI CORRETTI</span></div>
+    <div class="calibration-stat"><strong id="calibrationEasy">—</strong><span>TROPPO FACILI</span></div>
+    <div class="calibration-stat"><strong id="calibrationHard">—</strong><span>TROPPO DURI</span></div>
+  </div>
+  <div id="calibrationAdvice" class="info" style="margin-top:10px">Valuta la raccomandazione al termine delle prossime sessioni.</div>
+</div>
+
+<div class="card">
+  <div class="eyebrow">Equilibrio ultime 7 giornate</div>
+  <h2>Aerobico, forza e recupero</h2>
+  <p class="small">Riepilogo informativo rispetto a obiettivi generali di salute; non è una prescrizione clinica individuale.</p>
+  <div class="balance-row"><span>Aerobico</span><div class="balance-track"><i id="aerobicBalanceBar"></i></div><strong id="aerobicBalance">0 min</strong></div>
+  <div class="balance-row"><span>Forza</span><div class="balance-track"><i id="strengthBalanceBar"></i></div><strong id="strengthBalance">0 giorni</strong></div>
+  <div class="balance-row"><span>Recupero</span><div class="balance-track"><i id="recoveryBalanceBar"></i></div><strong id="recoveryBalance">0 giorni</strong></div>
+  <div id="weeklyBalanceAdvice" class="trend-summary"></div>
+</div>
+
 <div class="card">
   <div class="eyebrow">Andamento spalla · ultime 10 sessioni</div>
   <div class="pain-chart-legend"><span>Prima</span><span>Dopo</span></div>
@@ -2132,13 +2132,14 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
     <p>I dati restano nel browser di questo dispositivo e nel backup che scegli di esportare. Per proteggerli usa il blocco schermo del dispositivo e non condividere il file JSON.</p>
   </div>
 
-  <div class="eyebrow" style="margin-top:16px">Calibrazione prudenziale Master</div>
-  <div class="grid3">
-    <div class="field"><label for="thresholdAC">Soglia A:C di cautela</label><input id="thresholdAC" type="number" min="1.1" max="2" step="0.05" value="1.45"></div>
+  <div class="eyebrow expert-only" style="margin-top:16px">Calibrazione prudenziale Master</div>
+  <div class="grid3 expert-only">
+    <div class="field"><label for="thresholdAC">Riferimento variazione carico</label><input id="thresholdAC" type="number" min="1.1" max="2" step="0.05" value="1.45"></div>
     <div class="field"><label for="thresholdPrediction">Previsione minima</label><input id="thresholdPrediction" type="number" min="30" max="70" step="1" value="50"></div>
-    <div class="field"><label for="thresholdMinSessions">Sessioni per personalizzare</label><input id="thresholdMinSessions" type="number" min="5" max="30" step="1" value="6"></div>
+    <div class="field"><label for="thresholdMinSessions">Sessioni per personalizzare</label><input id="thresholdMinSessions" type="number" min="10" max="30" step="1" value="10"></div>
   </div>
-  <div class="checks" style="margin-top:10px">
+  <p class="formula-note expert-only" style="margin-top:10px">La variazione acuto:cronico è mostrata soltanto come contesto descrittivo e non modifica automaticamente l’allenamento.</p>
+  <div class="checks expert-only" style="margin-top:10px">
     <label class="checkline"><input type="checkbox" id="deviceTested"> Test manuale completato sul mio iPhone</label>
     <label class="checkline"><input type="checkbox" id="clinicalReviewed"> Soglie revisionate con un professionista</label>
   </div>
@@ -2380,6 +2381,16 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
   </div>
 
+  <div class="field" style="margin-top:12px">
+    <label>La raccomandazione di oggi era adeguata?</label>
+    <select id="recommendationFeedback">
+      <option value="">Seleziona una valutazione</option>
+      <option value="too_easy">Troppo facile</option>
+      <option value="right">Corretta</option>
+      <option value="too_hard">Troppo dura</option>
+    </select>
+  </div>
+
   <button
     id="saveSessionBtn"
     class="btn full"
@@ -2441,10 +2452,13 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "15.0.0-PICARI-WOW-EXPERIENCE";
+  "16.0.0-PICARI-CALIBRATED-FLOW";
 
 const SCHEMA_VERSION =
-  19;
+  20;
+
+const FORMULA_VERSION =
+  "2.0-DESCRIPTIVE-LOAD";
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -4333,6 +4347,8 @@ function defaults(){
 
       weeklyOverrides:{},
 
+      uiMode:"simple",
+
       voice:true,
 
       onboardingComplete:false,
@@ -4340,7 +4356,7 @@ function defaults(){
       masterThresholds:{
         acCaution:1.45,
         predictionMin:50,
-        minSessions:6
+        minSessions:10
       },
 
       validation:{
@@ -4484,7 +4500,8 @@ function norm(v){
 
       masterThresholds:{
         ...b.settings.masterThresholds,
-        ...(ss.masterThresholds || {})
+        ...(ss.masterThresholds || {}),
+        minSessions:Math.max(10,Number(ss.masterThresholds?.minSessions||b.settings.masterThresholds.minSessions))
       },
 
       validation:{
@@ -8243,7 +8260,7 @@ function masterFatigueModel(){
   const monotony=sd?mean/sd:0;
   const hard=d.sessions.filter(s=>masterDaysAgo(s.date)<=7&&(Number(s.rpe)>=8||/interval|tempo|hyrox|military|mountain bike|bici da corsa|cyclette/i.test(String(s.type)))).length;
   let debt=Number(d.fatigueDebt||0);
-  let score=78-pain*6-Math.max(0,ratio-1)*18-Math.max(0,monotony-1.7)*8-Math.max(0,hard-3)*5-debt*5;
+  let score=78-pain*6-Math.max(0,monotony-1.7)*8-Math.max(0,hard-3)*5-debt*5;
   score=masterClamp(score,10,100);
   return{score,acute,chronic,ratio,monotony,debt,hard};
 }
@@ -8257,7 +8274,7 @@ function fitnessFatigueModel(){
 
 function personalResponseModel(){
   const list=confirmedSessions(30);
-  if(list.length<5) return{score:50,confidence:"BASSA",hardTolerance:.5,recoveryHours:36,why:"Servono almeno 5 follow-up confermati."};
+  if(list.length<10) return{score:50,confidence:"BASSA",hardTolerance:.5,recoveryHours:36,why:"Servono almeno 10 follow-up confermati."};
   const good=list.filter(sessionTolerated), hard=list.filter(s=>Number(s.rpe)>=8), hardGood=hard.filter(sessionTolerated);
   const score=masterClamp(good.length/list.length*70+(hard.length?hardGood.length/hard.length:.5)*30,20,100);
   return{score,confidence:list.length>=15?"ALTA":"MEDIA",hardTolerance:hard.length?hardGood.length/hard.length:.5,recoveryHours:score>=85?24:score>=70?36:score>=55?48:60,why:`${good.length}/${list.length} sedute tollerate; recupero stimato ${score>=85?24:score>=70?36:score>=55?48:60}h.`};
@@ -8267,10 +8284,17 @@ function systemFatigueModel(){
   const zones={upper:0,lower:0,cardio:0,systemic:0}, chronic={upper:0,lower:0,cardio:0,systemic:0};
   const zoneFor=c=>/rehab|military|physio|release/.test(c)?"upper":/legs/.test(c)?"lower":/run|hyrox|pool|cycling/.test(c)?"cardio":"systemic";
   data().sessions.filter(s=>masterDaysAgo(s.date)<=28).forEach(s=>{
-    const items=s.prescribedWorkout||[], load=masterSessionLoad(s), counts={upper:0,lower:0,cardio:0,systemic:0};
-    if(items.length)items.forEach(x=>counts[zoneFor(String(x.category||EX[x.id]?.c||""))]++);else counts[zoneFor(String(s.trainingCategory||s.generatedSessionType||"systemic"))]=1;
-    const total=Math.max(1,Object.values(counts).reduce((a,b)=>a+b,0));
-    Object.keys(zones).forEach(k=>{const share=load*counts[k]/total;chronic[k]+=share;if(masterDaysAgo(s.date)<=7)zones[k]+=share});
+    const items=s.prescribedWorkout||[], load=masterSessionLoad(s), weights={upper:0,lower:0,cardio:0,systemic:.12};
+    const type=String(`${s.trainingCategory||""} ${s.generatedSessionType||""} ${s.type||""}`).toLowerCase();
+    if(items.length){
+      items.forEach(x=>{const zone=zoneFor(String(x.category||EX[x.id]?.c||""));weights[zone]+=1});
+    }else if(/cycling|bike|bici|cyclette|mtb/.test(type)){weights.cardio+=.65;weights.lower+=.30;weights.upper+=.05}
+    else if(/run|corsa|walk|cammin|swim|nuoto/.test(type)){weights.cardio+=.68;weights.lower+=.27;weights.upper+=.05}
+    else if(/strength|forza|legs|military|hyrox/.test(type)){weights.lower+=.48;weights.upper+=.30;weights.cardio+=.22}
+    else if(/rehab|shoulder|spalla|physio|fisio/.test(type)){weights.upper+=.72;weights.systemic+=.18;weights.cardio+=.10}
+    else weights.systemic+=1;
+    const total=Math.max(.01,Object.values(weights).reduce((a,b)=>a+b,0));
+    Object.keys(zones).forEach(k=>{const share=load*weights[k]/total;chronic[k]+=share;if(masterDaysAgo(s.date)<=7)zones[k]+=share});
   });
   const out={};Object.keys(zones).forEach(k=>out[k]=masterClamp(25+zones[k]/Math.max(chronic[k]/4,1)*28));
   if(selectedPain!==null)out.upper=masterClamp(out.upper+selectedPain*9+(100-(shoulderReadiness||100))*.28);
@@ -8293,8 +8317,8 @@ function masterDecisionModel(){
   const daily=selectedPain===null?65:masterClamp(readiness);
   let score=fatigue.score*.3+daily*.25+prediction.score*.2+fit.form*.15+personal.score*.1,action="MANTIENI";
   const enoughData=confirmedSessions(40).length>=thresholds.minSessions;
-  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68||(Number.isFinite(fatigue.ratio)&&fatigue.ratio>thresholds.acCaution+.1))action="CONTROLLA";else if(enoughData&&score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(enoughData&&score>=74&&prediction.score>=60)action="PROGREDISCI";
-  const brakes=[];if(!enoughData)brakes.push("storico insufficiente: modalità prudenziale");if(Number.isFinite(fatigue.ratio)&&fatigue.ratio>thresholds.acCaution)brakes.push(`A:C ${fatigue.ratio.toFixed(2)}`);if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<thresholds.predictionMin)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
+  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68)action="CONTROLLA";else if(enoughData&&score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(enoughData&&score>=74&&prediction.score>=60)action="PROGREDISCI";
+  const brakes=[];if(!enoughData)brakes.push("storico insufficiente: modalità prudenziale");if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<thresholds.predictionMin)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
   return{action,score:masterClamp(score),fatigue,fit,personal,prediction,daily,brakes,enoughData};
 }
 
@@ -10915,6 +10939,8 @@ function openPost(){
     .value =
       "";
 
+  document.getElementById("recommendationFeedback").value="";
+
   document
     .getElementById(
       "saveSessionBtn"
@@ -10977,6 +11003,8 @@ document
     validatePost
   );
 
+document.getElementById("recommendationFeedback").addEventListener("change",validatePost);
+
 function validatePost(){
 
   const rpe =
@@ -10988,6 +11016,8 @@ function validatePost(){
         .value
     );
 
+  const feedback=document.getElementById("recommendationFeedback").value;
+
   document
     .getElementById(
       "saveSessionBtn"
@@ -10997,7 +11027,8 @@ function validatePost(){
         postPain!==null &&
         Number.isFinite(rpe) &&
         rpe>=1 &&
-        rpe<=10
+        rpe<=10 &&
+        ["too_easy","right","too_hard"].includes(feedback)
       );
 
 }
@@ -11013,15 +11044,18 @@ function saveCompletedSession(){
         .value
     );
 
+  const recommendationFeedback=document.getElementById("recommendationFeedback").value;
+
   if(
     postPain===null ||
     !Number.isFinite(rpe) ||
     rpe<1 ||
-    rpe>10
+    rpe>10 ||
+    !["too_easy","right","too_hard"].includes(recommendationFeedback)
   ){
 
     alert(
-      "Inserisci dolore post-sessione e RPE."
+      "Inserisci dolore post-sessione, RPE e valutazione del consiglio."
     );
 
     return;
@@ -11155,6 +11189,17 @@ function saveCompletedSession(){
 
     performancePrediction:
       Math.round(masterSnapshot.prediction.score),
+
+    recommendationFeedback,
+
+    recommendationAtStart:{
+      action:masterSnapshot.action,
+      score:Math.round(masterSnapshot.score),
+      mode,
+      plannedType:generatedSessionType
+    },
+
+    formulaVersion:FORMULA_VERSION,
 
     durationSec,
 
@@ -11403,9 +11448,9 @@ function csvCell(value){
 }
 
 function exportSessionsCsv(){
-  const rows=[["data","tipo","origine","durata_min","rpe","carico","distanza_km","dislivello_m","dolore_pre","dolore_post","follow_up","note"]];
+  const rows=[["data","tipo","origine","durata_min","rpe","carico","distanza_km","dislivello_m","dolore_pre","dolore_post","follow_up","valutazione_consiglio","formula_versione","note"]];
   data().sessions.forEach(session=>rows.push([
-    session.date||"",session.type||"",session.sourceApp||"App",Math.round(Number(session.durationSec||0)/60),session.rpe??"",session.sessionLoad??"",session.distanceKm??"",session.elevationM??"",session.prePain??"",session.postPain??"",session.nextDayReaction??"",session.notes||""
+    session.date||"",session.type||"",session.sourceApp||"App",Math.round(Number(session.durationSec||0)/60),session.rpe??"",session.sessionLoad??"",session.distanceKm??"",session.elevationM??"",session.prePain??"",session.postPain??"",session.nextDayReaction??"",session.recommendationFeedback??"",session.formulaVersion??"",session.notes||""
   ]));
   const csv="\uFEFF"+rows.map(row=>row.map(csvCell).join(";")).join("\r\n");
   downloadTextFile(`picari-coach-sessioni-${localDay()}.csv`,csv,"text/csv;charset=utf-8");
@@ -11764,6 +11809,15 @@ function dashboard(
   updateStartButtonState();
   renderWowExperience();
 
+}
+
+function setExperienceMode(mode,persist=true){
+  const selected=mode==="expert"?"expert":"simple";
+  document.body.classList.toggle("simple-mode",selected==="simple");
+  document.getElementById("simpleModeBtn")?.classList.toggle("active",selected==="simple");
+  document.getElementById("expertModeBtn")?.classList.toggle("active",selected==="expert");
+  if(selected==="expert")document.getElementById("advancedCheck")?.setAttribute("open","");
+  if(persist){const d=data();d.settings.uiMode=selected;save(d);notify(`Modalità ${selected==="simple"?"Semplice":"Esperto"} attiva.`)}
 }
 
 function startOfCurrentWeek(){
@@ -12300,6 +12354,41 @@ function renderProgress(){
     }
   }
 
+  renderCalibrationReport();
+  renderWeeklyBalance();
+
+}
+
+function renderCalibrationReport(){
+  const evaluated=data().sessions.filter(session=>["too_easy","right","too_hard"].includes(session.recommendationFeedback));
+  const recent=evaluated.slice(-30),count=recent.length;
+  const totals={too_easy:0,right:0,too_hard:0};recent.forEach(session=>totals[session.recommendationFeedback]++);
+  const pct=key=>count?Math.round(totals[key]/count*100):0;
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
+  set("calibrationCount",`${Math.min(count,10)}/10`);set("calibrationRight",count?`${pct("right")}%`:"—");set("calibrationEasy",count?`${pct("too_easy")}%`:"—");set("calibrationHard",count?`${pct("too_hard")}%`:"—");
+  const intro=document.getElementById("calibrationIntro"),advice=document.getElementById("calibrationAdvice");if(!intro||!advice)return;
+  if(count<10){intro.textContent=`Ancora ${10-count} valutazioni per attivare una calibrazione personale prudente.`;advice.className="info";advice.textContent="Per ora il motore mantiene soglie conservative e non interpreta percentuali individuali.";return}
+  intro.textContent=`Analisi delle ultime ${count} sessioni valutate. Le percentuali descrivono la tua esperienza, non predicono infortuni.`;
+  advice.className=pct("too_hard")>=30?"warning":"info";
+  advice.textContent=pct("too_hard")>=30
+    ?"Il consiglio è risultato troppo duro frequentemente: mantieni una riduzione prudenziale di volume/intensità e rivedi le soglie con un professionista."
+    :pct("too_easy")>=40
+    ?"Molte sedute risultano troppo facili. Se follow-up, dolore e tecnica restano favorevoli, considera una sola progressione alla volta."
+    :pct("right")>=65
+    ?"Calibrazione coerente: la maggioranza delle raccomandazioni è risultata adeguata. Continua a raccogliere follow-up."
+    :"Risposte miste: evita cambi drastici e raccogli altre sessioni prima di modificare le soglie.";
+}
+
+function renderWeeklyBalance(){
+  const recent=data().sessions.filter(session=>masterDaysAgo(session.date)>=0&&masterDaysAgo(session.date)<7);
+  const daysFor=predicate=>new Set(recent.filter(predicate).map(session=>session.day||localDay(new Date(session.date)))).size;
+  const aerobic=recent.filter(session=>/run|corsa|walk|cammin|cycling|bike|bici|cyclette|mtb|swim|nuoto|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`)).reduce((sum,session)=>sum+Number(session.durationSec||0)/60,0);
+  const strengthDays=daysFor(session=>/strength|forza|legs|military|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
+  const recoveryDays=daysFor(session=>/recovery|recupero|mobility|mobilità|rehab|fisio|physio/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
+  document.getElementById("aerobicBalance").textContent=`${Math.round(aerobic)} min`;document.getElementById("strengthBalance").textContent=`${strengthDays} giorni`;document.getElementById("recoveryBalance").textContent=`${recoveryDays} giorni`;
+  document.getElementById("aerobicBalanceBar").style.width=`${masterClamp(aerobic/150*100)}%`;document.getElementById("strengthBalanceBar").style.width=`${masterClamp(strengthDays/2*100)}%`;document.getElementById("recoveryBalanceBar").style.width=`${masterClamp(recoveryDays/2*100)}%`;
+  const messages=[];if(aerobic<150)messages.push(`aerobico registrato ${Math.round(aerobic)}/150 min`);else messages.push("quota aerobica generale raggiunta");if(strengthDays<2)messages.push(`forza ${strengthDays}/2 giorni`);else messages.push("forza distribuita su almeno 2 giorni");
+  document.getElementById("weeklyBalanceAdvice").textContent=`Riepilogo: ${messages.join(" · ")}. Intensità, condizioni personali e lavoro fisico possono richiedere adattamenti.`;
 }
 
 /* =========================================================
@@ -12598,13 +12687,14 @@ function loadSettings(){
 
   document.getElementById("thresholdAC").value=s.masterThresholds?.acCaution??1.45;
   document.getElementById("thresholdPrediction").value=s.masterThresholds?.predictionMin??50;
-  document.getElementById("thresholdMinSessions").value=s.masterThresholds?.minSessions??6;
+  document.getElementById("thresholdMinSessions").value=Math.max(10,s.masterThresholds?.minSessions??10);
   document.getElementById("deviceTested").checked=!!s.validation?.deviceTested;
   document.getElementById("clinicalReviewed").checked=!!s.validation?.clinicalReviewed;
   document.getElementById("smartReminders").checked=!!s.reminders?.enabled;
   document.getElementById("recoveryAlerts").checked=s.reminders?.recoveryAlerts!==false;
   document.getElementById("reminderHour").value=s.reminders?.time||"18:00";
   document.getElementById("backupReminderDays").value=String(s.reminders?.backupDays||30);
+  setExperienceMode(s.uiMode||"simple",false);
 
 }
 
@@ -12714,6 +12804,10 @@ function saveSettings(){
       substituteEasyRun:document.getElementById("cyclingRunSubstitution").checked
     },
 
+    weeklyOverrides:{...(d.settings.weeklyOverrides||{})},
+
+    uiMode:d.settings.uiMode||"simple",
+
     voice:
       document
         .getElementById(
@@ -12727,7 +12821,7 @@ function saveSettings(){
     masterThresholds:{
       acCaution:masterClamp(Number(document.getElementById("thresholdAC").value||1.45),1.1,2),
       predictionMin:masterClamp(Number(document.getElementById("thresholdPrediction").value||50),30,70),
-      minSessions:Math.round(masterClamp(Number(document.getElementById("thresholdMinSessions").value||6),5,30))
+      minSessions:Math.round(masterClamp(Number(document.getElementById("thresholdMinSessions").value||10),10,30))
     },
 
     validation:{
@@ -13441,6 +13535,7 @@ function validateDataIntegrity(input=data()){
     if(s?.date&&!Number.isFinite(Date.parse(s.date)))issues.push(`data sessione ${index+1} non valida`);
     if(s?.rpe!=null&&(Number(s.rpe)<1||Number(s.rpe)>10))issues.push(`RPE sessione ${index+1} fuori scala`);
     if(s?.prePain!=null&&(Number(s.prePain)<0||Number(s.prePain)>5))issues.push(`dolore sessione ${index+1} fuori scala`);
+    if(s?.recommendationFeedback!=null&&!["too_easy","right","too_hard"].includes(s.recommendationFeedback))issues.push(`valutazione consiglio ${index+1} non valida`);
   });
   return{ok:issues.length===0,issues:issues.slice(0,12),checked:(input.sessions||[]).length};
 }
@@ -13462,6 +13557,11 @@ function runSelfTests(){
   test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
   test("wow experience",()=>["wowDeck","wowScore","wowMomentum","wowPrimaryBtn"].every(id=>document.getElementById(id))&&typeof renderWowExperience==="function");
+  test("flusso semplice esperto",()=>["simpleModeBtn","expertModeBtn","advancedCheck"].every(id=>document.getElementById(id))&&typeof setExperienceMode==="function");
+  test("carico sRPE",()=>masterSessionLoad({durationSec:1800,rpe:6})===180);
+  test("A:C solo descrittivo",()=>!masterDecisionModel.toString().includes("fatigue.ratio"));
+  test("calibrazione feedback",()=>["recommendationFeedback","calibrationCard","calibrationAdvice"].every(id=>document.getElementById(id))&&typeof renderCalibrationReport==="function");
+  test("equilibrio settimanale",()=>["aerobicBalance","strengthBalance","recoveryBalance"].every(id=>document.getElementById(id))&&typeof renderWeeklyBalance==="function");
   runtimeHealth.tests=tests;
   return tests;
 }
@@ -13493,7 +13593,8 @@ function browserCapabilityAudit(){
 
 function exportTechnicalReport(){
   const diagnostic=runDiagnostics(false),browser=browserCapabilityAudit(),d=data(),md=masterDecisionModel();
-  const report={generatedAt:new Date().toISOString(),appVersion:APP_VERSION,schemaVersion:SCHEMA_VERSION,diagnostic,browser,validation:d.settings.validation,thresholds:d.settings.masterThresholds,dataSummary:{sessions:d.sessions.length,confirmed:confirmedSessions(999).length,activities:d.activities.length,tests:d.tests.length,lastUpdated:d.updatedAt},masterSnapshot:{action:md.action,score:md.enoughData?Math.round(md.score):null,fatigue:md.enoughData?Math.round(md.fatigue.score):null,prediction:md.enoughData?Math.round(md.prediction.score):null,fitness:md.enoughData?Math.round(md.fit.fitness):null,acuteChronic:Number.isFinite(md.fatigue.ratio)?Number(md.fatigue.ratio.toFixed(2)):null,brakes:md.brakes},disclaimer:"Le soglie sono euristiche prudenziali e non costituiscono diagnosi o prescrizione clinica."};
+  const feedback=d.sessions.filter(s=>["too_easy","right","too_hard"].includes(s.recommendationFeedback));
+  const report={generatedAt:new Date().toISOString(),appVersion:APP_VERSION,schemaVersion:SCHEMA_VERSION,formulaVersion:FORMULA_VERSION,diagnostic,browser,validation:d.settings.validation,thresholds:d.settings.masterThresholds,dataSummary:{sessions:d.sessions.length,confirmed:confirmedSessions(999).length,evaluatedRecommendations:feedback.length,activities:d.activities.length,tests:d.tests.length,lastUpdated:d.updatedAt},calibration:{right:feedback.filter(s=>s.recommendationFeedback==="right").length,tooEasy:feedback.filter(s=>s.recommendationFeedback==="too_easy").length,tooHard:feedback.filter(s=>s.recommendationFeedback==="too_hard").length},masterSnapshot:{action:md.action,score:md.enoughData?Math.round(md.score):null,fatigue:md.enoughData?Math.round(md.fatigue.score):null,prediction:md.enoughData?Math.round(md.prediction.score):null,fitness:md.enoughData?Math.round(md.fit.fitness):null,loadChangeDescriptor:Number.isFinite(md.fatigue.ratio)?Number(md.fatigue.ratio.toFixed(2)):null,loadChangeAffectsDecision:false,brakes:md.brakes},disclaimer:"Le formule sono euristiche descrittive, non prevedono infortuni e non costituiscono diagnosi o prescrizione clinica."};
   const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download=`erjon-coach-report-${localDay()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify("Report tecnico esportato.");
 }
