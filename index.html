@@ -1084,6 +1084,26 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   .master-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.system-fatigue{grid-template-columns:repeat(2,minmax(0,1fr))}.prediction-grid,.load-capture{grid-template-columns:1fr}.planner-row{grid-template-columns:64px 1fr auto}
 }
 
+/* EXPERIENCE 15 · cinematic command deck */
+.wow-deck{padding:0;background:linear-gradient(145deg,rgba(13,35,48,.96),rgba(7,17,28,.96));border-color:rgba(83,200,255,.24)}
+.wow-deck:after{content:"";position:absolute;inset:-120% -30%;pointer-events:none;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.055) 50%,transparent 58%);animation:wow-shine 9s ease-in-out infinite}
+.wow-shell{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:18px;padding:22px}
+.wow-kicker{display:flex;align-items:center;gap:8px;color:#a8bfcd;font-size:.65rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.wow-live{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(46,230,166,.08),0 0 20px rgba(46,230,166,.65);animation:wow-pulse 2.2s ease-in-out infinite}
+.wow-title{font-size:clamp(1.55rem,3vw,2.35rem);line-height:1.03;letter-spacing:-.055em;margin:12px 0 8px;max-width:760px}
+.wow-title em{font-style:normal;color:var(--green);text-shadow:0 0 28px rgba(46,230,166,.2)}
+.wow-copy{color:#a9becb;line-height:1.55;font-size:.78rem;max-width:720px}
+.wow-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.wow-actions .btn{min-width:145px}
+.wow-pulse-card{display:grid;align-content:center;gap:12px;padding:17px;border-radius:18px;background:rgba(2,10,17,.48);border:1px solid rgba(255,255,255,.07);box-shadow:0 20px 55px rgba(0,0,0,.22) inset}
+.wow-score-row{display:flex;align-items:end;justify-content:space-between;gap:10px}.wow-score{font-size:2.6rem;font-weight:950;letter-spacing:-.07em;line-height:.9;color:#fff}.wow-score small{font-size:.72rem;color:var(--muted);letter-spacing:0}.wow-status{font-size:.62rem;font-weight:900;color:var(--green);letter-spacing:.08em}
+.wow-meter{height:9px;border-radius:999px;overflow:hidden;background:rgba(128,167,188,.13)}.wow-meter i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--green),var(--blue));box-shadow:0 0 18px rgba(46,230,166,.35);transition:width .5s ease}
+.wow-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.wow-mini{padding:9px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)}.wow-mini strong{display:block;font-size:.9rem}.wow-mini span{font-size:.54rem;color:var(--muted)}
+.momentum-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.momentum-day{text-align:center}.momentum-dot{height:7px;border-radius:99px;background:rgba(128,167,188,.13);margin-bottom:5px}.momentum-day.done .momentum-dot{background:linear-gradient(90deg,var(--green),var(--blue));box-shadow:0 0 12px rgba(46,230,166,.25)}.momentum-day.today .momentum-dot{outline:2px solid rgba(255,255,255,.38);outline-offset:2px}.momentum-day span{font-size:.52rem;color:var(--muted)}
+.achievement-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.achievement{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:11px;background:rgba(184,165,255,.08);border:1px solid rgba(184,165,255,.13);color:#d8ceff;font-size:.62rem;font-weight:800}.achievement.locked{filter:saturate(.2);opacity:.46}
+.celebration-layer{position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden}.celebration-bit{position:absolute;left:50%;top:52%;width:8px;height:14px;border-radius:3px;background:var(--green);animation:celebrate 1.25s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes wow-pulse{50%{transform:scale(.72);opacity:.7}}@keyframes wow-shine{0%,72%{transform:translateX(-42%)}88%,100%{transform:translateX(42%)}}@keyframes celebrate{0%{opacity:1;transform:translate(-50%,-50%) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+@media(max-width:780px){.wow-shell{grid-template-columns:1fr;padding:17px}.wow-title{font-size:1.65rem}.wow-pulse-card{padding:14px}.wow-actions .btn{flex:1;min-width:125px}}
+
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
@@ -1244,6 +1264,32 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
     </div>
 
+  </div>
+</div>
+
+<div class="card wow-deck" id="wowDeck">
+  <div class="wow-shell">
+    <div>
+      <div class="wow-kicker"><span class="wow-live"></span><span id="wowDate">COACH PULSE</span></div>
+      <h2 class="wow-title" id="wowTitle">Il prossimo passo, <em>senza rumore.</em></h2>
+      <p class="wow-copy" id="wowCopy">Il coach sta preparando il quadro della giornata.</p>
+      <div class="wow-actions">
+        <button type="button" class="btn" onclick="wowPrimaryAction()" id="wowPrimaryBtn">Completa il check</button>
+        <button type="button" class="btn secondary" onclick="showPage('plan')">Vedi la settimana</button>
+        <button type="button" class="btn secondary" onclick="showPage('progress')">Apri progressi</button>
+      </div>
+      <div class="achievement-row" id="wowAchievements"></div>
+    </div>
+    <div class="wow-pulse-card">
+      <div class="wow-score-row"><div><div class="wow-score"><span id="wowScore">0</span><small>%</small></div><div class="small">MOMENTUM SETTIMANALE</div></div><div class="wow-status" id="wowStatus">IN AVVIO</div></div>
+      <div class="wow-meter"><i id="wowMeter"></i></div>
+      <div class="momentum-strip" id="wowMomentum"></div>
+      <div class="wow-mini-grid">
+        <div class="wow-mini"><strong id="wowWeekDone">0/0</strong><span>SEDUTE</span></div>
+        <div class="wow-mini"><strong id="wowLoad">0</strong><span>CARICO 7G</span></div>
+        <div class="wow-mini"><strong id="wowStreak">0</strong><span>STREAK</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2395,7 +2441,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.5.0-PICARI-LIFETIME-SINGLE-FILE";
+  "15.0.0-PICARI-WOW-EXPERIENCE";
 
 const SCHEMA_VERSION =
   19;
@@ -11169,6 +11215,7 @@ function saveCompletedSession(){
   save(d);
 
   haptic("save");
+  celebrateCompletion();
 
   clearSessionDraft();
 
@@ -11715,7 +11762,67 @@ function dashboard(
   }
 
   updateStartButtonState();
+  renderWowExperience();
 
+}
+
+function startOfCurrentWeek(){
+  const date=new Date();date.setHours(0,0,0,0);date.setDate(date.getDate()-dayIndex());return date;
+}
+
+function renderWowExperience(){
+  const root=document.getElementById("wowDeck");if(!root)return;
+  const d=data(),start=startOfCurrentWeek(),end=new Date(start.getTime()+7*86400000);
+  const weekSessions=d.sessions.filter(session=>{const time=Date.parse(session.date||0);return time>=start.getTime()&&time<end.getTime()});
+  const completedDays=new Set(weekSessions.map(session=>session.day||localDay(new Date(session.date))));
+  const target=Math.max(1,Number(d.settings.days)||5),done=Math.min(target,completedDays.size),momentum=Math.min(100,Math.round(done/target*100));
+  const load7=weekSessions.reduce((sum,session)=>sum+Number(session.sessionLoad||0),0);
+  const planned=sessionLabel(scheduledSessionType());
+  const dateText=new Intl.DateTimeFormat("it-IT",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
+  document.getElementById("wowDate").textContent=`COACH PULSE · ${dateText}`.toUpperCase();
+  document.getElementById("wowScore").textContent=momentum;
+  document.getElementById("wowMeter").style.width=`${momentum}%`;
+  document.getElementById("wowWeekDone").textContent=`${done}/${target}`;
+  document.getElementById("wowLoad").textContent=Math.round(load7);
+  document.getElementById("wowStreak").textContent=streak(d.sessions);
+
+  let title=`Oggi: <em>${escapeHtml(planned)}</em>`;
+  let copy="Completa il check quotidiano: dolore, recupero e storico determineranno la versione più adatta della seduta.";
+  let status="CHECK RICHIESTO";
+  let button="Completa il check";
+  if(blocked){title="Oggi vince la <em>sicurezza.</em>";copy="I segnali inseriti richiedono prudenza. Non avviare il lavoro sulla spalla e valuta un confronto professionale.";status="STOP";button="Rivedi il check"}
+  else if(selectedPain!==null){
+    const modeLabel=mode==="build"?"PERFORMANCE":mode==="safe"?"SAFE":mode==="recovery"?"RECOVERY":"CHECK";
+    title=`${escapeHtml(planned)}, <em>modalità ${modeLabel.toLowerCase()}.</em>`;
+    copy=`Spalla ${shoulderReadiness}% · performance ${performanceReadiness}%. Il piano è stato adattato senza modificare il livello permanente costruito.`;
+    status=modeLabel;button=document.getElementById("startToday")?.disabled?"Completa i dati":"Avvia la sessione";
+  }
+  document.getElementById("wowTitle").innerHTML=title;
+  document.getElementById("wowCopy").textContent=copy;
+  document.getElementById("wowStatus").textContent=status;
+  document.getElementById("wowPrimaryBtn").textContent=button;
+
+  const days=["L","M","M","G","V","S","D"];
+  document.getElementById("wowMomentum").innerHTML=days.map((label,index)=>{
+    const date=new Date(start.getTime()+index*86400000),key=localDay(date);
+    return `<div class="momentum-day ${completedDays.has(key)?"done":""} ${index===dayIndex()?"today":""}"><div class="momentum-dot"></div><span>${label}</span></div>`;
+  }).join("");
+
+  const total=d.sessions.length,cycling=d.sessions.filter(session=>/bici|bike|cyclette|cycling/i.test(`${session.type||""} ${session.trainingCategory||""}`)).length;
+  const achievements=[
+    [total>=1,"✦","Prima sessione"],[total>=10,"◆","10 sessioni"],[streak(d.sessions)>=3,"⚡","Streak 3"],[cycling>=3,"◉","Cycling 3"],[!!d.lastBackupAt,"⬡","Backup protetto"]
+  ];
+  document.getElementById("wowAchievements").innerHTML=achievements.map(([ok,icon,label])=>`<span class="achievement ${ok?"":"locked"}">${icon} ${label}</span>`).join("");
+}
+
+function wowPrimaryAction(){
+  showPage("today");
+  const start=document.getElementById("startToday");
+  if(selectedPain!==null&&!blocked&&!start.disabled){startGeneratedWorkout();return}
+  const target=followupNeedsAnswer()&&!followupAnswerSelected()?document.getElementById("pain24"):document.getElementById("painScale");
+  target?.scrollIntoView({behavior:"smooth",block:"center"});
+  target?.focus?.();
+  haptic("tap");
 }
 
 /* =========================================================
@@ -13354,6 +13461,7 @@ function runSelfTests(){
   test("calendario modificabile",()=>typeof setWeekOverride==="function"&&typeof sessionTypeForDay==="function");
   test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
+  test("wow experience",()=>["wowDeck","wowScore","wowMomentum","wowPrimaryBtn"].every(id=>document.getElementById(id))&&typeof renderWowExperience==="function");
   runtimeHealth.tests=tests;
   return tests;
 }
@@ -13410,6 +13518,18 @@ function notify(message,type="success"){
   toast.textContent = String(message || "");
   region.appendChild(toast);
   setTimeout(()=>toast.remove(),4200);
+}
+
+function celebrateCompletion(){
+  if(window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches)return;
+  const layer=document.createElement("div");layer.className="celebration-layer";
+  const colors=["#2ee6a6","#53c8ff","#ffd45a","#b8a5ff","#ff9b54"];
+  for(let i=0;i<24;i++){
+    const bit=document.createElement("i");bit.className="celebration-bit";bit.style.background=colors[i%colors.length];
+    const angle=(Math.PI*2*i/24)+(Math.random()*.18),distance=120+Math.random()*240;
+    bit.style.setProperty("--x",`${Math.cos(angle)*distance}px`);bit.style.setProperty("--y",`${Math.sin(angle)*distance}px`);bit.style.setProperty("--r",`${180+Math.random()*540}deg`);bit.style.animationDelay=`${Math.random()*.12}s`;layer.appendChild(bit);
+  }
+  document.body.appendChild(layer);setTimeout(()=>layer.remove(),1700);
 }
 
 function customConfirm(message,title="Conferma operazione"){
