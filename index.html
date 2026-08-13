@@ -1808,7 +1808,18 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
   <label class="checkline" style="margin-top:10px"><input type="checkbox" id="manualActivityFollowup" checked> Richiedi domani il follow-up della spalla</label>
   <div class="field" style="margin-top:10px"><label for="manualActivityNotes">Note</label><textarea id="manualActivityNotes" maxlength="1000" placeholder="Percorso, intensità, sensazioni, dati utili..."></textarea></div>
-  <button class="btn blue full" style="margin-top:10px" onclick="saveManualActivity()">Salva attività manuale</button>
+  <input id="manualActivityEditId" type="hidden">
+  <div class="grid2" style="margin-top:10px">
+    <button id="manualActivitySaveBtn" class="btn blue" onclick="saveManualActivity()">Salva attività manuale</button>
+    <button id="manualActivityCancelBtn" class="btn secondary hidden" onclick="cancelManualActivityEdit()">Annulla modifica</button>
+  </div>
+  <div class="grid3" style="margin-top:10px">
+    <button class="btn secondary" onclick="exportSessionsCsv()">Esporta CSV</button>
+    <button class="btn secondary" onclick="document.getElementById('trackImportFile').click()">Importa GPX / TCX</button>
+    <button class="btn secondary" onclick="exportData()">Backup JSON</button>
+  </div>
+  <input id="trackImportFile" class="hidden" type="file" accept=".gpx,.tcx,application/gpx+xml,application/vnd.garmin.tcx+xml,application/xml,text/xml">
+  <p class="note">GPX e TCX vengono elaborati solo sul dispositivo. I file FIT richiedono un convertitore esterno: esportali prima come GPX o TCX.</p>
 </div>
 
 <div class="card">
@@ -2384,10 +2395,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.4.0-PICARI-CYCLING-EQUIPMENT";
+  "14.5.0-PICARI-LIFETIME-SINGLE-FILE";
 
 const SCHEMA_VERSION =
-  18;
+  19;
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -2403,6 +2414,9 @@ const RECORD =
 
 const DRAFT_KEY =
   `${KEY}_sessionDraft_v2`;
+
+const PRE_MIGRATION_BACKUP_KEY =
+  `${KEY}_preMigrationBackup`;
 
 const BACKUP_REMINDER_DAYS =
   30;
@@ -4270,6 +4284,8 @@ function defaults(){
         level:"intermediate",
         substituteEasyRun:true
       },
+
+      weeklyOverrides:{},
 
       voice:true,
 
@@ -8045,6 +8061,26 @@ function mask(n){
    TIPO SEDUTA GIORNALIERA
    ========================================================= */
 
+function weeklyOverrideKey(index){
+  return `${periodizationWeek()}:${index}`;
+}
+
+function sessionTypeForDay(index,baseType){
+  return data().settings.weeklyOverrides?.[weeklyOverrideKey(index)]||baseType||"recovery";
+}
+
+function setWeekOverride(index,value){
+  const d=data();
+  d.settings.weeklyOverrides={...(d.settings.weeklyOverrides||{})};
+  const key=weeklyOverrideKey(index);
+  if(value)d.settings.weeklyOverrides[key]=value;
+  else delete d.settings.weeklyOverrides[key];
+  save(d);
+  renderWeek();
+  if(index===dayIndex()&&selectedPain!==null)evaluate();
+  notify(value?"Giornata personalizzata.":"Giornata ripristinata dal piano.");
+}
+
 function scheduledSessionType(){
 
   const d =
@@ -8068,8 +8104,7 @@ function scheduledSessionType(){
     );
 
   return (
-    week[index] ||
-    "recovery"
+    sessionTypeForDay(index,week[index])
   );
 
 }
@@ -9099,6 +9134,13 @@ function renderPreviews(){
    SETTIMANA
    ========================================================= */
 
+function weekEditorOptions(selected,planned){
+  const types=["strength","strengthLight","power","easy","long","interval","tempo","threshold","rehab","mobility","recovery","hybridEngine","militaryStrength","militaryBodyweight"];
+  availableCyclingTypes().forEach(type=>types.push(type));
+  return `<option value="">Piano: ${escapeHtml(sessionLabel(planned))}</option>`+
+    [...new Set(types)].map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
+}
+
 function renderWeek(){
 
   const d =
@@ -9185,10 +9227,13 @@ function renderWeek(){
       days.map(
         (name,index) => {
 
-          let type =
+          const planned =
             available[index]
               ?week[index]
               :"recovery";
+
+          const override=d.settings.weeklyOverrides?.[weeklyOverrideKey(index)]||"";
+          let type=sessionTypeForDay(index,planned);
 
           if(
             earlyDeloadActive() &&
@@ -9217,6 +9262,10 @@ function renderWeek(){
                   sessionLabel(type)
                 )}
               </p>
+
+              <select aria-label="Modifica allenamento ${escapeHtml(name)}" onchange="setWeekOverride(${index},this.value)" style="margin-top:8px;font-size:.64rem;padding:7px">
+                ${weekEditorOptions(override,planned)}
+              </select>
 
               <p>
                 ${
@@ -11185,6 +11234,7 @@ function manualActivityLabel(type){
 }
 
 function saveManualActivity(){
+  const editId=document.getElementById("manualActivityEditId").value;
   const type=document.getElementById("manualActivityType").value;
   const dateValue=document.getElementById("manualActivityDate").value;
   const date=dateValue?new Date(dateValue):new Date();
@@ -11207,8 +11257,11 @@ function saveManualActivity(){
   const label=manualActivityLabel(type);
   const durationSec=Math.round(minutes*60);
 
-  d.sessions.push({
-    id:crypto.randomUUID?.()||`manual-${Date.now()}`,
+  const existingIndex=editId?d.sessions.findIndex(session=>session.id===editId):-1;
+  const existing=existingIndex>=0?d.sessions[existingIndex]:null;
+  const record={
+    ...(existing||{}),
+    id:existing?.id||crypto.randomUUID?.()||`manual-${Date.now()}`,
     date:date.toISOString(),
     day:localDay(date),
     type:label,
@@ -11238,20 +11291,127 @@ function saveManualActivity(){
     athleteLevel:d.settings.athleteLevel,
     prescribedWorkout:[],
     completedSteps:[],
-    appVersion:APP_VERSION
-  });
+    appVersion:APP_VERSION,
+    editedAt:existing?new Date().toISOString():null
+  };
+
+  if(existingIndex>=0)d.sessions[existingIndex]=record;
+  else d.sessions.push(record);
 
   d.sessions.sort((a,b)=>Date.parse(a.date||0)-Date.parse(b.date||0));
-  d.performance.unshift({date:date.toISOString(),metric:Math.round(minutes*rpe),type:label,external:true});
+  d.performance=d.performance.filter(item=>item.sessionId!==record.id);
+  d.performance.unshift({sessionId:record.id,date:date.toISOString(),metric:Math.round(minutes*rpe),type:label,external:true});
   d.performance=d.performance.slice(0,200);
   save(d);
   haptic("save");
   updateFollowupUI();
   dashboard(true);
   renderProgress();
-  document.getElementById("manualActivityNotes").value="";
-  notify(`${label} salvata: ${minutes} min · RPE ${rpe} · carico ${Math.round(minutes*rpe)}.`);
+  cancelManualActivityEdit(false);
+  notify(`${label} ${existing?"aggiornata":"salvata"}: ${minutes} min · RPE ${rpe} · carico ${Math.round(minutes*rpe)}.`);
 }
+
+function editManualActivity(id){
+  const session=data().sessions.find(item=>item.id===id&&item.manualEntry);
+  if(!session)return;
+  const local=new Date(session.date);local.setMinutes(local.getMinutes()-local.getTimezoneOffset());
+  document.getElementById("manualActivityEditId").value=session.id;
+  document.getElementById("manualActivityType").value=session.generatedSessionType||"sportExternal";
+  document.getElementById("manualActivityDate").value=local.toISOString().slice(0,16);
+  document.getElementById("manualActivitySource").value=session.sourceApp||"";
+  document.getElementById("manualActivityMinutes").value=Math.max(1,Math.round(Number(session.durationSec||0)/60));
+  document.getElementById("manualActivityRPE").value=session.rpe||6;
+  document.getElementById("manualActivityDistance").value=session.distanceKm||"";
+  document.getElementById("manualActivityElevation").value=session.elevationM||"";
+  document.getElementById("manualActivityPrePain").value=session.prePain??0;
+  document.getElementById("manualActivityPostPain").value=session.postPain??0;
+  document.getElementById("manualActivityFollowup").checked=session.followupRequired!==false;
+  document.getElementById("manualActivityNotes").value=session.notes||"";
+  document.getElementById("manualActivitySaveBtn").textContent="Aggiorna attività";
+  document.getElementById("manualActivityCancelBtn").classList.remove("hidden");
+  document.getElementById("manualActivityType").focus();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function cancelManualActivityEdit(resetDate=true){
+  document.getElementById("manualActivityEditId").value="";
+  document.getElementById("manualActivitySaveBtn").textContent="Salva attività manuale";
+  document.getElementById("manualActivityCancelBtn").classList.add("hidden");
+  document.getElementById("manualActivityNotes").value="";
+  if(resetDate){const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());document.getElementById("manualActivityDate").value=now.toISOString().slice(0,16)}
+}
+
+async function deleteManualActivity(id){
+  const d=data(),session=d.sessions.find(item=>item.id===id&&item.manualEntry);
+  if(!session)return;
+  if(!(await customConfirm(`Eliminare ${session.type||"questa attività"}? Il backup JSON può conservarne una copia.`,"Eliminare attività manuale?")))return;
+  d.sessions=d.sessions.filter(item=>item.id!==id);
+  d.performance=d.performance.filter(item=>item.sessionId!==id);
+  save(d);updateFollowupUI();dashboard(true);renderProgress();haptic("save");notify("Attività manuale eliminata.");
+}
+
+function csvCell(value){
+  const text=String(value??"");
+  return `"${text.replace(/"/g,'""')}"`;
+}
+
+function exportSessionsCsv(){
+  const rows=[["data","tipo","origine","durata_min","rpe","carico","distanza_km","dislivello_m","dolore_pre","dolore_post","follow_up","note"]];
+  data().sessions.forEach(session=>rows.push([
+    session.date||"",session.type||"",session.sourceApp||"App",Math.round(Number(session.durationSec||0)/60),session.rpe??"",session.sessionLoad??"",session.distanceKm??"",session.elevationM??"",session.prePain??"",session.postPain??"",session.nextDayReaction??"",session.notes||""
+  ]));
+  const csv="\uFEFF"+rows.map(row=>row.map(csvCell).join(";")).join("\r\n");
+  downloadTextFile(`picari-coach-sessioni-${localDay()}.csv`,csv,"text/csv;charset=utf-8");
+  notify("Storico CSV esportato.");
+}
+
+function trackDistanceKm(points){
+  const rad=value=>value*Math.PI/180;let total=0;
+  for(let i=1;i<points.length;i++){
+    const a=points[i-1],b=points[i],dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon);
+    const h=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;
+    total+=6371*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
+  }
+  return total;
+}
+
+function importedTrackSummary(text,fileName){
+  const xml=new DOMParser().parseFromString(text,"application/xml");
+  if(xml.querySelector("parsererror"))throw new Error("XML non valido");
+  const gpxPoints=[...xml.querySelectorAll("trkpt")].map(node=>({lat:Number(node.getAttribute("lat")),lon:Number(node.getAttribute("lon")),ele:Number(node.querySelector("ele")?.textContent)})).filter(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon));
+  const trackpoints=[...xml.querySelectorAll("Trackpoint")];
+  const times=[...xml.querySelectorAll("time, Time")].map(node=>Date.parse(node.textContent)).filter(Number.isFinite).sort((a,b)=>a-b);
+  let distance=gpxPoints.length>1?trackDistanceKm(gpxPoints):0;
+  if(!distance&&trackpoints.length){
+    const meters=trackpoints.map(node=>Number(node.querySelector("DistanceMeters")?.textContent)).filter(Number.isFinite);
+    if(meters.length)distance=Math.max(...meters)/1000;
+  }
+  const elevations=(gpxPoints.length?gpxPoints.map(p=>p.ele):trackpoints.map(node=>Number(node.querySelector("AltitudeMeters")?.textContent))).filter(Number.isFinite);
+  let ascent=0;for(let i=1;i<elevations.length;i++)ascent+=Math.max(0,elevations[i]-elevations[i-1]);
+  const duration=times.length>1?Math.max(1,Math.round((times.at(-1)-times[0])/60000)):0;
+  const sport=String(xml.querySelector("Activity")?.getAttribute("Sport")||"").toLowerCase();
+  return{date:times.length?new Date(times[0]):new Date(),minutes:duration,distance:Number(distance.toFixed(2)),elevation:Math.round(ascent),type:/run/.test(sport)?"runExternal":"roadBike",source:fileName};
+}
+
+document.getElementById("trackImportFile").addEventListener("change",event=>{
+  const file=event.target.files?.[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const summary=importedTrackSummary(String(reader.result||""),file.name);
+      const local=new Date(summary.date);local.setMinutes(local.getMinutes()-local.getTimezoneOffset());
+      document.getElementById("manualActivityType").value=summary.type;
+      document.getElementById("manualActivityDate").value=local.toISOString().slice(0,16);
+      document.getElementById("manualActivitySource").value=`Import ${file.name}`.slice(0,60);
+      if(summary.minutes)document.getElementById("manualActivityMinutes").value=summary.minutes;
+      document.getElementById("manualActivityDistance").value=summary.distance||"";
+      document.getElementById("manualActivityElevation").value=summary.elevation||"";
+      notify("Traccia importata. Controlla attività e RPE, poi salva.");
+    }catch(err){notify(`Importazione non riuscita: ${err.message||err}`,"error")}
+    event.target.value="";
+  };
+  reader.readAsText(file);
+});
 
 /* =========================================================
    STREAK
@@ -11920,12 +12080,14 @@ function renderProgress(){
 
                   </div>
 
-                  <div class="tag">
-                    ${escapeHtml(
-                      session.external
-                        ?"ESTERNA"
-                        :session.mode || ""
-                    )}
+                  <div style="display:grid;gap:6px;justify-items:end">
+                    <div class="tag">
+                      ${escapeHtml(session.external?"ESTERNA":session.mode||"")}
+                    </div>
+                    ${session.manualEntry?`
+                      <button type="button" data-id="${escapeHtml(session.id)}" class="btn secondary" style="min-height:30px;padding:5px 8px;font-size:.62rem" onclick="editManualActivity(this.dataset.id)">Modifica</button>
+                      <button type="button" data-id="${escapeHtml(session.id)}" class="btn danger" style="min-height:30px;padding:5px 8px;font-size:.62rem" onclick="deleteManualActivity(this.dataset.id)">Elimina</button>
+                    `:""}
                   </div>
 
                 </div>
@@ -12789,7 +12951,9 @@ async function resetData(){
   [
     KEY,
     ...LEGACY_KEYS,
-    PHYSIO_CONFIRM_KEY
+    PHYSIO_CONFIRM_KEY,
+    DRAFT_KEY,
+    PRE_MIGRATION_BACKUP_KEY
   ]
   .forEach(
     key =>
@@ -13081,6 +13245,16 @@ function migrateLegacy(){
    HYDRATE
    ========================================================= */
 
+function protectDataBeforeMigration(){
+  try{
+    const raw=localStorage.getItem(KEY);if(!raw)return;
+    const parsed=JSON.parse(raw);
+    if(Number(parsed?.schemaVersion||0)<SCHEMA_VERSION){
+      localStorage.setItem(PRE_MIGRATION_BACKUP_KEY,JSON.stringify({savedAt:new Date().toISOString(),schemaVersion:parsed?.schemaVersion||0,data:parsed}));
+    }
+  }catch(err){console.warn("Backup pre-migrazione:",err)}
+}
+
 async function hydrate(){
 
   migrateLegacy();
@@ -13176,6 +13350,10 @@ function runSelfTests(){
   test("elementi critici",()=>["page-today","startToday","sessionModal","postModal","painScale"].every(id=>document.getElementById(id)));
   test("ciclismo",()=>["mtbRide","roadRide","indoorRide","bikeIntervals"].every(id=>EX[id]));
   test("attività manuali",()=>["manualActivityType","manualActivityMinutes","manualActivityRPE","manualActivityDate"].every(id=>document.getElementById(id)));
+  test("gestione attività",()=>["editManualActivity","deleteManualActivity","exportSessionsCsv","importedTrackSummary"].every(name=>typeof window[name]==="function"));
+  test("calendario modificabile",()=>typeof setWeekOverride==="function"&&typeof sessionTypeForDay==="function");
+  test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
+  test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
   runtimeHealth.tests=tests;
   return tests;
 }
@@ -13596,7 +13774,7 @@ document.addEventListener(
           ?"error"
           :"success"
       );
-
+    protectDataBeforeMigration();
     await hydrate();
 
     await registerPwa();
