@@ -1184,7 +1184,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
   <ul class="rules">
     <li>L'obiettivo definisce la priorità, non un unico tipo di allenamento.</li>
     <li>La settimana ruota tra forza, corsa, conditioning, tecnica e recupero.</li>
-    <li>Dolore durante massimo 2–3/10.</li>
+    <li>Dolore durante massimo 2–3/5 sulla scala usata dall’app.</li>
     <li>Il follow-up del giorno successivo guida la progressione.</li>
     <li>Una sola variabile permanente aumenta alla volta.</li>
     <li>Due risposte negative consecutive anticipano il Deload.</li>
@@ -2079,7 +2079,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 
   <div class="modal-head">
     <h3 id="sessionTitle">Sessione</h3>
-    <button class="close" onclick="closeSession()">×</button>
+    <button class="close" onclick="requestCloseSession()">×</button>
   </div>
 
   <div class="progress">
@@ -2275,10 +2275,10 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
    ========================================================= */
 
 const APP_VERSION =
-  "14.0.0-HYBRID-LONGEVITY-AUDITED";
+  "14.1.0-HYBRID-LONGEVITY-PERSISTENT";
 
 const SCHEMA_VERSION =
-  14;
+  15;
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -2291,6 +2291,12 @@ const STORE =
 
 const RECORD =
   "main";
+
+const DRAFT_KEY =
+  `${KEY}_sessionDraft_v2`;
+
+const BACKUP_REMINDER_DAYS =
+  30;
 
 const PHYSIO_CONFIRM_KEY =
   "erjonDefinitivePhysioConfirmDate";
@@ -2367,6 +2373,8 @@ const runtimeHealth={
   tests:[],
   errors:[]
 };
+
+let idbWriteQueue=Promise.resolve();
 
 /* =========================================================
    DATABASE ESERCIZI
@@ -3177,7 +3185,7 @@ Object
               ?"💪"
               :"🧘",
             cat,
-            "Esegui con tecnica controllata. Interrompi o regredisci se compare dolore oltre 2–3/10."
+            "Esegui con tecnica controllata. Interrompi o regredisci se compare dolore oltre 2–3/5 sulla scala dell’app."
           );
 
         }
@@ -4056,7 +4064,13 @@ function defaults(){
       new Date().toISOString(),
 
     lastBackupAt:
-      null
+      null,
+
+    storageRevision:
+      0,
+
+    integrityHash:
+      ""
 
   };
 
@@ -4189,6 +4203,14 @@ function norm(v){
       v.lastBackupAt ||
       null,
 
+    storageRevision:
+      Math.max(0,Number(v.storageRevision || 0)),
+
+    integrityHash:
+      typeof v.integrityHash==="string"
+        ?v.integrityHash
+        :"",
+
     fatigueDebt:
       Number(v.fatigueDebt || 0),
 
@@ -4224,19 +4246,68 @@ function data(){
 
 }
 
+function stableStoragePayload(value){
+
+  const copy = {
+    ...value,
+    integrityHash:""
+  };
+
+  return JSON.stringify(copy);
+
+}
+
+function storageHash(value){
+
+  const text = stableStoragePayload(value);
+  let hash = 2166136261;
+
+  for(let i=0;i<text.length;i++){
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash,16777619);
+  }
+
+  return `fnv1a-${(hash>>>0).toString(16).padStart(8,"0")}`;
+
+}
+
+function hasValidStorageHash(value){
+
+  return !!(
+    value &&
+    typeof value==="object" &&
+    (!value.integrityHash || value.integrityHash===storageHash(value))
+  );
+
+}
+
+function persistLocalExact(value){
+
+  const serialized = JSON.stringify(value);
+  localStorage.setItem(KEY,serialized);
+
+  if(localStorage.getItem(KEY)!==serialized){
+    throw new Error("Verifica localStorage non riuscita");
+  }
+
+}
+
 function save(d){
 
-  const n =
-    norm({
-      ...d,
-      updatedAt:new Date().toISOString()
-    });
+  const n = norm({
+    ...d,
+    storageRevision:Math.max(
+      Number(d?.storageRevision || 0),
+      Number(data()?.storageRevision || 0)
+    )+1,
+    updatedAt:new Date().toISOString(),
+    integrityHash:""
+  });
+
+  n.integrityHash = storageHash(n);
 
   try{
-    localStorage.setItem(
-      KEY,
-      JSON.stringify(n)
-    );
+    persistLocalExact(n);
     runtimeHealth.lastSaveOk=true;
     runtimeHealth.lastSaveAt=n.updatedAt;
   }catch(err){
@@ -4245,7 +4316,11 @@ function save(d){
     notify?.("Salvataggio locale non riuscito. Esporta subito un backup.","error");
   }
 
-  idbSet(n)
+  idbWriteQueue=idbWriteQueue
+    .catch(()=>{})
+    .then(()=>idbSet(n));
+
+  idbWriteQueue
     .then(()=>{runtimeHealth.idbOk=true})
     .catch(
       err => {
@@ -6272,6 +6347,11 @@ function progressionText(){
   const master =
     masterDecisionModel();
 
+  const masterLabel =
+    master.enoughData
+      ?`${master.action} ${Math.round(master.score)}/100`
+      :`${master.action} · storico in apprendimento`;
+
   const signal =
     progressionSignal();
 
@@ -6308,7 +6388,7 @@ function progressionText(){
   if(signal==="reduce"){
 
     return (
-      `Regressione temporanea · Master ${master.action} ${Math.round(master.score)}/100: readiness, carico o spalla non giustificano la dose prevista. ` +
+      `Regressione temporanea · Master ${masterLabel}: readiness, carico o spalla non giustificano la dose prevista. ` +
       "Il coach riduce la seduta senza cancellare il livello costruito."
     );
 
@@ -6317,7 +6397,7 @@ function progressionText(){
   if(signal==="hold"){
 
     return (
-      `Carico stabile · Master ${master.action} ${Math.round(master.score)}/100: mantieni la dose attuale. ` +
+      `Carico stabile · Master ${masterLabel}: mantieni la dose attuale. ` +
       "Nessun aumento finché follow-up, dolore e RPE non sono chiaramente favorevoli."
     );
 
@@ -6326,7 +6406,7 @@ function progressionText(){
   if(signal==="progress"){
 
     return (
-      `Progressione consentita · Master ${master.action} ${Math.round(master.score)}/100: trend globale favorevole. ` +
+      `Progressione consentita · Master ${masterLabel}: trend globale favorevole. ` +
       "Dopo una seduta ben tollerata verrà aumentata una sola variabile permanente."
     );
 
@@ -7744,7 +7824,8 @@ function masterWeeklyLoads(){
 function masterFatigueModel(){
   const d=data(), confirmed=confirmedSessions(10), acute=masterLoadWindow(7);
   const chronicWeeks=masterWeeklyLoads().slice(1,5).filter(Boolean);
-  const chronic=masterAvg(chronicWeeks)||1, ratio=acute/Math.max(chronic,1);
+  const chronic=masterAvg(chronicWeeks)||0;
+  const ratio=chronicWeeks.length>=2&&chronic>0?acute/chronic:null;
   const pain=masterAvg(confirmed.map(s=>Number(s.prePain||0)));
   const daily=Array.from({length:7},(_,i)=>d.sessions.filter(s=>masterDaysAgo(s.date)===i).reduce((a,s)=>a+masterSessionLoad(s),0));
   const mean=masterAvg(daily), sd=Math.sqrt(masterAvg(daily.map(x=>(x-mean)**2)));
@@ -7801,9 +7882,9 @@ function masterDecisionModel(){
   const daily=selectedPain===null?65:masterClamp(readiness);
   let score=fatigue.score*.3+daily*.25+prediction.score*.2+fit.form*.15+personal.score*.1,action="MANTIENI";
   const enoughData=confirmedSessions(40).length>=thresholds.minSessions;
-  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68||fatigue.ratio>thresholds.acCaution+.1)action="CONTROLLA";else if(enoughData&&score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(enoughData&&score>=74&&prediction.score>=60)action="PROGREDISCI";
-  const brakes=[];if(!enoughData)brakes.push("storico insufficiente: modalità prudenziale");if(fatigue.ratio>thresholds.acCaution)brakes.push(`A:C ${fatigue.ratio.toFixed(2)}`);if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<thresholds.predictionMin)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
-  return{action,score:masterClamp(score),fatigue,fit,personal,prediction,daily,brakes};
+  if(blocked)action="STOP";else if(fit.fatigue>=80&&prediction.score<45)action="DELOAD";else if(fatigue.score<48||daily<48||fit.fatigue>fit.fitness+20)action="RECUPERA";else if(score<68||(Number.isFinite(fatigue.ratio)&&fatigue.ratio>thresholds.acCaution+.1))action="CONTROLLA";else if(enoughData&&score>=82&&prediction.score>=72&&personal.hardTolerance>=.7)action="SPINGI";else if(enoughData&&score>=74&&prediction.score>=60)action="PROGREDISCI";
+  const brakes=[];if(!enoughData)brakes.push("storico insufficiente: modalità prudenziale");if(Number.isFinite(fatigue.ratio)&&fatigue.ratio>thresholds.acCaution)brakes.push(`A:C ${fatigue.ratio.toFixed(2)}`);if(fit.fatigue>fit.fitness+12)brakes.push("fatica sopra fitness");if(prediction.score<thresholds.predictionMin)brakes.push("previsione bassa");if(personal.score<60)brakes.push("risposta personale prudente");
+  return{action,score:masterClamp(score),fatigue,fit,personal,prediction,daily,brakes,enoughData};
 }
 
 function masterPeriodization(){
@@ -7815,19 +7896,26 @@ function masterPeriodization(){
 
 function masterWorkoutMultiplier(){
   const action=masterDecisionModel().action;
-  return action==="DELOAD"?.62:action==="RECUPERA"?.72:action==="CONTROLLA"?.88:action==="SPINGI"?1.04:1;
+  return action==="DELOAD"?.62:action==="RECUPERA"?.72:action==="CONTROLLA"?.88:1;
 }
 
 function applyMasterToWorkout(list){
   const factor=masterWorkoutMultiplier(),action=masterDecisionModel().action;
-  return(list||[]).map(e=>({...e,s:Math.max(30,Math.round(Number(e.s||90)*factor)),reason:`${e.reason||"Dose base"} · Master ${action}`}));
+  return(list||[]).map(source=>{
+    const e={...source};
+    const timed=/run|hyrox|pool|recovery/.test(String(e.c||""))||/min|sec/i.test(String(e.d||""));
+    if(factor<1&&timed)e.s=Math.max(30,Math.round(Number(e.s||90)*factor));
+    if(factor<1&&!timed)e.d=adjustRepDose(String(e.d||""),"reduce");
+    e.reason=`${e.reason||"Dose base"} · Master ${action}`;
+    return e;
+  });
 }
 
 function renderMasterEngine(){
   const md=masterDecisionModel(),sys=systemFatigueModel(),phase=masterPeriodization();
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val};
-  set("masterAction",md.action);set("masterFatigue",Math.round(md.fatigue.score));set("masterPrediction",Math.round(md.prediction.score));set("masterAC",md.fatigue.ratio.toFixed(2));set("masterFitness",Math.round(md.fit.fitness));set("masterDebt",md.fatigue.debt.toFixed(1));set("personalResponseScore",Math.round(md.personal.score)+"/100");set("personalResponseText",`${md.personal.confidence} · ${md.personal.why}`);set("fitnessModelScore",Math.round(md.fit.fitness)+"/100");set("fatigueModelScore",Math.round(md.fit.fatigue)+"/100");
-  const exp=document.getElementById("masterExplanation");if(exp)exp.innerHTML=`<strong>${escapeHtml(md.action)} · ${Math.round(md.score)}/100</strong><br>${escapeHtml(md.prediction.text)} ${md.brakes.length?"Freni: "+escapeHtml(md.brakes.join(" · ")):"Nessun freno dominante."}<br><span class="small">Fase ${escapeHtml(phase.effective)} · ${escapeHtml(phase.reason)}.</span>`;
+  set("masterAction",md.action);set("masterFatigue",md.enoughData?Math.round(md.fatigue.score):"—");set("masterPrediction",md.enoughData?Math.round(md.prediction.score):"—");set("masterAC",Number.isFinite(md.fatigue.ratio)?md.fatigue.ratio.toFixed(2):"—");set("masterFitness",md.enoughData?Math.round(md.fit.fitness):"—");set("masterDebt",md.enoughData?md.fatigue.debt.toFixed(1):"—");set("personalResponseScore",md.enoughData?Math.round(md.personal.score)+"/100":"—");set("personalResponseText",`${md.personal.confidence} · ${md.personal.why}`);set("fitnessModelScore",md.enoughData?Math.round(md.fit.fitness)+"/100":"—");set("fatigueModelScore",md.enoughData?Math.round(md.fit.fatigue)+"/100":"—");
+  const exp=document.getElementById("masterExplanation");if(exp)exp.innerHTML=md.enoughData?`<strong>${escapeHtml(md.action)} · ${Math.round(md.score)}/100</strong><br>${escapeHtml(md.prediction.text)} ${md.brakes.length?"Freni: "+escapeHtml(md.brakes.join(" · ")):"Nessun freno dominante."}<br><span class="small">Fase ${escapeHtml(phase.effective)} · ${escapeHtml(phase.reason)}.</span>`:`<strong>${escapeHtml(md.action)}</strong><br>Il coach usa una modalità prudenziale. Le metriche previsionali appariranno dopo il numero minimo di sessioni confermate.<br><span class="small">Fase ${escapeHtml(phase.effective)} · ${escapeHtml(phase.reason)}.</span>`;
   [["fitnessModelBar",md.fit.fitness],["fatigueModelBar",md.fit.fatigue],["fatUpperBar",sys.upper],["fatLowerBar",sys.lower],["fatCardioBar",sys.cardio],["fatSystemicBar",sys.systemic]].forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.style.width=masterClamp(v)+"%"});
   [["fatUpper",sys.upper],["fatLower",sys.lower],["fatCardio",sys.cardio],["fatSystemic",sys.systemic]].forEach(([id,v])=>set(id,Math.round(v)+"%"));
   renderLongTermPlanner();
@@ -9420,6 +9508,8 @@ function renderSession(){
     300
   );
 
+  saveSessionDraft();
+
 }
 
 function markStepCompleted(){
@@ -9529,9 +9619,19 @@ function autoRegulateRemaining(){
   let factor=1,action="MANTIENI";
   if((pain!==null&&pain>=4)||rpe>=9.5||technique==="poor"){factor=.65;action="RIDUCI NETTAMENTE"}
   else if((pain!==null&&pain>=3)||rpe>=9||technique==="fair"){factor=.82;action="CONTROLLA"}
-  else if(rpe&&rpe<=7&&(pain===null||pain<=2)&&technique==="good"&&["SPINGI","PROGREDISCI"].includes(masterDecisionModel().action)){factor=1.03;action="CONSOLIDA"}
-  currentWorkout=currentWorkout.slice(0,currentIndex+1).concat(remaining.map(e=>({...e,s:Math.max(30,Math.round(Number(e.s||90)*factor)),reason:`${e.reason||""} · Autoregolazione ${action.toLowerCase()}`})));
-  if(result)result.textContent=`${action}: il resto della seduta è stato ricalibrato al ${Math.round(factor*100)}%.`;
+  else if(rpe&&rpe<=7&&(pain===null||pain<=2)&&technique==="good"){action="CONSOLIDA"}
+  currentWorkout=currentWorkout.slice(0,currentIndex+1).concat(remaining.map(source=>{
+    const e={...source};
+    const cardio=/run|hyrox|pool/.test(String(e.c||""));
+    const timed=/min|sec/i.test(String(e.d||""));
+    const strength=/legs|military|core/.test(String(e.c||""));
+    if(factor<1&&(cardio||timed))e.s=Math.max(30,Math.round(Number(e.s||90)*factor));
+    if(factor<1&&strength&&!timed)e.d=adjustRepDose(String(e.d||""),"reduce");
+    if(factor<1&&/rehab|physio|mobility|release/.test(String(e.c||"")))e.d=adjustRepDose(String(e.d||""),"reduce");
+    e.reason=`${e.reason||"Dose base"} · Autoregolazione ${action.toLowerCase()}`;
+    return e;
+  }));
+  if(result)result.textContent=factor<1?`${action}: durata dei blocchi a tempo e volume degli esercizi compatibili sono stati ridotti. Carichi e difficoltà non aumentano automaticamente.`:`${action}: mantieni la dose prescritta; nessun aumento automatico durante la seduta.`;
   speak(`Coach: ${action}`,true);
 }
 
@@ -9577,6 +9677,11 @@ function closeSession(){
       "hidden"
     );
 
+}
+
+async function requestCloseSession(){
+  const ok=await customConfirm("La sessione verrà conservata come bozza e potrai riprenderla in seguito.","Uscire dalla sessione?");
+  if(ok){saveSessionDraft();closeSession();notify("Sessione salvata come bozza.")}
 }
 
 /* =========================================================
@@ -11307,13 +11412,13 @@ function renderProgress(){
                         String(
                           session.prePain ?? "—"
                         )
-                      )}/10
+                      )}/5
                       →
                       ${escapeHtml(
                         String(
                           session.postPain ?? "—"
                         )
-                      )}/10
+                      )}/5
 
                       · RPE
                       ${escapeHtml(
@@ -11952,13 +12057,13 @@ function updateBackupInfo(){
 
 function exportData(){
 
-  const d =
+  let d =
     data();
 
   d.lastBackupAt =
     new Date().toISOString();
 
-  save(d);
+  d=save(d);
 
   const payload = {
 
@@ -11967,7 +12072,8 @@ function exportData(){
       edition:"Adaptive Periodization For Life",
       appVersion:APP_VERSION,
       schemaVersion:SCHEMA_VERSION,
-      exportedAt:new Date().toISOString()
+      exportedAt:new Date().toISOString(),
+      dataHash:storageHash(d)
     },
 
     data:d
@@ -12054,6 +12160,10 @@ document
               parsed?.meta
                 ?parsed.data
                 :parsed;
+
+            if(parsed?.meta?.dataHash&&parsed.meta.dataHash!==storageHash(imported)){
+              throw new Error("Checksum del backup non valido");
+            }
 
             const normalized =
               norm(
@@ -12259,7 +12369,7 @@ async function idbSet(d){
           "readwrite"
         );
 
-      tx
+      const request = tx
         .objectStore(
           STORE
         )
@@ -12267,6 +12377,8 @@ async function idbSet(d){
           norm(d),
           RECORD
         );
+
+      request.onerror = () => reject(request.error);
 
       tx.oncomplete =
         () => {
@@ -12325,9 +12437,7 @@ async function idbGet(){
 
           resolve(
             request.result
-              ?norm(
-                  request.result
-                )
+              ?request.result
               :null
           );
 
@@ -12435,43 +12545,45 @@ async function hydrate(){
 
   try{
 
-    const indexed =
-      await idbGet();
+    let local = null;
 
-    const local =
-      data();
-
-    const indexedTime =
-      Date.parse(
-        indexed?.updatedAt || 0
-      );
-
-    const localTime =
-      Date.parse(
-        local.updatedAt || 0
-      );
-
-    if(
-      indexed &&
-      indexedTime>localTime
-    ){
-
-      localStorage.setItem(
-        KEY,
-        JSON.stringify(
-          norm(indexed)
-        )
-      );
-
-    }else{
-
-      await idbSet(
-        local
-      );
-
-      runtimeHealth.idbOk=true;
-
+    try{
+      const raw = localStorage.getItem(KEY);
+      const parsed = raw ? JSON.parse(raw) : null;
+      if(parsed && hasValidStorageHash(parsed)) local = norm(parsed);
+    }catch(err){
+      runtimeHealth.errors.push(`Copia locale non valida: ${err.message||err}`);
     }
+
+    let indexed = null;
+
+    try{
+      const candidate = await idbGet();
+      if(candidate && hasValidStorageHash(candidate)) indexed = norm(candidate);
+    }catch(err){
+      runtimeHealth.errors.push(`Copia IndexedDB non valida: ${err.message||err}`);
+    }
+
+    const candidates = [local,indexed].filter(Boolean);
+    let winner = candidates.sort((a,b)=>{
+      const revision = Number(b.storageRevision||0)-Number(a.storageRevision||0);
+      return revision || Date.parse(b.updatedAt||0)-Date.parse(a.updatedAt||0);
+    })[0] || defaults();
+
+    winner = norm(winner);
+    winner.integrityHash = storageHash(winner);
+
+    persistLocalExact(winner);
+    await idbSet(winner);
+
+    const verified = await idbGet();
+    if(!verified || storageHash(verified)!==winner.integrityHash){
+      throw new Error("Verifica IndexedDB non riuscita");
+    }
+
+    runtimeHealth.lastSaveOk=true;
+    runtimeHealth.idbOk=true;
+    runtimeHealth.lastSaveAt=winner.updatedAt;
 
   }catch(err){
 
@@ -12551,7 +12663,7 @@ function browserCapabilityAudit(){
 
 function exportTechnicalReport(){
   const diagnostic=runDiagnostics(false),browser=browserCapabilityAudit(),d=data(),md=masterDecisionModel();
-  const report={generatedAt:new Date().toISOString(),appVersion:APP_VERSION,schemaVersion:SCHEMA_VERSION,diagnostic,browser,validation:d.settings.validation,thresholds:d.settings.masterThresholds,dataSummary:{sessions:d.sessions.length,confirmed:confirmedSessions(999).length,activities:d.activities.length,tests:d.tests.length,lastUpdated:d.updatedAt},masterSnapshot:{action:md.action,score:Math.round(md.score),fatigue:Math.round(md.fatigue.score),prediction:Math.round(md.prediction.score),fitness:Math.round(md.fit.fitness),acuteChronic:Number(md.fatigue.ratio.toFixed(2)),brakes:md.brakes},disclaimer:"Le soglie sono euristiche prudenziali e non costituiscono diagnosi o prescrizione clinica."};
+  const report={generatedAt:new Date().toISOString(),appVersion:APP_VERSION,schemaVersion:SCHEMA_VERSION,diagnostic,browser,validation:d.settings.validation,thresholds:d.settings.masterThresholds,dataSummary:{sessions:d.sessions.length,confirmed:confirmedSessions(999).length,activities:d.activities.length,tests:d.tests.length,lastUpdated:d.updatedAt},masterSnapshot:{action:md.action,score:md.enoughData?Math.round(md.score):null,fatigue:md.enoughData?Math.round(md.fatigue.score):null,prediction:md.enoughData?Math.round(md.prediction.score):null,fitness:md.enoughData?Math.round(md.fit.fitness):null,acuteChronic:Number.isFinite(md.fatigue.ratio)?Number(md.fatigue.ratio.toFixed(2)):null,brakes:md.brakes},disclaimer:"Le soglie sono euristiche prudenziali e non costituiscono diagnosi o prescrizione clinica."};
   const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download=`erjon-coach-report-${localDay()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify("Report tecnico esportato.");
 }
@@ -12683,7 +12795,7 @@ async function installApp(){
 
 document.addEventListener("keydown",event=>{
   if(event.key!=="Escape"){ return; }
-  if(!document.getElementById("sessionModal").classList.contains("hidden")){ closeSession(); return; }
+  if(!document.getElementById("sessionModal").classList.contains("hidden")){ requestCloseSession(); return; }
   if(!document.getElementById("postModal").classList.contains("hidden")){ closePost(); return; }
   if(!document.getElementById("confirmModal").classList.contains("hidden")){ document.getElementById("confirmCancel").click(); }
 });
@@ -12722,12 +12834,40 @@ window.addEventListener(
 function saveSessionDraft(){
   if(!sessionStartedAt||!currentWorkout.length)return;
   try{
-    sessionStorage.setItem(`${KEY}_sessionDraft`,JSON.stringify({savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
   }catch(err){console.warn("Bozza sessione:",err)}
 }
 
 function clearSessionDraft(){
-  try{sessionStorage.removeItem(`${KEY}_sessionDraft`)}catch{}
+  try{
+    localStorage.removeItem(DRAFT_KEY);
+    sessionStorage.removeItem(`${KEY}_sessionDraft`);
+  }catch{}
+}
+
+async function restoreSessionDraftIfAvailable(){
+  let draft=null;
+  try{draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||sessionStorage.getItem(`${KEY}_sessionDraft`)||"null")}catch{clearSessionDraft();return false}
+  if(!draft||!Array.isArray(draft.currentWorkout)||!draft.currentWorkout.length)return false;
+  if(Date.now()-Date.parse(draft.savedAt)>7*86400000){clearSessionDraft();return false}
+  const resume=await customConfirm("È disponibile una sessione interrotta. Vuoi riprenderla dal punto salvato?","Riprendere la sessione?");
+  if(!resume){clearSessionDraft();return false}
+  currentWorkout=draft.currentWorkout.map(e=>({...e}));
+  currentIndex=Math.max(0,Math.min(currentWorkout.length-1,Number(draft.currentIndex||0)));
+  currentType=draft.currentType||"Sessione ripristinata";
+  generatedSessionType=draft.generatedSessionType||generatedSessionType;
+  completedSteps=Array.isArray(draft.completedSteps)?draft.completedSteps:[];
+  sessionStartedAt=Number(draft.sessionStartedAt)||Date.now();
+  selectedPain=draft.selectedPain==null?selectedPain:Number(draft.selectedPain);
+  mode=draft.mode||mode;
+  readiness=Number(draft.readiness||0);
+  shoulderReadiness=Number(draft.shoulderReadiness||0);
+  performanceReadiness=Number(draft.performanceReadiness||0);
+  document.getElementById("sessionModal").classList.remove("hidden");
+  requestWakeLock();
+  renderSession();
+  notify("Sessione ripristinata.");
+  return true;
 }
 
 window.addEventListener("pagehide",saveSessionDraft);
@@ -12796,16 +12936,9 @@ document.addEventListener(
     improveAccessibility();
     runDiagnostics(false);
 
-    try{
-      const draft=JSON.parse(sessionStorage.getItem(`${KEY}_sessionDraft`)||"null");
-      if(draft&&Date.now()-Date.parse(draft.savedAt)<86400000){
-        notify("È stata rilevata una sessione interrotta. I dati salvati restano integri; avvia nuovamente la sessione desiderata.");
-      }else if(draft){
-        clearSessionDraft();
-      }
-    }catch{clearSessionDraft()}
+    const sessionRestored=await restoreSessionDraftIfAvailable();
 
-    if(!data().settings.onboardingComplete){
+    if(!sessionRestored&&!data().settings.onboardingComplete){
       openOnboarding();
     }
 
