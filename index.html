@@ -1100,12 +1100,12 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 .wow-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.wow-mini{padding:9px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05)}.wow-mini strong{display:block;font-size:.9rem}.wow-mini span{font-size:.54rem;color:var(--muted)}
 .momentum-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.momentum-day{text-align:center}.momentum-dot{height:7px;border-radius:99px;background:rgba(128,167,188,.13);margin-bottom:5px}.momentum-day.done .momentum-dot{background:linear-gradient(90deg,var(--green),var(--blue));box-shadow:0 0 12px rgba(46,230,166,.25)}.momentum-day.today .momentum-dot{outline:2px solid rgba(255,255,255,.38);outline-offset:2px}.momentum-day span{font-size:.52rem;color:var(--muted)}
 .achievement-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.achievement{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:11px;background:rgba(184,165,255,.08);border:1px solid rgba(184,165,255,.13);color:#d8ceff;font-size:.62rem;font-weight:800}.achievement.locked{filter:saturate(.2);opacity:.46}
-.experience-switch{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:13px;background:rgba(3,12,20,.55)}.experience-switch button{border:0;border-radius:9px;padding:7px 9px;background:transparent;color:var(--muted);font-size:.62rem;font-weight:850}.experience-switch button.active{color:#fff;background:linear-gradient(135deg,rgba(46,230,166,.17),rgba(83,200,255,.13))}
+.experience-switch{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:13px;background:rgba(3,12,20,.94)}.experience-switch button{border:0;border-radius:9px;padding:7px 9px;background:transparent;color:var(--muted);font-size:.62rem;font-weight:850}.experience-switch button.active{color:#fff;background:linear-gradient(135deg,rgba(46,230,166,.25),rgba(83,200,255,.20));box-shadow:0 0 0 1px rgba(83,200,255,.14) inset}.global-mode-switch{position:fixed;right:18px;top:94px;z-index:65;box-shadow:0 12px 34px rgba(0,0,0,.4);backdrop-filter:blur(18px)}
 body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:10px;border:1px solid var(--line);border-radius:14px;background:rgba(3,12,20,.35);overflow:hidden}.advanced-check summary{padding:12px;cursor:pointer;color:#d6e5ed;font-size:.72rem;font-weight:850;list-style:none}.advanced-check summary::-webkit-details-marker{display:none}.advanced-check summary:after{content:"+";float:right;color:var(--blue)}.advanced-check[open] summary:after{content:"–"}.advanced-check-body{padding:0 12px 12px}
 .calibration-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.calibration-stat{padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(4,13,21,.48)}.calibration-stat strong{display:block;font-size:1.15rem}.calibration-stat span{font-size:.58rem;color:var(--muted)}.balance-row{display:grid;grid-template-columns:95px 1fr auto;gap:9px;align-items:center;margin-top:9px;font-size:.68rem}.balance-track{height:7px;border-radius:99px;background:rgba(128,167,188,.14);overflow:hidden}.balance-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:inherit}.formula-note{padding:11px;border-left:3px solid var(--blue);background:rgba(83,200,255,.055);border-radius:0 11px 11px 0;font-size:.68rem;color:#b8ceda;line-height:1.5}
 .celebration-layer{position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden}.celebration-bit{position:absolute;left:50%;top:52%;width:8px;height:14px;border-radius:3px;background:var(--green);animation:celebrate 1.25s cubic-bezier(.2,.8,.2,1) forwards}
 @keyframes wow-pulse{50%{transform:scale(.72);opacity:.7}}@keyframes wow-shine{0%,72%{transform:translateX(-42%)}88%,100%{transform:translateX(42%)}}@keyframes celebrate{0%{opacity:1;transform:translate(-50%,-50%) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
-@media(max-width:780px){.wow-shell{grid-template-columns:1fr;padding:17px}.wow-title{font-size:1.65rem}.wow-pulse-card{padding:14px}.wow-actions .btn{flex:1;min-width:125px}.calibration-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.experience-switch{position:fixed;right:10px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:55;box-shadow:0 10px 30px rgba(0,0,0,.35)}}
+@media(max-width:780px){.wow-shell{grid-template-columns:1fr;padding:17px}.wow-title{font-size:1.65rem}.wow-pulse-card{padding:14px}.wow-actions .btn{flex:1;min-width:125px}.calibration-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.global-mode-switch{top:auto;left:50%;right:auto;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:65;box-shadow:0 10px 30px rgba(0,0,0,.48)}}
 
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
@@ -1143,10 +1143,6 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     CHECK NON COMPLETATO
   </div>
 
-  <div class="experience-switch" aria-label="Livello interfaccia">
-    <button type="button" id="simpleModeBtn" onclick="setExperienceMode('simple')">Semplice</button>
-    <button type="button" id="expertModeBtn" onclick="setExperienceMode('expert')">Esperto</button>
-  </div>
 </header>
 
 <div class="container">
@@ -2232,6 +2228,11 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </div>
 </div>
 
+<div class="experience-switch global-mode-switch" aria-label="Livello interfaccia">
+  <button type="button" id="simpleModeBtn" onclick="setExperienceMode('simple')">Semplice</button>
+  <button type="button" id="expertModeBtn" onclick="setExperienceMode('expert')">Esperto</button>
+</div>
+
 <nav class="nav" aria-label="Navigazione principale">
   <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
   <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
@@ -2452,7 +2453,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "16.0.0-PICARI-CALIBRATED-FLOW";
+  "16.0.1-PICARI-MODE-SWITCH-FIX";
 
 const SCHEMA_VERSION =
   20;
@@ -13558,6 +13559,7 @@ function runSelfTests(){
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
   test("wow experience",()=>["wowDeck","wowScore","wowMomentum","wowPrimaryBtn"].every(id=>document.getElementById(id))&&typeof renderWowExperience==="function");
   test("flusso semplice esperto",()=>["simpleModeBtn","expertModeBtn","advancedCheck"].every(id=>document.getElementById(id))&&typeof setExperienceMode==="function");
+  test("selettore iPhone",()=>document.querySelector(".global-mode-switch")?.parentElement===document.body);
   test("carico sRPE",()=>masterSessionLoad({durationSec:1800,rpe:6})===180);
   test("A:C solo descrittivo",()=>!masterDecisionModel.toString().includes("fatigue.ratio"));
   test("calibrazione feedback",()=>["recommendationFeedback","calibrationCard","calibrationAdvice"].every(id=>document.getElementById(id))&&typeof renderCalibrationReport==="function");
