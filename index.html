@@ -2453,7 +2453,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "16.1.0-PICARI-SAFE-RESUME-OFFLINE";
+  "16.3.0-PICARI-DAILY-PLAN-GUARD";
 
 const SCHEMA_VERSION =
   20;
@@ -2518,6 +2518,7 @@ let blocked = false;
 let currentWorkout = [];
 let currentIndex = 0;
 let currentType = "generated";
+let currentSessionOrigin = "extra";
 
 let sessionStartedAt = null;
 let completedSteps = [];
@@ -8595,11 +8596,49 @@ function updateStartButtonState(){
     followupNeedsAnswer() &&
     !followupAnswerSelected();
 
+  const alreadyCompleted =
+    !!dailyPlanSessionToday();
+
   start.disabled =
+    alreadyCompleted ||
     selectedPain===null ||
     blocked ||
     followupMissing;
 
+  start.textContent = alreadyCompleted
+    ?"OTTIMO LAVORO · ALLENAMENTO DI OGGI COMPLETATO"
+    :"AVVIA ALLENAMENTO";
+
+  const title=document.getElementById("todayTitle");
+  const message=document.getElementById("todayMessage");
+  if(alreadyCompleted){
+    if(title)title.textContent="Ottimo lavoro, hai già completato il piano di oggi";
+    if(message)message.textContent="La seduta programmata è registrata. Per un allenamento aggiuntivo scegli liberamente un modulo dalla sezione Allenati.";
+  }else if(selectedPain===null){
+    if(title)title.textContent="Completa il check prima di allenarti";
+    if(message)message.textContent="Il piano considera macro ciclo, obiettivo, spalla, recupero, follow-up, livello atleta, durata, attrezzatura e storico.";
+  }else{
+    if(title)title.textContent=blocked?"Valutazione clinica consigliata":mode==="recovery"?"Recupero attivo protetto":sessionLabel(effectiveSessionType());
+    if(message)message.textContent=blocked?"Non usare l'app per allenare la spalla con questi sintomi.":`Spalla ${shoulderReadiness}% · Performance ${performanceReadiness}% · Settimana ${periodizationWeek()}/12 · ${periodizationStage().name} · Motore ${progressionSignal()}.`;
+  }
+
+}
+
+function isDailyPlanSession(session){
+  if(!session||session.external||session.manualEntry)return false;
+  if(session.sessionOrigin==="daily-plan")return true;
+  if(session.sessionOrigin&&session.sessionOrigin!=="daily-plan")return false;
+  const plannedType=String(session.generatedSessionType||"");
+  return !!plannedType&&String(session.type||"")===String(sessionLabel(plannedType));
+}
+
+function dailyPlanSessionToday(){
+  const today=localDay();
+  return data().sessions.find(session=>{
+    const parsed=Date.parse(session?.date||0);
+    const day=session?.day||(Number.isFinite(parsed)?localDay(new Date(parsed)):"");
+    return day===today&&isDailyPlanSession(session);
+  })||null;
 }
 
 /* =========================================================
@@ -9431,6 +9470,13 @@ function requiredCheck(){
 
 function startGeneratedWorkout(){
 
+  if(dailyPlanSessionToday()){
+    notify("Ottimo lavoro: hai già completato il piano di oggi. Se desideri fare altro, scegli un modulo extra da Allenati.");
+    updateStartButtonState();
+    renderWowExperience();
+    return;
+  }
+
   if(
     !requiredCheck()
   ){
@@ -9443,7 +9489,9 @@ function startGeneratedWorkout(){
     currentWorkout,
     sessionLabel(
       generatedSessionType
-    )
+    ),
+    false,
+    "daily-plan"
   );
 
 }
@@ -9813,7 +9861,8 @@ document.addEventListener(
 function startWorkout(
   list,
   type,
-  isAutoFlow = false
+  isAutoFlow = false,
+  sessionOrigin = "extra"
 ){
 
   if(
@@ -9848,6 +9897,9 @@ function startWorkout(
 
   currentType =
     type;
+
+  currentSessionOrigin =
+    sessionOrigin==="daily-plan"?"daily-plan":"extra";
 
   completedSteps =
     [];
@@ -11157,6 +11209,9 @@ function saveCompletedSession(){
 
     sourceSessionId,
 
+    sessionOrigin:
+      currentSessionOrigin,
+
     date:
       new Date().toISOString(),
 
@@ -11306,6 +11361,7 @@ function saveCompletedSession(){
   sessionStartedAt=null;
   currentWorkout=[];
   completedSteps=[];
+  currentSessionOrigin="extra";
   sessionSaveInProgress=false;
 
   closePost();
@@ -11477,13 +11533,62 @@ function cancelManualActivityEdit(resetDate=true){
   if(resetDate){const now=new Date();now.setMinutes(now.getMinutes()-now.getTimezoneOffset());document.getElementById("manualActivityDate").value=now.toISOString().slice(0,16)}
 }
 
+function rebuildDerivedSessionHistories(d){
+  const sessions=Array.isArray(d.sessions)?d.sessions:[];
+  d.performance=sessions
+    .map(session=>({
+      sessionId:session.id||null,
+      date:session.date||new Date().toISOString(),
+      metric:Number(session.sessionLoad)||Math.round(Math.max(0,Number(session.durationSec||0))/60*Math.max(0,Number(session.rpe||0))),
+      type:session.type||"Sessione",
+      external:!!session.external
+    }))
+    .sort((a,b)=>Date.parse(b.date||0)-Date.parse(a.date||0))
+    .slice(0,200);
+  d.readinessHistory=sessions
+    .filter(session=>[session.readiness,session.shoulderReadiness,session.performanceReadiness].some(value=>value!=null&&Number.isFinite(Number(value))))
+    .map(session=>({
+      sessionId:session.id||null,
+      date:session.date||new Date().toISOString(),
+      readiness:Number(session.readiness||0),
+      shoulderReadiness:Number(session.shoulderReadiness||0),
+      performanceReadiness:Number(session.performanceReadiness||0)
+    }))
+    .sort((a,b)=>Date.parse(b.date||0)-Date.parse(a.date||0))
+    .slice(0,200);
+  return d;
+}
+
+async function deleteRecordedSession(id){
+  const d=data();
+  const session=d.sessions.find(item=>String(item?.id||"")===String(id||""));
+  if(!session){
+    notify("Sessione non trovata: lo storico è stato aggiornato.","error");
+    renderProgress();
+    return false;
+  }
+  const when=new Date(session.date||0).toLocaleDateString("it-IT");
+  const label=session.type||"questa sessione";
+  const title=session.manualEntry?"Eliminare attività manuale?":"Eliminare allenamento?";
+  if(!(await customConfirm(`Eliminare definitivamente ${label} del ${when}? Se vuoi conservarne una copia, esporta prima il backup JSON.`,title)))return false;
+  d.sessions=d.sessions.filter(item=>String(item?.id||"")!==String(id));
+  rebuildDerivedSessionHistories(d);
+  if(session.sourceSessionId&&session.sourceSessionId===activeSessionId){
+    clearSessionDraft();
+    activeSessionId=null;
+    sessionStartedAt=null;
+  }
+  save(d);
+  updateFollowupUI();
+  dashboard(true);
+  renderProgress();
+  haptic("save");
+  notify(session.manualEntry?"Attività manuale eliminata.":"Allenamento eliminato e statistiche ricalcolate.");
+  return true;
+}
+
 async function deleteManualActivity(id){
-  const d=data(),session=d.sessions.find(item=>item.id===id&&item.manualEntry);
-  if(!session)return;
-  if(!(await customConfirm(`Eliminare ${session.type||"questa attività"}? Il backup JSON può conservarne una copia.`,"Eliminare attività manuale?")))return;
-  d.sessions=d.sessions.filter(item=>item.id!==id);
-  d.performance=d.performance.filter(item=>item.sessionId!==id);
-  save(d);updateFollowupUI();dashboard(true);renderProgress();haptic("save");notify("Attività manuale eliminata.");
+  return deleteRecordedSession(id);
 }
 
 function csvCell(value){
@@ -11888,7 +11993,9 @@ function renderWowExperience(){
   let copy="Completa il check quotidiano: dolore, recupero e storico determineranno la versione più adatta della seduta.";
   let status="CHECK RICHIESTO";
   let button="Completa il check";
-  if(blocked){title="Oggi vince la <em>sicurezza.</em>";copy="I segnali inseriti richiedono prudenza. Non avviare il lavoro sulla spalla e valuta un confronto professionale.";status="STOP";button="Rivedi il check"}
+  const dailyCompleted=dailyPlanSessionToday();
+  if(dailyCompleted){title="Ottimo lavoro, <em>piano completato.</em>";copy="Hai già concluso l’allenamento programmato per oggi. Se vuoi aggiungere una seduta volontaria, scegli Military, Running, bici, Spalla o un altro modulo da Allenati.";status="COMPLETATO";button="Scegli un allenamento extra"}
+  else if(blocked){title="Oggi vince la <em>sicurezza.</em>";copy="I segnali inseriti richiedono prudenza. Non avviare il lavoro sulla spalla e valuta un confronto professionale.";status="STOP";button="Rivedi il check"}
   else if(selectedPain!==null){
     const modeLabel=mode==="build"?"PERFORMANCE":mode==="safe"?"SAFE":mode==="recovery"?"RECOVERY":"CHECK";
     title=`${escapeHtml(planned)}, <em>modalità ${modeLabel.toLowerCase()}.</em>`;
@@ -11914,6 +12021,11 @@ function renderWowExperience(){
 }
 
 function wowPrimaryAction(){
+  if(dailyPlanSessionToday()){
+    showPage("training");
+    haptic("tap");
+    return;
+  }
   showPage("today");
   const start=document.getElementById("startToday");
   if(selectedPain!==null&&!blocked&&!start.disabled){startGeneratedWorkout();return}
@@ -12291,8 +12403,8 @@ function renderProgress(){
                     </div>
                     ${session.manualEntry?`
                       <button type="button" data-id="${escapeHtml(session.id)}" class="btn secondary" style="min-height:30px;padding:5px 8px;font-size:.62rem" onclick="editManualActivity(this.dataset.id)">Modifica</button>
-                      <button type="button" data-id="${escapeHtml(session.id)}" class="btn danger" style="min-height:30px;padding:5px 8px;font-size:.62rem" onclick="deleteManualActivity(this.dataset.id)">Elimina</button>
                     `:""}
+                    <button type="button" data-id="${escapeHtml(session.id)}" class="btn danger" style="min-height:30px;padding:5px 8px;font-size:.62rem" onclick="deleteRecordedSession(this.dataset.id)">Elimina</button>
                   </div>
 
                 </div>
@@ -13597,6 +13709,8 @@ function runSelfTests(){
   test("ciclismo",()=>["mtbRide","roadRide","indoorRide","bikeIntervals"].every(id=>EX[id]));
   test("attività manuali",()=>["manualActivityType","manualActivityMinutes","manualActivityRPE","manualActivityDate"].every(id=>document.getElementById(id)));
   test("gestione attività",()=>["editManualActivity","deleteManualActivity","exportSessionsCsv","importedTrackSummary"].every(name=>typeof window[name]==="function"));
+  test("eliminazione sessioni app",()=>typeof deleteRecordedSession==="function"&&typeof rebuildDerivedSessionHistories==="function"&&document.getElementById("history"));
+  test("piano giornaliero singolo",()=>typeof dailyPlanSessionToday==="function"&&typeof isDailyPlanSession==="function"&&startGeneratedWorkout.toString().includes("dailyPlanSessionToday"));
   test("calendario modificabile",()=>typeof setWeekOverride==="function"&&typeof sessionTypeForDay==="function");
   test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
@@ -13991,7 +14105,7 @@ window.addEventListener(
 function saveSessionDraft(){
   if(!activeSessionId||!sessionStartedAt||!currentWorkout.length||sessionSaveInProgress)return;
   try{
-    localStorage.setItem(DRAFT_KEY,JSON.stringify({draftVersion:3,activeSessionId,savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({draftVersion:4,activeSessionId,savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,currentSessionOrigin,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
   }catch(err){console.warn("Bozza sessione:",err)}
 }
 
@@ -14029,6 +14143,7 @@ async function restoreSessionDraftIfAvailable(){
   currentWorkout=draft.currentWorkout.map(e=>({...e}));
   currentIndex=Math.max(0,Math.min(currentWorkout.length-1,Number(draft.currentIndex||0)));
   currentType=draft.currentType||"Sessione ripristinata";
+  currentSessionOrigin=draft.currentSessionOrigin==="daily-plan"||(!draft.currentSessionOrigin&&String(currentType)===String(sessionLabel(draft.generatedSessionType||generatedSessionType)))?"daily-plan":"extra";
   generatedSessionType=draft.generatedSessionType||generatedSessionType;
   completedSteps=Array.isArray(draft.completedSteps)?draft.completedSteps:[];
   sessionStartedAt=Number(draft.sessionStartedAt)||Date.now();
