@@ -2453,7 +2453,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "16.0.1-PICARI-MODE-SWITCH-FIX";
+  "16.1.0-PICARI-SAFE-RESUME-OFFLINE";
 
 const SCHEMA_VERSION =
   20;
@@ -2521,6 +2521,8 @@ let currentType = "generated";
 
 let sessionStartedAt = null;
 let completedSteps = [];
+let activeSessionId = null;
+let sessionSaveInProgress = false;
 
 let timerLeft = 0;
 let timerInitial = 0;
@@ -9853,6 +9855,11 @@ function startWorkout(
   sessionStartedAt =
     Date.now();
 
+  activeSessionId =
+    crypto.randomUUID?.() || `session-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  sessionSaveInProgress = false;
+
   document
     .getElementById(
       "sessionModal"
@@ -11036,6 +11043,10 @@ function validatePost(){
 
 function saveCompletedSession(){
 
+  if(sessionSaveInProgress){
+    return;
+  }
+
   const rpe =
     Number(
       document
@@ -11065,6 +11076,23 @@ function saveCompletedSession(){
 
   const d =
     data();
+
+  const sourceSessionId = activeSessionId ||
+    `legacy-${Number(sessionStartedAt)||Date.now()}-${String(currentType||"session")}`;
+
+  if(d.sessions.some(session=>session?.sourceSessionId===sourceSessionId)){
+    clearSessionDraft();
+    activeSessionId=null;
+    sessionStartedAt=null;
+    sessionSaveInProgress=false;
+    closePost();
+    notify("Questa sessione risulta già salvata: il duplicato è stato evitato.","error");
+    return;
+  }
+
+  sessionSaveInProgress=true;
+  const saveButton=document.getElementById("saveSessionBtn");
+  if(saveButton)saveButton.disabled=true;
 
   const durationSec =
     sessionStartedAt
@@ -11126,6 +11154,8 @@ function saveCompletedSession(){
       crypto.randomUUID?.()
       ||
       Date.now().toString(),
+
+    sourceSessionId,
 
     date:
       new Date().toISOString(),
@@ -11258,12 +11288,25 @@ function saveCompletedSession(){
   if(masterSnapshot.fatigue.score<55)d.fatigueDebt=Math.min(5,Number(d.fatigueDebt||0)+.5);
   else if(masterSnapshot.fatigue.score>75)d.fatigueDebt=Math.max(0,Number(d.fatigueDebt||0)-.2);
 
-  save(d);
+  try{
+    save(d);
+  }catch(err){
+    sessionSaveInProgress=false;
+    if(saveButton)saveButton.disabled=false;
+    notify("Salvataggio non riuscito. La bozza è stata conservata.","error");
+    return;
+  }
 
   haptic("save");
   celebrateCompletion();
 
   clearSessionDraft();
+
+  activeSessionId=null;
+  sessionStartedAt=null;
+  currentWorkout=[];
+  completedSteps=[];
+  sessionSaveInProgress=false;
 
   closePost();
 
@@ -13557,6 +13600,8 @@ function runSelfTests(){
   test("calendario modificabile",()=>typeof setWeekOverride==="function"&&typeof sessionTypeForDay==="function");
   test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
+  test("salvataggio idempotente",()=>saveCompletedSession.toString().includes("sourceSessionId")&&saveSessionDraft.toString().includes("activeSessionId"));
+  test("avvio offline non bloccante",()=>serviceWorkerText().includes("Promise.allSettled")&&serviceWorkerText().includes("cached||fresh"));
   test("wow experience",()=>["wowDeck","wowScore","wowMomentum","wowPrimaryBtn"].every(id=>document.getElementById(id))&&typeof renderWowExperience==="function");
   test("flusso semplice esperto",()=>["simpleModeBtn","expertModeBtn","advancedCheck"].every(id=>document.getElementById(id))&&typeof setExperienceMode==="function");
   test("selettore iPhone",()=>document.querySelector(".global-mode-switch")?.parentElement===document.body);
@@ -13785,9 +13830,9 @@ function serviceWorkerText(){
     `'use strict';`,
     `const CACHE_NAME=${JSON.stringify(cacheName)};`,
     `const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon.svg'];`,
-    `self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});`,
+    `self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>Promise.allSettled(APP_SHELL.map(asset=>cache.add(asset)))).then(()=>self.skipWaiting()))});`,
     `self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()))});`,
-    `self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response}).catch(()=>caches.match(event.request).then(hit=>hit||caches.match('./index.html'))));return}event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response}))) });`,
+    `self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;const url=new URL(event.request.url);if(url.origin!==self.location.origin)return;if(event.request.mode==='navigate'){event.respondWith(caches.match(event.request).then(hit=>hit||caches.match('./index.html')).then(cached=>{const fresh=fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>{cache.put(event.request,copy.clone());cache.put('./index.html',copy)})}return response}).catch(()=>cached);return cached||fresh}));return}event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(response=>{if(response&&response.ok){const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy))}return response}))) });`,
     `self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();if(event.data?.type==='SHOW_NOTIFICATION')self.registration.showNotification(event.data.title||'Picari Coach',{body:event.data.body||'',tag:event.data.tag||'coach-reminder',renotify:false,data:{url:'./index.html'}})});`,
     `self.addEventListener('periodicsync',event=>{if(event.tag==='coach-smart-reminders')event.waitUntil(self.registration.showNotification('Picari Coach',{body:'Apri il coach per controllare allenamento, recupero e backup.',tag:'coach-periodic',data:{url:'./index.html'}}))});`,
     `self.addEventListener('notificationclick',event=>{event.notification.close();event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const client of list){if('focus'in client)return client.focus()}return clients.openWindow(event.notification.data?.url||'./index.html')}))});`
@@ -13807,10 +13852,13 @@ async function registerPwa(){
   if(!("serviceWorker" in navigator)||!window.isSecureContext){updateDeviceStatus();return null}
   try{
     const registration=await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
-    await navigator.serviceWorker.ready;
     runtimeHealth.serviceWorkerOk=true;
-    if("periodicSync" in registration&&"Notification" in window&&Notification.permission==="granted"){
-      try{await registration.periodicSync.register("coach-smart-reminders",{minInterval:12*60*60*1000})}catch{}
+    const ready=await Promise.race([
+      navigator.serviceWorker.ready,
+      new Promise(resolve=>setTimeout(()=>resolve(registration),1800))
+    ]);
+    if("periodicSync" in ready&&"Notification" in window&&Notification.permission==="granted"){
+      try{await ready.periodicSync.register("coach-smart-reminders",{minInterval:12*60*60*1000})}catch{}
     }
     updateDeviceStatus();
     return registration;
@@ -13941,9 +13989,9 @@ window.addEventListener(
 );
 
 function saveSessionDraft(){
-  if(!sessionStartedAt||!currentWorkout.length)return;
+  if(!activeSessionId||!sessionStartedAt||!currentWorkout.length||sessionSaveInProgress)return;
   try{
-    localStorage.setItem(DRAFT_KEY,JSON.stringify({savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({draftVersion:3,activeSessionId,savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
   }catch(err){console.warn("Bozza sessione:",err)}
 }
 
@@ -13959,6 +14007,23 @@ async function restoreSessionDraftIfAvailable(){
   try{draft=JSON.parse(localStorage.getItem(DRAFT_KEY)||sessionStorage.getItem(`${KEY}_sessionDraft`)||"null")}catch{clearSessionDraft();return false}
   if(!draft||!Array.isArray(draft.currentWorkout)||!draft.currentWorkout.length)return false;
   if(Date.now()-Date.parse(draft.savedAt)>7*86400000){clearSessionDraft();return false}
+  if(draft.activeSessionId&&data().sessions.some(session=>session?.sourceSessionId===draft.activeSessionId)){
+    clearSessionDraft();
+    return false;
+  }
+  if(!draft.activeSessionId){
+    const started=Number(draft.sessionStartedAt||0);
+    const saved=Date.parse(draft.savedAt||0);
+    const legacyAlreadySaved=data().sessions.some(session=>{
+      const completed=Date.parse(session?.date||0);
+      return Number.isFinite(completed)&&completed>=started&&completed<=saved+5*60*1000&&String(session?.type||"")===String(draft.currentType||"");
+    });
+    if(legacyAlreadySaved){
+      clearSessionDraft();
+      notify("Una vecchia bozza già completata è stata rimossa automaticamente.");
+      return false;
+    }
+  }
   const resume=await customConfirm("È disponibile una sessione interrotta. Vuoi riprenderla dal punto salvato?","Riprendere la sessione?");
   if(!resume){clearSessionDraft();return false}
   currentWorkout=draft.currentWorkout.map(e=>({...e}));
@@ -13967,6 +14032,8 @@ async function restoreSessionDraftIfAvailable(){
   generatedSessionType=draft.generatedSessionType||generatedSessionType;
   completedSteps=Array.isArray(draft.completedSteps)?draft.completedSteps:[];
   sessionStartedAt=Number(draft.sessionStartedAt)||Date.now();
+  activeSessionId=draft.activeSessionId||`restored-${sessionStartedAt}-${String(draft.currentType||"session")}`;
+  sessionSaveInProgress=false;
   selectedPain=draft.selectedPain==null?selectedPain:Number(draft.selectedPain);
   mode=draft.mode||mode;
   readiness=Number(draft.readiness||0);
@@ -13999,8 +14066,6 @@ document.addEventListener(
       );
     protectDataBeforeMigration();
     await hydrate();
-
-    await registerPwa();
 
     const manualDate=document.getElementById("manualActivityDate");
     if(manualDate){
@@ -14056,6 +14121,8 @@ document.addEventListener(
     updateDeviceStatus();
     scheduleSmartReminders();
     checkBackupReminder();
+
+    setTimeout(()=>registerPwa(),0);
 
     const sessionRestored=await restoreSessionDraftIfAvailable();
 
