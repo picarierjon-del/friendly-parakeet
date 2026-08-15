@@ -1670,6 +1670,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
         <option value="all">Tutte</option>
         <option value="rehab">Spalla e scapola</option>
         <option value="mobility">Mobilità</option>
+        <option value="stretching">Just Stretching</option>
         <option value="release">Palla e roller</option>
         <option value="military">Military</option>
         <option value="legs">Gambe</option>
@@ -1868,7 +1869,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
   </div>
 </div>
 
-<div class="card" id="calibrationCard">
+<div class="card expert-only" id="calibrationCard">
   <div class="eyebrow">Calibrazione personale</div>
   <h2>Quanto ti conosce il coach?</h2>
   <p class="small" id="calibrationIntro">Servono almeno 10 sessioni valutate per una calibrazione utile.</p>
@@ -1881,7 +1882,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
   <div id="calibrationAdvice" class="info" style="margin-top:10px">Valuta la raccomandazione al termine delle prossime sessioni.</div>
 </div>
 
-<div class="card">
+<div class="card expert-only">
   <div class="eyebrow">Equilibrio ultime 7 giornate</div>
   <h2>Aerobico, forza e recupero</h2>
   <p class="small">Riepilogo informativo rispetto a obiettivi generali di salute; non è una prescrizione clinica individuale.</p>
@@ -1901,6 +1902,12 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 <div class="card">
   <div class="eyebrow">Diario sessioni · dose · RPE · follow-up</div>
   <div id="history" class="workout-list"></div>
+</div>
+
+<div class="card">
+  <div class="decision-head"><div><div class="eyebrow">Cestino recuperabile</div><h2>Sessioni eliminate</h2></div><button class="btn danger" style="min-height:34px;padding:7px 10px" onclick="emptySessionTrash()">Svuota</button></div>
+  <p class="small" id="sessionTrashCount">0 elementi · eliminazione automatica dopo 30 giorni</p>
+  <div id="sessionTrashList" class="workout-list" style="margin-top:10px"></div>
 </div>
 
 <div class="card">
@@ -2202,6 +2209,27 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <button class="hub-card accent-blue" onclick="showPage('military')"><svg class="ui-icon"><use href="#i-train"></use></svg><span><strong>Forza & Military</strong><small>Progressioni sicure e fallback corpo libero</small></span><b>→</b></button>
     <button class="hub-card accent-purple" onclick="showPage('running')"><svg class="ui-icon"><use href="#i-run"></use></svg><span><strong>Endurance & Cycling</strong><small>Corsa, Hyrox, MTB, bici da corsa e cyclette</small></span><b>→</b></button>
     <button class="hub-card accent-orange" onclick="showPage('work')"><svg class="ui-icon"><use href="#i-work"></use></svg><span><strong>Modalità lavoro</strong><small>Pre-turno, micro-reset e decompressione</small></span><b>→</b></button>
+    <button class="hub-card accent-green" onclick="showPage('stretching')"><svg class="ui-icon"><use href="#i-heart"></use></svg><span><strong>Just Stretching</strong><small>8–25 minuti di mobilità generale dolce e mantenimento</small></span><b>→</b></button>
+  </div>
+</section>
+
+<section id="page-stretching" class="hidden">
+  <div class="card hero compact-hero">
+    <div class="eyebrow">Just Stretching · recupero leggero</div>
+    <h2>Mobilità generale nei giorni di riposo</h2>
+    <p class="small">Movimenti lenti, respirazione regolare e tensione soltanto leggera. Non cercare dolore e non molleggiare.</p>
+  </div>
+  <div class="card">
+    <div class="segment" id="stretchingSegments">
+      <button class="active" onclick="selectStretching('quick',this)">Reset · 8 min</button>
+      <button onclick="selectStretching('maintenance',this)">Mantenimento · 15 min</button>
+      <button onclick="selectStretching('full',this)">Full Body · 25 min</button>
+      <button onclick="selectStretching('postwork',this)">Post-lavoro · 10 min</button>
+    </div>
+    <div id="stretchingSafety" class="info" style="margin-bottom:10px">Completa il check giornaliero: la routine verrà adattata alla spalla e ai segnali di sicurezza.</div>
+    <div id="stretchingPreview" class="workout-list"></div>
+    <button id="startStretchingBtn" class="btn purple full" style="margin-top:12px" onclick="startJustStretching()">Avvia Just Stretching</button>
+    <p class="note">Interrompi in caso di fitta, dolore articolare, nuovi sintomi o peggioramento. Questa routine non sostituisce una valutazione professionale.</p>
   </div>
 </section>
 
@@ -2236,7 +2264,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 <nav class="nav" aria-label="Navigazione principale">
   <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
   <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
-  <button type="button" data-page="training" data-related="shoulder,military,running,work"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
+  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
   <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
   <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
 </nav>
@@ -2383,7 +2411,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
   </div>
 
   <div class="field" style="margin-top:12px">
-    <label>La raccomandazione di oggi era adeguata?</label>
+    <label id="recommendationFeedbackLabel">La raccomandazione di oggi era adeguata?</label>
     <select id="recommendationFeedback">
       <option value="">Seleziona una valutazione</option>
       <option value="too_easy">Troppo facile</option>
@@ -2453,7 +2481,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "16.3.0-PICARI-DAILY-PLAN-GUARD";
+  "16.5.0-PICARI-JUST-STRETCHING";
 
 const SCHEMA_VERSION =
   20;
@@ -2544,6 +2572,7 @@ let shoulderRoutine = "reset";
 let militaryLevel = "recovery";
 let runType = "easy";
 let physioRoutine = "workout1";
+let stretchingRoutine = "quick";
 
 let wakeLock = null;
 let wakeLockWanted = false;
@@ -4277,6 +4306,61 @@ const specials = {
 
 };
 
+[
+  ["stretchWarm","Riscaldamento dolce","1 min",60,"🚶","stretching","Marcia lenta o cammino facile. Lascia le braccia morbide e respira normalmente."],
+  ["stretchBreath","Respirazione e scarico","1 min",60,"🫁","stretching","Inspira senza sollevare le spalle ed espira lentamente. Nessuna posizione forzata."],
+  ["stretchNeck","Mobilità cervicale dolce","1 min",60,"🧘","stretching","Piccoli movimenti controllati. Non eseguire circonduzioni complete e interrompi se compaiono sintomi."],
+  ["stretchOpenBook","Open Book toracico","45 sec per lato",90,"📖","stretching","Ruota il torace entro un arco confortevole; il braccio può restare basso."],
+  ["stretchPecLow","Pettorale con gomito basso","45 sec per lato",90,"🫶","stretching","Appoggio leggero e gomito sotto la spalla. Nessuna fitta anteriore."],
+  ["stretchLatGentle","Gran dorsale dolce","45 sec per lato",90,"🌿","stretching","Allunga senza appenderti al braccio e senza caricare l’articolazione."],
+  ["stretchHipFlexor","Flessori dell’anca","60 sec per lato",120,"🦵","stretching","Bacino neutro, gluteo leggermente attivo e schiena non inarcata."],
+  ["stretchFigure4","Gluteo · Figure Four","60 sec per lato",120,"🧘","stretching","Mantieni il ginocchio libero e cerca soltanto una tensione leggera."],
+  ["stretchHamstring","Posteriori della coscia","60 sec per lato",120,"🦿","stretching","Schiena lunga e ginocchio non bloccato. Non rimbalzare."],
+  ["stretchQuad","Quadricipite assistito","60 sec per lato",120,"🦵","stretching","Usa un appoggio stabile e non forzare il ginocchio."],
+  ["stretchCalf","Polpaccio alla parete","45 sec per lato",90,"🦶","stretching","Tallone appoggiato e piede rivolto avanti; tensione confortevole."],
+  ["stretchForearm","Avambracci e polsi","45 sec per lato",90,"🤲","stretching","Pressione minima, gomito morbido e nessun formicolio."],
+  ["stretchChildSide","Scarico laterale del tronco","45 sec per lato",90,"🌙","stretching","Sposta il bacino indietro solo quanto è comodo; tieni il braccio più basso se la spalla è sensibile."],
+  ["stretchLegsWall","Gambe appoggiate","2 min",120,"🧱","stretching","Appoggia le gambe comodamente e respira senza cercare un allungamento intenso."],
+  ["stretchFinish","Respirazione finale","1 min",60,"✨","stretching","Rilassa mandibola e spalle e osserva se ti senti più sciolto, uguale o peggio."]
+].forEach(v=>{if(!EX[v[0]])add(...v)});
+
+const justStretching={
+  quick:["stretchWarm","stretchBreath","stretchNeck","stretchOpenBook","stretchHipFlexor","stretchCalf","stretchFinish"],
+  maintenance:["stretchWarm","stretchBreath","stretchNeck","stretchOpenBook","stretchPecLow","stretchHipFlexor","stretchFigure4","stretchHamstring","stretchCalf","stretchFinish"],
+  full:["stretchWarm","stretchBreath","stretchNeck","stretchOpenBook","stretchPecLow","stretchLatGentle","stretchHipFlexor","stretchFigure4","stretchHamstring","stretchQuad","stretchCalf","stretchForearm","stretchChildSide","stretchLegsWall","stretchFinish"],
+  postwork:["stretchWarm","stretchBreath","stretchNeck","stretchPecLow","stretchLatGentle","stretchHipFlexor","stretchForearm","stretchCalf","stretchFinish"]
+};
+
+function stretchingRoutineLabel(type){return({quick:"Reset · 8 min",maintenance:"Mantenimento · 15 min",full:"Full Body · 25 min",postwork:"Post-lavoro · 10 min"})[type]||"Just Stretching"}
+
+function buildStretchingRoutine(type=stretchingRoutine){
+  let ids=[...(justStretching[type]||justStretching.quick)];
+  if(selectedPain>=4)ids=["stretchWarm","stretchBreath","stretchNeck","stretchFinish"];
+  else if(selectedPain===3)ids=ids.filter(id=>!["stretchPecLow","stretchLatGentle","stretchChildSide"].includes(id));
+  return unique(ids).map(id=>({...EX[id],reason:selectedPain>=4?"↓ mobilità minima · dolore elevato":selectedPain===3?"↓ routine adattata · evita la zona sensibile":"→ tensione leggera · nessun dolore"}));
+}
+
+function renderStretchingPreview(){
+  const target=document.getElementById("stretchingPreview");if(!target)return;
+  const safety=document.getElementById("stretchingSafety"),button=document.getElementById("startStretchingBtn");
+  render(target,buildStretchingRoutine());
+  if(blocked){safety.className="warning";safety.textContent="I segnali inseriti richiedono prudenza: il modulo è bloccato e non sostituisce una valutazione professionale.";button.disabled=true}
+  else if(selectedPain===null){safety.className="info";safety.textContent="Completa il check giornaliero prima di iniziare.";button.disabled=false}
+  else if(selectedPain>=4){safety.className="warning";safety.textContent="Dolore elevato: viene proposta soltanto mobilità minima. Interrompi se i sintomi aumentano.";button.disabled=false}
+  else{safety.className="info";safety.textContent=selectedPain===3?"Routine adattata: esclusi gli allungamenti più impegnativi per la spalla.":"Routine generale disponibile: mantieni soltanto una tensione leggera e confortevole.";button.disabled=false}
+}
+
+function selectStretching(type,button){stretchingRoutine=justStretching[type]?type:"quick";segment(button);renderStretchingPreview()}
+
+async function startJustStretching(){
+  if(!requiredCheck())return;
+  if(blocked)return;
+  if(todaySessionSummary().sessions.length&&!(await allowExtraSession("Just Stretching")))return;
+  const list=buildStretchingRoutine();
+  const dailyRecovery=!dailyPlanSessionToday()&&effectiveSessionType()==="recovery";
+  startWorkout(list,`Just Stretching · ${stretchingRoutineLabel(stretchingRoutine)}`,false,dailyRecovery?"daily-plan":"extra");
+}
+
 /* =========================================================
    DATI
    ========================================================= */
@@ -4292,6 +4376,7 @@ function defaults(){
       APP_VERSION,
 
     sessions:[],
+    trash:[],
     activities:[],
     tests:[],
     readinessHistory:[],
@@ -4433,6 +4518,11 @@ function norm(v){
     sessions:
       Array.isArray(v.sessions)
         ?v.sessions
+        :[],
+
+    trash:
+      Array.isArray(v.trash)
+        ?v.trash
         :[],
 
     activities:
@@ -5662,6 +5752,7 @@ const SESSION_LABELS = {
   rehab:"Spalla & mobilità",
   mobility:"Mobilità / Recovery",
   recovery:"Recupero",
+  stretching:"Just Stretching",
 
   hyroxTech:"Hyrox Technique",
   hyroxEngine:"Hyrox Engine",
@@ -7633,6 +7724,9 @@ function plan(type){
       "stretch"
     ],
 
+    stretching:
+      justStretching.maintenance,
+
     easy:[
       "breathing",
       "runEasy",
@@ -8188,6 +8282,10 @@ function effectiveSessionType(){
     return "recovery";
   }
 
+  if(scheduled==="recovery"){
+    return "stretching";
+  }
+
   if(
     plannedDeloadActive() &&
     ![
@@ -8625,7 +8723,7 @@ function updateStartButtonState(){
 }
 
 function isDailyPlanSession(session){
-  if(!session||session.external||session.manualEntry)return false;
+  if(!session||session.external||session.manualEntry||session.incomplete)return false;
   if(session.sessionOrigin==="daily-plan")return true;
   if(session.sessionOrigin&&session.sessionOrigin!=="daily-plan")return false;
   const plannedType=String(session.generatedSessionType||"");
@@ -8935,6 +9033,7 @@ function showPage(name){
     "progress",
     "settings",
     "training",
+    "stretching",
     "more"
   ]
   .forEach(
@@ -8991,6 +9090,10 @@ function showPage(name){
 
   if(name==="physio"){
     renderPhysioPreview();
+  }
+
+  if(name==="stretching"){
+    renderStretchingPreview();
   }
 
   renderPreviews();
@@ -9240,6 +9343,8 @@ function renderPreviews(){
     )
   );
 
+  renderStretchingPreview();
+
 }
 
 /* =========================================================
@@ -9247,7 +9352,7 @@ function renderPreviews(){
    ========================================================= */
 
 function weekEditorOptions(selected,planned){
-  const types=["strength","strengthLight","power","easy","long","interval","tempo","threshold","rehab","mobility","recovery","hybridEngine","militaryStrength","militaryBodyweight"];
+  const types=["strength","strengthLight","power","easy","long","interval","tempo","threshold","rehab","mobility","recovery","stretching","hybridEngine","militaryStrength","militaryBodyweight"];
   availableCyclingTypes().forEach(type=>types.push(type));
   return `<option value="">Piano: ${escapeHtml(sessionLabel(planned))}</option>`+
     [...new Set(types)].map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
@@ -10090,6 +10195,12 @@ function markStepCompleted(){
         e.s || 0
       ),
 
+    elapsedSec:
+      Math.max(0,Math.min(Number(e.s||0),Number(timerInitial||0)-Number(timerLeft||0))) || Number(e.s||0),
+
+    recoveryStep:
+      isRecoveryStep(e),
+
     reason:
       e.reason || "",
 
@@ -10224,8 +10335,15 @@ function closeSession(){
 }
 
 async function requestCloseSession(){
-  const ok=await customConfirm("La sessione verrà conservata come bozza e potrai riprenderla in seguito.","Uscire dalla sessione?");
-  if(ok){saveSessionDraft();closeSession();notify("Sessione salvata come bozza.")}
+  const choice=await practicalChoice("Uscire dalla sessione?","Scegli come gestire l’allenamento interrotto.",[
+    {value:"resume",label:"Riprendi più tardi",className:"btn"},
+    {value:"incomplete",label:"Salva come incompleto",className:"btn secondary"},
+    {value:"abandon",label:"Abbandona bozza",className:"btn danger"},
+    {value:"cancel",label:"Continua ora",className:"btn secondary"}
+  ]);
+  if(choice==="resume"){saveSessionDraft();closeSession();notify("Sessione salvata come bozza.")}
+  if(choice==="incomplete")saveCurrentAsIncomplete();
+  if(choice==="abandon"){clearSessionDraft();activeSessionId=null;sessionStartedAt=null;currentWorkout=[];completedSteps=[];currentSessionOrigin="extra";closeSession();notify("Bozza abbandonata.")}
 }
 
 /* =========================================================
@@ -11001,6 +11119,16 @@ function openPost(){
 
   document.getElementById("recommendationFeedback").value="";
 
+  const stretching=/Just Stretching/i.test(String(currentType||""));
+  const feedback=document.getElementById("recommendationFeedback");
+  const feedbackLabel=document.getElementById("recommendationFeedbackLabel");
+  if(feedbackLabel)feedbackLabel.textContent=stretching?"Come ti senti rispetto a prima?":"La raccomandazione di oggi era adeguata?";
+  if(feedback){
+    feedback.options[1].textContent=stretching?"Uguale":"Troppo facile";
+    feedback.options[2].textContent=stretching?"Più sciolto":"Corretta";
+    feedback.options[3].textContent=stretching?"Peggiore":"Troppo dura";
+  }
+
   document
     .getElementById(
       "saveSessionBtn"
@@ -11221,6 +11349,9 @@ function saveCompletedSession(){
     type:
       currentType,
 
+    trainingCategory:
+      /Just Stretching/i.test(String(currentType||""))?"stretching":null,
+
     generatedSessionType:
       generatedSessionType,
 
@@ -11241,8 +11372,11 @@ function saveCompletedSession(){
     followUpAt:
       null,
 
+    followupRequired:
+      !/Just Stretching/i.test(String(currentType||"")),
+
     progressionApplied:
-      false,
+      /Just Stretching/i.test(String(currentType||"")),
 
     mode,
 
@@ -11278,6 +11412,11 @@ function saveCompletedSession(){
 
     recommendationFeedback,
 
+    stretchingFeeling:
+      /Just Stretching/i.test(String(currentType||""))
+        ?({too_easy:"same",right:"looser",too_hard:"worse"})[recommendationFeedback]
+        :null,
+
     recommendationAtStart:{
       action:masterSnapshot.action,
       score:Math.round(masterSnapshot.score),
@@ -11286,6 +11425,15 @@ function saveCompletedSession(){
     },
 
     formulaVersion:FORMULA_VERSION,
+
+    completionRate:
+      currentWorkout.length?Math.round(completedSteps.length/currentWorkout.length*100):0,
+
+    activeDurationSec:
+      completedSteps.filter(step=>!step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),
+
+    recoveryDurationSec:
+      completedSteps.filter(step=>step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),
 
     durationSec,
 
@@ -11570,7 +11718,10 @@ async function deleteRecordedSession(id){
   const when=new Date(session.date||0).toLocaleDateString("it-IT");
   const label=session.type||"questa sessione";
   const title=session.manualEntry?"Eliminare attività manuale?":"Eliminare allenamento?";
-  if(!(await customConfirm(`Eliminare definitivamente ${label} del ${when}? Se vuoi conservarne una copia, esporta prima il backup JSON.`,title)))return false;
+  if(!(await customConfirm(`Spostare ${label} del ${when} nel cestino? Potrai ripristinarla per 30 giorni.`,title)))return false;
+  d.trash=Array.isArray(d.trash)?d.trash:[];
+  d.trash.unshift({...session,deletedAt:new Date().toISOString()});
+  d.trash=d.trash.filter(item=>Date.now()-Date.parse(item.deletedAt||0)<=30*86400000).slice(0,200);
   d.sessions=d.sessions.filter(item=>String(item?.id||"")!==String(id));
   rebuildDerivedSessionHistories(d);
   if(session.sourceSessionId&&session.sourceSessionId===activeSessionId){
@@ -11583,12 +11734,41 @@ async function deleteRecordedSession(id){
   dashboard(true);
   renderProgress();
   haptic("save");
-  notify(session.manualEntry?"Attività manuale eliminata.":"Allenamento eliminato e statistiche ricalcolate.");
+  notify(session.manualEntry?"Attività spostata nel cestino.":"Allenamento spostato nel cestino e statistiche ricalcolate.");
   return true;
 }
 
 async function deleteManualActivity(id){
   return deleteRecordedSession(id);
+}
+
+function purgeExpiredTrash(d=data()){
+  d.trash=(Array.isArray(d.trash)?d.trash:[]).filter(item=>Date.now()-Date.parse(item.deletedAt||0)<=30*86400000);
+  return d;
+}
+
+function restoreDeletedSession(id){
+  const d=data(),item=d.trash.find(session=>String(session?.id||"")===String(id||""));
+  if(!item)return;
+  if(!d.sessions.some(session=>String(session?.id||"")===String(item.id))){
+    const {deletedAt,...restored}=item;
+    d.sessions.push(restored);
+    d.sessions.sort((a,b)=>Date.parse(a.date||0)-Date.parse(b.date||0));
+  }
+  d.trash=d.trash.filter(session=>String(session?.id||"")!==String(id));
+  rebuildDerivedSessionHistories(d);save(d);dashboard(true);renderProgress();haptic("save");notify("Sessione ripristinata.");
+}
+
+async function emptySessionTrash(){
+  if(!(await customConfirm("Le sessioni nel cestino verranno eliminate definitivamente.","Svuotare il cestino?")))return;
+  const d=data();d.trash=[];save(d);renderSessionTrash();notify("Cestino svuotato.");
+}
+
+function renderSessionTrash(){
+  const host=document.getElementById("sessionTrashList");if(!host)return;
+  const list=purgeExpiredTrash(data()).trash;
+  document.getElementById("sessionTrashCount").textContent=`${list.length} elementi · eliminazione automatica dopo 30 giorni`;
+  host.innerHTML=list.length?list.map(item=>`<div class="workout-item"><div><strong>${escapeHtml(item.type||"Sessione")}</strong><br><span>${escapeHtml(new Date(item.date||0).toLocaleDateString("it-IT"))} · nel cestino ${escapeHtml(new Date(item.deletedAt||0).toLocaleDateString("it-IT"))}</span></div><button type="button" class="btn secondary" data-id="${escapeHtml(item.id)}" onclick="restoreDeletedSession(this.dataset.id)">Ripristina</button></div>`).join(""):'<div class="small">Il cestino è vuoto.</div>';
 }
 
 function csvCell(value){
@@ -11597,9 +11777,9 @@ function csvCell(value){
 }
 
 function exportSessionsCsv(){
-  const rows=[["data","tipo","origine","durata_min","rpe","carico","distanza_km","dislivello_m","dolore_pre","dolore_post","follow_up","valutazione_consiglio","formula_versione","note"]];
+  const rows=[["data","tipo","origine","piano_o_extra","stato","durata_totale_min","durata_attiva_min","recupero_min","completamento_percento","rpe","carico","distanza_km","dislivello_m","dolore_pre","dolore_post","follow_up","modalita_coach","readiness_spalla","readiness_performance","valutazione_consiglio","formula_versione","note"]];
   data().sessions.forEach(session=>rows.push([
-    session.date||"",session.type||"",session.sourceApp||"App",Math.round(Number(session.durationSec||0)/60),session.rpe??"",session.sessionLoad??"",session.distanceKm??"",session.elevationM??"",session.prePain??"",session.postPain??"",session.nextDayReaction??"",session.recommendationFeedback??"",session.formulaVersion??"",session.notes||""
+    session.date||"",session.type||"",session.sourceApp||"App",session.sessionOrigin||"legacy",session.incomplete?"incompleta":"completa",Math.round(Number(session.durationSec||0)/60),Math.round(Number(session.activeDurationSec||0)/60),Math.round(Number(session.recoveryDurationSec||0)/60),session.completionRate??"",session.rpe??"",session.sessionLoad??"",session.distanceKm??"",session.elevationM??"",session.prePain??"",session.postPain??"",session.nextDayReaction??"",session.mode??"",session.shoulderReadiness??"",session.performanceReadiness??"",session.recommendationFeedback??"",session.formulaVersion??"",session.notes||""
   ]));
   const csv="\uFEFF"+rows.map(row=>row.map(csvCell).join(";")).join("\r\n");
   downloadTextFile(`picari-coach-sessioni-${localDay()}.csv`,csv,"text/csv;charset=utf-8");
@@ -12512,11 +12692,12 @@ function renderProgress(){
 
   renderCalibrationReport();
   renderWeeklyBalance();
+  renderSessionTrash();
 
 }
 
 function renderCalibrationReport(){
-  const evaluated=data().sessions.filter(session=>["too_easy","right","too_hard"].includes(session.recommendationFeedback));
+  const evaluated=data().sessions.filter(session=>!["stretching"].includes(session.trainingCategory)&&!/Just Stretching/i.test(String(session.type||""))&&["too_easy","right","too_hard"].includes(session.recommendationFeedback));
   const recent=evaluated.slice(-30),count=recent.length;
   const totals={too_easy:0,right:0,too_hard:0};recent.forEach(session=>totals[session.recommendationFeedback]++);
   const pct=key=>count?Math.round(totals[key]/count*100):0;
@@ -12540,7 +12721,7 @@ function renderWeeklyBalance(){
   const daysFor=predicate=>new Set(recent.filter(predicate).map(session=>session.day||localDay(new Date(session.date)))).size;
   const aerobic=recent.filter(session=>/run|corsa|walk|cammin|cycling|bike|bici|cyclette|mtb|swim|nuoto|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`)).reduce((sum,session)=>sum+Number(session.durationSec||0)/60,0);
   const strengthDays=daysFor(session=>/strength|forza|legs|military|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
-  const recoveryDays=daysFor(session=>/recovery|recupero|mobility|mobilità|rehab|fisio|physio/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
+  const recoveryDays=daysFor(session=>/recovery|recupero|mobility|mobilità|stretch|rehab|fisio|physio/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
   document.getElementById("aerobicBalance").textContent=`${Math.round(aerobic)} min`;document.getElementById("strengthBalance").textContent=`${strengthDays} giorni`;document.getElementById("recoveryBalance").textContent=`${recoveryDays} giorni`;
   document.getElementById("aerobicBalanceBar").style.width=`${masterClamp(aerobic/150*100)}%`;document.getElementById("strengthBalanceBar").style.width=`${masterClamp(strengthDays/2*100)}%`;document.getElementById("recoveryBalanceBar").style.width=`${masterClamp(recoveryDays/2*100)}%`;
   const messages=[];if(aerobic<150)messages.push(`aerobico registrato ${Math.round(aerobic)}/150 min`);else messages.push("quota aerobica generale raggiunta");if(strengthDays<2)messages.push(`forza ${strengthDays}/2 giorni`);else messages.push("forza distribuita su almeno 2 giorni");
@@ -12861,6 +13042,8 @@ function saveSettings(){
 
   d.settings = {
 
+    ...d.settings,
+
     birthDate:
       document
         .getElementById(
@@ -13065,10 +13248,11 @@ function updateBackupInfo(){
     );
 
   const reminderDays=Number(d.settings.reminders?.backupDays||BACKUP_REMINDER_DAYS);
+  const newSessions=Math.max(0,d.sessions.length-Number(d.settings.lastBackupSessionCount||0));
 
   el.textContent =
     days>reminderDays
-      ?`Ultimo backup ${days} giorni fa. Consigliato esportarne uno nuovo.`
+      ?`Ultimo backup ${days} giorni fa · ${newSessions} nuove sessioni. Consigliato esportarne uno nuovo.`
       :`Ultimo backup: ${
           new Date(
             d.lastBackupAt
@@ -13076,7 +13260,7 @@ function updateBackupInfo(){
           .toLocaleString(
             "it-IT"
           )
-        }.`;
+        } · verificato internamente · ${newSessions} nuove sessioni.`;
 
 }
 
@@ -13088,6 +13272,9 @@ function exportData(){
   d.lastBackupAt =
     new Date().toISOString();
 
+  d.settings.lastBackupSessionCount=d.sessions.length;
+  d.settings.lastBackupVerifiedAt=d.lastBackupAt;
+
   d=save(d);
 
   const payload = {
@@ -13098,6 +13285,8 @@ function exportData(){
       appVersion:APP_VERSION,
       schemaVersion:SCHEMA_VERSION,
       exportedAt:new Date().toISOString(),
+      device:navigator.userAgent||"browser",
+      sessionCount:d.sessions.length,
       dataHash:storageHash(d)
     },
 
@@ -13153,6 +13342,8 @@ async function shareBackup(){
 
   let d=data();
   d.lastBackupAt=new Date().toISOString();
+  d.settings.lastBackupSessionCount=d.sessions.length;
+  d.settings.lastBackupVerifiedAt=d.lastBackupAt;
   d=save(d);
 
   const payload={
@@ -13162,6 +13353,8 @@ async function shareBackup(){
       appVersion:APP_VERSION,
       schemaVersion:SCHEMA_VERSION,
       exportedAt:new Date().toISOString(),
+      device:navigator.userAgent||"browser",
+      sessionCount:d.sessions.length,
       dataHash:storageHash(d)
     },
     data:d
@@ -13711,6 +13904,17 @@ function runSelfTests(){
   test("gestione attività",()=>["editManualActivity","deleteManualActivity","exportSessionsCsv","importedTrackSummary"].every(name=>typeof window[name]==="function"));
   test("eliminazione sessioni app",()=>typeof deleteRecordedSession==="function"&&typeof rebuildDerivedSessionHistories==="function"&&document.getElementById("history"));
   test("piano giornaliero singolo",()=>typeof dailyPlanSessionToday==="function"&&typeof isDailyPlanSession==="function"&&startGeneratedWorkout.toString().includes("dailyPlanSessionToday"));
+  test("cestino 30 giorni",()=>typeof restoreDeletedSession==="function"&&typeof purgeExpiredTrash==="function"&&document.getElementById("sessionTrashList"));
+  test("sessione incompleta",()=>typeof saveCurrentAsIncomplete==="function"&&requestCloseSession.toString().includes("incomplete"));
+  test("controllo sedute extra",()=>typeof allowExtraSession==="function"&&typeof todaySessionSummary==="function");
+  test("stati calendario",()=>typeof decorateWeekStatuses==="function"&&document.querySelectorAll("#weekGrid .day-status").length===7);
+  test("importazione protetta",()=>typeof installSafeImport==="function"&&typeof sessionIdentity==="function");
+  test("durate separate",()=>markStepCompleted.toString().includes("elapsedSec")&&saveCompletedSession.toString().includes("activeDurationSec"));
+  test("modulo Just Stretching",()=>document.getElementById("page-stretching")&&document.getElementById("stretchingPreview")&&typeof startJustStretching==="function");
+  test("routine stretching complete",()=>["quick","maintenance","full","postwork"].every(key=>Array.isArray(justStretching[key])&&justStretching[key].length>=4));
+  test("esercizi stretching",()=>["stretchWarm","stretchOpenBook","stretchHipFlexor","stretchHamstring","stretchCalf","stretchFinish"].every(id=>EX[id]?.c==="stretching"));
+  test("adattamento dolore stretching",()=>{const previous=selectedPain;selectedPain=4;const minimal=buildStretchingRoutine("full").length;selectedPain=previous;return minimal===4});
+  test("recovery consiglia stretching",()=>SESSION_LABELS.stretching==="Just Stretching"&&Array.isArray(plan("stretching")));
   test("calendario modificabile",()=>typeof setWeekOverride==="function"&&typeof sessionTypeForDay==="function");
   test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
@@ -14165,6 +14369,90 @@ window.addEventListener("pagehide",saveSessionDraft);
 window.addEventListener("beforeunload",saveSessionDraft);
 
 /* =========================================================
+   PRACTICAL RELIABILITY LAYER 16.4
+   ========================================================= */
+
+function practicalChoice(title,message,choices){
+  return new Promise(resolve=>{
+    let modal=document.getElementById("practicalChoiceModal");
+    if(!modal){
+      modal=document.createElement("div");modal.id="practicalChoiceModal";modal.className="modal hidden";modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");
+      modal.innerHTML='<div class="modal-box confirm-box"><div class="eyebrow">Gestione sicura</div><h2 id="practicalChoiceTitle"></h2><p class="small" id="practicalChoiceText" style="margin-top:8px"></p><div id="practicalChoiceActions" style="display:grid;gap:8px;margin-top:16px"></div></div>';
+      document.body.appendChild(modal);
+    }
+    document.getElementById("practicalChoiceTitle").textContent=title;
+    document.getElementById("practicalChoiceText").textContent=message;
+    const actions=document.getElementById("practicalChoiceActions");actions.innerHTML="";
+    const done=value=>{modal.classList.add("hidden");resolve(value)};
+    choices.forEach(choice=>{const button=document.createElement("button");button.type="button";button.className=choice.className||"btn secondary";button.textContent=choice.label;button.onclick=()=>done(choice.value);actions.appendChild(button)});
+    modal.classList.remove("hidden");actions.querySelector("button")?.focus();
+  });
+}
+
+function saveCurrentAsIncomplete(){
+  if(!sessionStartedAt||!currentWorkout.length){closeSession();return}
+  const d=data(),now=new Date(),durationSec=Math.max(0,Math.round((Date.now()-sessionStartedAt)/1000));
+  const completionRate=Math.min(99,Math.round(completedSteps.length/currentWorkout.length*100));
+  d.sessions.push({id:crypto.randomUUID?.()||`incomplete-${Date.now()}`,sourceSessionId:activeSessionId,date:now.toISOString(),day:localDay(now),type:`${currentType} · incompleta`,trainingCategory:/Just Stretching/i.test(String(currentType||""))?"stretching":null,generatedSessionType,sessionOrigin:currentSessionOrigin,incomplete:true,completionRate,durationSec,activeDurationSec:completedSteps.filter(step=>!step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),recoveryDurationSec:completedSteps.filter(step=>step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),estimatedDurationSec:workoutSeconds(currentWorkout),rpe:null,sessionLoad:0,prePain:selectedPain,postPain:null,nextDayReaction:null,followupRequired:false,progressionApplied:true,mode,readiness,shoulderReadiness,performanceReadiness,prescribedWorkout:currentWorkout.map((e,index)=>({index,id:e.id||"",title:e.t||"",dose:e.d||"",seconds:Number(e.s||0),category:e.c||""})),completedSteps:[...completedSteps],appVersion:APP_VERSION,formulaVersion:FORMULA_VERSION});
+  rebuildDerivedSessionHistories(d);save(d);clearSessionDraft();activeSessionId=null;sessionStartedAt=null;currentWorkout=[];completedSteps=[];currentSessionOrigin="extra";closeSession();dashboard(true);notify(`Sessione salvata come incompleta (${completionRate}%).`);
+}
+
+function todaySessionSummary(){
+  const sessions=data().sessions.filter(session=>(session.day||localDay(new Date(session.date)))===localDay()&&!session.incomplete);
+  const load=sessions.reduce((sum,session)=>sum+Number(session.sessionLoad||0),0);
+  const last=sessions.sort((a,b)=>Date.parse(b.date||0)-Date.parse(a.date||0))[0];
+  const hours=last?Math.max(0,(Date.now()-Date.parse(last.date))/3600000):Infinity;
+  return{sessions,load,last,hours};
+}
+
+async function allowExtraSession(label){
+  if(blocked){notify("I segnali di sicurezza attuali bloccano una nuova seduta.","error");return false}
+  const summary=todaySessionSummary();if(!summary.sessions.length)return true;
+  let level="CONSENTITO",message=`Hai già registrato ${summary.sessions.length} seduta/e oggi, carico ${Math.round(summary.load)}.`;
+  if(summary.load>=600||summary.hours<3||mode==="recovery"){level="SCONSIGLIATO";message+=` L’ultima risale a ${summary.hours.toFixed(1)} ore fa: privilegia recupero o un modulo molto leggero.`}
+  else if(summary.load>=300||summary.hours<6){level="EXTRA LEGGERO";message+=" Mantieni volume e intensità inferiori alla prima seduta."}
+  else message+=" Un extra breve e controllato è compatibile con i dati registrati.";
+  return practicalChoice(`${level} · ${label}`,message,[{value:true,label:level==="CONSENTITO"?"Continua":"Continua consapevolmente",className:level==="SCONSIGLIATO"?"btn danger":"btn"},{value:false,label:"Annulla",className:"btn secondary"}]);
+}
+
+function installExtraSessionGuards(){
+  [["startShoulder","Spalla"],["startMilitary","Military"],["startRunning","Running / bici"],["startPhysio","Fisio"]].forEach(([name,label])=>{
+    const original=window[name];if(typeof original!=="function"||original._extraGuard)return;
+    const wrapped=async function(...args){if(await allowExtraSession(label))return original.apply(this,args)};wrapped._extraGuard=true;window[name]=wrapped;
+  });
+}
+
+function decorateWeekStatuses(){
+  const grid=document.getElementById("weekGrid");if(!grid)return;
+  const start=startOfCurrentWeek(),sessions=data().sessions;
+  [...grid.querySelectorAll(".day-card")].forEach((card,index)=>{
+    card.querySelector(".day-status")?.remove();
+    const date=new Date(start.getTime()+index*86400000),key=localDay(date),items=sessions.filter(session=>(session.day||localDay(new Date(session.date)))===key);
+    const completed=items.some(isDailyPlanSession),incomplete=items.some(item=>item.incomplete),extra=items.some(item=>!item.incomplete&&!isDailyPlanSession(item));
+    let text="PROGRAMMATO",cls="planned";
+    if(completed&&extra){text="COMPLETATO + EXTRA";cls="done"}else if(completed){text="COMPLETATO";cls="done"}else if(incomplete){text="INCOMPLETO";cls="warn"}else if(extra){text="EXTRA REGISTRATO";cls="extra"}else if(date<new Date(new Date().setHours(0,0,0,0))){text="SALTATO / RIPOSO";cls="muted"}else if(index===dayIndex()){text="OGGI";cls="today"}
+    const badge=document.createElement("div");badge.className=`day-status ${cls}`;badge.textContent=text;card.appendChild(badge);
+  });
+}
+
+function installPracticalStyles(){
+  const style=document.createElement("style");style.textContent='.day-status{margin-top:8px;padding:5px 7px;border-radius:8px;font-size:.55rem;font-weight:900;letter-spacing:.06em;text-align:center;border:1px solid var(--line);color:var(--muted)}.day-status.done{color:var(--green);background:var(--greenbg)}.day-status.warn{color:var(--yellow);background:var(--yellowbg)}.day-status.extra{color:var(--blue);background:var(--bluebg)}body.simple-mode #calibrationCard,body.simple-mode .formula-note,body.simple-mode #masterCoachCard{display:none!important}';document.head.appendChild(style);
+}
+
+function sessionIdentity(session){return String(session?.sourceSessionId||session?.id||`${session?.date||""}|${session?.type||""}|${session?.durationSec||0}`)}
+
+function installSafeImport(){
+  const old=document.getElementById("importFile");if(!old)return;const input=old.cloneNode(true);old.replaceWith(input);
+  input.addEventListener("change",event=>{const file=event.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=async()=>{try{const parsed=JSON.parse(reader.result),imported=parsed?.data&&parsed?.meta?parsed.data:parsed;if(parsed?.meta?.dataHash&&parsed.meta.dataHash!==storageHash(imported))throw new Error("Checksum non valido");const incoming=norm(imported),dates=incoming.sessions.map(s=>Date.parse(s.date||0)).filter(Number.isFinite).sort((a,b)=>a-b);const range=dates.length?`${new Date(dates[0]).toLocaleDateString("it-IT")} – ${new Date(dates.at(-1)).toLocaleDateString("it-IT")}`:"nessuna data";const choice=await practicalChoice("Anteprima backup",`${incoming.sessions.length} sessioni · periodo ${range} · schema ${incoming.schemaVersion}. Unisci conserva i dati attuali ed evita i duplicati; Sostituisci usa interamente il backup.`,[{value:"merge",label:"Unisci senza duplicati",className:"btn"},{value:"replace",label:"Sostituisci tutto",className:"btn danger"},{value:"cancel",label:"Annulla",className:"btn secondary"}]);if(choice==="cancel")return;let result=incoming;if(choice==="merge"){const current=data(),seen=new Set(current.sessions.map(sessionIdentity));result={...current,sessions:[...current.sessions,...incoming.sessions.filter(session=>!seen.has(sessionIdentity(session)))],trash:[...(current.trash||[]),...(incoming.trash||[])]};result.sessions.sort((a,b)=>Date.parse(a.date||0)-Date.parse(b.date||0));rebuildDerivedSessionHistories(result)}save(norm(result));dashboard(true);renderProgress();renderTests();renderLibrary();renderPhysioPreview();updateFollowupUI();notify(`Backup ${choice==="merge"?"unito":"ripristinato"} correttamente.`)}catch(err){console.warn("Import:",err);notify("File non valido, danneggiato o non compatibile.","error")}finally{event.target.value=""}};reader.readAsText(file)});
+}
+
+const renderWeekBase=renderWeek;
+renderWeek=function(){renderWeekBase();decorateWeekStatuses()};
+
+const registerPwaBase=registerPwa;
+registerPwa=async function(){const registration=await registerPwaBase();if(registration){try{await registration.update()}catch{}if(registration.waiting)notify("Aggiornamento disponibile: chiudi e riapri l’app al termine della sessione.")}return registration};
+
+/* =========================================================
    START
    ========================================================= */
 
@@ -14181,6 +14469,12 @@ document.addEventListener(
       );
     protectDataBeforeMigration();
     await hydrate();
+
+    installPracticalStyles();
+    installSafeImport();
+    installExtraSessionGuards();
+    const beforeTrash=(data().trash||[]).length,cleaned=purgeExpiredTrash(data());
+    if((cleaned.trash||[]).length!==beforeTrash)save(cleaned);
 
     const manualDate=document.getElementById("manualActivityDate");
     if(manualDate){
