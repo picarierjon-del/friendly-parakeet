@@ -1671,6 +1671,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
         <option value="rehab">Spalla e scapola</option>
         <option value="mobility">Mobilità</option>
         <option value="stretching">Just Stretching</option>
+        <option value="calisthenics">Calisthenics</option>
         <option value="release">Palla e roller</option>
         <option value="military">Military</option>
         <option value="legs">Gambe</option>
@@ -2210,6 +2211,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <button class="hub-card accent-purple" onclick="showPage('running')"><svg class="ui-icon"><use href="#i-run"></use></svg><span><strong>Endurance & Cycling</strong><small>Corsa, Hyrox, MTB, bici da corsa e cyclette</small></span><b>→</b></button>
     <button class="hub-card accent-orange" onclick="showPage('work')"><svg class="ui-icon"><use href="#i-work"></use></svg><span><strong>Modalità lavoro</strong><small>Pre-turno, micro-reset e decompressione</small></span><b>→</b></button>
     <button class="hub-card accent-green" onclick="showPage('stretching')"><svg class="ui-icon"><use href="#i-heart"></use></svg><span><strong>Just Stretching</strong><small>8–25 minuti di mobilità generale dolce e mantenimento</small></span><b>→</b></button>
+    <button class="hub-card accent-blue" onclick="showPage('calisthenics')"><svg class="ui-icon"><use href="#i-train"></use></svg><span><strong>Calisthenics</strong><small>Parte alta, parte bassa, addome e total body progressivi</small></span><b>→</b></button>
   </div>
 </section>
 
@@ -2230,6 +2232,47 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <div id="stretchingPreview" class="workout-list"></div>
     <button id="startStretchingBtn" class="btn purple full" style="margin-top:12px" onclick="startJustStretching()">Avvia Just Stretching</button>
     <p class="note">Interrompi in caso di fitta, dolore articolare, nuovi sintomi o peggioramento. Questa routine non sostituisce una valutazione professionale.</p>
+  </div>
+</section>
+
+<section id="page-calisthenics" class="hidden">
+  <div class="card hero compact-hero">
+    <div class="eyebrow">Calisthenics · corpo libero progressivo</div>
+    <h2>Allenati quando lo decidi tu</h2>
+    <p class="small">Modulo separato dal piano giornaliero: scegli focus, livello e durata. Il check spalla adatta soltanto gli esercizi della parte alta.</p>
+  </div>
+  <div class="card">
+    <div class="segment" id="calisthenicsSegments">
+      <button onclick="selectCalisthenics('upper',this)">Parte alta</button>
+      <button onclick="selectCalisthenics('lower',this)">Parte bassa</button>
+      <button onclick="selectCalisthenics('core',this)">Addome & core</button>
+      <button class="active" onclick="selectCalisthenics('total',this)">Total body</button>
+    </div>
+    <div class="grid2" style="margin-bottom:10px">
+      <div class="field">
+        <label>Livello</label>
+        <select id="calisthenicsLevel" onchange="renderCalisthenicsPreview()">
+          <option value="auto">Automatico prudenziale</option>
+          <option value="1">1 · Reset</option>
+          <option value="2">2 · Foundation</option>
+          <option value="3">3 · Build</option>
+          <option value="4">4 · Performance</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Durata indicativa</label>
+        <select id="calisthenicsMinutes" onchange="renderCalisthenicsPreview()">
+          <option value="15">15 min</option>
+          <option value="25" selected>25 min</option>
+          <option value="35">35 min</option>
+          <option value="45">45 min</option>
+        </select>
+      </div>
+    </div>
+    <div id="calisthenicsSafety" class="info" style="margin-bottom:10px">Completa il check giornaliero: il modulo proteggerà la spalla senza modificare il piano.</div>
+    <div id="calisthenicsPreview" class="workout-list"></div>
+    <button id="startCalisthenicsBtn" class="btn blue full" style="margin-top:12px" onclick="startCalisthenics()">Avvia Calisthenics</button>
+    <p class="note">Qualità prima delle ripetizioni. Interrompi se il dolore supera 2–3/10, compare una fitta o peggiorano i sintomi. Il modulo non sostituisce una valutazione professionale.</p>
   </div>
 </section>
 
@@ -2264,7 +2307,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 <nav class="nav" aria-label="Navigazione principale">
   <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
   <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
-  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
+  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
   <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
   <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
 </nav>
@@ -2481,7 +2524,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "16.5.0-PICARI-JUST-STRETCHING";
+  "16.6.0-PICARI-CALISTHENICS";
 
 const SCHEMA_VERSION =
   20;
@@ -2573,6 +2616,7 @@ let militaryLevel = "recovery";
 let runType = "easy";
 let physioRoutine = "workout1";
 let stretchingRoutine = "quick";
+let calisthenicsFocus = "total";
 
 let wakeLock = null;
 let wakeLockWanted = false;
@@ -4359,6 +4403,127 @@ async function startJustStretching(){
   const list=buildStretchingRoutine();
   const dailyRecovery=!dailyPlanSessionToday()&&effectiveSessionType()==="recovery";
   startWorkout(list,`Just Stretching · ${stretchingRoutineLabel(stretchingRoutine)}`,false,dailyRecovery?"daily-plan":"extra");
+}
+
+/* =========================================================
+   CALISTHENICS · MODULO MANUALE SEPARATO
+   ========================================================= */
+
+[
+  ["caliWarm","Riscaldamento articolare","2 min",120,"🔥","calisthenics","Marcia leggera, anche e caviglie. Braccia morbide e nessun movimento forzato."],
+  ["caliScap","Controllo scapolare in piedi","2×8",90,"🪽","calisthenics","Muovi le scapole lentamente senza alzare le spalle e senza cercare ampiezza."],
+  ["caliWallPush","Push-up al muro","2×8–12",150,"🧱","calisthenics","Corpo allineato, gomiti 30–45° e profondità completamente indolore."],
+  ["caliInclinePush","Push-up inclinato","3×6–10",180,"↗️","calisthenics","Usa un piano stabile e alto; scapole controllate e nessuna fitta."],
+  ["caliKneePush","Push-up sulle ginocchia","3×6–10",180,"🫸","calisthenics","Linea ginocchia-bacino-spalle stabile. Riduci la discesa se perdi controllo."],
+  ["caliFloorPush","Push-up a terra","3×6–12",210,"💪","calisthenics","Tecnica pulita, gomiti non larghi e arresto prima di dolore o compensi."],
+  ["caliPlus","Push-up plus al muro","2×10",120,"🪽","calisthenics","Gomiti tesi: allontana dolcemente le scapole, poi ritorna senza crollare."],
+  ["caliTowelRow","Row isometrico con asciugamano","4×12 sec",120,"🧻","calisthenics","Tira moderatamente l’asciugamano mantenendo collo e trapezi rilassati."],
+  ["caliSquat","Squat controllato","3×10",180,"🦵","calisthenics","Piedi stabili, discesa controllata e ginocchia in linea."],
+  ["caliTempoSquat","Squat a tempo","3×10 · 3 sec discesa",210,"⏱️","calisthenics","Scendi in tre secondi, breve pausa e risali senza perdere l’allineamento."],
+  ["caliReverseLunge","Affondo indietro","3×8 per lato",210,"↩️","calisthenics","Passo stabile, busto alto e ritorno controllato."],
+  ["caliSplitSquat","Split squat","3×8 per lato",210,"🦿","calisthenics","Posizione stabile, discesa verticale e ampiezza confortevole."],
+  ["caliBridge","Glute bridge","3×12",150,"🌉","calisthenics","Spingi dai talloni e termina senza inarcare la schiena."],
+  ["caliSingleBridge","Bridge monopodalico assistito","3×6 per lato",180,"🌉","calisthenics","Mantieni il bacino livellato; appoggia entrambi i piedi se perdi controllo."],
+  ["caliCalf","Calf raise","3×15",120,"⬆️","calisthenics","Salita, pausa breve e discesa lenta con appoggio stabile."],
+  ["caliWallSit","Wall sit","3×30 sec",150,"🧱","calisthenics","Schiena appoggiata, respirazione libera e angolo del ginocchio confortevole."],
+  ["caliBrace","Brace addominale in piedi","5×10 sec",90,"🛡️","calisthenics","Espira e crea una tensione moderata senza trattenere il respiro."],
+  ["caliDeadBug","Dead bug","3×6 per lato",180,"🪲","calisthenics","Schiena neutra, espira durante l’estensione e riduci la leva se serve."],
+  ["caliHeelTap","Heel tap","3×10 alternati",150,"🦶","calisthenics","Mantieni il controllo lombare e muovi una gamba alla volta."],
+  ["caliBirdDog","Bird dog","3×6 per lato",180,"🐕","calisthenics","Bacino stabile; il braccio può restare basso se la spalla è sensibile."],
+  ["caliSideKnee","Side plank sulle ginocchia","3×20 sec per lato",180,"📐","calisthenics","Spalla lontana dall’orecchio. Sospendi se senti carico nella zona sensibile."],
+  ["caliPlankWall","Plank al muro","3×25 sec",150,"🧱","calisthenics","Corpo allineato e spinta leggera sul muro senza irrigidire il collo."],
+  ["caliPlankIncline","Plank inclinato","3×25 sec",150,"📐","calisthenics","Appoggio stabile e alto; interrompi se la spalla perde comfort."],
+  ["caliPlankFloor","Plank a terra","3×25 sec",150,"📐","calisthenics","Addome attivo e scapole controllate, senza cedere tra le spalle."],
+  ["caliMarch","Marcia atletica","3×40 sec",150,"🎒","calisthenics","Postura alta, appoggi silenziosi e ritmo sostenibile."],
+  ["caliStepJack","Step jack senza salto","3×40 sec",150,"⚡","calisthenics","Passi laterali fluidi; mantieni le braccia basse se la spalla è affaticata."],
+  ["caliFinish","Defaticamento e respiro","2 min",120,"✨","calisthenics","Cammina lentamente, rilassa mandibola e spalle e verifica come ti senti."]
+].forEach(v=>{if(!EX[v[0]])add(...v)});
+
+const calisthenicsPlans={
+  upper:{
+    1:["caliWarm","caliScap","caliWallPush","caliPlus","caliTowelRow","caliBrace","caliFinish"],
+    2:["caliWarm","caliScap","caliInclinePush","caliPlus","caliTowelRow","caliDeadBug","caliFinish"],
+    3:["caliWarm","caliScap","caliKneePush","caliTowelRow","caliPlankIncline","caliDeadBug","caliFinish"],
+    4:["caliWarm","caliScap","caliFloorPush","caliTowelRow","caliPlankFloor","caliBirdDog","caliFinish"]
+  },
+  lower:{
+    1:["caliWarm","caliSquat","caliBridge","caliCalf","caliBrace","caliFinish"],
+    2:["caliWarm","caliSquat","caliReverseLunge","caliBridge","caliCalf","caliDeadBug","caliFinish"],
+    3:["caliWarm","caliTempoSquat","caliSplitSquat","caliSingleBridge","caliCalf","caliHeelTap","caliFinish"],
+    4:["caliWarm","caliTempoSquat","caliSplitSquat","caliSingleBridge","caliWallSit","caliStepJack","caliDeadBug","caliFinish"]
+  },
+  core:{
+    1:["caliWarm","caliBrace","caliDeadBug","caliBirdDog","caliPlankWall","caliBridge","caliFinish"],
+    2:["caliWarm","caliDeadBug","caliHeelTap","caliBirdDog","caliPlankIncline","caliBridge","caliFinish"],
+    3:["caliWarm","caliDeadBug","caliHeelTap","caliBirdDog","caliSideKnee","caliPlankIncline","caliFinish"],
+    4:["caliWarm","caliDeadBug","caliHeelTap","caliBirdDog","caliSideKnee","caliPlankFloor","caliMarch","caliFinish"]
+  },
+  total:{
+    1:["caliWarm","caliSquat","caliWallPush","caliTowelRow","caliBridge","caliDeadBug","caliMarch","caliFinish"],
+    2:["caliWarm","caliSquat","caliReverseLunge","caliInclinePush","caliTowelRow","caliBridge","caliDeadBug","caliMarch","caliFinish"],
+    3:["caliWarm","caliTempoSquat","caliSplitSquat","caliKneePush","caliTowelRow","caliSingleBridge","caliHeelTap","caliStepJack","caliFinish"],
+    4:["caliWarm","caliTempoSquat","caliSplitSquat","caliFloorPush","caliTowelRow","caliSingleBridge","caliPlankFloor","caliStepJack","caliFinish"]
+  }
+};
+
+function calisthenicsFocusLabel(focus){return({upper:"Parte alta",lower:"Parte bassa",core:"Addome & core",total:"Total body"})[focus]||"Total body"}
+function calisthenicsLevelLabel(level){return({1:"Reset",2:"Foundation",3:"Build",4:"Performance"})[level]||"Foundation"}
+
+function autoCalisthenicsLevel(){
+  const athlete=currentAthleteLevel();
+  let level=athlete==="advanced"?3:athlete==="beginner"?1:2;
+  const favorable=data().sessions.filter(s=>!s.incomplete&&s.trainingCategory==="calisthenics"&&s.recommendationFeedback!=="too_hard"&&Number(s.postPain??s.prePain??0)-Number(s.prePain??0)<=1).length;
+  if(favorable>=6)level++;
+  if(selectedPain>=3||mode==="recovery")level=1;
+  else if(mode==="safe"||shoulderReadiness<70)level=Math.min(level,2);
+  return Math.max(1,Math.min(4,level));
+}
+
+function selectedCalisthenicsLevel(){
+  const value=document.getElementById("calisthenicsLevel")?.value||"auto";
+  return value==="auto"?autoCalisthenicsLevel():Math.max(1,Math.min(4,Number(value)||1));
+}
+
+function buildCalisthenicsWorkout(focus=calisthenicsFocus,requestedLevel=selectedCalisthenicsLevel(),minutes=Number(document.getElementById("calisthenicsMinutes")?.value||25)){
+  const validFocus=calisthenicsPlans[focus]?focus:"total";
+  let level=Math.max(1,Math.min(4,Number(requestedLevel)||1));
+  if((validFocus==="upper"||validFocus==="total")&&(selectedPain>=3||mode==="recovery"))level=1;
+  else if((validFocus==="upper"||validFocus==="total")&&(mode==="safe"||shoulderReadiness<70))level=Math.min(level,2);
+  let ids=[...calisthenicsPlans[validFocus][level]];
+  if(selectedPain>=4&&(validFocus==="upper"||validFocus==="total"))return [];
+  if(selectedPain===3)ids=ids.map(id=>({caliInclinePush:"caliWallPush",caliKneePush:"caliWallPush",caliFloorPush:"caliWallPush",caliPlankIncline:"caliPlankWall",caliPlankFloor:"caliPlankWall",caliSideKnee:"caliBrace"})[id]||id);
+  const duration=Math.max(15,Math.min(45,Number(minutes)||25));
+  const factor=duration<=15?.72:duration<=25?1:duration<=35?1.28:1.55;
+  const rounds=duration>=45?" · volume esteso":duration>=35?" · volume medio+":"";
+  return unique(ids).map(id=>{
+    const source=EX[id];
+    return {...source,s:Math.max(45,Math.round(Number(source.s||90)*factor)),d:`${source.d}${rounds}`,reason:`→ Calisthenics L${level} · ${calisthenicsLevelLabel(level)}`};
+  });
+}
+
+function renderCalisthenicsPreview(){
+  const target=document.getElementById("calisthenicsPreview");if(!target)return;
+  const safety=document.getElementById("calisthenicsSafety"),button=document.getElementById("startCalisthenicsBtn");
+  const level=selectedCalisthenicsLevel();
+  const list=buildCalisthenicsWorkout(calisthenicsFocus,level);
+  render(target,list);
+  const shoulderFocus=["upper","total"].includes(calisthenicsFocus);
+  if(blocked){safety.className="warning";safety.textContent="Modulo bloccato: i segnali inseriti richiedono una valutazione professionale prima di allenarti.";button.disabled=true}
+  else if(selectedPain===null){safety.className="info";safety.textContent=`${calisthenicsFocusLabel(calisthenicsFocus)} · livello ${level} ${calisthenicsLevelLabel(level)}. Completa il check prima di iniziare.`;button.disabled=false}
+  else if(selectedPain>=4&&shoulderFocus){safety.className="warning";safety.textContent="Dolore elevato: Parte alta e Total body non sono disponibili oggi. Puoi scegliere Parte bassa o Addome & core se non ci sono altri segnali di blocco.";button.disabled=true}
+  else{safety.className="info";safety.textContent=`${calisthenicsFocusLabel(calisthenicsFocus)} · livello effettivo ${level} ${calisthenicsLevelLabel(level)}. ${selectedPain===3&&shoulderFocus?"Le spinte e gli appoggi sono stati regressi automaticamente.":"Modulo manuale separato: non modifica la seduta del piano."}`;button.disabled=false}
+}
+
+function selectCalisthenics(focus,button){calisthenicsFocus=calisthenicsPlans[focus]?focus:"total";segment(button);renderCalisthenicsPreview()}
+
+async function startCalisthenics(){
+  if(!requiredCheck()||blocked)return;
+  if(selectedPain>=4&&["upper","total"].includes(calisthenicsFocus)){notify("Con dolore elevato scegli Parte bassa o Addome & core.","error");return}
+  if(todaySessionSummary().sessions.length&&!(await allowExtraSession("Calisthenics")))return;
+  const level=selectedCalisthenicsLevel();
+  const list=buildCalisthenicsWorkout(calisthenicsFocus,level);
+  if(!list.length){notify("Nessuna routine Calisthenics disponibile con il check attuale.","error");return}
+  startWorkout(list,`Calisthenics · ${calisthenicsFocusLabel(calisthenicsFocus)} · L${level}`,false,"extra");
 }
 
 /* =========================================================
@@ -8392,7 +8557,7 @@ function systemFatigueModel(){
       items.forEach(x=>{const zone=zoneFor(String(x.category||EX[x.id]?.c||""));weights[zone]+=1});
     }else if(/cycling|bike|bici|cyclette|mtb/.test(type)){weights.cardio+=.65;weights.lower+=.30;weights.upper+=.05}
     else if(/run|corsa|walk|cammin|swim|nuoto/.test(type)){weights.cardio+=.68;weights.lower+=.27;weights.upper+=.05}
-    else if(/strength|forza|legs|military|hyrox/.test(type)){weights.lower+=.48;weights.upper+=.30;weights.cardio+=.22}
+    else if(/strength|forza|legs|military|hyrox|calisthenics/.test(type)){weights.lower+=.48;weights.upper+=.30;weights.cardio+=.22}
     else if(/rehab|shoulder|spalla|physio|fisio/.test(type)){weights.upper+=.72;weights.systemic+=.18;weights.cardio+=.10}
     else weights.systemic+=1;
     const total=Math.max(.01,Object.values(weights).reduce((a,b)=>a+b,0));
@@ -9034,6 +9199,7 @@ function showPage(name){
     "settings",
     "training",
     "stretching",
+    "calisthenics",
     "more"
   ]
   .forEach(
@@ -9094,6 +9260,10 @@ function showPage(name){
 
   if(name==="stretching"){
     renderStretchingPreview();
+  }
+
+  if(name==="calisthenics"){
+    renderCalisthenicsPreview();
   }
 
   renderPreviews();
@@ -9229,6 +9399,8 @@ function previewFit(
 }
 
 function renderPreviews(){
+
+  renderCalisthenicsPreview();
 
   let s = [
     ...shoulder[
@@ -11350,7 +11522,8 @@ function saveCompletedSession(){
       currentType,
 
     trainingCategory:
-      /Just Stretching/i.test(String(currentType||""))?"stretching":null,
+      /Just Stretching/i.test(String(currentType||""))?"stretching":
+      /Calisthenics/i.test(String(currentType||""))?"calisthenics":null,
 
     generatedSessionType:
       generatedSessionType,
@@ -12720,7 +12893,7 @@ function renderWeeklyBalance(){
   const recent=data().sessions.filter(session=>masterDaysAgo(session.date)>=0&&masterDaysAgo(session.date)<7);
   const daysFor=predicate=>new Set(recent.filter(predicate).map(session=>session.day||localDay(new Date(session.date)))).size;
   const aerobic=recent.filter(session=>/run|corsa|walk|cammin|cycling|bike|bici|cyclette|mtb|swim|nuoto|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`)).reduce((sum,session)=>sum+Number(session.durationSec||0)/60,0);
-  const strengthDays=daysFor(session=>/strength|forza|legs|military|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
+  const strengthDays=daysFor(session=>/strength|forza|legs|military|hyrox|calisthenics/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
   const recoveryDays=daysFor(session=>/recovery|recupero|mobility|mobilità|stretch|rehab|fisio|physio/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
   document.getElementById("aerobicBalance").textContent=`${Math.round(aerobic)} min`;document.getElementById("strengthBalance").textContent=`${strengthDays} giorni`;document.getElementById("recoveryBalance").textContent=`${recoveryDays} giorni`;
   document.getElementById("aerobicBalanceBar").style.width=`${masterClamp(aerobic/150*100)}%`;document.getElementById("strengthBalanceBar").style.width=`${masterClamp(strengthDays/2*100)}%`;document.getElementById("recoveryBalanceBar").style.width=`${masterClamp(recoveryDays/2*100)}%`;
@@ -13915,6 +14088,11 @@ function runSelfTests(){
   test("esercizi stretching",()=>["stretchWarm","stretchOpenBook","stretchHipFlexor","stretchHamstring","stretchCalf","stretchFinish"].every(id=>EX[id]?.c==="stretching"));
   test("adattamento dolore stretching",()=>{const previous=selectedPain;selectedPain=4;const minimal=buildStretchingRoutine("full").length;selectedPain=previous;return minimal===4});
   test("recovery consiglia stretching",()=>SESSION_LABELS.stretching==="Just Stretching"&&Array.isArray(plan("stretching")));
+  test("modulo Calisthenics",()=>document.getElementById("page-calisthenics")&&document.getElementById("calisthenicsPreview")&&typeof startCalisthenics==="function");
+  test("focus Calisthenics",()=>["upper","lower","core","total"].every(focus=>[1,2,3,4].every(level=>Array.isArray(calisthenicsPlans[focus][level])&&calisthenicsPlans[focus][level].length>=6)));
+  test("esercizi Calisthenics",()=>["caliWallPush","caliSquat","caliDeadBug","caliFloorPush","caliFinish"].every(id=>EX[id]?.c==="calisthenics"));
+  test("Calisthenics separato dal piano",()=>!JSON.stringify(PERIODIZATION).toLowerCase().includes("calisthenics")&&!getWeekTemplate().includes("calisthenics"));
+  test("protezione spalla Calisthenics",()=>{const oldPain=selectedPain,oldMode=mode;selectedPain=3;mode="safe";const ids=buildCalisthenicsWorkout("upper",4,25).map(x=>x.id);selectedPain=oldPain;mode=oldMode;return ids.includes("caliWallPush")&&!ids.includes("caliFloorPush")});
   test("calendario modificabile",()=>typeof setWeekOverride==="function"&&typeof sessionTypeForDay==="function");
   test("protezione migrazione",()=>typeof protectDataBeforeMigration==="function"&&!!PRE_MIGRATION_BACKUP_KEY);
   test("ripristino sessione",()=>typeof restoreSessionDraftIfAvailable==="function"&&!!DRAFT_KEY);
@@ -14393,7 +14571,7 @@ function saveCurrentAsIncomplete(){
   if(!sessionStartedAt||!currentWorkout.length){closeSession();return}
   const d=data(),now=new Date(),durationSec=Math.max(0,Math.round((Date.now()-sessionStartedAt)/1000));
   const completionRate=Math.min(99,Math.round(completedSteps.length/currentWorkout.length*100));
-  d.sessions.push({id:crypto.randomUUID?.()||`incomplete-${Date.now()}`,sourceSessionId:activeSessionId,date:now.toISOString(),day:localDay(now),type:`${currentType} · incompleta`,trainingCategory:/Just Stretching/i.test(String(currentType||""))?"stretching":null,generatedSessionType,sessionOrigin:currentSessionOrigin,incomplete:true,completionRate,durationSec,activeDurationSec:completedSteps.filter(step=>!step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),recoveryDurationSec:completedSteps.filter(step=>step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),estimatedDurationSec:workoutSeconds(currentWorkout),rpe:null,sessionLoad:0,prePain:selectedPain,postPain:null,nextDayReaction:null,followupRequired:false,progressionApplied:true,mode,readiness,shoulderReadiness,performanceReadiness,prescribedWorkout:currentWorkout.map((e,index)=>({index,id:e.id||"",title:e.t||"",dose:e.d||"",seconds:Number(e.s||0),category:e.c||""})),completedSteps:[...completedSteps],appVersion:APP_VERSION,formulaVersion:FORMULA_VERSION});
+  d.sessions.push({id:crypto.randomUUID?.()||`incomplete-${Date.now()}`,sourceSessionId:activeSessionId,date:now.toISOString(),day:localDay(now),type:`${currentType} · incompleta`,trainingCategory:/Just Stretching/i.test(String(currentType||""))?"stretching":/Calisthenics/i.test(String(currentType||""))?"calisthenics":null,generatedSessionType,sessionOrigin:currentSessionOrigin,incomplete:true,completionRate,durationSec,activeDurationSec:completedSteps.filter(step=>!step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),recoveryDurationSec:completedSteps.filter(step=>step.recoveryStep).reduce((sum,step)=>sum+Number(step.elapsedSec||0),0),estimatedDurationSec:workoutSeconds(currentWorkout),rpe:null,sessionLoad:0,prePain:selectedPain,postPain:null,nextDayReaction:null,followupRequired:false,progressionApplied:true,mode,readiness,shoulderReadiness,performanceReadiness,prescribedWorkout:currentWorkout.map((e,index)=>({index,id:e.id||"",title:e.t||"",dose:e.d||"",seconds:Number(e.s||0),category:e.c||""})),completedSteps:[...completedSteps],appVersion:APP_VERSION,formulaVersion:FORMULA_VERSION});
   rebuildDerivedSessionHistories(d);save(d);clearSessionDraft();activeSessionId=null;sessionStartedAt=null;currentWorkout=[];completedSteps=[];currentSessionOrigin="extra";closeSession();dashboard(true);notify(`Sessione salvata come incompleta (${completionRate}%).`);
 }
 
