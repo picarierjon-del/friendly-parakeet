@@ -1110,6 +1110,23 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+/* V20.4 · Adaptive performance interface */
+:root{--bg:#050a13;--panel:rgba(15,27,45,.9);--panel2:#14253b;--line:rgba(151,181,220,.18);--green:#61f5bd;--blue:#71d5ff;--purple:#c5a7ff;--radius:24px;--shadow:0 24px 64px rgba(0,0,0,.32)}
+body{background:radial-gradient(ellipse at 8% 0%,rgba(97,245,189,.14),transparent 32rem),radial-gradient(ellipse at 95% 12%,rgba(113,213,255,.15),transparent 34rem),linear-gradient(155deg,#050a13,#0a1424 55%,#060b15);}
+.card,.hub-card,.wow-pulse-card,.stat{border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(18px);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.card{border-radius:26px;background:linear-gradient(145deg,rgba(19,35,55,.94),rgba(9,20,34,.94))}
+.card:focus-within{border-color:rgba(97,245,189,.42)}
+.btn,button{min-height:44px;border-radius:14px;transition:transform .15s ease,filter .15s ease}
+.btn:active,button:active{transform:scale(.985)}
+.field input,.field select,select,input,textarea{border-radius:13px;border-color:rgba(151,181,220,.22)}
+:focus-visible{outline:3px solid rgba(113,213,255,.85);outline-offset:3px}
+.wow-deck{overflow:hidden;border:1px solid rgba(97,245,189,.25);background:radial-gradient(circle at 80% 20%,rgba(113,213,255,.12),transparent 25rem),linear-gradient(130deg,rgba(17,42,57,.98),rgba(9,18,34,.98))}
+.wow-title{letter-spacing:-.045em;line-height:1.02}
+.eyebrow{letter-spacing:.14em}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media(max-width:600px){.card{border-radius:20px;padding:16px}.wow-actions{display:grid;grid-template-columns:1fr}.wow-actions .btn{width:100%}.grid3{gap:10px}.topbar{margin:0 8px;border-radius:16px}}
+
 </style>
 </head>
 
@@ -1317,6 +1334,18 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <div id="v20BodyHistory" class="small" style="margin-top:10px" aria-live="polite">Nessuna misurazione registrata.</div>
   </details>
   <p class="formula-note" style="margin-top:12px">Regola V20: la raccomandazione è prudenziale e trasparente; non aumenta automaticamente il carico. Il coach lascia all’atleta la decisione finale.</p>
+</div>
+
+<div class="card" id="v204DailyGuide" aria-live="polite">
+  <div class="eyebrow">V20.4 · Piano d'azione</div>
+  <h3 id="v204GuideTitle">Il prossimo passo migliore</h3>
+  <p class="small" id="v204GuideText">Il suggerimento viene aggiornato con i dati registrati. Non sostituisce il tuo giudizio.</p>
+  <div class="grid3" style="margin-top:12px">
+    <div class="stat"><strong id="v204LoadStatus">—</strong><span>CARICO RECENTE</span></div>
+    <div class="stat"><strong id="v204GoalStatus">—</strong><span>OBIETTIVO</span></div>
+    <div class="stat"><strong id="v204StorageStatus">—</strong><span>SALVATAGGIO</span></div>
+  </div>
+  <button type="button" class="btn secondary full" style="margin-top:12px" onclick="showPage('progress')">Controlla i progressi</button>
 </div>
 
 <div class="card decision-card expert-only" id="decisionCard">
@@ -2619,7 +2648,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "20.3.0-ADAPTIVE-EXERCISE-ENGINE";
+  "20.4.0-PERFORMANCE-UX";
 // V20.1: profilo obiettivi unificato, priorità esplicita, onboarding completo, 30–90 minuti, niente duplicato dimagrimento/definizione.
 
 const SCHEMA_VERSION =
@@ -14411,7 +14440,22 @@ function v20GetWeeklySummary(){
   if(metrics.length>=2){const delta=Number(metrics[0].weight)-Number(metrics[1].weight);trend=`${delta>0?"+":""}${delta.toFixed(1)} kg`;}
   return {sessions:sessions.length,planned,minutes:Math.round(minutes),avgRpe,status,title,advice,trend,metrics};
 }
+function renderV204DailyGuide(){
+  const d=data(),settings=d.settings||{},sessions=(d.sessions||[]).filter(s=>!s.incomplete&&Number(s.durationSec||s.activeDurationSec||0)>0&&Date.now()-Date.parse(s.date||"")<=7*86400000&&Date.now()-Date.parse(s.date||"")>=-3600000);
+  const recent=sessions.slice(-3),rpes=recent.map(s=>Number(s.rpe)).filter(n=>Number.isFinite(n)&&n>=1&&n<=10),avg=rpes.length?rpes.reduce((a,b)=>a+b,0)/rpes.length:null;
+  const el=id=>document.getElementById(id);let title="Segui il piano senza fretta",msg="Completa il check quotidiano e scegli la seduta proposta in base a recupero, tempo e attrezzatura.";
+  if(sessions.length>=Number(settings.days||4)){title="Hai raggiunto il volume pianificato";msg="Dai priorità al recupero e alla qualità. Non aggiungere lavoro solo per aumentare il totale settimanale."}
+  else if(avg!==null&&avg>=8){title="Riduci l'intensità se serve";msg="Gli ultimi allenamenti sono stati percepiti come impegnativi. Considera una seduta facile o mobilità se la fatica persiste."}
+  else if(recent.length===0){title="Riparti da una seduta sostenibile";msg="Non risultano allenamenti recenti completi. Inizia dal check e usa una sessione compatibile con il tempo che hai."}
+  if(el("v204GuideTitle"))el("v204GuideTitle").textContent=title;
+  if(el("v204GuideText"))el("v204GuideText").textContent=msg;
+  if(el("v204LoadStatus"))el("v204LoadStatus").textContent=avg===null?"N/D":avg.toFixed(1)+"/10";
+  if(el("v204GoalStatus"))el("v204GoalStatus").textContent=String(settings.days||4)+" sedute";
+  if(el("v204StorageStatus"))el("v204StorageStatus").textContent=runtimeHealth?.lastSaveOk===false?"Controlla":"Locale";
+  return {sessions:sessions.length,avgRpe:avg,title,msg};
+}
 function renderV20Coach(){
+  renderV204DailyGuide();
   const el=id=>document.getElementById(id),summary=v20GetWeeklySummary();
   if(!el("v20CoachCard"))return summary;
   if(el("v20CoachTitle"))el("v20CoachTitle").textContent=summary.title;
@@ -14503,6 +14547,8 @@ function runSelfTests(){
   test("V17 storico conserva RPE dolore tecnica",()=>markStepCompleted.toString().includes("blockRPE")&&markStepCompleted.toString().includes("blockPain")&&markStepCompleted.toString().includes("technique")&&saveCompletedSession.toString().includes("step.technique"));
   test("V17 controllo navigazione palestra",()=>document.getElementById("page-gym")&&typeof showPage==="function"&&showPage.toString().includes("gym"));
   runtimeHealth.tests=tests;
+  test("V20.4 guida adattiva presente",()=>typeof renderV204DailyGuide==="function"&&["v204GuideTitle","v204GuideText","v204LoadStatus","v204GoalStatus","v204StorageStatus"].every(id=>document.getElementById(id)));
+  test("V20.4 stile accessibile",()=>document.querySelector("style")?.textContent.includes("prefers-reduced-motion")&&document.querySelector("style")?.textContent.includes(":focus-visible"));
   return tests;
 }
 
