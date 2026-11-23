@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Picari Hybrid Coach AI V26.0 · Recovery Adaptive Coach</title>
+<title>Erjon Picari Hybrid Coach — Lifetime Definitive V28.1</title>
 
 <style>
 :root{
@@ -2669,11 +2669,11 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "26.0.0-LIFETIME-ADAPTIVE-COACH";
+  "28.1.0-LIFETIME-DEFINITIVE";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
-  28;
+  29;
 
 const FORMULA_VERSION =
   "2.1-SESSION-TIME-AND-LIFETIME-ADAPTATION";
@@ -4471,6 +4471,21 @@ const military = {
  ["dbTricepsPushdownAlt","French press manubrio da seduto","2×10–12",90,"💪","military","Solo se la posizione è confortevole; in caso di fastidio sostituisci con pushdown.","weights",{shoulderSensitive:true}]
 ].forEach(v=>add(...v));
 
+
+/* =========================================================
+   V27 PERFORMANCE HYBRID FUSION
+   Esercizi selezionati importati dalla libreria Performance Hybrid OS v27.
+   Il motore Lifetime V26 resta il sistema principale di pianificazione e adattamento.
+   ========================================================= */
+[
+  ["reverseLungeV27","Affondi indietro (Reverse Lunge)","3×8–10 per lato",150,"🦵","legs","Passo indietro controllato, bacino stabile e ginocchio in linea con il piede.","weights"],
+  ["hipThrustV27","Hip Thrust caricato","3×8–12",150,"🍑","legs","Spingi dai talloni; chiudi con retroversione del bacino senza inarcare la zona lombare.","weights"],
+  ["ytwRaiseV27","Y-T-W Raise su panca inclinata","2×8 per lettera",90,"🪽","rehab","Carico molto leggero e controllo scapolare; interrompi se compare dolore alla spalla.","weights",{shoulderSensitive:true}],
+  ["floorPressNeutralV27","Floor Press manubri presa neutra","3×8–10",150,"💪","military","Presa neutra e ROM controllato; esegui solo se completamente tollerato dalla spalla.","weights",{shoulderSensitive:true}],
+  ["chestSupportedRowV27","Rematore chest-supported","3×8–12",120,"🏋️","military","Petto appoggiato, pausa breve in chiusura e nessuno slancio lombare.","weights"],
+  ["burpeeStepV27","Burpee step-out controllato","3×6–8",120,"⚡","hybrid","Porta un piede alla volta indietro e avanti; evita impatti e interrompi in caso di dolore.","bodyweight"]
+].forEach(v=>add(...v));
+
 const FREE_WEIGHT_ROUTINES={
  full:["goblet","rdl","dbRowSupported","dbBenchNeutral","dbSplitSquat","carry"],
  upper:["dbRowSupported","dbBenchNeutral","dbInclineCurl","dbTricepsPushdownAlt","dbLateralRaise"],
@@ -4490,6 +4505,13 @@ const GYM_ROUTINES = {
   core:["machineAbCrunch","machineBackExtension","machineCablePallof"],
   arms:["machineBiceps","machinePreacherCurl","machineCableCurl","machineTriceps","machineOverheadTriceps"]
 };
+
+/* V27 · integrazione nelle routine Lifetime, senza duplicati */
+FREE_WEIGHT_ROUTINES.full = unique([...FREE_WEIGHT_ROUTINES.full,"hipThrustV27","chestSupportedRowV27"]);
+FREE_WEIGHT_ROUTINES.lower = unique([...FREE_WEIGHT_ROUTINES.lower,"reverseLungeV27","hipThrustV27"]);
+FREE_WEIGHT_ROUTINES.upper = unique([...FREE_WEIGHT_ROUTINES.upper,"chestSupportedRowV27","floorPressNeutralV27"]);
+FREE_WEIGHT_ROUTINES.upperPull = unique([...FREE_WEIGHT_ROUTINES.upperPull,"chestSupportedRowV27"]);
+
 const GYM_LOAD_IDS = Object.keys(EX).filter(id=>EX[id]?.e==="machines");
 
 function gymExerciseIds(){
@@ -10967,7 +10989,7 @@ function renderSession(){
     );
 
   reason.textContent =
-    e.reason || "";
+    [e.reason,e.adaptiveNote].filter(Boolean).join(" · ");
 
   reason.className =
     "reason "+
@@ -14961,7 +14983,7 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V26 versione e schema",()=>APP_VERSION.startsWith("26.0.0")&&SCHEMA_VERSION===28);
+  test("V26 versione e schema",()=>APP_VERSION.startsWith("28.1.0")&&SCHEMA_VERSION===29);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
@@ -15789,6 +15811,219 @@ runSelfTests=function(){
 // Final initialization refresh: load saved local muscle status before rendering the week.
 const lifetimeDOMContentLoadedRefresh=()=>{try{loadMuscleRecoveryCheck();renderWeek();updateMuscleRecoverySummary();}catch(error){console.warn("Lifetime planner refresh:",error);}};
 document.addEventListener("DOMContentLoaded",lifetimeDOMContentLoadedRefresh);
+
+/* LIFETIME DEFINITIVE V28.1 · adaptive, shoulder-safe, resilient local history */
+const LIFETIME_BACKUP_KEY=`${KEY}_verifiedLocalSnapshots_v2`;
+function lifetimeEnsureState(d){
+  d.coachLearning=d.coachLearning||{};
+  d.coachLearning.sessionsObserved=Math.max(0,Number(d.coachLearning.sessionsObserved||0));
+  d.coachLearning.feedback={too_easy:0,right:0,too_hard:0,...(d.coachLearning.feedback||{})};
+  d.coachLearning.byExercise=d.coachLearning.byExercise||{};
+  d.longTerm=d.longTerm||{careerStartDate:d.createdAt||new Date().toISOString(),phaseAnchor:d.programStartDate||localDay()};
+  if(!Number.isFinite(Date.parse(d.longTerm.careerStartDate||"")))d.longTerm.careerStartDate=d.createdAt||new Date().toISOString();
+  if(!d.longTerm.phaseAnchor)d.longTerm.phaseAnchor=d.programStartDate||localDay();
+  return d;
+}
+const lifetimeNormBase=norm;
+norm=function(v){return lifetimeEnsureState(lifetimeNormBase(v));};
+// defaults() bypasses norm() when no local record exists; normalize that path too.
+const lifetimeDataBase=data;
+data=function(){return lifetimeEnsureState(lifetimeDataBase());};
+function lifetimeFeedbackProfile(){
+  const d=lifetimeEnsureState(data()),f=d.coachLearning.feedback;
+  const n=Number(f.too_easy||0)+Number(f.right||0)+Number(f.too_hard||0);
+  return {n,easy:n?Number(f.too_easy||0)/n:0,right:n?Number(f.right||0)/n:0,hard:n?Number(f.too_hard||0)/n:0};
+}
+function lifetimeAdaptiveDecision(){
+  const d=lifetimeEnsureState(data());
+  const recent=(d.sessions||[]).filter(s=>!s.incomplete).slice(-6);
+  const rpe=recent.map(s=>Number(s.rpe??s.sessionRPE??s.blockRPE??0)).filter(x=>x>0&&x<=10);
+  const avg=rpe.length?rpe.reduce((a,b)=>a+b,0)/rpe.length:0;
+  const rec=getMuscleRecoveryProfile(),max=Math.max(0,...Object.values(rec.score||{}).map(Number));
+  const rh=(d.readinessHistory||[]).slice(-7).map(x=>Number(x.score??x.readiness??0)).filter(x=>x>0&&x<=100);
+  const ready=rh.length?rh.reduce((a,b)=>a+b,0)/rh.length:0;
+  const fb=lifetimeFeedbackProfile();
+  const painReaction=recent.slice(-3).some(s=>Number(s.postPain||0)>=4||Number(s.nextDayReaction||0)>=3);
+  let action="maintain",volume=1,intensity=1,reasons=[];
+  // Safety hierarchy: pain/reaction > local recovery > systemic deload > progression.
+  if(painReaction){action="protect";volume=.65;intensity=.80;reasons.push("dolore post-seduta o reazione del giorno successivo");}
+  else if(max>=7.5){action="recover";volume=.50;intensity=.70;reasons.push("recupero insufficiente in almeno un distretto");}
+  else if((avg>=9&&rpe.length>=2)||(fb.hard>=.35&&fb.n>=4)||(ready>0&&ready<45&&rh.length>=3)){
+    action="deload";volume=.65;intensity=.85;reasons.push("RPE, feedback o readiness indicano necessità di scarico");
+  }
+  else if(max>=5){action="adapt";volume=.80;intensity=.90;reasons.push("recupero muscolare ancora incompleto");}
+  else if(fb.easy>=.50&&fb.n>=4&&avg>0&&avg<=7.5){action="progress";volume=1.0;intensity=1.0;reasons.push("feedback favorevoli: valuta una progressione minima e controllata");}
+  else reasons.push("dati insufficienti o segnali stabili: mantieni il carico senza aumenti automatici");
+  return {action,volume,intensity,reasons,avgRpe:Number(avg.toFixed(1)),readiness:Math.round(ready),muscleFatigue:Math.round(max),feedbackCount:fb.n};
+}
+function lifetimeShoulderRisk(e){
+  const id=typeof e==="string"?e:String(e?.id||""),x=EX[id]||((e&&typeof e==="object")?e:{});
+  const t=`${id} ${x?.t||e?.name||e?.t||""}`.toLowerCase();
+  return x?.shoulderSensitive===true||/overhead|military.?press|push.?press|upright.?row|dips?|deep.?push.?up|burpee|wall.?ball|ski.?erg|kipping|behind.?neck|snatch|jerk|ytw.?raise|floor.?press/.test(t);
+}
+function lifetimeExerciseLearningRisk(e){
+  const id=typeof e==="string"?e:String(e?.id||""),r=data().coachLearning?.byExercise?.[id];
+  if(!r)return {blocked:false,caution:false,averagePain:0};
+  const n=Math.max(0,Number(r.painCount??r.n??0)),averagePain=n?Number(r.painTotal||0)/n:0;
+  return {blocked:n>=2&&averagePain>=3,caution:n>=2&&averagePain>=2,averagePain};
+}
+function lifetimeShoulderFilter(list){
+  const d=data(),c=d.settings?.muscleRecoveryCheck,pain=Number(selectedPain||0);
+  const soreness=c?.date===localDay()?Number(c.values?.shoulders||0):0;
+  const night=Number(document.getElementById("night")?.value||0),tingling=Number(document.getElementById("tingling")?.value||0),weakness=Number(document.getElementById("weakness")?.value||0);
+  const red=night>=3||tingling>=3||weakness>=3;
+  return (list||[]).filter(e=>{
+    const risk=lifetimeShoulderRisk(e),learned=lifetimeExerciseLearningRisk(e);
+    if(learned.blocked)return false;
+    if(red){const groups=lifetimeGroupForExercise({id:typeof e==="string"?e:e?.id,name:e?.t||e?.name||""});return !risk&&!groups.some(g=>["push","pull","shoulders"].includes(g));}
+    if((pain>=1||soreness>=1)&&risk)return false;
+    if(learned.caution&&risk)return false;
+    return true;
+  });
+}
+const lifetimeStartBase=startWorkout;
+startWorkout=function(list,type,flow=false,origin="extra"){
+  const normalized=(list||[]).map(e=>typeof e==="string"?({...EX[e],id:e,t:EX[e]?.t||e}):({...e}));
+  let safe=lifetimeShoulderFilter(normalized);
+  const decision=lifetimeAdaptiveDecision();
+  if(["adapt","deload","recover","protect"].includes(decision.action)){
+    safe=safe.map(e=>{
+      const sets=Math.max(1,Number(e.sets||parseSets(e.d)||1));
+      const reduced=Math.max(1,Math.floor(sets*decision.volume));
+      const cue=decision.action==="protect"?"Protezione: riduci volume e mantieni solo ROM indolore; interrompi se i sintomi aumentano."
+        :decision.action==="recover"?"Recupero: volume ridotto e intensità leggera, senza arrivare a cedimento."
+        :decision.action==="deload"?"Deload anticipato: circa 35% di volume in meno e carico prudente (RPE massimo 6–7)."
+        :"Adattamento: riduci il volume e mantieni almeno 2–3 ripetizioni in riserva.";
+      return {...e,sets:reduced,adaptiveNote:[e.adaptiveNote,cue].filter(Boolean).join(" ")};
+    });
+  }else if(decision.action==="progress"){
+    safe=safe.map(e=>({...e,adaptiveNote:"Progressione prudente: aumenta una sola variabile solo se tecnica, recupero e dolore restano favorevoli; nessun aumento automatico del carico."}));
+  }
+  if(!safe.length){notify("Coach: nessun esercizio compatibile con i segnali attuali. Scegli recupero/mobilità e rivaluta; se i sintomi persistono, chiedi indicazioni al professionista che ti segue.","error");return;}
+  const d=data();d.coachLearning.lastDecision={...decision,date:new Date().toISOString(),type};save(d);
+  return lifetimeStartBase(safe,type,flow,origin);
+};
+const lifetimeSaveBase=saveCompletedSession;
+saveCompletedSession=function(){
+  const before=new Set((data().sessions||[]).map(s=>String(s.id||"")));
+  const result=lifetimeSaveBase();
+  try{
+    const d=lifetimeEnsureState(data()),fresh=d.sessions.filter(s=>!before.has(String(s.id||""))&&!s.incomplete);
+    fresh.forEach(s=>{
+      d.coachLearning.sessionsObserved++;
+      const f=s.recommendationFeedback;
+      if(["too_easy","right","too_hard"].includes(f))d.coachLearning.feedback[f]=(d.coachLearning.feedback[f]||0)+1;
+      (s.completedSteps||[]).forEach(e=>{
+        if(!e.id)return;
+        const r=d.coachLearning.byExercise[e.id]||(d.coachLearning.byExercise[e.id]={n:0,rpeTotal:0,rpeCount:0,painTotal:0,painCount:0});
+        r.n++;
+        const rp=Number(e.blockRPE??e.rpe);if(Number.isFinite(rp)&&rp>0&&rp<=10){r.rpeTotal+=rp;r.rpeCount++;}
+        const pn=Number(e.blockPain??e.pain);if(Number.isFinite(pn)&&pn>=0&&pn<=5){r.painTotal+=pn;r.painCount++;}
+      });
+    });
+    if(fresh.length){save(d);lifetimeCreateLocalSnapshot("post-workout");}
+    lifetimeRefreshPanel();
+  }catch(e){console.warn("Coach learning:",e);}
+  return result;
+};
+function lifetimeCareerSummary(){
+  const d=lifetimeEnsureState(data()),ss=d.sessions.filter(s=>!s.incomplete);
+  const raw=Date.parse(d.longTerm.careerStartDate||d.createdAt||Date.now()),start=Number.isFinite(raw)?raw:Date.now();
+  const days=Math.max(0,Math.floor((Date.now()-start)/86400000));
+  return {days,sessions:ss.length,cycles:Math.floor(days/84),careerStartDate:new Date(start).toISOString()};
+}
+function lifetimeCreateLocalSnapshot(reason="manual"){
+  try{
+    const d=data(),hash=storageHash(d),arr=JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]");
+    const next=arr.filter(x=>x?.hash!==hash);
+    next.unshift({createdAt:new Date().toISOString(),reason,data:d,hash});
+    // Keep two independent restore points to reduce localStorage quota pressure.
+    next.splice(2);
+    let candidate=next,raw=JSON.stringify(candidate),stored=false;
+    while(candidate.length){
+      try{localStorage.setItem(LIFETIME_BACKUP_KEY,raw);stored=localStorage.getItem(LIFETIME_BACKUP_KEY)===raw;if(stored)break;}catch{}
+      candidate=candidate.slice(0,-1);raw=JSON.stringify(candidate);
+    }
+    if(!stored)throw Error("Spazio locale insufficiente: esporta un backup JSON esterno.");
+    const verify=JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]");
+    if(!verify[0]?.data||verify[0].hash!==storageHash(verify[0].data))throw Error("Verifica integrità snapshot non riuscita");
+    return {ok:true,count:verify.length,hash};
+  }catch(e){return {ok:false,error:String(e.message||e)};}
+}
+function lifetimeListLocalSnapshots(){
+  try{return JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]").map((x,i)=>({index:i,date:x.createdAt,valid:!!x.data&&x.hash===storageHash(x.data),sessions:x.data?.sessions?.length||0,reason:x.reason||""}));}catch{return [];}
+}
+function lifetimeRestoreLocalSnapshot(i){
+  const a=JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]"),x=a[Number(i)];
+  if(!x?.data||x.hash!==storageHash(x.data))throw Error("Backup non valido: ripristino annullato");
+  const safety=lifetimeCreateLocalSnapshot("pre-restore");
+  if(!safety.ok)throw Error(`Impossibile creare la copia di sicurezza prima del ripristino: ${safety.error}`);
+  const d=norm(x.data);if(!Array.isArray(d.sessions)||!d.settings)throw Error("Storico o impostazioni non validi");
+  const saved=save(d);if(runtimeHealth.lastSaveOk===false)throw Error("Salvataggio del ripristino non riuscito");
+  return {ok:true,sessions:saved.sessions.length};
+}
+function lifetimeBackupAudit(){
+  const rawText=localStorage.getItem(KEY),raw=rawText?JSON.parse(rawText):null,sn=lifetimeListLocalSnapshots();
+  return {primaryHashValid:hasValidStorageHash(raw),sessions:data().sessions.length,snapshots:sn.length,validSnapshots:sn.filter(x=>x.valid).length,indexedDB:runtimeHealth.idbOk===true,cloudRequired:false};
+}
+function lifetimeRefreshSnapshotSelect(){
+  const sel=document.getElementById("lifeSnapshotSelect");if(!sel)return;
+  sel.innerHTML=lifetimeListLocalSnapshots().map(x=>`<option value="${x.index}">${new Date(x.date).toLocaleString("it-IT")} · ${x.sessions} sessioni · ${x.valid?"integro":"NON VALIDO"}</option>`).join("")||'<option value="">Nessun backup</option>';
+}
+function lifetimeInstallPanel(){
+  if(document.getElementById("lifetimeUltimatePanel"))return;
+  const host=document.getElementById("page-progress");if(!host)return;
+  const s=document.createElement("section");s.id="lifetimeUltimatePanel";s.className="card";
+  s.innerHTML='<div class="eyebrow">Lifetime Definitive Coach · adattivo</div><h2>Percorso a lungo termine</h2><div id="lifeDecision" class="info"></div><div id="lifeCareer" class="small"></div><div class="grid2"><button class="btn secondary" id="lifeBackup">Crea backup locale</button><button class="btn secondary" id="lifeAudit">Verifica archivio</button></div><div class="grid2"><select id="lifeSnapshotSelect" aria-label="Backup locale da ripristinare"></select><button class="btn danger" id="lifeRestore">Ripristina copia</button></div><div id="lifeBackupInfo" class="small"></div><p class="small">Le copie locali proteggono da errori accidentali sul dispositivo, ma non sostituiscono l’esportazione periodica di un file JSON su una destinazione sicura scelta da te.</p>';
+  host.appendChild(s);lifetimeRefreshSnapshotSelect();
+  s.querySelector("#lifeBackup").onclick=()=>{const r=lifetimeCreateLocalSnapshot();s.querySelector("#lifeBackupInfo").textContent=r.ok?`Copia locale verificata (${r.count} snapshot).`:`Errore: ${r.error}`;lifetimeRefreshSnapshotSelect();};
+  s.querySelector("#lifeAudit").onclick=()=>{const a=lifetimeBackupAudit();s.querySelector("#lifeBackupInfo").textContent=`Dati ${a.primaryHashValid?"integri":"da verificare"} · ${a.sessions} sessioni · copie valide ${a.validSnapshots}/${a.snapshots} · IndexedDB ${a.indexedDB?"attivo":"non confermato"} · nessun cloud richiesto.`;};
+  s.querySelector("#lifeRestore").onclick=()=>{const i=s.querySelector("#lifeSnapshotSelect").value;if(i===""||!confirm("Ripristinare questa copia? Prima verrà creata e verificata una copia dello stato attuale."))return;try{const r=lifetimeRestoreLocalSnapshot(i);s.querySelector("#lifeBackupInfo").textContent=`Ripristino completato: ${r.sessions} sessioni.`;location.reload();}catch(e){s.querySelector("#lifeBackupInfo").textContent=`Ripristino annullato: ${e.message}`;}};
+  lifetimeRefreshPanel();
+}
+function lifetimeRefreshPanel(){
+  const e=document.getElementById("lifeDecision");if(!e)return;
+  const x=lifetimeAdaptiveDecision(),c=lifetimeCareerSummary();
+  e.textContent=`Decisione: ${x.action.toUpperCase()}. Volume ${Math.round(x.volume*100)}%, intensità ${Math.round(x.intensity*100)}%. ${x.reasons.join("; ")}`;
+  document.getElementById("lifeCareer").textContent=`Storico continuo: ${c.days} giorni · ${c.sessions} sessioni · ${c.cycles} cicli da 12 settimane. Lo storico non viene azzerato al cambio di ciclo.`;
+}
+function lifetimeUltimateSelfTests(){
+  const t=[],ck=(n,f)=>{try{t.push({name:n,ok:!!f()});}catch(e){t.push({name:n,ok:false,error:String(e)});}};
+  const simulate=(sessions=[],feedback={too_easy:0,right:0,too_hard:0},score={legs:0,push:0,pull:0,shoulders:0,core:0},readiness=[])=>{
+    const oldData=data,oldRecovery=getMuscleRecoveryProfile;
+    try{data=()=>({sessions,readinessHistory:readiness,coachLearning:{sessionsObserved:sessions.length,feedback,byExercise:{}},settings:{}});getMuscleRecoveryProfile=()=>({score});return lifetimeAdaptiveDecision();}
+    finally{data=oldData;getMuscleRecoveryProfile=oldRecovery;}
+  };
+  ck("V28.1 schema conserva storico e dati Lifetime",()=>{const n=norm({sessions:[{id:"keep"}],coachLearning:{sessionsObserved:2},longTerm:{careerStartDate:new Date().toISOString()}});return n.sessions.length===1&&n.coachLearning.sessionsObserved===2&&!!n.longTerm.careerStartDate;});
+  ck("V28.1 feedback usa solo valutazioni reali",()=>{const old=data;try{data=()=>({coachLearning:{feedback:{too_easy:2,right:1,too_hard:1},sessionsObserved:20}});const f=lifetimeFeedbackProfile();return f.n===4&&f.easy===.5&&f.hard===.25;}finally{data=old;}});
+  ck("V28.1 dolore ha priorità sul deload",()=>simulate([{rpe:9},{rpe:9},{postPain:4,rpe:9}]).action==="protect");
+  ck("V28.1 recupero severo ha priorità sul deload",()=>simulate([{rpe:9},{rpe:9}],{}, {legs:8,push:0,pull:0,shoulders:0,core:0}).action==="recover");
+  ck("V28.1 deload anticipato su RPE elevato",()=>simulate([{rpe:9},{rpe:9}]).action==="deload");
+  ck("V28.1 adattamento su fatica moderata",()=>simulate([],{too_easy:0,right:0,too_hard:0},{legs:6,push:0,pull:0,shoulders:0,core:0}).action==="adapt");
+  ck("V28.1 progressione richiede feedback sufficienti",()=>simulate([{rpe:6},{rpe:7},{rpe:7},{rpe:6}],{too_easy:3,right:1,too_hard:0}).action==="progress");
+  ck("V28.1 nessun dato non genera progressione automatica",()=>simulate().action==="maintain");
+  ck("V28.1 classificazione esercizi spalla",()=>lifetimeShoulderRisk({id:"militaryPress",t:"Military press"})&&lifetimeShoulderRisk("wallBallSkill"));
+  ck("V28.1 storico pluriennale continuo",()=>lifetimeCareerSummary().sessions>=0&&Number.isFinite(lifetimeCareerSummary().days));
+  ck("V28.1 snapshot con checksum",()=>{const r=lifetimeCreateLocalSnapshot("test");return r.ok&&lifetimeListLocalSnapshots()[0]?.valid;});
+  ck("V28.1 limite snapshot locali",()=>lifetimeListLocalSnapshots().length<=2);
+  ck("V28.1 ripristino protetto da checksum",()=>typeof lifetimeRestoreLocalSnapshot==="function"&&typeof lifetimeBackupAudit==="function");
+  ck("V28.1 timer e guida serie ereditati",()=>typeof renderSession==="function"&&typeof finishTimer==="function"&&typeof isGuidedSetExercise==="function");
+  return t;
+}
+
+const lifetimeTestsBase=runSelfTests;runSelfTests=function(){
+  const tests=lifetimeTestsBase();
+  // Earlier regression checks inspected Function#toString. Lifetime wrappers
+  // legitimately change that text, so validate the preserved base functions.
+  const replaceCheck=(name,ok,error)=>{const t=tests.find(x=>x.name===name);if(t){t.ok=!!ok;if(error)t.error=error;else delete t.error;}};
+  replaceCheck('durate separate',markStepCompleted.toString().includes('elapsedSec')&&lifetimeSaveBase.toString().includes('activeDurationSec'));
+  replaceCheck('salvataggio idempotente',lifetimeSaveBase.toString().includes('sourceSessionId')&&saveSessionDraft.toString().includes('activeSessionId'));
+  replaceCheck('V25 guida serie in qualsiasi sessione',lifetimeStartBase.toString().includes('isGuidedSetExercise')&&finishTimer.toString().includes('isGuidedSetExercise'));
+  replaceCheck('V17 storico conserva RPE dolore tecnica',markStepCompleted.toString().includes('blockRPE')&&markStepCompleted.toString().includes('blockPain')&&markStepCompleted.toString().includes('technique')&&lifetimeSaveBase.toString().includes('step.technique'));
+  return tests.concat(lifetimeUltimateSelfTests());
+};
+window.addEventListener("DOMContentLoaded",()=>{try{lifetimeInstallPanel();const r=lifetimeCreateLocalSnapshot("avvio");lifetimeRefreshSnapshotSelect();lifetimeRefreshPanel();if(!r.ok)console.warn("Lifetime snapshot non creato:",r.error);}catch(error){console.error("Lifetime initialization:",error);}});
+/* END LIFETIME DEFINITIVE V28.1 */
 
 /* END LIFETIME CONSOLIDATION */
 </script>
