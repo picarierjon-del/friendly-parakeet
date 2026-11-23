@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Picari Hybrid Coach AI V23 · Muscle Recovery Adaptive Coach</title>
+<title>Picari Hybrid Coach AI V25 · Lifetime Adaptive Coach</title>
 
 <style>
 :root{
@@ -1700,7 +1700,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <div id="gymPreview" class="workout-list" style="margin-top:10px"></div>
     <button class="btn full" style="margin-top:12px" onclick="startGym()">Avvia scheda sala pesi</button>
   </div>
-  <div class="card info"><strong>Nuovo flusso guidato V21.</strong> Ogni esercizio mostra le serie, registra il carico e guida una serie alla volta. Quando completi una serie parte il recupero; al termine il coach passa automaticamente alla serie successiva e poi all'esercizio seguente. Puoi mettere in pausa o saltare il recupero.</div>
+  <div class="card info"><strong>Flusso guidato V25.</strong> Il coach guida ogni esercizio a serie: serie → recupero → serie successiva. Dopo l’ultima serie esegue un recupero di transizione e passa automaticamente all’esercizio successivo. Il tempo stimato include lavoro, recuperi, transizioni e preparazione. Puoi mettere in pausa o saltare il recupero.</div>
   <div class="card warning"><strong>Spalla e sicurezza.</strong> I macchinari disponibili non sono tutti automaticamente adatti a ogni persona. Chest Press, Lat Machine e Reverse Fly sono opzionali e vanno esclusi se provocano dolore o non sono stati autorizzati nel percorso di recupero. Niente massimali o cedimento nelle prime settimane.</div>
 </section>
 
@@ -2014,6 +2014,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 <div class="card">
 
   <div class="eyebrow">Profilo personale</div>
+  <p class="small">Imposta qui il tuo obiettivo principale: il coach lo userà per costruire il piano settimanale e generare ogni seduta. Non servono schede separate per dimagrimento o definizione.</p>
 
   <div class="grid3">
 
@@ -2035,16 +2036,33 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <div class="field">
       <label>Obiettivo principale</label>
 
-      <select id="goal">
+      <select id="goal" onchange="renderGoalStrategyHint()">
         <option value="longevity">Longevità atletica</option>
-        <option value="fatloss">Dimagrimento e ricomposizione</option>
+        <option value="fatloss" selected>Ricomposizione corporea / perdita di grasso</option>
         <option value="definition">Definizione muscolare</option>
-
-        <option value="hyrox">Hyrox</option>
+        <option value="muscleGain">Aumento massa muscolare (ipertrofia)</option>
+        <option value="strengthFocus">Forza massimale e forza generale</option>
+        <option value="run5k">Running · 5 km</option>
+        <option value="run10k">Running · 10 km</option>
+        <option value="halfMarathon">Running · Mezza maratona</option>
+        <option value="endurance">Resistenza aerobica</option>
+        <option value="hyrox">HYROX</option>
         <option value="military">Military fitness</option>
-        <option value="run10k">10 km</option>
-        <option value="hybrid" selected>Hybrid completo</option>
+        <option value="hybrid">Hybrid completo</option>
       </select>
+      <div class="info" id="goalStrategyHint" style="margin-top:8px" aria-live="polite">Il coach userà questo obiettivo come riferimento principale per generare il microciclo e le sedute quotidiane.</div>
+      <div class="field" style="margin-top:10px">
+        <label>Priorità secondarie (facoltative)</label>
+        <div class="checks">
+          <label class="checkline"><input type="checkbox" id="priorityMuscle"> Aumentare / mantenere massa muscolare</label>
+          <label class="checkline"><input type="checkbox" id="priorityRunning"> Migliorare il running</label>
+          <label class="checkline"><input type="checkbox" id="priorityStrength"> Migliorare la forza</label>
+          <label class="checkline"><input type="checkbox" id="priorityEndurance"> Migliorare resistenza aerobica</label>
+          <label class="checkline"><input type="checkbox" id="priorityHyrox"> Preparazione HYROX</label>
+          <label class="checkline"><input type="checkbox" id="priorityMobility"> Mobilità e qualità del movimento</label>
+        </div>
+        <p class="small">Il coach integra le priorità senza trasformare ogni seduta in un circuito e senza superare il numero di giorni scelto.</p>
+      </div>
     </div>
 
     <div class="field">
@@ -2052,8 +2070,8 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 
       <select id="days">
         <option>3</option>
-        <option>4</option>
-        <option selected>5</option>
+        <option selected>4</option>
+        <option>5</option>
         <option>6</option>
       </select>
     </div>
@@ -2063,9 +2081,9 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 
       <select id="minutes">
         <option value="20">20 min</option>
-        <option value="30" selected>30 min</option>
+        <option value="30">30 min</option>
         <option value="45">45 min</option>
-        <option value="60">60 min</option>
+        <option value="60" selected>60 min</option>
       </select>
     </div>
 
@@ -2080,7 +2098,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
       Includi Sala pesi nel programma (macchine, cavi, manubri e bilancieri)
     </label>
   </div>
-  <p class="small" style="margin-top:7px">Questa scelta abilita la sala pesi come modalità effettiva del programma, non soltanto come attrezzatura disponibile. Puoi comunque alternarla a corsa, bici, corpo libero e recupero.</p>
+  <p class="small" style="margin-top:7px">Questa scelta abilita la sala pesi come modalità effettiva del programma, non soltanto come attrezzatura disponibile. Puoi comunque alternarla a corsa, bici, corpo libero e recupero. Il metodo integra forza, ipertrofia, capacità aerobica, conditioning e mobilità con progressione e autoregolazione; non importa né riproduce schede proprietarie di terzi.</p>
 
   <div class="eyebrow" style="margin-top:14px">
     Attrezzatura disponibile
@@ -2197,25 +2215,6 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     Salva e rigenera
   </button>
 
-</div>
-
-<div class="card" id="physiqueGoalCard">
-  <div class="eyebrow">Composizione corporea · V20</div>
-  <h3>Dimagrimento e definizione</h3>
-  <p class="small">Scegli l'obiettivo principale qui sopra e avvia una scheda mirata. Il dimagrimento richiede un deficit calorico moderato e costante; la definizione combina forza progressiva, attività aerobica e recupero. Non esiste dimagrimento localizzato. Il coach non prescrive diete né sostituisce un professionista sanitario.</p>
-  <div class="grid2">
-    <div class="card" style="margin:0">
-      <strong>🔥 Dimagrimento / ricomposizione</strong>
-      <p class="small">Circuito total body a impatto modulabile, recuperi controllati e cardio facile separato o a fine seduta. Priorità alla costanza, non a finire esausto.</p>
-      <button class="btn full" onclick="startPhysiqueWorkout('fatloss')">Avvia scheda dimagrimento</button>
-    </div>
-    <div class="card" style="margin:0">
-      <strong>💪 Definizione muscolare</strong>
-      <p class="small">Forza full body con progressione, serie controllate e recuperi adeguati; cardio facile dosato per non compromettere il recupero.</p>
-      <button class="btn full" onclick="startPhysiqueWorkout('definition')">Avvia scheda definizione</button>
-    </div>
-  </div>
-  <div id="physiqueWorkoutInfo" class="info" style="margin-top:12px">La scheda si adatta al livello, ai minuti disponibili, all'attrezzatura selezionata e ai controlli di sicurezza. Se il recupero è insufficiente o il dolore è elevato, la seduta viene resa più prudente o bloccata.</div>
 </div>
 
 <div class="card">
@@ -2630,7 +2629,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
       <div class="eyebrow">Configurazione iniziale</div>
       <h2 id="onboardingTitle">Un coach costruito intorno a te</h2>
       <p class="small">Tre passaggi per calibrare obiettivo, disponibilità e protezione della spalla. Potrai cambiare tutto dalle impostazioni.</p>
-      <div class="field onboarding-field"><label for="onboardGoal">Obiettivo principale</label><select id="onboardGoal"><option value="hybrid">Fitness ibrido</option><option value="fatloss">Dimagrimento e ricomposizione</option><option value="definition">Definizione muscolare</option><option value="hyrox">Hyrox</option><option value="military">Preparazione Military</option><option value="run10k">Corsa 10 km</option><option value="longevity">Longevità</option></select></div>
+      <div class="field onboarding-field"><label for="onboardGoal">Obiettivo principale</label><select id="onboardGoal"><option value="hybrid">Fitness ibrido</option><option value="fatloss">Ricomposizione corporea</option><option value="definition">Definizione muscolare</option><option value="muscleGain">Aumento massa muscolare</option><option value="strengthFocus">Forza generale</option><option value="run5k">Running 5 km</option><option value="run10k">Running 10 km</option><option value="halfMarathon">Mezza maratona</option><option value="endurance">Resistenza aerobica</option><option value="hyrox">HYROX</option><option value="military">Preparazione Military</option><option value="longevity">Longevità</option></select></div>
     </section>
     <section class="onboarding-step hidden" data-step="1">
       <div class="eyebrow">Tempo e livello</div>
@@ -2670,14 +2669,14 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "23.0.0-MUSCLE-RECOVERY-ADAPTIVE";
-// V23: recupero muscolare per distretto, carico recente e adattamento della seduta; conserva modalità automatiche e scelta libera.
+  "25.0.0-LIFETIME-ADAPTIVE-COACH";
+// V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
-  26;
+  28;
 
 const FORMULA_VERSION =
-  "2.0-DESCRIPTIVE-LOAD";
+  "2.1-SESSION-TIME-AND-LIFETIME-ADAPTATION";
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -4460,6 +4459,28 @@ const military = {
  ["machineGluteAbduction","Abduzione anca al cavo","2×12 per lato",90,"🍑","legs","Bacino stabile, movimento corto e controllato.","machines"]
 ].forEach(v=>add(...v));
 
+/* V25 · pesi liberi e fondamentali da palestra tradizionale */
+[
+ ["barbellSquat","Back Squat bilanciere","3×6–8",180,"🏋️","legs","Usa rack e sicurezze; profondità e carico solo se tecnica e mobilità sono solide.","weights"],
+ ["barbellRDL","Romanian Deadlift bilanciere","3×8–10",150,"🏋️","legs","Anche indietro, bilanciere vicino alle gambe, schiena neutra.","weights"],
+ ["dbBenchNeutral","Distensioni manubri presa neutra su panca","3×8–10",150,"💪","military","Solo ROM indolore e se la spalla lo tollera; presa neutra, niente allungamento forzato.","weights",{shoulderSensitive:true}],
+ ["dbRowSupported","Rematore manubrio con appoggio","3×8–12",120,"💪","military","Appoggia il busto, evita rotazioni e slanci.","weights"],
+ ["dbSplitSquat","Split Squat manubri","3×8 per lato",150,"🦵","legs","Passo stabile, ginocchio allineato e carico controllabile.","weights"],
+ ["dbLateralRaise","Alzate laterali manubri","2×12–15",90,"💪","military","Carico leggero, arco indolore; interrompi se la spalla pizzica.","weights",{shoulderSensitive:true}],
+ ["dbInclineCurl","Curl manubri su panca inclinata","2×10–12",90,"💪","military","Spalla rilassata, gomiti fermi e niente slanci.","weights"],
+ ["dbTricepsPushdownAlt","French press manubrio da seduto","2×10–12",90,"💪","military","Solo se la posizione è confortevole; in caso di fastidio sostituisci con pushdown.","weights",{shoulderSensitive:true}]
+].forEach(v=>add(...v));
+
+const FREE_WEIGHT_ROUTINES={
+ full:["goblet","rdl","dbRowSupported","dbBenchNeutral","dbSplitSquat","carry"],
+ upper:["dbRowSupported","dbBenchNeutral","dbInclineCurl","dbTricepsPushdownAlt","dbLateralRaise"],
+ upperPull:["dbRowSupported","dbInclineCurl"],
+ upperPush:["dbBenchNeutral","dbLateralRaise","dbTricepsPushdownAlt"],
+ lower:["barbellSquat","barbellRDL","dbSplitSquat","goblet"],
+ core:["deadbug","carry"],
+ arms:["dbInclineCurl","dbTricepsPushdownAlt"]
+};
+
 const GYM_ROUTINES = {
   full:["machineLegPress","machineSeatedRow","machineChestPress","machineLegCurl","machineLatPulldown","machineHipThrust","machineAbCrunch","machineCablePallof"],
   upper:["machineChestPress","machineInclinePress","machineSeatedRow","machineLowRow","machineLatPulldown","machineReverseFly","machineBiceps","machinePreacherCurl","machineTriceps","machineCableCurl"],
@@ -4472,31 +4493,54 @@ const GYM_ROUTINES = {
 const GYM_LOAD_IDS = Object.keys(EX).filter(id=>EX[id]?.e==="machines");
 
 function gymExerciseIds(){
-  if(!data().settings.equipment.machines)return [];
-  let ids=[...(GYM_ROUTINES[gymRoutine]||GYM_ROUTINES.full)];
+  const eq=data().settings.equipment||{};
+  let ids=[];
+  if(eq.machines)ids.push(...(GYM_ROUTINES[gymRoutine]||GYM_ROUTINES.full));
+  if(eq.weights)ids.push(...(FREE_WEIGHT_ROUTINES[gymRoutine]||FREE_WEIGHT_ROUTINES.full));
   if(mode==="recovery"||mode==="safe"||blocked)ids=ids.filter(id=>!EX[id]?.shoulderSensitive);
-  return ids.filter(id=>EX[id]&&eqAvailable(id));
+  return unique(ids).filter(id=>EX[id]&&eqAvailable(id));
 }
 function selectGym(type,btn){gymRoutine=["full","upper","lower","core","upperPull","upperPush","arms"].includes(type)?type:"full";if(btn)segment(btn);renderGymPreview();}
 function renderGymPreview(){
   const box=document.getElementById("gymPreview"),info=document.getElementById("gymProgressionInfo");if(!box)return;
-  if(!data().settings.equipment.machines){box.innerHTML='<div class="warning">Attiva “Sala pesi · macchinari e cavi” in Altro → Impostazioni → Attrezzatura disponibile, poi salva.</div>';if(info)info.textContent="La scheda è pronta ma i macchinari non risultano attivati.";return;}
+  if(!data().settings.equipment.machines&&!data().settings.equipment.weights){box.innerHTML='<div class="warning">Attiva Sala pesi/macchinari oppure Manubri/Kettlebell in Impostazioni.</div>';if(info)info.textContent="Attiva almeno una modalità di forza per visualizzare gli esercizi.";return;}
   const ids=gymExerciseIds();if(!ids.length){box.innerHTML='<div class="small">Nessun esercizio compatibile con lo stato di recupero selezionato.</div>';return;}
   box.innerHTML=ids.map(id=>{const e=EX[id],hist=data().progression.loadHistory?.[id]||[],last=hist.at(-1);let hint=last?`Ultimo carico: ${last.kg} kg`:'Prima esposizione: carico tecnico leggero';if(last&&last.technique==="good"&&Number(last.rpe)<=8&&Number(last.postPain)<=2)hint+=' · valuta il minimo incremento solo se hai completato tutte le ripetizioni';else if(last)hint+=' · mantieni o riduci finché tecnica, RPE e dolore non sono adeguati';return `<div class="workout-item"><div><strong>${escapeHtml(e.i)} ${escapeHtml(e.t)}</strong><br><span>${escapeHtml(e.d)} · recupero ${Math.round(e.s/60)} min circa</span><br><span>${escapeHtml(hint)}</span></div><span class="tag">MACCHINA</span></div>`}).join("");
   if(info)info.textContent="Doppia progressione: prima completa il range alto con tecnica pulita, RPE ≤8 e dolore ≤2/10; poi aumenta solo del minimo scatto disponibile (indicativamente 2–5%). Nessun massimale o cedimento.";
 }
 function startGym(){
   if(!requiredCheck())return;
-  if(!data().settings.equipment.machines){notify("Attiva prima i macchinari nelle impostazioni e salva.","error");showPage("settings");return;}
+  if(!data().settings.equipment.machines&&!data().settings.equipment.weights){notify("Attiva Sala pesi/macchinari oppure Manubri/Kettlebell nelle impostazioni.","error");showPage("settings");return;}
   const ids=gymExerciseIds();if(!ids.length){notify("Nessun esercizio disponibile per lo stato di recupero selezionato.","error");return;}
   const list=fitToTime(enhance(ids,"strength"),data().settings.minutes);
   startWorkout(list,`Sala pesi · ${{full:"Full body",upper:"Parte alta",lower:"Gambe",core:"Core",upperPull:"Schiena + bicipiti",upperPush:"Petto + tricipiti",arms:"Braccia"}[gymRoutine]||"Full body"}`);
 }
+function renderGoalStrategyHint(){
+  const el=document.getElementById("goalStrategyHint");
+  const goal=document.getElementById("goal")?.value||data().settings.goal||"hybrid";
+  if(!el)return;
+  const copy={
+    longevity:"Longevità atletica: forza sostenibile, base aerobica, mobilità, equilibrio e recupero distribuiti nel tempo.",
+    fatloss:"Ricomposizione: forza progressiva per preservare/costruire muscolo, cardio dosato e volume sostenibile. Il deficit energetico va gestito fuori dalla scheda, senza circuiti estenuanti quotidiani.",
+    definition:"Definizione: mantenimento della massa e della forza, volume recuperabile e cardio dosato; non è una scheda separata.",
+    muscleGain:"Ipertrofia: più esposizioni settimanali per i gruppi muscolari, volume progressivo, range di ripetizioni, RIR/RPE e recuperi completi. Il cardio resta complementare.",
+    strengthFocus:"Forza: pochi esercizi fondamentali, carichi tecnici, recuperi lunghi, progressione graduale e scarichi programmati.",
+    run5k:"Running 5 km: base aerobica, tecnica, una seduta di qualità e progressione prudente del volume.",
+    run10k:"Running 10 km: base aerobica, lavori di soglia/ritmo, lungo facile e forza di supporto.",
+    halfMarathon:"Mezza maratona: costruzione graduale del volume, lungo progressivo, soglia e forza di supporto.",
+    endurance:"Resistenza aerobica: prevalenza di lavoro facile, progressione del tempo totale e poche sedute intense ben distanziate.",
+    hyrox:"HYROX: corsa, forza funzionale e stazioni specifiche (SkiErg, RowErg, sled, wall ball e carry) secondo attrezzatura e recupero.",
+    military:"Military fitness: forza generale, capacità di lavoro, corsa e condizionamento adattati al livello.",
+    hybrid:"Hybrid completo: forza, corsa, conditioning e mobilità in equilibrio secondo attrezzatura e recupero."
+  };
+  el.textContent=copy[goal]||copy.hybrid;
+}
+
 function physiqueWorkoutIds(kind){
   const d=data(), safetyBlocked=blocked||mode==="recovery"||mode==="safe";
   let ids=[];
-  if(d.settings.equipment.machines){
-    ids=kind==="definition"?[...(GYM_ROUTINES.full||[])]:[...(GYM_ROUTINES.full||[])];
+  if(d.settings.equipment.machines || selectedModes().gym){
+    ids=[...(GYM_ROUTINES.full||[])];
     if(kind==="fatloss") ids=ids.filter(id=>!EX[id]?.shoulderSensitive);
   }else{
     ids=plan(safetyBlocked?"strengthLight":"strength").filter(id=>EX[id]);
@@ -4507,20 +4551,6 @@ function physiqueWorkoutIds(kind){
   if(!ids.length) ids=plan("strengthLight").filter(id=>EX[id]&&eqAvailable(id));
   return unique(ids);
 }
-function startPhysiqueWorkout(kind){
-  if(!["fatloss","definition"].includes(kind))kind="fatloss";
-  if(!requiredCheck())return;
-  const d=data();
-  const ids=physiqueWorkoutIds(kind);
-  if(!ids.length){notify("Nessun esercizio compatibile con attrezzatura e stato di recupero. Controlla le impostazioni.","error");return;}
-  let list=fitToTime(enhance(ids,kind==="definition"?"strength":"strengthLight"),d.settings.minutes);
-  if(kind==="fatloss"&&!blocked&&mode!=="recovery"&&mode!=="safe"){
-    // Circuit-style pacing is a coaching cue; exercise order remains editable and safe.
-    list=list.map((item,index)=>({...item,reason:(item.reason?item.reason+" · ":"")+(index<list.length-1?"Circuito controllato · tecnica prima del ritmo":"Ultimo esercizio · termina con margine")}));
-  }
-  startWorkout(list,kind==="fatloss"?"Dimagrimento · circuito total body":"Definizione · forza progressiva");
-}
-
 function paceToSpeedKmh(pace){
   const match=String(pace||"").trim().match(/^(\d{1,2}):([0-5]\d)$/);
   if(!match)return null;
@@ -4857,13 +4887,14 @@ function defaults(){
         "intermediate",
 
       goal:
-        "hybrid",
+        "fatloss",
+      goalPriorities:{muscle:false,running:false,strength:false,endurance:false,hyrox:false,mobility:false},
 
       days:
-        5,
+        4,
 
       minutes:
-        30,
+        60,
 
       trainingModes:{gym:true,skiErg:false,rower:false,assaultBike:false,treadmill:false,sled:false,wallBall:false,carry:false,coachMode:"auto",freeFocus:"auto"},
       planPreferences:{gym:true,skiErg:false,rower:false,assaultBike:false,treadmill:false,sled:false,wallBall:false,carry:false,coachMode:"auto",freeFocus:"auto"},
@@ -5038,6 +5069,7 @@ function norm(v){
         lp.level ||
         b.settings.athleteLevel,
 
+      goalPriorities:{...b.settings.goalPriorities,...(ss.goalPriorities||{})},
       trainingModes:{...b.settings.trainingModes,...(ss.trainingModes||{})},
       planPreferences:{...b.settings.planPreferences,...(ss.planPreferences||{})},
       equipment:{
@@ -6149,11 +6181,57 @@ function getWeekTemplate(
       6:["strength","easy","strength","recovery","strength","easy","recovery"]
     };
     const custom=(goal==="fatloss"?fatloss:definition)[days]||fatloss[5];
-    return applyCyclingPreferencesToWeek([...custom]);
+    return applyCyclingPreferencesToWeek(applyGoalDeload(applySecondaryGoalBalance([...custom],goal)));
+  }
+  const days=Number(data().settings.days||4);
+  const goalTemplates={
+    muscleGain:{3:["strength","recovery","strength","recovery","strength","recovery","recovery"],4:["strength","easy","strength","recovery","strength","recovery","recovery"],5:["strength","easy","strength","recovery","strength","easy","recovery"],6:["strength","easy","strength","easy","strength","easy","recovery"]},
+    strengthFocus:{3:["strength","recovery","strength","recovery","power","recovery","recovery"],4:["strength","easy","strength","recovery","power","recovery","recovery"],5:["strength","easy","strength","recovery","power","easy","recovery"],6:["strength","easy","strength","recovery","power","easy","recovery"]},
+    run5k:{3:["easy","strengthLight","recovery","interval","recovery","recovery","recovery"],4:["easy","strengthLight","interval","recovery","long","recovery","recovery"],5:["easy","strengthLight","interval","recovery","tempo","long","recovery"],6:["easy","strengthLight","interval","easy","tempo","long","recovery"]},
+    halfMarathon:{3:["easy","strengthLight","recovery","tempo","recovery","recovery","recovery"],4:["easy","strengthLight","tempo","recovery","long","recovery","recovery"],5:["easy","strengthLight","interval","recovery","tempo","long","recovery"],6:["easy","strengthLight","interval","easy","tempo","long","recovery"]},
+    endurance:{3:["easy","strengthLight","recovery","easy","recovery","recovery","recovery"],4:["easy","strengthLight","easy","recovery","long","recovery","recovery"],5:["easy","strengthLight","easy","recovery","tempo","long","recovery"],6:["easy","strengthLight","easy","tempo","easy","long","recovery"]}
+  };
+  if(goalTemplates[goal])return applyCyclingPreferencesToWeek(applyGoalDeload(applySecondaryGoalBalance([...(goalTemplates[goal][days]||goalTemplates[goal][4])],goal)));
+  if(goal==="run5k"||goal==="halfMarathon"||goal==="endurance"){
+    const block=PERIODIZATION.run10k||PERIODIZATION.hybrid;
+    return applyCyclingPreferencesToWeek(applyGoalDeload(applySecondaryGoalBalance([...(block[periodizationWeek()-1]||block[0])],goal)));
   }
   const block=PERIODIZATION[goal]||PERIODIZATION.hybrid;
   const base=[...(block[periodizationWeek()-1]||block[0])];
-  return applyCyclingPreferencesToWeek(base);
+  return applyCyclingPreferencesToWeek(applyGoalDeload(applySecondaryGoalBalance(base,goal)));
+}
+
+function applyGoalDeload(base){
+  const week=periodizationWeek();
+  if(![4,8,12].includes(week))return [...base];
+  return base.map(type=>({strength:"strengthLight",power:"strengthLight",interval:"easy",tempo:"easy",threshold:"easy",hyroxHIIT:"hyroxTech",hybridTest:"hybridEngine"})[type]||type);
+}
+
+function applySecondaryGoalBalance(base,primary){
+  const p=data().settings.goalPriorities||{},out=[...(base||[])],max=Math.max(3,Math.min(6,Number(data().settings.days)||4));
+  const active=()=>out.filter(x=>x!=="recovery").length;
+  const replaceOne=(from,to)=>{const i=out.findIndex((x,index)=>x===from&&index!==2);if(i>=0){out[i]=to;return true}return false};
+  if(p.muscle&& !["muscleGain","strengthFocus"].includes(primary) && !out.includes("strength"))replaceOne("easy","strength");
+  if(p.running && !["run5k","run10k","halfMarathon","endurance"].includes(primary) && !out.some(x=>["easy","long","interval","tempo","threshold"].includes(x)))replaceOne("recovery","easy");
+  if(p.endurance && !out.includes("long"))replaceOne("recovery","long");
+  if(p.hyrox && primary!=="hyrox" && (selectedModes().skiErg||selectedModes().rower||selectedModes().sled))replaceOne("easy","hyroxTech");
+  if(p.mobility && !out.includes("mobility") && !out.includes("rehab"))replaceOne("recovery","mobility");
+  if(p.strength && !["muscleGain","strengthFocus"].includes(primary) && out.filter(x=>["strength","strengthLight","power"].includes(x)).length<2)replaceOne("recovery","strengthLight");
+  // Respect the selected weekly frequency for every primary goal. Low-priority standalone
+  // prehab/easy slots are folded into warm-ups or removed before key sessions are touched.
+  const dropOrder=(primary==="muscleGain"||primary==="strengthFocus")
+    ?["rehab","easy","strengthLight","power"]
+    :(["run5k","run10k","halfMarathon","endurance"].includes(primary)
+      ?["rehab","strengthLight","easy","strength"]
+      :(primary==="hyrox"?["rehab","easy","strengthLight","interval"]:["rehab","easy","strengthLight","interval","strength"]));
+  while(active()>max){
+    let index=-1;
+    for(const type of dropOrder){index=out.findIndex((x,i)=>x===type&&i!==2);if(index>=0)break;}
+    if(index<0)index=out.findIndex((x,i)=>x!=="recovery"&&i!==2);
+    if(index<0)break;
+    out[index]="recovery";
+  }
+  return out;
 }
 
 function availableCyclingTypesForSettings(settings){
@@ -8570,20 +8648,43 @@ function plan(type){
    DURATA
    ========================================================= */
 
+function isGuidedSetExercise(e){
+  if(!e)return false;
+  const dose=String(e.d||"").trim();
+  if(!/^\d+(?:[–-]\d+)?\s*[×x]/i.test(dose))return false;
+  if(/\b(min|minuti|sec|secondi|km)\b/i.test(dose))return false;
+  return !["rehab","mobility","stretching","recovery","cardio","run"].includes(String(e.c||""));
+}
+function setCountForExercise(e){return Math.max(1,Number(e?.sets||parseSets(e?.d)||1));}
+function repsOrDistanceSeconds(e){
+  const dose=String(e?.d||"");
+  const after=dose.replace(/^\s*\d+(?:[–-]\d+)?\s*[×x]\s*/i,"");
+  const range=after.match(/(\d+)\s*[–-]\s*(\d+)/);
+  const one=after.match(/(\d+)/);
+  if(/m\b/i.test(after)&&!/(rip|rep)/i.test(after))return Math.max(10,Math.round(Number(range?range[2]:one?.[1]||20)/1.15));
+  const reps=range?(Number(range[1])+Number(range[2]))/2:Number(one?.[1]||10);
+  return Math.max(15,Math.round(reps*3.2));
+}
+function setRestSeconds(e,isLastSet=false){
+  const base=Math.max(30,Number(e?.s||90));
+  return isLastSet?Math.max(30,Math.min(75,Number(e?.transitionRestSec||60))):base;
+}
+function estimateExerciseSeconds(e){
+  if(!e)return 0;
+  if(isGuidedSetExercise(e)){
+    const sets=setCountForExercise(e),workPerSet=repsOrDistanceSeconds(e),rest=Array.from({length:sets},(_,i)=>setRestSeconds(e,i===sets-1)).reduce((a,b)=>a+b,0);
+    return sets*workPerSet+rest+25; // setup/transition to the station
+  }
+  return Math.max(0,Number(e.s||0))+20;
+}
 function workoutSeconds(list){
-
-  return (
-    list || []
-  )
-  .reduce(
-    (sum,e) =>
-      sum+
-      Number(
-        e?.s || 0
-      ),
-    0
-  );
-
+  const items=list||[];
+  if(!items.length)return 0;
+  const base=items.reduce((sum,e)=>sum+estimateExerciseSeconds(e),0);
+  const ids=items.map(e=>e?.id);
+  const warmup=ids.some(id=>["breathing","walk","stretchWarm"].includes(id))?0:240;
+  const cooldown=ids.some(id=>["stretch","stretchFinish","breathing"].includes(id))?0:180;
+  return Math.round(base+warmup+cooldown);
 }
 
 function fitToTime(
@@ -8620,10 +8721,7 @@ function fitToTime(
     of prepared
   ){
 
-    const sec =
-      Number(
-        e.s || 0
-      );
+    const sec = estimateExerciseSeconds(e);
 
     const main =
       [
@@ -8704,9 +8802,9 @@ function renderDuration(
   el.innerHTML =
     `
       <div class="duration-banner">
-        <span>Durata stimata</span>
+        <span>Durata stimata realistica · lavoro + recuperi + transizioni</span>
         <strong>${escapeHtml(formatSeconds(estimated))}</strong>
-        <span>${escapeHtml(note)}</span>
+        <span>${escapeHtml(note)} · tolleranza indicativa ±10–15% in base a cambi macchina e ritmo personale</span>
       </div>
     `;
 
@@ -9023,7 +9121,7 @@ function updateDecisionExplanation(){
 }
 
 /* =========================================================
-   MUSCLE RECOVERY ADAPTIVE ENGINE · V23
+   MUSCLE RECOVERY ADAPTIVE ENGINE · V24
    Heuristic estimate from self-report + logged work in last 72h.
    It is a training aid, not a medical or injury prediction model.
    ========================================================= */
@@ -9143,6 +9241,24 @@ function generateToday(){
       generatedSessionType
     );
   ids = applyModalitiesToWorkout(ids,generatedSessionType);
+
+  // V24: l'obiettivo selezionato in Impostazioni è l'unica fonte per la scheda.
+  // Nei giorni di forza usa la routine composizione corporea e il dosaggio coerente.
+  const activeGoal=d.settings.goal||"hybrid";
+  const physiqueGoal=["fatloss","definition"].includes(activeGoal);
+  let goalCoachingCue="";
+  if(physiqueGoal && ["strength","strengthLight","power"].includes(generatedSessionType)){
+    const goalIds=physiqueWorkoutIds(activeGoal);
+    if(goalIds.length){
+      const goalType=activeGoal==="definition"?"strength":"strengthLight";
+      ids=enhance(goalIds,goalType);
+      ids=applyModalitiesToWorkout(ids,generatedSessionType);
+      goalCoachingCue=activeGoal==="fatloss"
+        ?"Forza controllata e densità sostenibile: non trasformare ogni seduta in HIIT."
+        :"Priorità alla qualità delle serie, progressione e recuperi completi.";
+    }
+  }
+
   let muscleAdaptation=adaptWorkoutForMuscleRecovery(ids,generatedSessionType);
   ids=muscleAdaptation.ids;
 
@@ -9165,8 +9281,9 @@ function generateToday(){
     );
 
   if(["strength","strengthLight","power"].includes(generatedSessionType)&&(d.settings.planPreferences?.gym ?? d.settings.trainingModes?.gym ?? d.settings.equipment.machines)&&!(selectedModes().coachMode==="free"&&selectedModes().freeFocus!=="auto")){
-    const safeIds=[...(GYM_ROUTINES.full||[])].filter(id=>!(mode==="recovery"||mode==="safe"||blocked)||!EX[id]?.shoulderSensitive);
-    if(safeIds.length)currentWorkout=fitToTime(enhance(safeIds,"strength"),d.settings.minutes);
+    const safeIds=[...(GYM_ROUTINES.full||[])].filter(id=>eqAvailable(id)&&(!(mode==="recovery"||mode==="safe"||blocked)||!EX[id]?.shoulderSensitive));
+    const gymDoseType=activeGoal==="fatloss"?"strengthLight":"strength";
+    if(safeIds.length)currentWorkout=fitToTime(enhance(safeIds,physiqueGoal?gymDoseType:"strength"),d.settings.minutes);
   }
   // Reapply after the gym-specific routine selection so the recovery filter cannot be overwritten.
   const finalMuscleAdaptation=adaptWorkoutForMuscleRecovery(currentWorkout.map(e=>e.id),generatedSessionType);
@@ -9210,6 +9327,7 @@ function generateToday(){
     )
     .innerHTML =
       `<strong>${escapeHtml(sessionLabel(generatedSessionType))}</strong>`+
+      (physiqueGoal?`<br><strong>Obiettivo:</strong> ${activeGoal==="fatloss"?"Dimagrimento e ricomposizione":"Definizione muscolare"}${goalCoachingCue?` · ${escapeHtml(goalCoachingCue)}`:""}`:"")+
       `<br>Settimana ${periodizationWeek()}/12 · ${
         escapeHtml(
           periodizationStage().name
@@ -10632,7 +10750,7 @@ function startWorkout(
   currentIndex =
     0;
   currentSetNumber=1;
-  strengthSetFlow=String(type||"").toLowerCase().includes("sala pesi");
+  strengthSetFlow=currentWorkout.some(isGuidedSetExercise);
   strengthRestPhase=false;
 
   currentType =
@@ -10776,11 +10894,11 @@ function renderSession(){
   const setPanel=document.getElementById("setFlowPanel");
   if(setPanel){
     const total=Number(e.sets||parseSets(e.d)||1);
-    const active=strengthSetFlow&&!isRecoveryStep(e);
+    const active=isGuidedSetExercise(e)&&!isRecoveryStep(e);
     setPanel.classList.toggle("hidden",!active);
     if(active){
       document.getElementById("setFlowLabel").textContent=`SERIE ${currentSetNumber} / ${total}`;
-      document.getElementById("setFlowHint").textContent=`${e.d||""} · Recupero previsto ${Math.round(Number(e.s||90)/60)} min. Completa la serie, poi lascia partire il timer.`;
+      document.getElementById("setFlowHint").textContent=`${e.d||""} · Recupero tra le serie ${Math.round(Number(e.s||90))} sec; dopo l’ultima serie recupero/transizione ${setRestSeconds(e,true)} sec. Completa la serie per avviare il countdown.`;
       const b=document.getElementById("completeSetBtn");
       b.disabled=strengthRestPhase;
       b.textContent=strengthRestPhase?"Recupero in corso…":"Serie completata · avvia recupero";
@@ -10834,7 +10952,7 @@ function renderSession(){
     Number(
       e.s || 90
     );
-  if(strengthSetFlow&&!isRecoveryStep(e)){
+  if(isGuidedSetExercise(e)&&!isRecoveryStep(e)){
     const td=document.getElementById("timerDisplay");if(td)td.textContent="PRONTO";
     const tb=document.getElementById("timerBtn");if(tb)tb.textContent="Timer recupero dopo la serie";
   }
@@ -10843,7 +10961,7 @@ function renderSession(){
     timerLeft;
 
   resetTimer(false);
-  if(strengthSetFlow&&!isRecoveryStep(e)){
+  if(isGuidedSetExercise(e)&&!isRecoveryStep(e)){
     const td=document.getElementById("timerDisplay");if(td)td.textContent="PRONTO";
     const tb=document.getElementById("timerBtn");if(tb)tb.textContent="Timer recupero dopo la serie";
   }
@@ -10926,23 +11044,24 @@ function parseSets(dose){
   return m?Math.max(1,Number(m[1])):1;
 }
 function completeCurrentSet(){
-  if(!strengthSetFlow||strengthRestPhase)return;
-  const e=currentWorkout[currentIndex];if(!e)return;
-  const total=Number(e.sets||parseSets(e.d)||1);
-  completedSteps.push({index:currentIndex,set:currentSetNumber,id:e.id||"",title:e.t||"",dose:e.d||"",seconds:Number(e.s||0),elapsedSec:0,recoveryStep:false,weightKg:Number(document.getElementById("exerciseWeightKg")?.value||0)||null,blockRPE:Number(document.getElementById("blockRPE")?.value||0)||null,blockPain:document.getElementById("blockPain")?.value!==""?Number(document.getElementById("blockPain")?.value):null,technique:document.getElementById("blockTechnique")?.value||null});
+  const e=currentWorkout[currentIndex];
+  if(!isGuidedSetExercise(e)||strengthRestPhase)return;
+  const total=setCountForExercise(e),last=currentSetNumber>=total;
+  const rest=setRestSeconds(e,last);
+  completedSteps.push({index:currentIndex,set:currentSetNumber,id:e.id||"",title:e.t||"",dose:e.d||"",seconds:rest,elapsedSec:0,recoveryStep:false,weightKg:Number(document.getElementById("exerciseWeightKg")?.value||0)||null,blockRPE:Number(document.getElementById("blockRPE")?.value||0)||null,blockPain:document.getElementById("blockPain")?.value!==""?Number(document.getElementById("blockPain")?.value):null,technique:document.getElementById("blockTechnique")?.value||null});
   strengthRestPhase=true;
-  timerLeft=Number(e.s||90);timerInitial=timerLeft;resetVoiceCues();
+  timerLeft=rest;timerInitial=timerLeft;resetVoiceCues();
   const b=document.getElementById("completeSetBtn");if(b){b.disabled=true;b.textContent="Recupero in corso…";}
-  const hint=document.getElementById("setFlowHint");if(hint)hint.textContent=`Serie ${currentSetNumber}/${total} completata. Recupera ${Math.round(timerLeft/60)} min: il coach passerà automaticamente alla prossima serie.`;
+  const hint=document.getElementById("setFlowHint");if(hint)hint.textContent=last?`Ultima serie completata. Recupero e transizione ${rest} sec: poi passerai automaticamente all’esercizio successivo.`:`Serie ${currentSetNumber}/${total} completata. Recupera ${rest} sec: poi partirà la serie successiva.`;
   updateTimer();
-  speak(`Serie ${currentSetNumber} completata. Recupero ${Math.round(timerLeft)} secondi.`,true);
+  speak(last?`Ultima serie completata. Recupero ${rest} secondi, poi prossimo esercizio.`:`Serie ${currentSetNumber} completata. Recupero ${rest} secondi.`,true);
   beginCountdown();
 }
 
 function nextStep(){
 
-  if(strengthSetFlow&&strengthRestPhase){speak("Completa il recupero oppure usa Salta recupero.",true);return;}
-  if(strengthSetFlow&&!strengthRestPhase){completeCurrentSet();return;}
+  if(isGuidedSetExercise(currentWorkout[currentIndex])&&strengthRestPhase){speak("Completa il recupero oppure usa Salta recupero.",true);return;}
+  if(isGuidedSetExercise(currentWorkout[currentIndex])&&!strengthRestPhase){completeCurrentSet();return;}
   stopTimer();
 
   haptic("block");
@@ -11409,7 +11528,7 @@ function startRealTimer(){
 
 function toggleTimer(){
 
-  if(strengthSetFlow&&!strengthRestPhase){
+  if(isGuidedSetExercise(currentWorkout[currentIndex])&&!strengthRestPhase){
     speak("Completa prima la serie, poi avvierò il recupero.",true);return;
   }
 
@@ -11521,7 +11640,7 @@ function isRecoveryStep(e){
 
 function skipRecovery(){
 
-  if(strengthSetFlow&&strengthRestPhase){
+  if(isGuidedSetExercise(currentWorkout[currentIndex])&&strengthRestPhase){
     stopTimer();
     timerLeft=0;
     finishTimer();
@@ -11661,11 +11780,11 @@ function finishTimer(){
 
   haptic("finish");
 
-  if(strengthSetFlow && strengthRestPhase){
+  if(isGuidedSetExercise(currentWorkout[currentIndex]) && strengthRestPhase){
     strengthRestPhase=false;
-    currentSetNumber++;
     const e=currentWorkout[currentIndex];
-    const total=Number(e?.sets||parseSets(e?.d)||1);
+    const total=setCountForExercise(e);
+    currentSetNumber++;
     if(currentSetNumber>total){
       currentSetNumber=1;
       currentIndex++;
@@ -12858,11 +12977,16 @@ function dashboard(
     .textContent =
       ({
         hybrid:"Hybrid",
-        fatloss:"Dimagrimento",
+        fatloss:"Ricomposizione",
         definition:"Definizione",
+        muscleGain:"Massa muscolare",
+        strengthFocus:"Forza",
+        run5k:"Running 5 km",
+        run10k:"Running 10 km",
+        halfMarathon:"Mezza maratona",
+        endurance:"Resistenza",
         hyrox:"Hyrox",
         military:"Military",
-        run10k:"10 km",
         longevity:"Longevità"
       })[
         d.settings.goal
@@ -13707,6 +13831,11 @@ function loadSettings(){
     .value =
       s.goal;
 
+  renderGoalStrategyHint();
+  const priorities=s.goalPriorities||{};
+  const priorityMap={muscle:"priorityMuscle",running:"priorityRunning",strength:"priorityStrength",endurance:"priorityEndurance",hyrox:"priorityHyrox",mobility:"priorityMobility"};
+  Object.entries(priorityMap).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.checked=!!priorities[key]});
+
   document
     .getElementById(
       "days"
@@ -13819,6 +13948,7 @@ function saveSettings(){
 
   const d =
     data();
+  const previousGoal=d.settings.goal||"hybrid";
 
   d.settings = {
 
@@ -13846,6 +13976,14 @@ function saveSettings(){
           "goal"
         )
         .value,
+    goalPriorities:{
+      muscle:!!document.getElementById("priorityMuscle")?.checked,
+      running:!!document.getElementById("priorityRunning")?.checked,
+      strength:!!document.getElementById("priorityStrength")?.checked,
+      endurance:!!document.getElementById("priorityEndurance")?.checked,
+      hyrox:!!document.getElementById("priorityHyrox")?.checked,
+      mobility:!!document.getElementById("priorityMobility")?.checked
+    },
 
     days:
       Number(
@@ -13976,10 +14114,18 @@ function saveSettings(){
     notify("Piano bici disattivato: seleziona almeno MTB, bici da corsa o cyclette.","error");
   }
 
+  if(previousGoal!==d.settings.goal){
+    d.settings.goalChangedAt=new Date().toISOString();
+    d.settings.goalPlanRevision=Number(d.settings.goalPlanRevision||0)+1;
+    // Le personalizzazioni giornaliere del vecchio obiettivo non devono contaminare il nuovo piano.
+    d.settings.weeklyOverrides={};
+  }
+
   voiceEnabled =
     d.settings.voice;
 
   save(d);
+  renderGoalStrategyHint();
 
   scheduleSmartReminders();
   updateDeviceStatus();
@@ -14137,7 +14283,7 @@ function exportData(){
     url;
 
   a.download =
-    `erjon-hybrid-coach-v20-backup-${localDay()}.json`;
+    `picari-hybrid-coach-v25-backup-${localDay()}.json`;
 
   a.click();
 
@@ -14177,7 +14323,7 @@ async function shareBackup(){
 
   const file=new File(
     [JSON.stringify(payload,null,2)],
-    `erjon-hybrid-coach-v20-backup-${localDay()}.json`,
+    `picari-hybrid-coach-v25-backup-${localDay()}.json`,
     {type:"application/json"}
   );
 
@@ -14712,7 +14858,9 @@ function runSelfTests(){
   test("normalizzazione",()=>Array.isArray(norm({}).sessions)&&!!norm({}).settings);
   test("periodizzazione",()=>!!masterPeriodization().effective);
   test("decisione finita",()=>Number.isFinite(masterDecisionModel().score));
-  test("durata workout",()=>workoutSeconds([{s:60},{s:90}])===150);
+  test("stima durata workout con preparazione",()=>workoutSeconds([{id:"walk",s:60,c:"cardio"},{id:"stretch",s:60,c:"stretching"}])>=120);
+  test("stima serie include lavoro e recuperi",()=>workoutSeconds([{id:"machineLegPress",d:"3×10–12",s:120,c:"legs",e:"machines"}])>300);
+  test("riconoscimento serie guidate",()=>isGuidedSetExercise({id:"machineLegPress",d:"3×10–12",c:"legs",e:"machines"})&&!isGuidedSetExercise({id:"runEasy",d:"20 min continui",c:"cardio",e:"bodyweight"}));
   test("escape HTML",()=>escapeHtml("<x>")==="&lt;x&gt;");
   test("elementi critici",()=>["page-today","startToday","sessionModal","postModal","painScale"].every(id=>document.getElementById(id)));
   test("ciclismo",()=>["mtbRide","roadRide","indoorRide","bikeIntervals"].every(id=>EX[id]));
@@ -14748,14 +14896,25 @@ function runSelfTests(){
   test("A:C solo descrittivo",()=>!masterDecisionModel.toString().includes("fatigue.ratio"));
   test("calibrazione feedback",()=>["recommendationFeedback","calibrationCard","calibrationAdvice"].every(id=>document.getElementById(id))&&typeof renderCalibrationReport==="function");
   test("equilibrio settimanale",()=>["aerobicBalance","strengthBalance","recoveryBalance"].every(id=>document.getElementById(id))&&typeof renderWeeklyBalance==="function");
-  test("V20 versione e schema",()=>APP_VERSION.startsWith("20.0.0")&&SCHEMA_VERSION===23);
+  test("V25 obiettivi multipli nelle impostazioni",()=>["fatloss","definition","muscleGain","strengthFocus","run5k","run10k","halfMarathon","endurance"].every(v=>[...document.querySelectorAll("#goal option")].some(o=>o.value===v))&&!!document.getElementById("goalStrategyHint"));
+  test("V25 piani per massa, forza e running",()=>["muscleGain","strengthFocus","run5k","run10k","halfMarathon","endurance"].every(g=>getWeekTemplate(g).length===7));
+  test("V25 frequenza massa muscolare rispetta 4 giorni",()=>{const d=data(),old=d.settings.days;d.settings.days=4;save(d);const count=getWeekTemplate("muscleGain").filter(x=>x!=="recovery").length;d.settings.days=old;save(d);return count===4});
+  test("V25 deload periodico disponibile",()=>typeof applyGoalDeload==="function"&&Array.isArray(applyGoalDeload(["strength","interval"])));
+  test("V25 tutti i piani rispettano i giorni selezionati",()=>{const d=data(),old=d.settings.days,goals=["fatloss","definition","muscleGain","strengthFocus","run5k","run10k","halfMarathon","endurance","hyrox","military","hybrid","longevity"];let ok=true;for(const days of [3,4,5,6]){d.settings.days=days;save(d);for(const g of goals)if(getWeekTemplate(g).filter(x=>x!=="recovery").length>days)ok=false;}d.settings.days=old;save(d);return ok});
+  test("V25 priorità secondarie persistenti",()=>!!defaults().settings.goalPriorities&&typeof applySecondaryGoalBalance==="function");
+  test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
+  test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
+  test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
+  test("V25 versione e schema",()=>APP_VERSION.startsWith("25.0.0")&&SCHEMA_VERSION===28);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
-  test("V20 backup con versione coerente",()=>exportData.toString().includes("v20-backup")&&shareBackup.toString().includes("v20-backup"));
+  test("V24 backup con versione coerente",()=>exportData.toString().includes("v25-backup")&&shareBackup.toString().includes("v25-backup"));
   test("V18 import con limiti di sicurezza",()=>installSafeImport.toString().includes("25*1024*1024")&&installSafeImport.toString().includes("100000"));
-  test("V17 database 16 macchinari",()=>GYM_LOAD_IDS.length===16&&GYM_LOAD_IDS.every(id=>EX[id]?.e==="machines"));
-  test("V17 quattro schede palestra coerenti",()=>Object.keys(GYM_ROUTINES).join(",")==="full,upper,lower,core"&&Object.values(GYM_ROUTINES).every(ids=>ids.length>=3&&ids.every(id=>GYM_LOAD_IDS.includes(id))));
+  test("V25 database 36 macchinari",()=>GYM_LOAD_IDS.length===36&&GYM_LOAD_IDS.every(id=>EX[id]?.e==="machines"));
+  test("V25 sette schede palestra coerenti",()=>Object.keys(GYM_ROUTINES).join(",")==="full,upper,upperPull,upperPush,lower,core,arms"&&Object.values(GYM_ROUTINES).every(ids=>ids.length>=3&&ids.every(id=>GYM_LOAD_IDS.includes(id))));
+  test("V25 libreria pesi liberi e routines",()=>["barbellSquat","barbellRDL","dbBenchNeutral","dbRowSupported","dbSplitSquat","dbLateralRaise"].every(id=>EX[id])&&Object.keys(FREE_WEIGHT_ROUTINES).length===7);
+  test("V25 guida serie in qualsiasi sessione",()=>startWorkout.toString().includes("isGuidedSetExercise")&&finishTimer.toString().includes("isGuidedSetExercise"));
   test("V17 protezione spalla",()=>["machineChestPress","machineLatPulldown","machineReverseFly"].every(id=>EX[id]?.shoulderSensitive===true));
   test("V17 tapis roulant senza contaminare piscina/Hyrox",()=>{const old=runSurface,oldType=runType;runSurface="treadmill";runType="easy";const input=[{id:"runEasy",t:"Corsa facile",x:"test"},{id:"squat",t:"Squat",x:"test"}];const out=applyTreadmillToWorkout(input);runSurface=old;runType=oldType;return out[0].t.startsWith("Tapis roulant")&&out[0].x.includes("clip di sicurezza")&&out[1].t==="Squat"});
   test("V17 preferenza superficie valida",()=>["outdoor","treadmill"].includes(data().settings.runSurface||"outdoor"));
@@ -14952,7 +15111,7 @@ function downloadTextFile(name,content,type="text/plain"){
 
 function pwaManifestText(){
   return JSON.stringify({
-    name:"Erjon Picari Hybrid Coach Ultimate V20",
+    name:"Picari Hybrid Coach AI V25",
     short_name:"Hybrid Coach",
     description:"Coach ibrido adattivo: forza, corsa, Hyrox, recupero, progressione, video tecnici e PWA offline.",
     id:"./",
@@ -14993,7 +15152,7 @@ function serviceWorkerText(){
 }
 
 async function downloadPwaFiles(){
-  const ok=await customConfirm("Verranno scaricati service-worker.js, manifest.webmanifest e icon.svg. Per la versione completa con icone iOS/Android usa anche il pacchetto ZIP Ultimate V20.","Preparare il pacchetto PWA?");
+  const ok=await customConfirm("Verranno scaricati service-worker.js, manifest.webmanifest e icon.svg. Per la versione completa con icone iOS/Android pubblica anche le icone PWA generate.","Preparare il pacchetto PWA?");
   if(!ok)return;
   downloadTextFile("service-worker.js",serviceWorkerText(),"text/javascript");
   setTimeout(()=>downloadTextFile("manifest.webmanifest",pwaManifestText(),"application/manifest+json"),250);
@@ -15144,7 +15303,7 @@ window.addEventListener(
 function saveSessionDraft(){
   if(!activeSessionId||!sessionStartedAt||!currentWorkout.length||sessionSaveInProgress)return;
   try{
-    localStorage.setItem(DRAFT_KEY,JSON.stringify({draftVersion:4,activeSessionId,savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,currentSessionOrigin,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness}));
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({draftVersion:5,activeSessionId,savedAt:new Date().toISOString(),currentWorkout,currentIndex,currentType,currentSessionOrigin,generatedSessionType,completedSteps,sessionStartedAt,selectedPain,mode,readiness,shoulderReadiness,performanceReadiness,strengthSetFlow,strengthRestPhase,currentSetNumber,timerLeft,timerInitial}));
   }catch(err){console.warn("Bozza sessione:",err)}
 }
 
@@ -15185,6 +15344,7 @@ async function restoreSessionDraftIfAvailable(){
   currentSessionOrigin=draft.currentSessionOrigin==="daily-plan"||(!draft.currentSessionOrigin&&String(currentType)===String(sessionLabel(draft.generatedSessionType||generatedSessionType)))?"daily-plan":"extra";
   generatedSessionType=draft.generatedSessionType||generatedSessionType;
   completedSteps=Array.isArray(draft.completedSteps)?draft.completedSteps:[];
+  strengthSetFlow=!!draft.strengthSetFlow;strengthRestPhase=!!draft.strengthRestPhase;currentSetNumber=Math.max(1,Number(draft.currentSetNumber||1));
   sessionStartedAt=Number(draft.sessionStartedAt)||Date.now();
   activeSessionId=draft.activeSessionId||`restored-${sessionStartedAt}-${String(draft.currentType||"session")}`;
   sessionSaveInProgress=false;
@@ -15196,6 +15356,7 @@ async function restoreSessionDraftIfAvailable(){
   document.getElementById("sessionModal").classList.remove("hidden");
   requestWakeLock();
   renderSession();
+  if(strengthRestPhase&&isGuidedSetExercise(currentWorkout[currentIndex])){timerLeft=Math.max(1,Number(draft.timerLeft||setRestSeconds(currentWorkout[currentIndex],currentSetNumber>=setCountForExercise(currentWorkout[currentIndex]))));timerInitial=timerLeft;updateTimer();beginCountdown();}
   notify("Sessione ripristinata.");
   return true;
 }
