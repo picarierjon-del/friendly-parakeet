@@ -2669,7 +2669,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "25.0.0-LIFETIME-ADAPTIVE-COACH";
+  "25.2.0-LIFETIME-ADAPTIVE-COACH";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
@@ -6278,6 +6278,7 @@ const SESSION_LABELS = {
   strength:"Forza totale",
   strengthLight:"Forza leggera",
   power:"Potenziamento",
+  gym:"Sala pesi",
 
   easy:"Corsa Z2",
   long:"Lungo facile",
@@ -8609,6 +8610,23 @@ function plan(type){
     )
   ];
 
+  // Sala pesi selezionabile anche direttamente dal calendario settimanale.
+  // La seduta usa soltanto macchine/pesi liberi effettivamente abilitati.
+  if(type==="gym"){
+    const eq=data().settings.equipment||{};
+    const gymIds=[];
+    if(eq.machines || data().settings.planPreferences?.gym || data().settings.trainingModes?.gym){
+      gymIds.push(...(GYM_ROUTINES.full||[]));
+    }
+    if(eq.weights){
+      gymIds.push(...(FREE_WEIGHT_ROUTINES.full||[]));
+    }
+    ids=unique(gymIds).filter(id=>EX[id]&&eqAvailable(id));
+    if(!ids.length){
+      ids=unique([...(GYM_ROUTINES.full||[]),...(FREE_WEIGHT_ROUTINES.full||[])]).filter(id=>EX[id]&&eqAvailable(id));
+    }
+  }
+
   if(mode==="safe"){
 
     ids =
@@ -10107,10 +10125,11 @@ function renderPreviews(){
    ========================================================= */
 
 function weekEditorOptions(selected,planned){
-  const types=["strength","strengthLight","power","easy","long","interval","tempo","threshold","rehab","mobility","recovery","stretching","hybridEngine","militaryStrength","militaryBodyweight"];
+  const types=["gym","strength","strengthLight","power","easy","long","progressive","fartlek","interval","tempo","threshold","rehab","mobility","recovery","stretching","hybridEngine","hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation","militaryStrength","militaryBodyweight"];
   availableCyclingTypes().forEach(type=>types.push(type));
+  const uniqueTypes=[...new Set(types)];
   return `<option value="">Piano: ${escapeHtml(sessionLabel(planned))}</option>`+
-    [...new Set(types)].map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
+    uniqueTypes.map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
 }
 
 function renderWeek(){
@@ -14905,7 +14924,7 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V25 versione e schema",()=>APP_VERSION.startsWith("25.0.0")&&SCHEMA_VERSION===28);
+  test("V25 versione e schema",()=>APP_VERSION.startsWith("25.2.0")&&SCHEMA_VERSION===28);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
@@ -15448,6 +15467,221 @@ renderWeek=function(){renderWeekBase();decorateWeekStatuses()};
 const registerPwaBase=registerPwa;
 registerPwa=async function(){const registration=await registerPwaBase();if(registration){try{await registration.update()}catch{}if(registration.waiting)notify("Aggiornamento disponibile: chiudi e riapri l’app al termine della sessione.")}return registration};
 
+
+/* =========================================================
+   V25.2 · CALENDARIO INTELLIGENTE, ANTEPRIMA E SALA PESI
+   ========================================================= */
+
+// La modalità Sala pesi è una vera tipologia di seduta del calendario,
+// non un semplice collegamento alla pagina palestra.
+const planV251Base = plan;
+plan = function(type){
+  if(type === "gym"){
+    const eq=data().settings.equipment||{};
+    let ids=[];
+    if(eq.machines) ids.push(...(GYM_ROUTINES[gymRoutine]||GYM_ROUTINES.full));
+    if(eq.weights) ids.push(...(FREE_WEIGHT_ROUTINES[gymRoutine]||FREE_WEIGHT_ROUTINES.full));
+    ids=unique(ids).filter(id=>EX[id]&&eqAvailable(id));
+    if(!ids.length) ids=planV251Base("strength");
+    return ids;
+  }
+  return planV251Base(type);
+};
+
+const enhanceV251Base = enhance;
+enhance = function(ids,type){
+  return enhanceV251Base(ids,type==="gym"?"strength":type);
+};
+
+const adaptMuscleV251Base = adaptWorkoutForMuscleRecovery;
+adaptWorkoutForMuscleRecovery = function(ids,type){
+  return adaptMuscleV251Base(ids,type==="gym"?"strength":type);
+};
+
+weekEditorOptions = function(selected,planned){
+  const types=[
+    "gym","strength","strengthLight","power",
+    "easy","long","progressive","fartlek","interval","tempo","threshold",
+    "mtb","roadBike","indoorBike",
+    "hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation","hybridEngine",
+    "militaryStrength","militaryBodyweight","rehab","mobility","recovery","stretching"
+  ];
+  availableCyclingTypes().forEach(type=>types.push(type));
+  return `<option value="">Piano: ${escapeHtml(sessionLabel(planned))}</option>`+
+    [...new Set(types)].map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
+};
+
+function weeklyGoalReason(type, goal){
+  const goalName={
+    fatloss:"ricomposizione e perdita di grasso",
+    definition:"definizione mantenendo la massa muscolare",
+    muscleGain:"aumento della massa muscolare",
+    strengthFocus:"sviluppo della forza",
+    run5k:"miglioramento sui 5 km",
+    run10k:"miglioramento sui 10 km",
+    halfMarathon:"preparazione della mezza maratona",
+    endurance:"costruzione della resistenza aerobica",
+    hyrox:"prestazione HYROX",
+    military:"preparazione atletica generale",
+    hybrid:"sviluppo ibrido di forza e resistenza",
+    longevity:"longevità e capacità atletica"
+  }[goal]||"sviluppo atletico generale";
+  const stimulus={
+    gym:"stimolo di forza/ipertrofia: costruisce o mantiene la muscolatura e sostiene il metabolismo",
+    strength:"forza generale: migliora la capacità di produrre forza e sostiene la massa muscolare",
+    strengthLight:"forza a volume ridotto: mantiene lo stimolo senza accumulare troppa fatica",
+    power:"potenziamento: sviluppa forza e capacità di esprimere potenza",
+    easy:"corsa facile in Z2: costruisce base aerobica con costo di recupero contenuto",
+    long:"lungo facile: aumenta gradualmente la resistenza e la tolleranza al volume",
+    interval:"intervalli: sviluppano velocità e capacità aerobica ad alta intensità",
+    tempo:"tempo run: migliora la capacità di sostenere ritmi impegnativi",
+    threshold:"soglia: migliora la tenuta a ritmo sostenuto",
+    progressive:"corsa progressiva: allena il controllo del ritmo e la gestione dello sforzo",
+    fartlek:"fartlek: alterna intensità per sviluppare adattabilità nella corsa",
+    mtb:"mountain bike: sviluppa resistenza con varietà di stimolo",
+    roadBike:"bici da corsa: aumenta il volume aerobico senza impatto della corsa",
+    indoorBike:"cyclette: lavoro aerobico controllabile e a basso impatto",
+    hyroxTech:"tecnica HYROX: consolida le stazioni senza cercare intensità massimale",
+    hyroxEngine:"motore HYROX: combina corsa e stazioni funzionali",
+    hyroxHIIT:"conditioning: sviluppa capacità di lavoro, da dosare in base al recupero",
+    hybridEngine:"allenamento ibrido: integra forza e capacità aerobica",
+    militaryStrength:"forza generale: sostiene capacità atletiche e robustezza",
+    militaryBodyweight:"forza a corpo libero: sviluppa controllo e resistenza muscolare",
+    rehab:"lavoro di spalla e mobilità: mantiene la qualità del movimento",
+    mobility:"mobilità e recupero: facilita il movimento e riduce il carico complessivo",
+    stretching:"mobilità dolce: favorisce il recupero e la flessibilità",
+    recovery:"recupero: lascia spazio all'adattamento e alla riduzione della fatica",
+    stretching:"mobilità e scarico: favoriscono il recupero"
+  }[type]||"stimolo complementare per mantenere varietà e continuità";
+  return `Per ${goalName}: ${stimulus}. Il carico effettivo verrà confermato dal check giornaliero.`;
+}
+
+function plannedPreviewItems(type){
+  let ids=[];
+  if(type==="gym"){
+    const eq=data().settings.equipment||{};
+    if(eq.machines || data().settings.planPreferences?.gym || data().settings.trainingModes?.gym)ids.push(...(GYM_ROUTINES.full||[]));
+    if(eq.weights)ids.push(...(FREE_WEIGHT_ROUTINES.full||[]));
+    ids=unique(ids).filter(id=>EX[id]&&eqAvailable(id));
+    if(!ids.length)ids=plan("strength");
+  }else{
+    ids=plan(type);
+  }
+  ids=enhance(ids,type==="gym"?"strength":type);
+  const fitted=fitToTime(ids,data().settings.minutes);
+  return fitted.slice(0,12);
+}
+
+function renderWeek(){
+  const d=data();
+  const week=getWeekTemplate(d.settings.goal);
+  const available=mask(d.settings.days);
+  const days=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+  const stage=periodizationStage();
+  const goalFocus={fatloss:"ricomposizione e dimagrimento",definition:"definizione mantenendo la massa",muscleGain:"aumento della massa muscolare",strengthFocus:"sviluppo della forza",run5k:"miglioramento sui 5 km",run10k:"miglioramento sui 10 km",halfMarathon:"preparazione della mezza maratona",endurance:"resistenza aerobica",hyrox:"prestazione HYROX",military:"preparazione atletica generale",hybrid:"sviluppo ibrido",longevity:"longevità atletica"}[d.settings.goal]||"sviluppo atletico";
+  const title=`Settimana ${periodizationWeek()}/12 · ${stage.name}`;
+  const titleEl=document.getElementById("periodizationTitle");
+  const todayTitle=document.getElementById("todayPeriodTitle");
+  [titleEl,todayTitle].filter(Boolean).forEach(el=>el.textContent=title);
+  const grid=document.getElementById("weekGrid");
+  if(!grid)return;
+  const plannedTypes=days.map((_,i)=>{
+    const planned=available[i]?week[i]:"recovery";
+    return sessionTypeForDay(i,planned);
+  });
+  const counts={};plannedTypes.forEach(t=>counts[t]=(counts[t]||0)+1);
+  const trainingCount=plannedTypes.filter(t=>!['recovery','mobility','stretching','rehab'].includes(t)).length;
+  const summary=`Questa settimana lavori per ${goalFocus}. Sono previste ${trainingCount} sedute di allenamento e ${7-trainingCount} giornate di recupero/mobilità. La distribuzione alterna stimoli diversi per far avanzare l'obiettivo senza concentrare tutta la fatica. Apri ogni giornata per vedere esercizi, dosi, recuperi e motivazione. Il check del giorno può adattare la seduta in base a energia, dolore e recupero.`;
+  ["periodizationText","todayPeriodText"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=stage.text+" "+summary});
+  grid.innerHTML=days.map((name,index)=>{
+    const planned=available[index]?week[index]:"recovery";
+    const override=d.settings.weeklyOverrides?.[weeklyOverrideKey(index)]||"";
+    let type=sessionTypeForDay(index,planned);
+    if(earlyDeloadActive()&&!['recovery','easy','rehab','mobility'].includes(type))type="recovery";
+    const items=plannedPreviewItems(type);
+    const rationale=weeklyGoalReason(type,d.settings.goal);
+    const duration=items.length&&typeof workoutSeconds==="function"?formatSeconds(workoutSeconds(items)):"da definire";
+    const preview=items.length?items.map((e,i)=>{
+      const rest=Math.max(0,Math.round(Number(e.s||0)/60));
+      return `<div class="week-preview-item"><b>${i+1}. ${escapeHtml(e.t)}</b><span><strong>${escapeHtml(e.d||"Dose da definire")}</strong>${rest?` · recupero indicativo ${rest} min`:""}</span><span>${escapeHtml(e.x||e.c||"")}</span></div>`;
+    }).join(""):'<p class="small">Attiva la relativa attrezzatura nelle Impostazioni per visualizzare gli esercizi.</p>';
+    const status=available[index]?"SEDUTA PREVISTA":"GIORNO NON ALLENAMENTO";
+    return `<div class="day-card ${index===dayIndex()?"today":""}">
+      <strong>${escapeHtml(name)}</strong>
+      <p class="week-type">${escapeHtml(sessionLabel(type))}</p>
+      <select aria-label="Modifica allenamento ${escapeHtml(name)}" onchange="setWeekOverride(${index},this.value)">${weekEditorOptions(override,planned)}</select>
+      <p class="week-rationale">${escapeHtml(rationale)}</p>
+      <details class="week-preview"><summary>Visualizza allenamento · ${items.length} esercizi</summary><div class="week-preview-meta">Durata indicativa: <strong>${escapeHtml(duration)}</strong></div><div class="week-preview-list">${preview}</div><p class="week-preview-note">Anteprima della seduta programmata. Il coach conferma carichi, intensità e varianti dopo il check-in del giorno; non forza il completamento se emergono dolore o recupero insufficiente.</p></details>
+      <div class="week-plan-origin">${override?"PERSONALIZZATO":status+" · COACH"}</div>
+    </div>`;
+  }).join("");
+  if(typeof decorateWeekStatuses==="function")decorateWeekStatuses();
+}
+
+function installWeekCoachV252Styles(){
+  if(document.getElementById("weekCoachV252Styles"))return;
+  const style=document.createElement("style");style.id="weekCoachV252Styles";
+  style.textContent=`
+    #weekGrid .day-card{min-width:0;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:20px}
+    #weekGrid .day-card select{width:100%;max-width:100%;font-size:14px!important;line-height:1.3;min-height:46px;border-radius:14px;padding:10px}
+    #weekGrid .week-rationale{font-size:.78rem;line-height:1.48;color:var(--muted);margin:2px 0 4px}
+    #weekGrid .week-preview{border:1px solid var(--line);border-radius:14px;padding:10px;background:rgba(255,255,255,.025)}
+    #weekGrid .week-preview summary{font-size:.8rem;font-weight:800;cursor:pointer;min-height:32px;display:flex;align-items:center}
+    #weekGrid .week-preview-meta{font-size:.76rem;color:var(--muted);padding:8px 2px 2px}
+    #weekGrid .week-preview-list{display:grid;gap:7px;margin-top:9px}
+    #weekGrid .week-preview-item{display:grid;gap:3px;padding:9px;border-radius:10px;background:rgba(255,255,255,.035);font-size:.76rem;line-height:1.35}
+    #weekGrid .week-preview-item span{color:var(--muted);font-size:.7rem}
+    #weekGrid .week-preview-note{font-size:.69rem;line-height:1.45;color:var(--muted);margin:10px 0 0}
+    #weekGrid .week-plan-origin{font-size:.62rem;font-weight:900;letter-spacing:.07em;color:var(--muted);border:1px solid var(--line);border-radius:10px;text-align:center;padding:8px}
+    @media(max-width:480px){#weekGrid .day-card{padding:11px;gap:7px}#weekGrid .week-type{font-size:.95rem}#weekGrid .week-rationale{font-size:.73rem}#weekGrid .week-preview summary{font-size:.74rem}}
+  `;
+  document.head.appendChild(style);
+}
+
+const runSelfTestsV252Base=runSelfTests;
+runSelfTests=function(){
+  const tests=runSelfTestsV252Base();
+  const check=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(error){tests.push({name,ok:false,error:String(error)})}};
+  check("V25.2 Sala pesi selezionabile nel calendario",()=>weekEditorOptions("gym","strength").includes('value="gym"'));
+  check("V25.2 Sala pesi ha una motivazione",()=>weeklyGoalReason("gym","muscleGain").includes("ipertrofia"));
+  check("V25.2 anteprima Sala pesi con esercizi",()=>plannedPreviewItems("gym").length>0);
+  check("V25.2 anteprima mostra dosi e recuperi",()=>plannedPreviewItems("gym").some(e=>e.d&&Number(e.s)>=0));
+  check("V25.2 piano conserva selezione personalizzata",()=>typeof setWeekOverride==="function"&&typeof weeklyOverrideKey==="function");
+  return tests;
+};
+
+
+function installWeekCoachStyles(){
+  if(document.getElementById("weekCoachV251Styles"))return;
+  const style=document.createElement("style");style.id="weekCoachV251Styles";
+  style.textContent=`
+    #weekGrid .day-card{min-width:0;display:flex;flex-direction:column;gap:7px;padding:14px;border-radius:20px}
+    #weekGrid .day-card select{width:100%;max-width:100%;font-size:14px!important;line-height:1.3;min-height:44px;border-radius:14px}
+    #weekGrid .week-rationale{font-size:.78rem;line-height:1.45;color:var(--muted);margin:2px 0 4px}
+    #weekGrid .week-preview{border:1px solid var(--line);border-radius:13px;padding:9px 10px;background:rgba(255,255,255,.025)}
+    #weekGrid .week-preview summary{font-size:.78rem;font-weight:800;cursor:pointer;min-height:28px;display:flex;align-items:center}
+    #weekGrid .week-preview-list{display:grid;gap:7px;margin-top:10px}
+    #weekGrid .week-preview-item{display:grid;gap:2px;padding:8px;border-radius:9px;background:rgba(255,255,255,.035);font-size:.75rem}
+    #weekGrid .week-preview-item span{color:var(--muted);font-size:.7rem}
+    #weekGrid .week-preview-note{font-size:.68rem;line-height:1.4;color:var(--muted);margin:9px 0 0}
+    #weekGrid .week-plan-origin{font-size:.62rem;font-weight:900;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:10px;text-align:center;padding:8px}
+    @media(max-width:480px){#weekGrid .day-card{padding:11px;gap:6px}#weekGrid .week-type{font-size:.95rem}#weekGrid .week-rationale{font-size:.72rem}#weekGrid .week-preview summary{font-size:.72rem}}
+  `;
+  document.head.appendChild(style);
+}
+
+const runSelfTestsV251Base=runSelfTests;
+runSelfTests=function(){
+  const tests=runSelfTestsV251Base();
+  const check=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(error){tests.push({name,ok:false,error:String(error)})}};
+  check("V25.2 calendario include Sala pesi",()=>weekEditorOptions("gym","strength").includes('value="gym"'));
+  check("V25.2 catalogo Sala pesi disponibile",()=>Array.isArray(GYM_ROUTINES.full)&&GYM_ROUTINES.full.length>=3&&GYM_ROUTINES.full.every(id=>!!EX[id]));
+  check("V25.2 Sala pesi disponibile come sessione guidata",()=>SESSION_LABELS.gym==="Sala pesi"&&typeof weeklyGoalReason==="function");
+  check("V25.2 anteprima settimanale",()=>typeof plannedPreviewItems==="function"&&plannedPreviewItems("gym").length>=1);
+  check("V25.2 motivazione per obiettivi",()=>weeklyGoalReason("gym","muscleGain").includes("aumento della massa muscolare")&&weeklyGoalReason("easy","run10k").includes("10 km"));
+  return tests;
+};
+
 /* =========================================================
    START
    ========================================================= */
@@ -15467,6 +15701,8 @@ document.addEventListener(
     await hydrate();
 
     installPracticalStyles();
+    installWeekCoachStyles();
+    installWeekCoachV252Styles();
     installSafeImport();
     installExtraSessionGuards();
     const beforeTrash=(data().trash||[]).length,cleaned=purgeExpiredTrash(data());
