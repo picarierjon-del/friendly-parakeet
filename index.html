@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Picari Hybrid Coach AI V25.3 · Recovery Adaptive Coach</title>
+<title>Picari Hybrid Coach AI V26.0 · Recovery Adaptive Coach</title>
 
 <style>
 :root{
@@ -2669,7 +2669,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "25.3.0-LIFETIME-ADAPTIVE-COACH";
+  "26.0.0-LIFETIME-ADAPTIVE-COACH";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
@@ -14961,7 +14961,7 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V25 versione e schema",()=>APP_VERSION.startsWith("25.2.0")&&SCHEMA_VERSION===28);
+  test("V26 versione e schema",()=>APP_VERSION.startsWith("26.0.0")&&SCHEMA_VERSION===28);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
@@ -15506,342 +15506,291 @@ registerPwa=async function(){const registration=await registerPwaBase();if(regis
 
 
 /* =========================================================
-   V25.3 · RECOVERY ENGINE REPAIR, CROSS-MODAL ADAPTATION
+   PICARI HYBRID COACH AI · LIFETIME EDITION
+   Consolidated planner + recovery engine (single authoritative layer)
    ========================================================= */
 
-// La modalità Sala pesi è una vera tipologia di seduta del calendario,
-// non un semplice collegamento alla pagina palestra.
-const planV251Base = plan;
-plan = function(type){
-  if(type === "gym"){
-    const eq=data().settings.equipment||{};
-    let ids=[];
-    if(eq.machines) ids.push(...(GYM_ROUTINES[gymRoutine]||GYM_ROUTINES.full));
-    if(eq.weights) ids.push(...(FREE_WEIGHT_ROUTINES[gymRoutine]||FREE_WEIGHT_ROUTINES.full));
-    ids=unique(ids).filter(id=>EX[id]&&eqAvailable(id));
-    if(!ids.length) ids=planV251Base("strength");
-    return ids;
-  }
-  return planV251Base(type);
-};
+// Canonical labels and one source of truth for the weekly planner.
+SESSION_LABELS.gym = "Sala pesi";
 
-const enhanceV251Base = enhance;
-enhance = function(ids,type){
-  return enhanceV251Base(ids,type==="gym"?"strength":type);
-};
-
-const adaptMuscleV251Base = adaptWorkoutForMuscleRecovery;
-adaptWorkoutForMuscleRecovery = function(ids,type){
-  return adaptMuscleV251Base(ids,type==="gym"?"strength":type);
-};
-
-weekEditorOptions = function(selected,planned){
-  const types=[
-    "gym","strength","strengthLight","power",
-    "easy","long","progressive","fartlek","interval","tempo","threshold",
-    "mtb","roadBike","indoorBike",
-    "hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation","hybridEngine",
-    "militaryStrength","militaryBodyweight","rehab","mobility","recovery","stretching"
-  ];
-  availableCyclingTypes().forEach(type=>types.push(type));
-  return `<option value="">Piano: ${escapeHtml(sessionLabel(planned))}</option>`+
-    [...new Set(types)].map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
-};
-
-function weeklyGoalReason(type, goal){
-  const goalName={
-    fatloss:"ricomposizione e perdita di grasso",
-    definition:"definizione mantenendo la massa muscolare",
-    muscleGain:"aumento della massa muscolare",
-    strengthFocus:"sviluppo della forza",
-    run5k:"miglioramento sui 5 km",
-    run10k:"miglioramento sui 10 km",
-    halfMarathon:"preparazione della mezza maratona",
-    endurance:"costruzione della resistenza aerobica",
-    hyrox:"prestazione HYROX",
-    military:"preparazione atletica generale",
-    hybrid:"sviluppo ibrido di forza e resistenza",
-    longevity:"longevità e capacità atletica"
-  }[goal]||"sviluppo atletico generale";
-  const stimulus={
-    gym:"stimolo di forza/ipertrofia: costruisce o mantiene la muscolatura e sostiene il metabolismo",
-    strength:"forza generale: migliora la capacità di produrre forza e sostiene la massa muscolare",
-    strengthLight:"forza a volume ridotto: mantiene lo stimolo senza accumulare troppa fatica",
-    power:"potenziamento: sviluppa forza e capacità di esprimere potenza",
-    easy:"corsa facile in Z2: costruisce base aerobica con costo di recupero contenuto",
-    long:"lungo facile: aumenta gradualmente la resistenza e la tolleranza al volume",
-    interval:"intervalli: sviluppano velocità e capacità aerobica ad alta intensità",
-    tempo:"tempo run: migliora la capacità di sostenere ritmi impegnativi",
-    threshold:"soglia: migliora la tenuta a ritmo sostenuto",
-    progressive:"corsa progressiva: allena il controllo del ritmo e la gestione dello sforzo",
-    fartlek:"fartlek: alterna intensità per sviluppare adattabilità nella corsa",
-    mtb:"mountain bike: sviluppa resistenza con varietà di stimolo",
-    roadBike:"bici da corsa: aumenta il volume aerobico senza impatto della corsa",
-    indoorBike:"cyclette: lavoro aerobico controllabile e a basso impatto",
-    hyroxTech:"tecnica HYROX: consolida le stazioni senza cercare intensità massimale",
-    hyroxEngine:"motore HYROX: combina corsa e stazioni funzionali",
-    hyroxHIIT:"conditioning: sviluppa capacità di lavoro, da dosare in base al recupero",
-    hybridEngine:"allenamento ibrido: integra forza e capacità aerobica",
-    militaryStrength:"forza generale: sostiene capacità atletiche e robustezza",
-    militaryBodyweight:"forza a corpo libero: sviluppa controllo e resistenza muscolare",
-    rehab:"lavoro di spalla e mobilità: mantiene la qualità del movimento",
-    mobility:"mobilità e recupero: facilita il movimento e riduce il carico complessivo",
-    stretching:"mobilità dolce: favorisce il recupero e la flessibilità",
-    recovery:"recupero: lascia spazio all'adattamento e alla riduzione della fatica",
-    stretching:"mobilità e scarico: favoriscono il recupero"
-  }[type]||"stimolo complementare per mantenere varietà e continuità";
-  return `Per ${goalName}: ${stimulus}. Il carico effettivo verrà confermato dal check giornaliero.`;
+function lifetimeGymPool(focus="full"){
+  const settings=data().settings||{};
+  const eq=settings.equipment||{};
+  // Choosing "Sala pesi" in the weekly calendar explicitly means a gym session.
+  // If equipment preferences were never configured, use the full gym catalogue.
+  const hasEquipmentChoice=!!(eq.machines||eq.weights);
+  const useMachines=eq.machines||!hasEquipmentChoice;
+  const useWeights=eq.weights||!hasEquipmentChoice;
+  let ids=[];
+  if(useMachines)ids.push(...(GYM_ROUTINES[focus]||GYM_ROUTINES.full||[]));
+  if(useWeights)ids.push(...(FREE_WEIGHT_ROUTINES[focus]||FREE_WEIGHT_ROUTINES.full||[]));
+  return unique(ids).filter(id=>!!EX[id]);
 }
 
-function plannedPreviewItems(type, previewDayIndex=null){
-  let ids=[];
+const lifetimePlanBase=plan;
+plan=function(type){
   if(type==="gym"){
-    const eq=data().settings.equipment||{};
-    if(eq.machines || data().settings.planPreferences?.gym || data().settings.trainingModes?.gym)ids.push(...(GYM_ROUTINES.full||[]));
-    if(eq.weights)ids.push(...(FREE_WEIGHT_ROUTINES.full||[]));
-    ids=unique(ids).filter(id=>EX[id]&&eqAvailable(id));
-    if(!ids.length)ids=plan("strength");
-  }else{
-    ids=plan(type);
+    let ids=lifetimeGymPool(gymRoutine||"full");
+    if(!ids.length)ids=lifetimeGymPool("full");
+    return ids.length?ids:lifetimePlanBase("strength");
   }
+  return lifetimePlanBase(type);
+};
+
+const lifetimeEnhanceBase=enhance;
+enhance=function(ids,type){return lifetimeEnhanceBase(ids,type==="gym"?"strength":type);};
+
+function lifetimeGroupForExercise(step){
+  const id=String(step?.id||"").toLowerCase();
+  const name=String(step?.name||step?.title||step?.exercise||step?.t||"").toLowerCase();
+  const text=id+" "+name;
+  const groups=[];
+  if(/squat|goblet|split|lunge|step.?up|thrust|bridge|wall.?sit|sled.?push|sled.?pull|run|hyroxrun|march|bike|rowerg|rower|assaultbike|calf|deadlift|hinge|leg|hamstring|quad|glute|cycling|treadmill/.test(text))groups.push("legs");
+  if(/inclinepush|wallpush|push.?up|chest|petto|dip|tricep|bench|press|pec.?deck/.test(text))groups.push("push");
+  if(/row|pull|lat|pulldown|bicep|curl|back|schiena|face.?pull/.test(text))groups.push("pull");
+  if(/shoulder|spalla|deltoid|lateral.?raise|alzate|overhead|militarypress|scap|cuff|ski.?erg|skierg|wall.?ball/.test(text))groups.push("shoulders");
+  if(/core|deadbug|plank|crunch|mountain|carry|farmer|anti.?rotation|abdom|pallof/.test(text))groups.push("core");
+  // Ergometer patterns load more than one region; deliberately conservative.
+  if(/rowerg|rower/.test(text)){groups.push("legs","pull","core");}
+  if(/skierg|ski.?erg/.test(text)){groups.push("shoulders","core");}
+  return [...new Set(groups)];
+}
+muscleGroupForExercise=lifetimeGroupForExercise;
+
+function getMuscleRecoveryProfile(){
+  const d=data(),now=Date.now();
+  const check=d.settings?.muscleRecoveryCheck;
+  const manual=check?.date===localDay()?check.values||{}:{};
+  const score={legs:0,push:0,pull:0,shoulders:0,core:0};
+  const sessions=Array.isArray(d.sessions)?d.sessions:[];
+  sessions.filter(session=>{
+    const stamp=Date.parse(session.date||"");
+    return Number.isFinite(stamp)&&stamp<=now&&now-stamp<=72*3600000&&!session.incomplete;
+  }).forEach(session=>{
+    const age=(now-Date.parse(session.date))/3600000;
+    const weight=age<=24?1.8:age<=48?1.1:.45;
+    const steps=[...(session.completedSteps||[]),...(session.completedSteps?.length?[]:(session.prescribedWorkout||[]))];
+    const touched=new Set();
+    steps.forEach(step=>lifetimeGroupForExercise(step).forEach(group=>touched.add(group)));
+    touched.forEach(group=>score[group]+=weight);
+  });
+  Object.keys(score).forEach(group=>{
+    const level=Math.max(0,Math.min(3,Number(manual[group]||0)));
+    const perceived=[0,2.5,6,8.5][level]||0;
+    score[group]=Math.min(10,score[group]+perceived);
+  });
+  return {score,manual,historyCount:sessions.length};
+}
+
+function lifetimeRecoveryExercises(severe=false){
+  const preferred=severe?["breathing","stretch","cat"]:["breathing","walkFast","stretch","deadbug"];
+  const result=preferred.filter(id=>EX[id]);
+  return result.length?result:(plan("recovery")||[]).filter(id=>EX[id]);
+}
+
+function adaptWorkoutForMuscleRecovery(ids,type){
+  const profile=getMuscleRecoveryProfile(),score=profile.score||{};
+  const threshold=5,severeThreshold=7.5;
+  const high=key=>Number(score[key]||0)>=threshold;
+  const severe=key=>Number(score[key]||0)>=severeThreshold;
+  const gym=type==="gym";
+  const normalized=gym?"strength":type;
+  const strengthTypes=["strength","strengthLight","power","militaryStrength","militaryLight","militaryTest","gym"];
+  const runTypes=["easy","long","progressive","fartlek","interval","tempo","threshold","runTest"];
+  const cycleTypes=["mtb","roadBike","indoorBike","cycling"];
+  const hyroxTypes=["hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation","hyroxTest","hybridEngine","hybridTest","militaryConditioning"];
+  let original=unique((ids||[]).filter(id=>!!EX[id]));
+  let out=[...original];
+  const shoulderSafe=id=>!EX[id]?.shoulderSensitive&&!/overhead|militarypress|wall.?ball|ski.?erg|push.?up|dip/i.test(id);
+  const available=id=>!!EX[id]&&(gym||eqAvailable(id));
+  const poolFor=(focus)=>gym?lifetimeGymPool(focus).filter(available):
+    (plan("strength")||[]).filter(available);
+  const fatigueGroups=["legs","push","pull","shoulders","core"].filter(high);
+  if(!fatigueGroups.length)return {ids:out,changed:false,profile};
+
+  if(high("shoulders"))out=out.filter(id=>shoulderSafe(id));
+
+  if(strengthTypes.includes(normalized)){
+    // Keep only work for recovered regions. For an explicitly selected gym day,
+    // draw alternatives from the complete machine/free-weight catalogue.
+    let candidates=gym?lifetimeGymPool("full").filter(available):out;
+    candidates=candidates.filter(id=>{
+      const groups=lifetimeGroupForExercise({id,name:EX[id]?.t||""});
+      if(high("legs")&&groups.includes("legs"))return false;
+      if(high("push")&&groups.includes("push"))return false;
+      if(high("pull")&&groups.includes("pull"))return false;
+      if(high("core")&&groups.includes("core"))return false;
+      if(high("shoulders")&&(!shoulderSafe(id)||groups.some(group=>["push","pull","shoulders"].includes(group))))return false;
+      return true;
+    });
+    // Avoid selecting only warm-up / mobility items as a strength replacement.
+    const strengthCandidates=candidates.filter(id=>!(["breathing","walk","stretch","deadbug","cat"].includes(id)));
+    if(strengthCandidates.length>=2)out=unique([...(out.includes("breathing")?["breathing"]:[]),...strengthCandidates.slice(0,8),...(out.includes("stretch")?["stretch"]:[])]);
+    else if(strengthCandidates.length)out=strengthCandidates;
+    else out=lifetimeRecoveryExercises(severeGroups());
+  }else if((runTypes.includes(normalized)||cycleTypes.includes(normalized))&&high("legs")){
+    out=lifetimeRecoveryExercises(severe("legs"));
+  }else if(hyroxTypes.includes(normalized)){
+    // HYROX ergometers/stations also load shoulders, trunk and legs; no unsafe
+    // substitution is guessed. Use recovery when the affected regions overlap.
+    const filtered=out.filter(id=>{
+      const groups=lifetimeGroupForExercise({id,name:EX[id]?.t||""});
+      if(high("legs")&&groups.includes("legs"))return false;
+      if(high("push")&&groups.includes("push"))return false;
+      if(high("pull")&&groups.includes("pull"))return false;
+      if(high("shoulders")&&!shoulderSafe(id))return false;
+      if(high("core")&&groups.includes("core"))return false;
+      return true;
+    });
+    out=filtered.length>=2?filtered:lifetimeRecoveryExercises(fatigueGroups.some(k=>severe(k)));
+  }else{
+    out=out.filter(id=>{
+      const groups=lifetimeGroupForExercise({id,name:EX[id]?.t||""});
+      if(fatigueGroups.some(group=>groups.includes(group)))return false;
+      if(high("shoulders")&&(!shoulderSafe(id)||groups.some(group=>["push","pull","shoulders"].includes(group))))return false;
+      return true;
+    });
+    if(!out.length)out=lifetimeRecoveryExercises(fatigueGroups.some(k=>severe(k)));
+  }
+
+  // Last safety pass: never return an exercise explicitly classified in a
+  // manually fatigued region; retain only known catalogue IDs.
+  out=unique(out).filter(id=>!!EX[id]);
+  if(high("shoulders"))out=out.filter(id=>shoulderSafe(id)&&!lifetimeGroupForExercise({id,name:EX[id]?.t||""}).some(group=>["push","pull","shoulders"].includes(group)));
+  if(!out.length)out=lifetimeRecoveryExercises(true);
+  const changed=out.join("|")!==original.join("|");
+  return {ids:out,changed,profile};
+
+  function severeGroups(){return fatigueGroups.some(group=>severe(group));}
+}
+
+function saveMuscleRecoveryCheck(){
+  const d=data(),values={};
+  const map={legs:"mrLegs",push:"mrPush",pull:"mrPull",shoulders:"mrShoulders",core:"mrCore"};
+  Object.entries(map).forEach(([key,id])=>{
+    const el=document.getElementById(id);
+    values[key]=Math.max(0,Math.min(3,Number(el?.value||0)));
+  });
+  d.settings.muscleRecoveryCheck={date:localDay(),values,updatedAt:new Date().toISOString()};
+  save(d);
+  updateMuscleRecoverySummary();
+  // Re-render the weekly preview even before the shoulder/readiness check-in.
+  // If the daily check-in exists, regenerate today's actual session as well.
+  if(selectedPain!==null){try{evaluate();}catch(error){console.warn("Lifetime recovery update:",error);renderWeek();}}
+  else renderWeek();
+  notify("Recupero muscolare salvato: anteprima settimanale aggiornata.");
+}
+
+function loadMuscleRecoveryCheck(){
+  const check=data().settings.muscleRecoveryCheck;
+  const values=check?.date===localDay()?check.values||{}:{};
+  const map={legs:"mrLegs",push:"mrPush",pull:"mrPull",shoulders:"mrShoulders",core:"mrCore"};
+  Object.entries(map).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.value=String(values[key]||0);});
+  updateMuscleRecoverySummary();
+}
+
+function updateMuscleRecoverySummary(){
+  const el=document.getElementById("muscleRecoverySummary");if(!el)return;
+  const p=getMuscleRecoveryProfile();
+  const labels={legs:"Gambe",push:"Petto/tricipiti",pull:"Schiena/bicipiti",shoulders:"Spalle",core:"Core"};
+  const high=Object.entries(p.score).filter(([,v])=>v>=5).sort((a,b)=>b[1]-a[1]);
+  el.textContent=high.length?"Adattamento attivo: "+high.map(([k,v])=>labels[k]+" ("+Math.round(v)+"/10)").join(", ")+". Il coach protegge questi distretti e ricalcola la seduta compatibile.":"Nessun distretto con affaticamento elevato. Il coach mantiene il piano e continua a monitorare il recupero.";
+}
+
+function weekEditorOptions(selected,planned){
+  const types=["gym","strength","strengthLight","power","easy","long","progressive","fartlek","interval","tempo","threshold","mtb","roadBike","indoorBike","hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation","hybridEngine","militaryStrength","militaryBodyweight","rehab","mobility","recovery","stretching"];
+  availableCyclingTypes().forEach(type=>types.push(type));
+  return `<option value="">Piano: ${escapeHtml(sessionLabel(planned))}</option>`+[...new Set(types)].map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
+}
+
+function weeklyGoalReason(type,goal){
+  const names={fatloss:"ricomposizione e perdita di grasso",definition:"definizione mantenendo la massa muscolare",muscleGain:"aumento della massa muscolare",strengthFocus:"sviluppo della forza",run5k:"miglioramento sui 5 km",run10k:"miglioramento sui 10 km",halfMarathon:"preparazione della mezza maratona",endurance:"resistenza aerobica",hyrox:"prestazione HYROX",military:"preparazione atletica generale",hybrid:"sviluppo ibrido di forza e resistenza",longevity:"longevità atletica"};
+  const stimuli={gym:"sala pesi: stimolo di forza e ipertrofia per costruire o mantenere la muscolatura",strength:"forza generale e progressione dei carichi",strengthLight:"forza a volume controllato per gestire la fatica",power:"potenza e capacità di esprimere forza",easy:"corsa facile Z2 per costruire base aerobica",long:"lungo facile per aumentare gradualmente la resistenza",interval:"intervalli per velocità e capacità aerobica",tempo:"tempo run per sostenere ritmi impegnativi",threshold:"lavoro di soglia per migliorare la tenuta",progressive:"corsa progressiva per controllo del ritmo",fartlek:"variazioni di ritmo per adattabilità",mtb:"mountain bike per resistenza e varietà",roadBike:"bici da corsa per volume aerobico",indoorBike:"cyclette per lavoro aerobico controllabile",hyroxTech:"tecnica HYROX senza intensità massimale",hyroxEngine:"corsa e stazioni per il motore HYROX",hyroxHIIT:"conditioning ad alta intensità dosato sul recupero",hybridEngine:"integrazione di forza e capacità aerobica",militaryStrength:"forza generale e robustezza",militaryBodyweight:"controllo e resistenza a corpo libero",rehab:"mobilità e lavoro specifico di spalla",mobility:"mobilità e qualità del movimento",stretching:"mobilità dolce e flessibilità",recovery:"recupero per favorire adattamento e ridurre la fatica"};
+  return `Per ${names[goal]||"sviluppo atletico generale"}: ${stimuli[type]||"stimolo complementare al programma"}. Il check-in del giorno regola intensità e volume.`;
+}
+
+function plannedPreviewItems(type,previewDayIndex=null){
+  let ids=plan(type);
   ids=enhance(ids,type==="gym"?"strength":type);
-  if(previewDayIndex===dayIndex()&&selectedPain!==null){
+  if(type!=="gym")ids=applyModalitiesToWorkout(ids,type);
+  if(type==="gym")ids=ids.filter(id=>!!EX[id]);
+  if(previewDayIndex===dayIndex()){
     const adapted=adaptWorkoutForMuscleRecovery(ids,type);
     ids=adapted.ids;
   }
-  const fitted=fitToTime(ids,data().settings.minutes);
-  return fitted.slice(0,12);
+  return fitToTime(ids,data().settings.minutes).slice(0,12);
 }
 
 function renderWeek(){
-  const d=data();
-  const week=getWeekTemplate(d.settings.goal);
-  const available=mask(d.settings.days);
-  const days=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
-  const stage=periodizationStage();
-  const goalFocus={fatloss:"ricomposizione e dimagrimento",definition:"definizione mantenendo la massa",muscleGain:"aumento della massa muscolare",strengthFocus:"sviluppo della forza",run5k:"miglioramento sui 5 km",run10k:"miglioramento sui 10 km",halfMarathon:"preparazione della mezza maratona",endurance:"resistenza aerobica",hyrox:"prestazione HYROX",military:"preparazione atletica generale",hybrid:"sviluppo ibrido",longevity:"longevità atletica"}[d.settings.goal]||"sviluppo atletico";
+  const d=data(),week=getWeekTemplate(d.settings.goal),available=mask(d.settings.days);
+  const days=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"],stage=periodizationStage();
   const title=`Settimana ${periodizationWeek()}/12 · ${stage.name}`;
-  const titleEl=document.getElementById("periodizationTitle");
-  const todayTitle=document.getElementById("todayPeriodTitle");
-  [titleEl,todayTitle].filter(Boolean).forEach(el=>el.textContent=title);
-  const grid=document.getElementById("weekGrid");
-  if(!grid)return;
-  const plannedTypes=days.map((_,i)=>{
-    const planned=available[i]?week[i]:"recovery";
-    return sessionTypeForDay(i,planned);
-  });
-  const counts={};plannedTypes.forEach(t=>counts[t]=(counts[t]||0)+1);
-  const trainingCount=plannedTypes.filter(t=>!['recovery','mobility','stretching','rehab'].includes(t)).length;
-  const summary=`Questa settimana lavori per ${goalFocus}. Sono previste ${trainingCount} sedute di allenamento e ${7-trainingCount} giornate di recupero/mobilità. La distribuzione alterna stimoli diversi per far avanzare l'obiettivo senza concentrare tutta la fatica. Apri ogni giornata per vedere esercizi, dosi, recuperi e motivazione. Il check del giorno può adattare la seduta in base a energia, dolore e recupero.`;
-  ["periodizationText","todayPeriodText"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=stage.text+" "+summary});
+  ["periodizationTitle","todayPeriodTitle"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=title;});
+  const grid=document.getElementById("weekGrid");if(!grid)return;
+  const plannedTypes=days.map((_,i)=>sessionTypeForDay(i,available[i]?week[i]:"recovery"));
+  const trainingCount=plannedTypes.filter(t=>!["recovery","mobility","stretching","rehab"].includes(t)).length;
+  const goalFocus={fatloss:"ricomposizione e dimagrimento",definition:"definizione mantenendo la massa",muscleGain:"aumento della massa muscolare",strengthFocus:"sviluppo della forza",run5k:"miglioramento sui 5 km",run10k:"miglioramento sui 10 km",halfMarathon:"preparazione della mezza maratona",endurance:"resistenza aerobica",hyrox:"prestazione HYROX",military:"preparazione atletica generale",hybrid:"sviluppo ibrido",longevity:"longevità atletica"}[d.settings.goal]||"sviluppo atletico";
+  const summary=`Questa settimana lavori per ${goalFocus}. Sono previste ${trainingCount} sedute di allenamento e ${7-trainingCount} giornate di recupero o mobilità. Ogni seduta ha uno stimolo specifico; apri l'anteprima per vedere esercizi, dosi, recuperi e durata. Il check-in quotidiano può adattare la seduta in base a energia, dolore e recupero muscolare.`;
+  ["periodizationText","todayPeriodText"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=(stage.text||"")+" "+summary;});
   grid.innerHTML=days.map((name,index)=>{
     const planned=available[index]?week[index]:"recovery";
     const override=d.settings.weeklyOverrides?.[weeklyOverrideKey(index)]||"";
     let type=sessionTypeForDay(index,planned);
-    if(earlyDeloadActive()&&!['recovery','easy','rehab','mobility'].includes(type))type="recovery";
+    if(earlyDeloadActive()&&!["recovery","easy","rehab","mobility"].includes(type))type="recovery";
     const items=plannedPreviewItems(type,index);
     let rationale=weeklyGoalReason(type,d.settings.goal);
-    if(index===dayIndex()&&selectedPain!==null){
-      const recoveryProfile=getMuscleRecoveryProfile();
-      const highZones=Object.entries(recoveryProfile.score).filter(([,score])=>score>=5).map(([key])=>({legs:'gambe',push:'petto/tricipiti',pull:'schiena/bicipiti',shoulders:'spalle',core:'core'}[key]));
-      if(highZones.length)rationale+=` Adattamento di oggi: proteggo ${highZones.join(', ')} e sposto lo stimolo sui distretti recuperati.`;
+    if(index===dayIndex()){
+      const profile=getMuscleRecoveryProfile();
+      const labels={legs:"gambe",push:"petto/tricipiti",pull:"schiena/bicipiti",shoulders:"spalle",core:"core"};
+      const affected=Object.entries(profile.score).filter(([,v])=>v>=5).map(([key])=>labels[key]);
+      if(affected.length)rationale+=` Adattamento recupero: proteggo ${affected.join(", ")} e scelgo solo distretti compatibili.`;
     }
-    const duration=items.length&&typeof workoutSeconds==="function"?formatSeconds(workoutSeconds(items)):"da definire";
+    const duration=items.length?formatSeconds(workoutSeconds(items)):"da definire";
     const preview=items.length?items.map((e,i)=>{
       const rest=Math.max(0,Math.round(Number(e.s||0)/60));
       return `<div class="week-preview-item"><b>${i+1}. ${escapeHtml(e.t)}</b><span><strong>${escapeHtml(e.d||"Dose da definire")}</strong>${rest?` · recupero indicativo ${rest} min`:""}</span><span>${escapeHtml(e.x||e.c||"")}</span></div>`;
-    }).join(""):'<p class="small">Attiva la relativa attrezzatura nelle Impostazioni per visualizzare gli esercizi.</p>';
+    }).join(""):'<p class="small">Attiva l’attrezzatura necessaria nelle Impostazioni per visualizzare gli esercizi.</p>';
     const status=available[index]?"SEDUTA PREVISTA":"GIORNO NON ALLENAMENTO";
-    return `<div class="day-card ${index===dayIndex()?"today":""}">
-      <strong>${escapeHtml(name)}</strong>
-      <p class="week-type">${escapeHtml(sessionLabel(type))}</p>
-      <select aria-label="Modifica allenamento ${escapeHtml(name)}" onchange="setWeekOverride(${index},this.value)">${weekEditorOptions(override,planned)}</select>
-      <p class="week-rationale">${escapeHtml(rationale)}</p>
-      <details class="week-preview"><summary>Visualizza allenamento · ${items.length} esercizi</summary><div class="week-preview-meta">Durata indicativa: <strong>${escapeHtml(duration)}</strong></div><div class="week-preview-list">${preview}</div><p class="week-preview-note">Anteprima della seduta programmata. Il coach conferma carichi, intensità e varianti dopo il check-in del giorno; non forza il completamento se emergono dolore o recupero insufficiente.</p></details>
-      <div class="week-plan-origin">${override?"PERSONALIZZATO":status+" · COACH"}</div>
-    </div>`;
+    return `<div class="day-card ${index===dayIndex()?"today":""}"><strong>${name}</strong><p class="week-type">${escapeHtml(sessionLabel(type))}</p><select aria-label="Modifica allenamento ${name}" onchange="setWeekOverride(${index},this.value)">${weekEditorOptions(override,planned)}</select><p class="week-rationale">${escapeHtml(rationale)}</p><details class="week-preview"><summary>Visualizza allenamento · ${items.length} esercizi</summary><div class="week-preview-meta">Durata indicativa: <strong>${escapeHtml(duration)}</strong></div><div class="week-preview-list">${preview}</div><p class="week-preview-note">Anteprima della seduta. Il coach conferma carichi e intensità dopo il check-in del giorno.</p></details><div class="week-plan-origin">${override?"PERSONALIZZATO":status+" · COACH"}</div></div>`;
   }).join("");
   if(typeof decorateWeekStatuses==="function")decorateWeekStatuses();
 }
 
-function installWeekCoachV252Styles(){
-  if(document.getElementById("weekCoachV252Styles"))return;
-  const style=document.createElement("style");style.id="weekCoachV252Styles";
-  style.textContent=`
-    #weekGrid .day-card{min-width:0;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:20px}
-    #weekGrid .day-card select{width:100%;max-width:100%;font-size:14px!important;line-height:1.3;min-height:46px;border-radius:14px;padding:10px}
-    #weekGrid .week-rationale{font-size:.78rem;line-height:1.48;color:var(--muted);margin:2px 0 4px}
-    #weekGrid .week-preview{border:1px solid var(--line);border-radius:14px;padding:10px;background:rgba(255,255,255,.025)}
-    #weekGrid .week-preview summary{font-size:.8rem;font-weight:800;cursor:pointer;min-height:32px;display:flex;align-items:center}
-    #weekGrid .week-preview-meta{font-size:.76rem;color:var(--muted);padding:8px 2px 2px}
-    #weekGrid .week-preview-list{display:grid;gap:7px;margin-top:9px}
-    #weekGrid .week-preview-item{display:grid;gap:3px;padding:9px;border-radius:10px;background:rgba(255,255,255,.035);font-size:.76rem;line-height:1.35}
-    #weekGrid .week-preview-item span{color:var(--muted);font-size:.7rem}
-    #weekGrid .week-preview-note{font-size:.69rem;line-height:1.45;color:var(--muted);margin:10px 0 0}
-    #weekGrid .week-plan-origin{font-size:.62rem;font-weight:900;letter-spacing:.07em;color:var(--muted);border:1px solid var(--line);border-radius:10px;text-align:center;padding:8px}
-    @media(max-width:480px){#weekGrid .day-card{padding:11px;gap:7px}#weekGrid .week-type{font-size:.95rem}#weekGrid .week-rationale{font-size:.73rem}#weekGrid .week-preview summary{font-size:.74rem}}
-  `;
-  document.head.appendChild(style);
-}
-
-const runSelfTestsV252Base=runSelfTests;
-runSelfTests=function(){
-  const tests=runSelfTestsV252Base();
-  const check=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(error){tests.push({name,ok:false,error:String(error)})}};
-  check("V25.2 Sala pesi selezionabile nel calendario",()=>weekEditorOptions("gym","strength").includes('value="gym"'));
-  check("V25.2 Sala pesi ha una motivazione",()=>weeklyGoalReason("gym","muscleGain").includes("ipertrofia"));
-  check("V25.2 anteprima Sala pesi con esercizi",()=>plannedPreviewItems("gym").length>0);
-  check("V25.2 anteprima mostra dosi e recuperi",()=>plannedPreviewItems("gym").some(e=>e.d&&Number(e.s)>=0));
-  check("V25.2 piano conserva selezione personalizzata",()=>typeof setWeekOverride==="function"&&typeof weeklyOverrideKey==="function");
-  return tests;
-};
-
-
 function installWeekCoachStyles(){
-  if(document.getElementById("weekCoachV251Styles"))return;
-  const style=document.createElement("style");style.id="weekCoachV251Styles";
-  style.textContent=`
-    #weekGrid .day-card{min-width:0;display:flex;flex-direction:column;gap:7px;padding:14px;border-radius:20px}
-    #weekGrid .day-card select{width:100%;max-width:100%;font-size:14px!important;line-height:1.3;min-height:44px;border-radius:14px}
-    #weekGrid .week-rationale{font-size:.78rem;line-height:1.45;color:var(--muted);margin:2px 0 4px}
-    #weekGrid .week-preview{border:1px solid var(--line);border-radius:13px;padding:9px 10px;background:rgba(255,255,255,.025)}
-    #weekGrid .week-preview summary{font-size:.78rem;font-weight:800;cursor:pointer;min-height:28px;display:flex;align-items:center}
-    #weekGrid .week-preview-list{display:grid;gap:7px;margin-top:10px}
-    #weekGrid .week-preview-item{display:grid;gap:2px;padding:8px;border-radius:9px;background:rgba(255,255,255,.035);font-size:.75rem}
-    #weekGrid .week-preview-item span{color:var(--muted);font-size:.7rem}
-    #weekGrid .week-preview-note{font-size:.68rem;line-height:1.4;color:var(--muted);margin:9px 0 0}
-    #weekGrid .week-plan-origin{font-size:.62rem;font-weight:900;letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:10px;text-align:center;padding:8px}
-    @media(max-width:480px){#weekGrid .day-card{padding:11px;gap:6px}#weekGrid .week-type{font-size:.95rem}#weekGrid .week-rationale{font-size:.72rem}#weekGrid .week-preview summary{font-size:.72rem}}
-  `;
+  if(document.getElementById("lifetimeWeekStyles"))return;
+  const style=document.createElement("style");style.id="lifetimeWeekStyles";
+  style.textContent=`#weekGrid .day-card{min-width:0;display:flex;flex-direction:column;gap:8px;padding:13px;border-radius:18px}#weekGrid .day-card select{width:100%;max-width:100%;font-size:14px!important;min-height:46px;border-radius:14px;padding:10px}#weekGrid .week-rationale{font-size:.76rem;line-height:1.45;color:var(--muted);margin:2px 0 4px}#weekGrid .week-preview{border:1px solid var(--line);border-radius:13px;padding:9px;background:rgba(255,255,255,.025)}#weekGrid .week-preview summary{font-size:.78rem;font-weight:800;cursor:pointer;min-height:30px;display:flex;align-items:center}#weekGrid .week-preview-list{display:grid;gap:7px;margin-top:9px}#weekGrid .week-preview-item{display:grid;gap:3px;padding:8px;border-radius:9px;background:rgba(255,255,255,.035);font-size:.74rem}#weekGrid .week-preview-item span{color:var(--muted);font-size:.69rem}@media(max-width:480px){#weekGrid .day-card{padding:10px;gap:6px}#weekGrid .week-rationale{font-size:.72rem}}`;
   document.head.appendChild(style);
 }
+function installWeekCoachV252Styles(){installWeekCoachStyles();}
 
-const runSelfTestsV251Base=runSelfTests;
+// Keep the existing status decoration and PWA update behaviour, without stacking
+// multiple historical wrappers.
+const lifetimeRegisterPwaBase=registerPwa;
+registerPwa=async function(){const registration=await lifetimeRegisterPwaBase();if(registration){try{await registration.update();}catch(error){console.info("PWA update check skipped",error);}if(registration.waiting)notify("Aggiornamento disponibile: chiudi e riapri l’app al termine della sessione.");}return registration;};
+
+const lifetimeSelfTestsBase=runSelfTests;
 runSelfTests=function(){
-  const tests=runSelfTestsV251Base();
-  const check=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(error){tests.push({name,ok:false,error:String(error)})}};
-  check("V25.2 calendario include Sala pesi",()=>weekEditorOptions("gym","strength").includes('value="gym"'));
-  check("V25.2 catalogo Sala pesi disponibile",()=>Array.isArray(GYM_ROUTINES.full)&&GYM_ROUTINES.full.length>=3&&GYM_ROUTINES.full.every(id=>!!EX[id]));
-  check("V25.2 Sala pesi disponibile come sessione guidata",()=>SESSION_LABELS.gym==="Sala pesi"&&typeof weeklyGoalReason==="function");
-  check("V25.2 anteprima settimanale",()=>typeof plannedPreviewItems==="function"&&plannedPreviewItems("gym").length>=1);
-  check("V25.2 motivazione per obiettivi",()=>weeklyGoalReason("gym","muscleGain").includes("aumento della massa muscolare")&&weeklyGoalReason("easy","run10k").includes("10 km"));
+  const tests=lifetimeSelfTestsBase();
+  const check=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(error){tests.push({name,ok:false,error:String(error)});}};
+  check("Lifetime: Sala pesi disponibile nel calendario",()=>weekEditorOptions("gym","strength").includes('value="gym"'));
+  check("Lifetime: routine palestra contiene esercizi validi",()=>lifetimeGymPool("full").length>=3&&lifetimeGymPool("full").every(id=>!!EX[id]));
+  check("Lifetime: etichetta Sala pesi",()=>sessionLabel("gym")==="Sala pesi");
+  check("Lifetime: anteprima settimanale palestra",()=>plannedPreviewItems("gym").length>0);
+  check("Lifetime: motivazione obiettivo massa",()=>weeklyGoalReason("gym","muscleGain").includes("aumento della massa muscolare"));
+  check("Lifetime: check recupero separato dal check-in spalla",()=>saveMuscleRecoveryCheck.toString().includes("else renderWeek()"));
+  check("Lifetime: mapping SkiErg e vogatore",()=>lifetimeGroupForExercise({id:"skiErgIntervals"}).includes("shoulders")&&lifetimeGroupForExercise({id:"rowErgEasy"}).includes("legs"));
+  check("Lifetime: adattamento gambe affaticate su corsa",()=>{const old=getMuscleRecoveryProfile;getMuscleRecoveryProfile=()=>({score:{legs:6,push:0,pull:0,shoulders:0,core:0}});try{return adaptWorkoutForMuscleRecovery(["runEasy","walk","stretch"],"easy").ids.every(id=>!["runEasy"].includes(id));}finally{getMuscleRecoveryProfile=old;}});
+  check("Lifetime: adattamento gambe affaticate su palestra",()=>{const old=getMuscleRecoveryProfile;getMuscleRecoveryProfile=()=>({score:{legs:6,push:0,pull:0,shoulders:0,core:0}});try{const r=adaptWorkoutForMuscleRecovery(GYM_ROUTINES.full,"gym");return r.changed&&r.ids.length>0&&r.ids.every(id=>!lifetimeGroupForExercise({id,name:EX[id]?.t||""}).includes("legs"));}finally{getMuscleRecoveryProfile=old;}});
+  check("Lifetime: protezione spalla",()=>{const old=getMuscleRecoveryProfile;getMuscleRecoveryProfile=()=>({score:{legs:0,push:0,pull:0,shoulders:8.5,core:0}});try{return adaptWorkoutForMuscleRecovery(GYM_ROUTINES.full,"gym").ids.every(id=>!EX[id]?.shoulderSensitive);}finally{getMuscleRecoveryProfile=old;}});
   return tests;
 };
 
-/* =========================================================
-   START
-   ========================================================= */
+// Final initialization refresh: load saved local muscle status before rendering the week.
+const lifetimeDOMContentLoadedRefresh=()=>{try{loadMuscleRecoveryCheck();renderWeek();updateMuscleRecoverySummary();}catch(error){console.warn("Lifetime planner refresh:",error);}};
+document.addEventListener("DOMContentLoaded",lifetimeDOMContentLoadedRefresh);
 
-document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    window.alert = message =>
-      notify(
-        message,
-        /non valid|errore|controlla|manca|impossibile/i.test(String(message))
-          ?"error"
-          :"success"
-      );
-    protectDataBeforeMigration();
-    await hydrate();
-
-    installPracticalStyles();
-    installWeekCoachStyles();
-    installWeekCoachV252Styles();
-    installSafeImport();
-    installExtraSessionGuards();
-    const beforeTrash=(data().trash||[]).length,cleaned=purgeExpiredTrash(data());
-    if((cleaned.trash||[]).length!==beforeTrash)save(cleaned);
-
-    const manualDate=document.getElementById("manualActivityDate");
-    if(manualDate){
-      const now=new Date();
-      now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
-      manualDate.value=now.toISOString().slice(0,16);
-    }
-
-    const pain24 =
-      document.getElementById(
-        "pain24"
-      );
-
-    pain24.value =
-      "";
-
-    updateFollowupUI();
-
-    dashboard(true);
-
-    selectShoulder(
-      "reset",
-      document.querySelector(
-        "#page-shoulder .segment button"
-      )
-    );
-
-    selectMilitary(
-      "recovery",
-      document.querySelector(
-        "#page-military .segment button"
-      )
-    );
-
-    selectRun(
-      "easy",
-      document.querySelector(
-        "#page-running .segment button"
-      )
-    );
-    updatePaceTool();
-
-    renderTests();
-    renderLibrary();
-    renderPhysioPreview();
-    renderGymPreview();
-    updateVoiceUI();
-    updateBackupInfo();
-    updateFollowupUI();
-    renderWeek();
-    updateStartButtonState();
-    updateDecisionExplanation();
-    improveAccessibility();
-    runDiagnostics(false);
-    updateDeviceStatus();
-    scheduleSmartReminders();
-    checkBackupReminder();
-
-    setTimeout(()=>registerPwa(),0);
-
-    const sessionRestored=await restoreSessionDraftIfAvailable();
-
-    if(!sessionRestored&&!data().settings.onboardingComplete){
-      openOnboarding();
-    }
-
-  }
-);
-
-
-/* =========================================================
-   V25.3 · RECOVERY ENGINE REPAIR + CROSS-MODAL VALIDATION
-   ========================================================= */
-const runSelfTestsV253Base=runSelfTests;
-runSelfTests=function(){
-  const tests=runSelfTestsV253Base();
-  const check=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(error){tests.push({name,ok:false,error:String(error)})}};
-  check('V25.3 livello Affaticati raggiunge soglia adattiva',()=>{const v=2,score=v===0?0:v===1?2.5:v===2?6:8.5;return score>=5});
-  check('V25.3 livello Molto affaticati attiva protezione severa',()=>{const v=3,score=v===0?0:v===1?2.5:v===2?6:8.5;return score>=7.5});
-  check('V25.3 aggiornamento immediato al salvataggio check',()=>saveMuscleRecoveryCheck.toString().includes('evaluate()'));
-  check('V25.3 adattamento cross-modale running',()=>adaptMuscleV251Base.toString().includes('runningTypes'));
-  check('V25.3 adattamento cross-modale cycling',()=>adaptMuscleV251Base.toString().includes('cyclingTypes'));
-  check('V25.3 protezione distretti spinta/trazione',()=>adaptMuscleV251Base.toString().includes("high('push')")&&adaptMuscleV251Base.toString().includes("high('pull')"));
-  check('V25.3 anteprima giorno corrente adattata',()=>plannedPreviewItems.toString().includes('previewDayIndex===dayIndex()'));
-  check('V25.3 selettore sala pesi nel piano',()=>weekEditorOptions('gym','strength').includes('value="gym"'));
-  check('V25.3 catalogo esercizi palestra presente',()=>Array.isArray(GYM_ROUTINES.full)&&GYM_ROUTINES.full.length>0);
-  return tests;
-};
-
+/* END LIFETIME CONSOLIDATION */
 </script>
 
 </body>
