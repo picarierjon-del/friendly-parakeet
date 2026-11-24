@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Picari Hybrid Coach — Lifetime Hybrid Evolution V29.0</title>
+<title>Erjon Picari Hybrid Coach — Lifetime Hybrid Evolution V29.1</title>
 
 <style>
 :root{
@@ -1121,6 +1121,8 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 .exercise-video-panel .video-disclaimer{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.45}
 .exercise-video-panel .btn{min-height:42px}
 
+
+.adaptive-schedule-card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(17,42,55,.94),rgba(7,22,34,.98))}.adaptive-fields{display:grid;grid-template-columns:1fr;gap:7px;margin:14px 0}.adaptive-fields label{font-size:.72rem;font-weight:800;color:var(--muted)}.adaptive-fields select{width:100%;padding:12px;border-radius:12px;background:var(--panel);color:var(--text);border:1px solid var(--line);font:inherit}.adaptive-preview{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);font-size:.82rem;line-height:1.5}.adaptive-preview ul{margin:8px 0 0;padding-left:20px}.adaptive-actions{display:flex;flex-wrap:wrap;gap:8px}.adaptive-actions .btn{flex:1 1 140px}.adaptive-schedule-card .tiny{margin-top:12px;color:var(--muted);font-size:.68rem;line-height:1.45}
 </style>
 </head>
 
@@ -1280,6 +1282,36 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     </div>
 
   </div>
+</div>
+
+<div class="card adaptive-schedule-card" id="adaptiveScheduleCard">
+  <div class="eyebrow">V29.2 · Adaptive Schedule</div>
+  <h3>Oggi il programma cambia?</h3>
+  <p class="small">Segnala un imprevisto o una giornata di recupero. Il coach ricalcola il microciclo senza accumulare sedute o perdere la progressione.</p>
+  <div class="adaptive-fields">
+    <label for="adaptiveChoice">Cosa vuoi fare oggi?</label>
+    <select id="adaptiveChoice">
+      <option value="rest">Recupero completo</option>
+      <option value="active">Recupero attivo</option>
+      <option value="home">Allenamento breve a casa</option>
+      <option value="normal">Mantieni l'allenamento previsto</option>
+    </select>
+    <label for="adaptiveReason">Perché cambi il programma?</label>
+    <select id="adaptiveReason">
+      <option value="time">Imprevisto / mancanza di tempo</option>
+      <option value="fatigue">Stanchezza generale</option>
+      <option value="soreness">Indolenzimento o recupero incompleto</option>
+      <option value="pain">Dolore o sintomi alla spalla</option>
+      <option value="other">Altro motivo</option>
+    </select>
+  </div>
+  <div id="adaptiveSchedulePreview" class="adaptive-preview" aria-live="polite">Scegli come gestire oggi per vedere la proposta del coach.</div>
+  <div class="adaptive-actions">
+    <button class="btn orange" type="button" onclick="previewAdaptiveSchedule()">Analizza e proponi</button>
+    <button class="btn" type="button" onclick="applyAdaptiveSchedule()">Conferma modifica</button>
+    <button class="btn secondary" type="button" onclick="resetAdaptiveSchedule()">Annulla modifica</button>
+  </div>
+  <p class="tiny">La proposta non viene applicata finché non la confermi. Le sedute già completate non vengono spostate. Se il recupero è insufficiente, il coach può consigliare di saltare una seduta invece di recuperarla.</p>
 </div>
 
 <div class="card wow-deck" id="wowDeck">
@@ -2669,7 +2701,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "29.0.0-LIFETIME-HYBRID-EVOLUTION";
+  "29.2.0-LIFETIME-ADAPTIVE-SCHEDULE";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
@@ -4527,7 +4559,7 @@ function renderGymPreview(){
   const box=document.getElementById("gymPreview"),info=document.getElementById("gymProgressionInfo");if(!box)return;
   if(!data().settings.equipment.machines&&!data().settings.equipment.weights){box.innerHTML='<div class="warning">Attiva Sala pesi/macchinari oppure Manubri/Kettlebell in Impostazioni.</div>';if(info)info.textContent="Attiva almeno una modalità di forza per visualizzare gli esercizi.";return;}
   const ids=gymExerciseIds();if(!ids.length){box.innerHTML='<div class="small">Nessun esercizio compatibile con lo stato di recupero selezionato.</div>';return;}
-  box.innerHTML=ids.map(id=>{const e=EX[id],hist=data().progression.loadHistory?.[id]||[],last=hist.at(-1);let hint=last?`Ultimo carico: ${last.kg} kg`:'Prima esposizione: carico tecnico leggero';if(last&&last.technique==="good"&&Number(last.rpe)<=8&&Number(last.postPain)<=2)hint+=' · valuta il minimo incremento solo se hai completato tutte le ripetizioni';else if(last)hint+=' · mantieni o riduci finché tecnica, RPE e dolore non sono adeguati';return `<div class="workout-item"><div><strong>${escapeHtml(e.i)} ${escapeHtml(e.t)}</strong><br><span>${escapeHtml(e.d)} · recupero ${Math.round(e.s/60)} min circa</span><br><span>${escapeHtml(hint)}</span></div><span class="tag">MACCHINA</span></div>`}).join("");
+  box.innerHTML=ids.map(id=>{const e=EX[id],hist=data().progression.loadHistory?.[id]||[],last=hist.at(-1);let hint=last?`Ultimo carico: ${last.kg} kg`:'Prima esposizione: carico tecnico leggero';if(last&&last.technique==="good"&&Number(last.rpe)<=8&&Number(last.postPain)<=2)hint+=' · valuta il minimo incremento solo se hai completato tutte le ripetizioni';else if(last)hint+=' · mantieni o riduci finché tecnica, RPE e dolore non sono adeguati';const label=e.e==="machines"?"MACCHINA":e.e==="weights"?"PESI LIBERI":"CORPO LIBERO";return `<div class="workout-item"><div><strong>${escapeHtml(e.i)} ${escapeHtml(e.t)}</strong><br><span>${escapeHtml(e.d)} · recupero ${Math.round(e.s/60)} min circa</span><br><span>${escapeHtml(hint)}</span></div><span class="tag">${label}</span></div>`}).join("");
   if(info)info.textContent="Doppia progressione: prima completa il range alto con tecnica pulita, RPE ≤8 e dolore ≤2/10; poi aumenta solo del minimo scatto disponibile (indicativamente 2–5%). Nessun massimale o cedimento.";
 }
 function startGym(){
@@ -10191,6 +10223,109 @@ function weekEditorOptions(selected,planned){
     uniqueTypes.map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
 }
 
+/* =========================================================
+   V29.2 · ADAPTIVE SCHEDULE ENGINE
+   Riprogramma solo il microciclo corrente; non altera la progressione.
+   ========================================================= */
+function adaptiveWeekStart(){
+  const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-dayIndex());return d;
+}
+function adaptiveDateKey(index){const d=adaptiveWeekStart();d.setDate(d.getDate()+index);return localDay(d);}
+function adaptiveBaseWeek(){
+  const d=data(),template=getWeekTemplate(d.settings.goal),available=mask(d.settings.days);
+  return template.map((v,i)=>sessionTypeForDay(i,available[i]?v:"recovery"));
+}
+function adaptivePlan(choice,reason){
+  const today=dayIndex(),base=adaptiveBaseWeek(),plan=[...base],d=data();
+  const current=plan[today]||"recovery";
+  const completed=d.sessions.some(x=>isDailyPlanSession(x)&&(x.day||localDay(new Date(x.date)))===localDay());
+  if(completed)return {ok:false,message:"La seduta prevista oggi risulta già completata: non modifico il piano."};
+  if(choice==="normal")return {ok:true,plan,changes:[],message:"Il programma originale resta invariato."};
+  if(choice==="active"){
+    plan[today]="recovery";
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi recupero attivo leggero. Le sedute future restano invariate."};
+  }
+  if(choice==="home"){
+    const homeType=["strength","power","militaryStrength"].includes(current)?"strengthLight":(["interval","tempo","threshold","long"].includes(current)?"easy":"mobility");
+    plan[today]=homeType;
+    return {ok:true,plan,changes:[{day:today,from:current,to:homeType}],message:"Conversione in seduta breve e più gestibile. Nessun recupero obbligatorio nei giorni successivi."};
+  }
+  plan[today]="recovery";
+  if(reason==="time"){
+    if(current==="recovery")return {ok:true,plan,changes:[],message:"Oggi era già previsto recupero: il calendario resta invariato."};
+    const demanding=new Set(["strength","power","interval","tempo","threshold","long","hyrox","hyroxEngine","militaryStrength"]);
+    let slot=-1;
+    for(let i=today+1;i<7;i++){
+      if(plan[i]!=="recovery")continue;
+      const prev=plan[i-1]||"recovery",next=plan[i+1]||"recovery";
+      if(!demanding.has(prev)&&!demanding.has(next)){slot=i;break;}
+    }
+    if(slot>=0 && current!=="recovery"){
+      plan[slot]=current;
+      return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"},{day:slot,from:"recovery",to:current}],message:`Imprevisto logistico: la seduta viene spostata al ${["lunedì","martedì","mercoledì","giovedì","venerdì","sabato","domenica"][slot]}, primo spazio libero. Il resto del piano non cambia.`};
+    }
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Non c'è uno spazio libero sicuro nei prossimi giorni: meglio saltare questa seduta che comprimere il recupero."};
+  }
+  if(reason==="fatigue"||reason==="soreness"){
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Segnale di recupero incompleto: oggi riposo. Non sposto automaticamente il carico sui giorni successivi; il check giornaliero rivaluterà la prontezza."};
+  }
+  if(reason==="pain"){
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi niente seduta programmata. Se il dolore è nuovo, intenso o associato a debolezza/formicolio, evita di allenarti e chiedi una valutazione sanitaria."};
+  }
+  return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi recupero. Il coach non accumula sedute: rivaluta il programma al prossimo check."};
+}
+function previewAdaptiveSchedule(){
+  const choice=document.getElementById("adaptiveChoice")?.value||"rest",reason=document.getElementById("adaptiveReason")?.value||"other";
+  const result=adaptivePlan(choice,reason);window.__adaptiveScheduleDraft=result;
+  const box=document.getElementById("adaptiveSchedulePreview");if(!box)return;
+  if(!result.ok){box.textContent=result.message;return;}
+  const names=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"];
+  const changes=result.changes||[];
+  box.innerHTML=`<strong>${escapeHtml(result.message)}</strong>`+(changes.length?`<ul>${changes.map(c=>`<li>${names[c.day]}: ${escapeHtml(sessionLabel(c.from))} → <strong>${escapeHtml(sessionLabel(c.to))}</strong></li>`).join("")}</ul>`:`<p>Nessuna modifica al calendario.</p>`);
+}
+function applyAdaptiveSchedule(){
+  const draft=window.__adaptiveScheduleDraft;
+  if(!draft){previewAdaptiveSchedule();notify("Prima analizza la proposta.","error");return;}
+  if(!draft.ok){notify(draft.message,"error");return;}
+  const d=data(),today=dayIndex();
+  d.settings.weeklyOverrides={...(d.settings.weeklyOverrides||{})};
+  // Remove only overrides for the affected current-week days; leave unrelated weeks untouched.
+  (draft.changes||[]).forEach(c=>{
+    const key=weeklyOverrideKey(c.day);
+    if(c.to) d.settings.weeklyOverrides[key]=c.to; else delete d.settings.weeklyOverrides[key];
+  });
+  d.adaptiveScheduleHistory=Array.isArray(d.adaptiveScheduleHistory)?d.adaptiveScheduleHistory:[];
+  const previousOverrides={};
+  (draft.changes||[]).forEach(c=>{const k=weeklyOverrideKey(c.day);previousOverrides[k]=d.settings.weeklyOverrides[k]??null;});
+  d.adaptiveScheduleHistory.push({date:localDay(),week:periodizationWeek(),choice:document.getElementById("adaptiveChoice")?.value||"rest",reason:document.getElementById("adaptiveReason")?.value||"other",changes:draft.changes||[],previousOverrides,createdAt:new Date().toISOString()});
+  d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.slice(-100);
+  save(d);renderWeek();
+  if(selectedPain!==null)evaluate();
+  renderAdaptiveScheduleStatus();
+  notify("Calendario adattato e salvato sul dispositivo.");
+}
+function resetAdaptiveSchedule(){
+  const d=data(),today=localDay();
+  const record=[...(d.adaptiveScheduleHistory||[])].reverse().find(x=>x.date===today);
+  const indexes=new Set([dayIndex(),...(record?.changes||[]).map(x=>x.day)]);
+  if(!record&&!d.settings.weeklyOverrides?.[weeklyOverrideKey(dayIndex())]){notify("Nessuna modifica adattiva di oggi da annullare.");return;}
+  if(record?.previousOverrides){
+    Object.entries(record.previousOverrides).forEach(([k,v])=>{if(v===null)delete d.settings.weeklyOverrides[k];else d.settings.weeklyOverrides[k]=v;});
+  }else{
+    indexes.forEach(i=>delete d.settings.weeklyOverrides?.[weeklyOverrideKey(i)]);
+  }
+  if(record){d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.filter(x=>x!==record);}
+  save(d);renderWeek();if(selectedPain!==null)evaluate();
+  window.__adaptiveScheduleDraft=null;
+  const box=document.getElementById("adaptiveSchedulePreview");if(box)box.textContent="Modifiche adattive di oggi annullate. Il calendario è ripristinato.";
+  renderAdaptiveScheduleStatus();
+}
+function renderAdaptiveScheduleStatus(){
+  const box=document.getElementById("adaptiveSchedulePreview");if(!box)return;
+  const current=data().settings.weeklyOverrides?.[weeklyOverrideKey(dayIndex())];
+  if(current&&!window.__adaptiveScheduleDraft)box.textContent=`Oggi il calendario è personalizzato: ${sessionLabel(current)}.`;
+}
+
 function renderWeek(){
 
   const d =
@@ -14983,7 +15118,7 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V26 versione e schema",()=>APP_VERSION.startsWith("29.0.0")&&SCHEMA_VERSION===30);
+  test("V26 versione e schema",()=>APP_VERSION.startsWith("29.2.0")&&SCHEMA_VERSION===30);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
@@ -14999,6 +15134,11 @@ function runSelfTests(){
   test("V17 carichi progressivi con feedback",()=>typeof GYM_LOAD_IDS[0]==="string"&&data().progression&&data().progression.loadHistory&&typeof renderGymPreview==="function");
   test("V17 storico conserva RPE dolore tecnica",()=>markStepCompleted.toString().includes("blockRPE")&&markStepCompleted.toString().includes("blockPain")&&markStepCompleted.toString().includes("technique")&&saveCompletedSession.toString().includes("step.technique"));
   test("V17 controllo navigazione palestra",()=>document.getElementById("page-gym")&&typeof showPage==="function"&&showPage.toString().includes("gym"));
+  test("adaptive schedule genera proposta",()=>typeof adaptivePlan==="function"&&adaptivePlan("rest","time").ok);
+  test("adaptive schedule non sovraccarica per fatica",()=>{const r=adaptivePlan("rest","fatigue");return r.ok&&r.changes.length===1&&r.changes[0].to==="recovery";});
+  test("adaptive schedule mantiene il piano se normale",()=>adaptivePlan("normal","time").changes.length===0);
+  test("adaptive schedule salva cronologia locale",()=>typeof applyAdaptiveSchedule==="function"&&Array.isArray(data().adaptiveScheduleHistory||[]));
+  test("adaptive schedule UI presente",()=>["adaptiveChoice","adaptiveReason","adaptiveSchedulePreview"].every(id=>!!document.getElementById(id)));
   runtimeHealth.tests=tests;
   return tests;
 }
@@ -16201,7 +16341,190 @@ runSelfTests=function(){return v29SelfTestsBase().concat(v29RunTests());};
 window.v29RunTests=v29RunTests;
 window.v29Diagnostics=()=>({version:APP_VERSION,goalMix:v29GoalMixSummary(),decision:v29CoordinatedDecision(),running:v29RunningTrend(),career:lifetimeCareerSummary(),backup:lifetimeBackupAudit()});
 document.addEventListener('DOMContentLoaded',()=>{try{v29InstallGoalControls();const w=data().v29.goalWeights||V29_GOAL_WEIGHTS;document.querySelectorAll('[data-v29-weight]').forEach(el=>el.value=String(v29Clamp(w[el.dataset.v29Weight]??0)));v29UpdateGoalSummary();}catch(e){console.error('V29 initialization',e);}});
-/* END V29.0 HYBRID EVOLUTION ENGINE */
+/* END V29.1 HYBRID EVOLUTION ENGINE */
+
+
+
+/* =========================================================
+   V29.1 · EQUIPMENT INVENTORY + SMART SUBSTITUTIONS
+   - Inventario macchina per macchina
+   - Alternativa automatica o scelta manuale
+   - Risoluzione anche nelle schede generate dal coach
+   ========================================================= */
+const V291_MACHINE_ALTERNATIVES = {
+  machineLegPress:["goblet","squat","reverseLunge"],
+  machineLegCurl:["rdl","bridge"],
+  machineLegExtension:["squat","goblet","reverseLunge"],
+  machineHipAbduction:["sideLegRaise","reverseLunge","split"],
+  machineHipAdduction:["squeezeBridge","squat","split"],
+  machineCalf:["calf"],
+  machineChestPress:["dbBenchNeutral","floorPressNeutralV27","wallPush","inclinePush"],
+  machineSeatedRow:["dbRowSupported","chestSupportedRowV27","rowDB","rowTowel"],
+  machineLatPulldown:["rowDB","dbRowSupported","rowTowel"],
+  machineReverseFly:["scapset","pullApart","chestSupportedRowV27"],
+  machineBiceps:["dbInclineCurl"],
+  machineTriceps:["dbTricepsPushdownAlt","wallPush"],
+  machineAbCrunch:["deadbug"],
+  machineBackExtension:["birdDog","bridge","rdl"],
+  machineHipThrust:["hipThrustV27","bridge","rdl"],
+  machineCablePallof:["deadbug","caliSideKnee"],
+  machineInclinePress:["dbBenchNeutral","floorPressNeutralV27","inclinePush","wallPush"],
+  machinePecDeck:["dbBenchNeutral","wallPush","inclinePush"],
+  machineAssistedPullup:["rowDB","dbRowSupported","rowTowel"],
+  machineLowRow:["dbRowSupported","chestSupportedRowV27","rowDB","rowTowel"],
+  machineHighRow:["dbRowSupported","chestSupportedRowV27","rowDB","rowTowel"],
+  machinePullover:["dbRowSupported","rowTowel","scapset"],
+  machineLateralRaise:["dbLateralRaise","scapset"],
+  machineShoulderPress:["wallPush","inclinePush"],
+  machinePreacherCurl:["dbInclineCurl"],
+  machineCableCurl:["dbInclineCurl"],
+  machineOverheadTriceps:["dbTricepsPushdownAlt","wallPush"],
+  machineGluteKick:["hipThrustV27","bridge","reverseLunge"],
+  machineSeatedLegCurl:["rdl","bridge"],
+  machineHackSquat:["goblet","barbellSquat","squat"],
+  machineSmithSquat:["barbellSquat","goblet","squat"],
+  machineCableRow:["dbRowSupported","chestSupportedRowV27","rowTowel"],
+  machineCableFly:["dbBenchNeutral","wallPush","inclinePush"],
+  machineCableFacePull:["scapset","pullApart","dbRowSupported"],
+  machineSeatedCalf:["calf"],
+  machineGluteAbduction:["sideLegRaise","reverseLunge","split"]
+};
+const V291_MACHINE_LABELS = {
+  machineLegPress:"Leg Press",machineLegCurl:"Leg Curl seduto",
+  machineLegExtension:"Leg Extension",machineHipAbduction:"Abductor",
+  machineHipAdduction:"Adductor",machineCalf:"Calf machine",
+  machineChestPress:"Chest Press",machineSeatedRow:"Seated Row",
+  machineLatPulldown:"Lat Machine",machineReverseFly:"Reverse Fly",
+  machineBiceps:"Curl macchina",machineTriceps:"Pushdown cavo",
+  machineAbCrunch:"Abdominal Crunch",machineBackExtension:"Back Extension",
+  machineHipThrust:"Glute Drive / Hip Thrust",machineCablePallof:"Pallof Press",
+  machineInclinePress:"Chest Press inclinata",machinePecDeck:"Pectoral machine",
+  machineAssistedPullup:"Trazioni assistite",machineLowRow:"Low Row",
+  machineHighRow:"High Row",machinePullover:"Pullover macchina",
+  machineLateralRaise:"Alzate laterali macchina",machineShoulderPress:"Shoulder Press",
+  machinePreacherCurl:"Curl Scott",machineCableCurl:"Curl al cavo",
+  machineOverheadTriceps:"Estensioni tricipiti",machineGluteKick:"Glute Kickback",
+  machineSeatedLegCurl:"Leg Curl sdraiato",machineHackSquat:"Hack Squat",
+  machineSmithSquat:"Multipower",machineCableRow:"Rematore al cavo",
+  machineCableFly:"Croci ai cavi",machineCableFacePull:"Face Pull",
+  machineSeatedCalf:"Calf seduto",machineGluteAbduction:"Abduzione anca al cavo"
+};
+function v291State(){
+  const d=data();d.v29=d.v29||{};
+  d.v29.machineAvailability=d.v29.machineAvailability||{};
+  d.v29.machineAlternatives=d.v29.machineAlternatives||{};
+  return d.v29;
+}
+function v291MachineAvailable(id){
+  const v=v291State().machineAvailability[id];
+  return v!==false;
+}
+function v291ShoulderRestricted(){
+  return !!(blocked||mode==="safe"||mode==="recovery"||Number(selectedPain||0)>=3);
+}
+function v291CanUse(id){
+  const e=EX[id];if(!e)return false;
+  if(v291ShoulderRestricted()&&e.shoulderSensitive)return false;
+  return eqAvailable(id);
+}
+function v291ResolveAlternative(machineId){
+  const state=v291State(),custom=state.machineAlternatives[machineId];
+  const candidates=[custom,...(V291_MACHINE_ALTERNATIVES[machineId]||[])].filter(Boolean);
+  for(const id of candidates){
+    if(id===machineId||!v291CanUse(id))continue;
+    return id;
+  }
+  return null;
+}
+function v291ResolveExerciseList(list){
+  const out=[],seen=new Set();
+  for(const original of (Array.isArray(list)?list:[])){
+    let item=typeof original==="string"?exercise(original):original;
+    if(!item)continue;
+    const id=item.id||item.key;
+    if(EX[id]?.e==="machines"&&!v291MachineAvailable(id)){
+      const alt=v291ResolveAlternative(id);
+      if(!alt)continue;
+      const replacement=exercise(alt);
+      if(!replacement)continue;
+      item={...replacement,substitutionReason:`Alternativa a ${V291_MACHINE_LABELS[id]||EX[id].t}: macchinario non disponibile`,substitutedFrom:id};
+    }
+    const finalId=item.id||item.key;
+    if(!finalId||seen.has(finalId))continue;
+    if(v291ShoulderRestricted()&&EX[finalId]?.shoulderSensitive)continue;
+    if(EX[finalId]&&!eqAvailable(finalId))continue;
+    seen.add(finalId);out.push(item);
+  }
+  return out;
+}
+function v291InstallEquipmentPanel(){
+  const page=document.getElementById("page-settings");if(!page||document.getElementById("v291EquipmentInventory"))return;
+  const card=document.createElement("section");card.id="v291EquipmentInventory";card.className="card";
+  const groups=[
+    ["Gambe e glutei",["machineLegPress","machineLegCurl","machineLegExtension","machineHipAbduction","machineHipAdduction","machineCalf","machineHipThrust","machineGluteKick","machineSeatedLegCurl","machineHackSquat","machineSmithSquat","machineSeatedCalf","machineGluteAbduction"]],
+    ["Petto e spalle",["machineChestPress","machineInclinePress","machinePecDeck","machineCableFly","machineShoulderPress","machineLateralRaise"]],
+    ["Schiena",["machineSeatedRow","machineLatPulldown","machineReverseFly","machineAssistedPullup","machineLowRow","machineHighRow","machinePullover","machineCableRow","machineCableFacePull"]],
+    ["Braccia",["machineBiceps","machineTriceps","machinePreacherCurl","machineCableCurl","machineOverheadTriceps"]],
+    ["Core",["machineAbCrunch","machineBackExtension","machineCablePallof"]]
+  ];
+  const rows=groups.map(([group,ids])=>`<details style="margin-top:10px" open><summary style="font-weight:800;padding:8px;cursor:pointer">${group} · ${ids.length} attrezzi</summary><div style="display:grid;gap:8px;margin-top:8px">${ids.filter(id=>EX[id]).map(id=>{
+    const alternatives=(V291_MACHINE_ALTERNATIVES[id]||[]).filter(x=>EX[x]);
+    return `<div class="workout-item" style="grid-template-columns:minmax(0,1fr) minmax(125px,180px);align-items:start"><div><strong>${V291_MACHINE_LABELS[id]||EX[id].t}</strong><br><span>${EX[id].d}</span><label class="checkline" style="margin-top:6px"><input type="checkbox" data-v291-machine="${id}" checked> Disponibile</label></div><div class="field"><label>Se manca, usa</label><select data-v291-alt="${id}"><option value="">Scelta automatica</option>${alternatives.map(a=>`<option value="${a}">${EX[a].t}</option>`).join("")}</select></div></div>`;
+  }).join("")}</div></details>`).join("");
+  card.innerHTML=`<div class="eyebrow">V29.1 · Inventario reale palestra</div><h3>Quali macchinari hai davvero a disposizione?</h3><p class="small">Disattiva ogni attrezzo assente o guasto. Il coach lo sostituisce nella scheda, quando esiste un'alternativa compatibile con attrezzatura e sicurezza. Puoi scegliere anche una sostituzione manuale.</p><div class="info" style="margin-top:10px">Le alternative sono proposte in base al movimento e all'attrezzatura registrata. Non sono sempre equivalenti biomeccanici: scegli solo varianti che sai eseguire senza dolore.</div>${rows}<button class="btn full" style="margin-top:12px" type="button" onclick="v291SaveInventory()">Salva inventario attrezzi</button><div id="v291InventoryStatus" class="small" style="margin-top:8px">Inventario non modificato.</div>`;
+  const anchor=document.getElementById("v29GoalControls");
+  if(anchor?.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else page.appendChild(card);
+  v291LoadInventory();
+}
+function v291LoadInventory(){
+  const state=v291State();
+  document.querySelectorAll("[data-v291-machine]").forEach(el=>el.checked=state.machineAvailability[el.dataset.v291Machine]!==false);
+  document.querySelectorAll("[data-v291-alt]").forEach(el=>el.value=state.machineAlternatives[el.dataset.v291Alt]||"");
+}
+function v291SaveInventory(){
+  const d=data();d.v29=d.v29||{};d.v29.machineAvailability=d.v29.machineAvailability||{};d.v29.machineAlternatives=d.v29.machineAlternatives||{};
+  document.querySelectorAll("[data-v291-machine]").forEach(el=>d.v29.machineAvailability[el.dataset.v291Machine]=!!el.checked);
+  document.querySelectorAll("[data-v291-alt]").forEach(el=>{if(el.value)d.v29.machineAlternatives[el.dataset.v291Alt]=el.value;else delete d.v29.machineAlternatives[el.dataset.v291Alt];});
+  save(d);const status=document.getElementById("v291InventoryStatus");if(status)status.textContent="Inventario salvato. Le prossime schede useranno questi attrezzi e le alternative selezionate.";
+  if(typeof renderGymPreview==="function")renderGymPreview();
+  if(typeof renderPreviews==="function")renderPreviews();
+}
+const v291LoadSettingsBase=loadSettings;
+loadSettings=function(){v291InstallEquipmentPanel();v291LoadSettingsBase();v291LoadInventory();};
+const v291GymExerciseIdsBase=gymExerciseIds;
+gymExerciseIds=function(){
+  const base=v291GymExerciseIdsBase();
+  return v291ResolveExerciseList(base).map(x=>x.id||x.key).filter(Boolean);
+};
+const v291RenderGymPreviewBase=renderGymPreview;
+renderGymPreview=function(){
+  v291RenderGymPreviewBase();
+  const box=document.getElementById("gymPreview");if(!box)return;
+  const state=v291State(),missing=Object.entries(state.machineAvailability).filter(([,v])=>v===false).length;
+  if(missing){const note=document.createElement("div");note.className="info";note.style.marginTop="8px";note.textContent=`Inventario: ${missing} macchinari segnati come non disponibili. Le schede vengono adattate con le alternative selezionate o automatiche.`;box.appendChild(note);}
+};
+const v291StartWorkoutBase=startWorkout;
+startWorkout=function(list,type,isAutoFlow=false,sessionOrigin="extra"){
+  const resolved=v291ResolveExerciseList(list);
+  if(!resolved.length){notify("Non ci sono esercizi compatibili con attrezzatura e stato di recupero. Controlla inventario e impostazioni.","error");return;}
+  v291StartWorkoutBase(resolved,type,isAutoFlow,sessionOrigin);
+};
+const v291RunTestsBase=runSelfTests;
+function v291RunTests(){
+  const tests=[],check=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(e){tests.push({name,ok:false,error:String(e.message||e)});}};
+  check("V29.1 inventario macchina predefinito disponibile",()=>GYM_LOAD_IDS.every(id=>v291MachineAvailable(id)));
+  check("V29.1 ogni macchinario ha alternative documentate",()=>GYM_LOAD_IDS.every(id=>(V291_MACHINE_ALTERNATIVES[id]||[]).some(a=>!!EX[a])));
+  check("V29.1 alternative rispettano attrezzatura disponibile",()=>{const d=data(),old={...v291State().machineAvailability};d.settings.equipment.weights=false;const id="machineSeatedRow";d.v29.machineAvailability[id]=false;save(d);const alt=v291ResolveAlternative(id);d.settings.equipment.weights=true;save(d);Object.assign(d.v29.machineAvailability,old);save(d);return !alt||eqAvailable(alt);});
+  check("V29.1 sostituzione non duplica esercizi",()=>{const x=v291ResolveExerciseList(["machineLegPress","machineLegPress"]);return x.length===1;});
+  check("V29.1 filtro spalla applicato alle alternative",()=>{const old=selectedPain;selectedPain=4;const a=v291ResolveAlternative("machineChestPress");selectedPain=old;return !a||!EX[a]?.shoulderSensitive;});
+  check("V29.1 inventario UI installabile",()=>!!document.getElementById("page-settings")&&typeof v291SaveInventory==="function");
+  check("V29.1 lista alternativa non contiene ID mancanti",()=>Object.values(V291_MACHINE_ALTERNATIVES).flat().every(id=>!!EX[id]));
+  return tests;
+}
+runSelfTests=function(){return v291RunTestsBase().concat(v291RunTests());};
+window.v291RunTests=v291RunTests;
+document.addEventListener("DOMContentLoaded",()=>{try{v291InstallEquipmentPanel();v291LoadInventory();}catch(e){console.error("V29.1 inventory",e);}});
+/* END V29.1 */
 
 </script>
 
