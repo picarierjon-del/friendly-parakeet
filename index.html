@@ -10274,51 +10274,95 @@ function adaptivePlan(choice,reason){
   }
   return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi recupero. Il coach non accumula sedute: rivaluta il programma al prossimo check."};
 }
+function adaptiveOverridesSnapshot(changes,overrides){
+  const snapshot={};
+  (changes||[]).forEach(change=>{
+    const key=weeklyOverrideKey(change.day);
+    snapshot[key]=Object.prototype.hasOwnProperty.call(overrides||{},key)?overrides[key]:null;
+  });
+  return snapshot;
+}
 function previewAdaptiveSchedule(){
   const choice=document.getElementById("adaptiveChoice")?.value||"rest",reason=document.getElementById("adaptiveReason")?.value||"other";
-  const result=adaptivePlan(choice,reason);window.__adaptiveScheduleDraft=result;
+  const d=data(),result=adaptivePlan(choice,reason);
+  result.choice=choice;result.reason=reason;result.createdAt=Date.now();
+  result.baseRevision=Number(d.storageRevision||0);
+  result.previousOverrides=adaptiveOverridesSnapshot(result.changes,d.settings.weeklyOverrides||{});
+  window.__adaptiveScheduleDraft=result;
   const box=document.getElementById("adaptiveSchedulePreview");if(!box)return;
   if(!result.ok){box.textContent=result.message;return;}
   const names=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"];
   const changes=result.changes||[];
-  box.innerHTML=`<strong>${escapeHtml(result.message)}</strong>`+(changes.length?`<ul>${changes.map(c=>`<li>${names[c.day]}: ${escapeHtml(sessionLabel(c.from))} → <strong>${escapeHtml(sessionLabel(c.to))}</strong></li>`).join("")}</ul>`:`<p>Nessuna modifica al calendario.</p>`);
+  box.innerHTML=`<strong>${escapeHtml(result.message)}</strong>`+(changes.length?`<ul>${changes.map(c=>`<li>${names[c.day]}: ${escapeHtml(sessionLabel(c.from))} → <strong>${escapeHtml(sessionLabel(c.to))}</strong></li>`).join("")}</ul>`:`<p>Nessuna modifica al calendario.</p>`)+`<p class="tiny">Proposta calcolata sulla revisione ${result.baseRevision}. Conferma per applicarla.</p>`;
 }
 function applyAdaptiveSchedule(){
   const draft=window.__adaptiveScheduleDraft;
   if(!draft){previewAdaptiveSchedule();notify("Prima analizza la proposta.","error");return;}
   if(!draft.ok){notify(draft.message,"error");return;}
-  const d=data(),today=dayIndex();
+  const d=data();
+  const selectedChoice=document.getElementById("adaptiveChoice")?.value||"rest";
+  const selectedReason=document.getElementById("adaptiveReason")?.value||"other";
+  if(selectedChoice!==(draft.choice||"rest")||selectedReason!==(draft.reason||"other")){
+    window.__adaptiveScheduleDraft=null;
+    previewAdaptiveSchedule();
+    notify("Hai cambiato le risposte dopo l'analisi. Ho aggiornato la proposta: controllala e confermala di nuovo.","error");
+    return;
+  }
+  if(Number(d.storageRevision||0)!==Number(draft.baseRevision||0)){
+    window.__adaptiveScheduleDraft=null;
+    previewAdaptiveSchedule();
+    notify("Il programma è cambiato dopo l'analisi. Ho aggiornato la proposta: controllala e confermala di nuovo.","error");
+    return;
+  }
+  if(!Array.isArray(draft.changes)||!draft.changes.length){window.__adaptiveScheduleDraft=null;notify("Nessuna modifica da applicare.");return;}
   d.settings.weeklyOverrides={...(d.settings.weeklyOverrides||{})};
-  // Remove only overrides for the affected current-week days; leave unrelated weeks untouched.
-  (draft.changes||[]).forEach(c=>{
+  // Snapshot BEFORE changing anything: this is the exact state needed for a reliable undo.
+  const previousOverrides=adaptiveOverridesSnapshot(draft.changes,d.settings.weeklyOverrides);
+  draft.changes.forEach(c=>{
     const key=weeklyOverrideKey(c.day);
-    if(c.to) d.settings.weeklyOverrides[key]=c.to; else delete d.settings.weeklyOverrides[key];
+    if(c.to)d.settings.weeklyOverrides[key]=c.to;
+    else delete d.settings.weeklyOverrides[key];
   });
   d.adaptiveScheduleHistory=Array.isArray(d.adaptiveScheduleHistory)?d.adaptiveScheduleHistory:[];
-  const previousOverrides={};
-  (draft.changes||[]).forEach(c=>{const k=weeklyOverrideKey(c.day);previousOverrides[k]=d.settings.weeklyOverrides[k]??null;});
-  d.adaptiveScheduleHistory.push({date:localDay(),week:periodizationWeek(),choice:document.getElementById("adaptiveChoice")?.value||"rest",reason:document.getElementById("adaptiveReason")?.value||"other",changes:draft.changes||[],previousOverrides,createdAt:new Date().toISOString()});
+  const record={id:`adaptive-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,date:localDay(),week:periodizationWeek(),choice:draft.choice||"rest",reason:draft.reason||"other",changes:draft.changes.map(c=>({...c})),previousOverrides,createdAt:new Date().toISOString()};
+  d.adaptiveScheduleHistory.push(record);
   d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.slice(-100);
-  save(d);renderWeek();
+  const saved=save(d);
+  if(!runtimeHealth.lastSaveOk){
+    // Do not leave a false success state if local persistence failed.
+    Object.entries(previousOverrides).forEach(([key,value])=>{if(value===null)delete d.settings.weeklyOverrides[key];else d.settings.weeklyOverrides[key]=value;});
+    d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.filter(x=>x.id!==record.id);
+    window.__adaptiveScheduleDraft=null;
+    notify("Non sono riuscito a salvare le modifiche. Il calendario non è stato confermato: esporta un backup e riprova.","error");
+    return;
+  }
+  window.__adaptiveScheduleDraft=null;
+  renderWeek();
   if(selectedPain!==null)evaluate();
   renderAdaptiveScheduleStatus();
   notify("Calendario adattato e salvato sul dispositivo.");
 }
 function resetAdaptiveSchedule(){
   const d=data(),today=localDay();
-  const record=[...(d.adaptiveScheduleHistory||[])].reverse().find(x=>x.date===today);
-  const indexes=new Set([dayIndex(),...(record?.changes||[]).map(x=>x.day)]);
-  if(!record&&!d.settings.weeklyOverrides?.[weeklyOverrideKey(dayIndex())]){notify("Nessuna modifica adattiva di oggi da annullare.");return;}
-  if(record?.previousOverrides){
-    Object.entries(record.previousOverrides).forEach(([k,v])=>{if(v===null)delete d.settings.weeklyOverrides[k];else d.settings.weeklyOverrides[k]=v;});
-  }else{
-    indexes.forEach(i=>delete d.settings.weeklyOverrides?.[weeklyOverrideKey(i)]);
+  const history=Array.isArray(d.adaptiveScheduleHistory)?d.adaptiveScheduleHistory:[];
+  const record=[...history].reverse().find(x=>x.date===today&&x.previousOverrides&&x.changes);
+  if(!record){
+    notify("Non ci sono modifiche adattive di oggi da annullare. Per cambiare una singola giornata usa il calendario settimanale.");
+    return;
   }
-  if(record){d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.filter(x=>x!==record);}
-  save(d);renderWeek();if(selectedPain!==null)evaluate();
+  d.settings.weeklyOverrides={...(d.settings.weeklyOverrides||{})};
+  Object.entries(record.previousOverrides).forEach(([key,value])=>{
+    if(value===null)delete d.settings.weeklyOverrides[key];
+    else d.settings.weeklyOverrides[key]=value;
+  });
+  d.adaptiveScheduleHistory=history.filter(x=>x.id!==record.id);
+  save(d);
+  if(!runtimeHealth.lastSaveOk){notify("Ripristino non salvato. Riprova e verifica il backup locale.","error");return;}
+  renderWeek();if(selectedPain!==null)evaluate();
   window.__adaptiveScheduleDraft=null;
-  const box=document.getElementById("adaptiveSchedulePreview");if(box)box.textContent="Modifiche adattive di oggi annullate. Il calendario è ripristinato.";
+  const box=document.getElementById("adaptiveSchedulePreview");if(box)box.textContent="Ultima modifica adattiva di oggi annullata. Il calendario precedente è stato ripristinato.";
   renderAdaptiveScheduleStatus();
+  notify("Calendario precedente ripristinato.");
 }
 function renderAdaptiveScheduleStatus(){
   const box=document.getElementById("adaptiveSchedulePreview");if(!box)return;
@@ -15139,6 +15183,9 @@ function runSelfTests(){
   test("adaptive schedule mantiene il piano se normale",()=>adaptivePlan("normal","time").changes.length===0);
   test("adaptive schedule salva cronologia locale",()=>typeof applyAdaptiveSchedule==="function"&&Array.isArray(data().adaptiveScheduleHistory||[]));
   test("adaptive schedule UI presente",()=>["adaptiveChoice","adaptiveReason","adaptiveSchedulePreview"].every(id=>!!document.getElementById(id)));
+  test("adaptive schedule snapshot conserva override precedenti",()=>{const k=weeklyOverrideKey(0),snap=adaptiveOverridesSnapshot([{day:0}],{[k]:"strength"});return snap[k]==="strength";});
+  test("adaptive schedule snapshot distingue override assente",()=>{const k=weeklyOverrideKey(6),snap=adaptiveOverridesSnapshot([{day:6}],{});return Object.prototype.hasOwnProperty.call(snap,k)&&snap[k]===null;});
+  test("adaptive schedule annullamento richiede cronologia valida",()=>typeof resetAdaptiveSchedule==="function"&&typeof applyAdaptiveSchedule==="function");
   runtimeHealth.tests=tests;
   return tests;
 }
