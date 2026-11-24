@@ -14,7 +14,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Picari Hybrid Coach — Lifetime Definitive V28.1</title>
+<title>Erjon Picari Hybrid Coach — Lifetime Hybrid Evolution V29.0</title>
 
 <style>
 :root{
@@ -2669,14 +2669,14 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "28.1.0-LIFETIME-DEFINITIVE";
+  "29.0.0-LIFETIME-HYBRID-EVOLUTION";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
-  29;
+  30;
 
 const FORMULA_VERSION =
-  "2.1-SESSION-TIME-AND-LIFETIME-ADAPTATION";
+  "3.0-COORDINATED-HYBRID-LIFETIME";
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -14361,7 +14361,7 @@ function exportData(){
     url;
 
   a.download =
-    `picari-hybrid-coach-v25-backup-${localDay()}.json`;
+    `picari-hybrid-coach-v29-backup-${localDay()}.json`;
 
   a.click();
 
@@ -14401,7 +14401,7 @@ async function shareBackup(){
 
   const file=new File(
     [JSON.stringify(payload,null,2)],
-    `picari-hybrid-coach-v25-backup-${localDay()}.json`,
+    `picari-hybrid-coach-v29-backup-${localDay()}.json`,
     {type:"application/json"}
   );
 
@@ -14983,11 +14983,11 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V26 versione e schema",()=>APP_VERSION.startsWith("28.1.0")&&SCHEMA_VERSION===29);
+  test("V26 versione e schema",()=>APP_VERSION.startsWith("29.0.0")&&SCHEMA_VERSION===30);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
-  test("V24 backup con versione coerente",()=>exportData.toString().includes("v25-backup")&&shareBackup.toString().includes("v25-backup"));
+  test("V29 backup con versione coerente",()=>exportData.toString().includes("v29-backup")&&shareBackup.toString().includes("v29-backup"));
   test("V18 import con limiti di sicurezza",()=>installSafeImport.toString().includes("25*1024*1024")&&installSafeImport.toString().includes("100000"));
   test("V25 database 36 macchinari",()=>GYM_LOAD_IDS.length===36&&GYM_LOAD_IDS.every(id=>EX[id]?.e==="machines"));
   test("V25 sette schede palestra coerenti",()=>Object.keys(GYM_ROUTINES).join(",")==="full,upper,upperPull,upperPush,lower,core,arms"&&Object.values(GYM_ROUTINES).every(ids=>ids.length>=3&&ids.every(id=>GYM_LOAD_IDS.includes(id))));
@@ -15812,7 +15812,7 @@ runSelfTests=function(){
 const lifetimeDOMContentLoadedRefresh=()=>{try{loadMuscleRecoveryCheck();renderWeek();updateMuscleRecoverySummary();}catch(error){console.warn("Lifetime planner refresh:",error);}};
 document.addEventListener("DOMContentLoaded",lifetimeDOMContentLoadedRefresh);
 
-/* LIFETIME DEFINITIVE V28.1 · adaptive, shoulder-safe, resilient local history */
+/* LIFETIME HYBRID EVOLUTION V29.0 · adaptive, shoulder-safe, resilient local history */
 const LIFETIME_BACKUP_KEY=`${KEY}_verifiedLocalSnapshots_v2`;
 function lifetimeEnsureState(d){
   d.coachLearning=d.coachLearning||{};
@@ -16023,9 +16023,186 @@ const lifetimeTestsBase=runSelfTests;runSelfTests=function(){
   return tests.concat(lifetimeUltimateSelfTests());
 };
 window.addEventListener("DOMContentLoaded",()=>{try{lifetimeInstallPanel();const r=lifetimeCreateLocalSnapshot("avvio");lifetimeRefreshSnapshotSelect();lifetimeRefreshPanel();if(!r.ok)console.warn("Lifetime snapshot non creato:",r.error);}catch(error){console.error("Lifetime initialization:",error);}});
-/* END LIFETIME DEFINITIVE V28.1 */
+/* END LIFETIME HYBRID EVOLUTION V29.0 */
 
 /* END LIFETIME CONSOLIDATION */
+
+
+/* =========================================================
+   V29.0 · HYBRID EVOLUTION ENGINE
+   Configurable goal weighting, weekly composition, coordinated
+   strength/running progression, adaptive recovery and shoulder guard.
+   ========================================================= */
+const V29_GOAL_WEIGHTS={strength:2,running:2,hyrox:1,endurance:1,mobility:1};
+function v29EnsureState(d){
+  d=lifetimeEnsureState(d||{});
+  d.v29=d.v29||{};
+  d.v29.goalWeights={...V29_GOAL_WEIGHTS,...(d.v29.goalWeights||{})};
+  d.v29.progression=d.v29.progression||{strength:{},running:{},lastDecision:null};
+  d.v29.shoulderEvents=Array.isArray(d.v29.shoulderEvents)?d.v29.shoulderEvents:[];
+  d.v29.deloadLog=Array.isArray(d.v29.deloadLog)?d.v29.deloadLog:[];
+  return d;
+}
+const v29NormBase=norm;
+norm=function(v){return v29EnsureState(v29NormBase(v));};
+const v29DataBase=data;
+data=function(){return v29EnsureState(v29DataBase());};
+function v29Clamp(n,min=0,max=3){n=Number(n);return Number.isFinite(n)?Math.max(min,Math.min(max,n)):0;}
+function v29GoalWeights(){
+  const d=data(),w=d.v29.goalWeights||{},p=d.settings.goalPriorities||{};
+  return {strength:v29Clamp(p.muscle||p.strength?Math.max(w.strength||0,1):w.strength||0),running:v29Clamp(p.running?Math.max(w.running||0,1):w.running||0),hyrox:v29Clamp(p.hyrox?Math.max(w.hyrox||0,1):w.hyrox||0),endurance:v29Clamp(p.endurance?Math.max(w.endurance||0,1):w.endurance||0),mobility:v29Clamp(p.mobility?Math.max(w.mobility||0,1):w.mobility||0)};
+}
+function v29GoalMixSummary(){
+  const s=data().settings,w=v29GoalWeights();
+  const primary=s.goal||"hybrid",days=Math.max(3,Math.min(6,Number(s.days)||4));
+  const run=Math.max(w.running,["run5k","run10k","halfMarathon","endurance"].includes(primary)?3:0);
+  const strength=Math.max(w.strength,["muscleGain","strengthFocus","fatloss","definition"].includes(primary)?2:0);
+  const hyrox=Math.max(w.hyrox,primary==="hyrox"?3:0);
+  return {primary,days,run,strength,hyrox,endurance:w.endurance,mobility:w.mobility};
+}
+function v29ComposeWeek(base,goal){
+  const out=[...(base||[])],mix=v29GoalMixSummary();
+  if(out.length!==7)return out;
+  const active=out.map((x,i)=>({x,i})).filter(z=>z.x!=='recovery');
+  if(active.length>mix.days){
+    const remove=active.slice(mix.days).map(z=>z.i).sort((a,b)=>b-a);
+    remove.forEach(i=>out[i]='recovery');
+  }
+  const indices=out.map((x,i)=>({x,i})).filter(z=>z.x!=='recovery').map(z=>z.i);
+  const setType=(types,type)=>{
+    if(!indices.length)return;
+    const exists=indices.some(i=>types.includes(out[i]));
+    if(exists)return;
+    const candidates=indices.filter(i=>['easy','strengthLight','strength','power','hyroxTech','hybridEngine'].includes(out[i]));
+    if(!candidates.length)return;
+    const idx=candidates[candidates.length-1];out[idx]=type;
+  };
+  // Preserve the primary template. Secondary priorities only reshape compatible slots.
+  if(mix.run>=2 && !["run5k","run10k","halfMarathon","endurance"].includes(goal))setType(['easy','long','interval','tempo'],'easy');
+  if(mix.strength>=2 && !['muscleGain','strengthFocus','fatloss','definition'].includes(goal))setType(['strength','strengthLight','power'],'strengthLight');
+  if(mix.hyrox>=2 && goal!=='hyrox' && indices.length>=5)setType(['hyroxTech','hyroxHIIT','hybridEngine'],'hyroxTech');
+  // Cap hard running/conditioning exposures to protect recovery in mixed plans.
+  const hard=indices.filter(i=>['interval','tempo','threshold','hyroxHIIT','hybridTest'].includes(out[i]));
+  hard.slice(1).forEach(i=>out[i]='easy');
+  // Preserve exact selected training-day count after any substitutions.
+  const activeNow=out.filter(x=>x!=='recovery').length;
+  if(activeNow>mix.days){let excess=activeNow-mix.days;for(let i=6;i>=0&&excess;i--)if(!['recovery','mobility','stretching'].includes(out[i])){out[i]='recovery';excess--;}}
+  return out;
+}
+const v29WeekBase=getWeekTemplate;
+getWeekTemplate=function(goal=data().settings.goal){return v29ComposeWeek(v29WeekBase(goal),goal);};
+
+function v29RecentExerciseHistory(id){
+  const ss=(data().sessions||[]).filter(s=>!s.incomplete).slice(-12).reverse();
+  const rows=[];
+  for(const s of ss){
+    const steps=(s.completedSteps||[]).filter(x=>String(x.id||'')===String(id));
+    const prescribed=(s.prescribedWorkout||[]).filter(x=>String(x.id||'')===String(id));
+    for(const x of (steps.length?steps:prescribed))rows.push({date:s.date||s.day,rpe:Number(x.blockRPE??x.rpe??s.rpe??0),pain:Number(x.blockPain??x.pain??s.postPain??0),weight:Number(x.weightKg||0),reps:Number(x.repsCompleted||x.reps||0),type:s.generatedSessionType||s.type});
+    if(rows.length>=3)break;
+  }
+  return rows;
+}
+function v29StrengthAdvice(id){
+  const h=v29RecentExerciseHistory(id).filter(x=>x.weight>0),d=data();
+  if(!h.length)return 'Progressione forza: registra il carico effettivo per calibrare i prossimi incrementi.';
+  const last=h[0],good=h.filter(x=>x.rpe>0&&x.rpe<=7&&x.pain<2).length;
+  if(last.pain>=3||last.rpe>=9)return 'Forza: non aumentare il carico; riduci 5–10% o interrompi se il dolore aumenta.';
+  if(good>=2)return 'Forza: se tutte le ripetizioni sono tecniche e senza dolore, valuta un incremento minimo (2–2,5%) nella prossima esposizione.';
+  if(last.rpe>=8)return 'Forza: mantieni il carico e consolida la tecnica prima di progredire.';
+  return 'Forza: mantieni il carico; servono altre esposizioni registrate per una progressione affidabile.';
+}
+function v29RunningTrend(){
+  const ss=(data().sessions||[]).filter(s=>!s.incomplete&&/run|running|corsa|interval|tempo|long/i.test(String(s.generatedSessionType||s.type||''))).slice(-8);
+  const acts=(data().activities||[]).filter(a=>/run|running|corsa/i.test(String(a.type||a.category||''))).slice(-8);
+  const all=[...ss,...acts].map(x=>({date:x.date||x.day,minutes:Number(x.durationSec?x.durationSec/60:x.minutes||x.durationMin||0),rpe:Number(x.rpe||x.sessionRPE||0),distance:Number(x.distanceKm||x.km||0),pain:Number(x.postPain||0)})).filter(x=>x.minutes>0);
+  if(!all.length)return {count:0,advice:'Corsa: registra durata, distanza e RPE per costruire una progressione personale.'};
+  const recent=all.slice(-3),avg=recent.reduce((a,x)=>a+x.minutes,0)/recent.length,hard=recent.filter(x=>x.rpe>=8||x.pain>=3).length;
+  return {count:all.length,avgMinutes:avg,advice:hard?'Corsa: mantieni o riduci il carico; le ultime sedute indicano fatica o reazione.':`Corsa: mantieni la qualità; se recupero e gambe sono buoni, aumenta al massimo il volume settimanale del 5–8%, senza aumentare contemporaneamente intensità e durata.`};
+}
+function v29CoordinatedDecision(){
+  const d=data(),base=v29AdaptiveBase(),run=v29RunningTrend(),recent=(d.sessions||[]).filter(s=>!s.incomplete).slice(-6);
+  const highRun=recent.filter(s=>/run|running|corsa|interval|tempo|long/i.test(String(s.generatedSessionType||s.type||''))&&Number(s.rpe||0)>=8).length;
+  let action=base.action,volume=base.volume,intensity=base.intensity,reasons=[...(base.reasons||[])];
+  if(highRun>=2&&!['protect','recover','deload'].includes(action)){action='adapt';volume=Math.min(volume,.85);intensity=Math.min(intensity,.9);reasons.push('due o più sedute di corsa impegnative recenti: carico ibrido riequilibrato');}
+  const strengthLoads=Object.values(d.progression?.loadHistory||{}).flat().slice(-10);
+  const runLoad=recent.filter(s=>/run|running|corsa|interval|tempo|long/i.test(String(s.generatedSessionType||s.type||''))).reduce((a,s)=>a+Number(s.sessionLoad||0),0);
+  return {...base,action,volume,intensity,reasons,runTrend:run,highRunSessions:highRun,runLoadRecent:runLoad,strengthRecords:strengthLoads.length};
+}
+const v29AdaptiveBase=lifetimeAdaptiveDecision;
+lifetimeAdaptiveDecision=function(){return v29CoordinatedDecision();};
+
+// Apply the shoulder guard to every session entry point and attach exercise-specific coaching.
+const v29StartBase=startWorkout;
+startWorkout=function(list,type,flow=false,origin='extra'){
+  const decision=v29CoordinatedDecision();
+  let safe=lifetimeShoulderFilter((list||[]).map(e=>typeof e==='string'?({...EX[e],id:e,t:EX[e]?.t||e}):({...e})));
+  if(!safe.length){notify('Coach: nessun esercizio compatibile con i segnali registrati. Scegli recupero/mobilità e rivaluta; per sintomi persistenti chiedi indicazioni al professionista che ti segue.','error');return;}
+  safe=safe.map(e=>{
+    const id=e.id||'',cat=String(e.c||EX[id]?.c||'').toLowerCase();
+    let note='';
+    if(/run|cardio|running|corsa/.test(cat)||/run|tempo|interval|long/i.test(String(type||'')))note=v29RunningTrend().advice;
+    else if(lifetimeGroupForExercise({id,name:e.t||''}).some(g=>['push','pull','legs'].includes(g)))note=v29StrengthAdvice(id);
+    if(decision.action==='protect'||decision.action==='recover'||decision.action==='deload'||decision.action==='adapt'){
+      const cue=decision.action==='protect'?'Protezione prioritaria: solo movimento indolore, senza forzare ROM.':decision.action==='recover'?'Recupero prioritario: seduta leggera, niente cedimento.':decision.action==='deload'?'Deload adattivo: volume ridotto e intensità prudente.':'Adattamento: mantieni 2–3 ripetizioni in riserva.';
+      note=[cue,note].filter(Boolean).join(' ');
+    }
+    return {...e,reason:[e.reason,note].filter(Boolean).join(' · '),adaptiveNote:note};
+  });
+  const d=data();d.v29.progression.lastDecision={date:new Date().toISOString(),action:decision.action,volume:decision.volume,intensity:decision.intensity,runTrend:decision.runTrend};save(d);
+  return v29StartBase(safe,type,flow,origin);
+};
+
+// Apply the coordinated decision to the actual prescription, not only to an explanatory badge.
+const v29ApplyMasterBase=applyMasterToWorkout;
+applyMasterToWorkout=function(list){
+  const base=v29ApplyMasterBase(list||[]),d=v29CoordinatedDecision();
+  const factor=d.action==='protect'?.65:d.action==='recover'?.72:d.action==='deload'?.65:d.action==='adapt'?.85:1;
+  if(factor>=.999)return base;
+  return base.map(source=>{
+    const e={...source},timed=/run|hyrox|pool|cycling|recovery|cardio/i.test(String(e.c||''))||/min|sec/i.test(String(e.d||''));
+    if(timed)e.s=Math.max(30,Math.round(Number(e.s||90)*factor));
+    else if(typeof adjustRepDose==='function')e.d=adjustRepDose(String(e.d||''),'reduce');
+    e.reason=[e.reason,`V29 ${d.action}: dose adattata (${Math.round(factor*100)}% del volume/tempo previsto).`].filter(Boolean).join(' · ');
+    return e;
+  });
+};
+
+// Keep goal controls understandable and adjustable without removing the original priority switches.
+function v29InstallGoalControls(){
+  const page=document.getElementById('page-settings');if(!page||document.getElementById('v29GoalControls'))return;
+  const card=document.createElement('section');card.id='v29GoalControls';card.className='card';
+  card.innerHTML=`<div class="eyebrow">V29 · Composizione intelligente</div><h3>Quanto deve pesare ogni priorità?</h3><p class="small">Imposta il peso delle priorità secondarie. Il coach conserva l'obiettivo principale e usa questi valori per riequilibrare gli slot compatibili, senza aumentare i giorni selezionati.</p><div class="grid2">${[['strength','Forza e massa'],['running','Running'],['hyrox','HYROX'],['endurance','Resistenza'],['mobility','Mobilità']].map(([k,label])=>`<label class="field"><span>${label}</span><select data-v29-weight="${k}"><option value="0">Esclusa</option><option value="1">Bassa</option><option value="2">Media</option><option value="3">Alta</option></select></label>`).join('')}</div><div class="info" id="v29GoalSummary">La composizione viene aggiornata in base alle priorità salvate.</div>`;
+  const anchor=page.querySelector('.card');if(anchor?.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else page.appendChild(card);
+}
+const v29LoadSettingsBase=loadSettings;
+loadSettings=function(){v29InstallGoalControls();v29LoadSettingsBase();const w=data().v29.goalWeights||V29_GOAL_WEIGHTS;document.querySelectorAll('[data-v29-weight]').forEach(el=>{el.value=String(v29Clamp(w[el.dataset.v29Weight]??0));});v29UpdateGoalSummary();};
+function v29UpdateGoalSummary(){const el=document.getElementById('v29GoalSummary');if(!el)return;const m=v29GoalMixSummary();el.textContent=`Obiettivo: ${m.primary} · ${m.days} giorni · priorità corsa ${m.run}/3 · forza ${m.strength}/3 · HYROX ${m.hyrox}/3. Il coach non aggiunge sedute oltre il limite impostato.`;}
+document.addEventListener('change',e=>{if(e.target?.matches?.('[data-v29-weight]'))v29UpdateGoalSummary();});
+const v29SaveSettingsBase=saveSettings;
+saveSettings=function(){v29SaveSettingsBase();const d=data();d.v29.goalWeights={...(d.v29.goalWeights||V29_GOAL_WEIGHTS)};document.querySelectorAll('[data-v29-weight]').forEach(el=>{d.v29.goalWeights[el.dataset.v29Weight]=v29Clamp(el.value);});save(d);v29UpdateGoalSummary();};
+
+function v29RunTests(){
+  const tests=[],ck=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(e){tests.push({name,ok:false,error:String(e.message||e)});}};
+  ck('V29 schema conserva storico precedente',()=>{const n=norm({sessions:[{id:'legacy-v26'}],settings:{goal:'fatloss'},progression:{byExercise:{x:1}}});return n.sessions.length===1&&n.progression.byExercise.x===1&&n.v29.goalWeights.running===2;});
+  ck('V29 composizione settimanale conserva sette giorni',()=>getWeekTemplate().length===7);
+  ck('V29 composizione non supera giorni impostati',()=>{const d=data(),old=d.settings.days;let ok=true;for(const days of [3,4,5,6]){d.settings.days=days;save(d);for(const g of ['fatloss','hybrid','run10k','hyrox','muscleGain'])if(getWeekTemplate(g).filter(x=>x!=='recovery').length>days)ok=false;}d.settings.days=old;save(d);return ok;});
+  ck('V29 priorità secondarie regolabili',()=>typeof v29GoalWeights==='function'&&typeof v29ComposeWeek==='function');
+  ck('V29 andamento corsa senza dati non inventa progressione',()=>v29RunningTrend().count===0||typeof v29RunningTrend().advice==='string');
+  ck('V29 progressione forza richiede carichi registrati',()=>v29StrengthAdvice('exercise-without-history').includes('registra'));
+  ck('V29 decisione coordinata restituisce volume e intensità validi',()=>{const x=v29CoordinatedDecision();return x.volume>0&&x.volume<=1&&x.intensity>0&&x.intensity<=1;});
+  ck('V29 filtro spalla presente',()=>typeof lifetimeShoulderFilter==='function'&&typeof lifetimeShoulderRisk==='function');
+  ck('V29 backup e ripristino Lifetime mantenuti',()=>typeof lifetimeCreateLocalSnapshot==='function'&&typeof lifetimeRestoreLocalSnapshot==='function');
+  ck('V29 UI obiettivi configurabili',()=>!!document.getElementById('v29GoalControls')||!!document.getElementById('page-settings'));
+  return tests;
+}
+const v29SelfTestsBase=runSelfTests;
+runSelfTests=function(){return v29SelfTestsBase().concat(v29RunTests());};
+window.v29RunTests=v29RunTests;
+window.v29Diagnostics=()=>({version:APP_VERSION,goalMix:v29GoalMixSummary(),decision:v29CoordinatedDecision(),running:v29RunningTrend(),career:lifetimeCareerSummary(),backup:lifetimeBackupAudit()});
+document.addEventListener('DOMContentLoaded',()=>{try{v29InstallGoalControls();const w=data().v29.goalWeights||V29_GOAL_WEIGHTS;document.querySelectorAll('[data-v29-weight]').forEach(el=>el.value=String(v29Clamp(w[el.dataset.v29Weight]??0)));v29UpdateGoalSummary();}catch(e){console.error('V29 initialization',e);}});
+/* END V29.0 HYBRID EVOLUTION ENGINE */
+
 </script>
 
 </body>
