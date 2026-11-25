@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- V35 ULTIMATE FUSION: V26 training engine retained; V34 programming, recovery, performance and personal-coach modules integrated. Schema 31 intentionally retained for data compatibility. -->
 <!-- Codice completo pronto da copiare. Per eseguirlo, salva il contenuto con estensione .html -->
 <html lang="it">
 <head>
@@ -14,7 +15,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Picari Hybrid Coach AI V26.0 · Recovery Adaptive Coach</title>
+<title>Erjon Picari Hybrid Coach — Ultimate Fusion V35</title>
 
 <style>
 :root{
@@ -988,7 +989,7 @@ select:focus,input:focus,textarea:focus{border-color:var(--blue);background:rgba
 .nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:.62rem}
 .nav button .ui-icon{width:20px;height:20px}.nav button span{display:block}
 
-.onboarding-box{width:min(560px,100%);padding:24px}.onboarding-progress{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:24px}.onboarding-progress span{height:4px;border-radius:999px;background:rgba(148,184,207,.13)}.onboarding-progress span.active{background:linear-gradient(90deg,var(--green),var(--blue))}.onboarding-mark{width:60px;height:60px;display:grid;place-items:center;border-radius:19px;background:linear-gradient(145deg,var(--green),var(--blue));color:#03120d;margin-bottom:18px}.onboarding-mark .ui-icon{width:30px;height:30px}.onboarding-step h2{font-size:1.7rem;letter-spacing:-.04em;margin-bottom:9px}.onboarding-field{margin-top:18px}.onboarding-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}.safety-callout{padding:15px;border:1px solid rgba(255,212,90,.24);background:var(--yellowbg);border-radius:15px;color:#ffe99b;margin-top:16px}.safety-callout p{font-size:.75rem;line-height:1.5;margin-top:5px}.confirm-box{width:min(430px,100%)}
+.onboarding-box{width:min(560px,100%);padding:24px}.onboarding-progress{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:24px}.onboarding-progress span{height:4px;border-radius:999px;background:rgba(148,184,207,.13)}.onboarding-progress span.active{background:linear-gradient(90deg,var(--green),var(--blue))}.onboarding-mark{width:60px;height:60px;display:grid;place-items:center;border-radius:19px;background:linear-gradient(145deg,var(--green),var(--blue));color:#03120d;margin-bottom:18px}.onboarding-mark .ui-icon{width:30px;height:30px}.onboarding-step h2{font-size:1.7rem;letter-spacing:-.04em;margin-bottom:9px}.onboarding-field{margin-top:18px}.onboarding-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}.safety-callout{padding:15px;border:1px solid rgba(255,212,90,.24);background:var(--yellowbg);border-radius:15px;color:#ffe99b;margin-top:16px}.safety-callout p{font-size:.75rem;line-height:1.5;margin-top:5px}.confirm-box{width:min(430px,100%)}
 
 .toast-region{position:fixed;right:18px;top:88px;z-index:120;display:grid;gap:8px;width:min(360px,calc(100% - 36px));pointer-events:none}.toast{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;border-radius:15px;border:1px solid rgba(83,200,255,.18);background:rgba(7,20,31,.94);color:#eaf5fa;box-shadow:0 18px 50px rgba(0,0,0,.4);backdrop-filter:blur(20px);font-size:.76rem;line-height:1.45;animation:toast-in .2s ease-out}.toast:before{content:"✓";display:grid;place-items:center;min-width:22px;height:22px;border-radius:50%;background:var(--greenbg);color:var(--green);font-weight:900}.toast.error:before{content:"!";background:var(--redbg);color:var(--red)}@keyframes toast-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 
@@ -1121,7 +1122,37 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 .exercise-video-panel .video-disclaimer{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.45}
 .exercise-video-panel .btn{min-height:42px}
 
+
+.adaptive-schedule-card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(17,42,55,.94),rgba(7,22,34,.98))}.adaptive-fields{display:grid;grid-template-columns:1fr;gap:7px;margin:14px 0}.adaptive-fields label{font-size:.72rem;font-weight:800;color:var(--muted)}.adaptive-fields select{width:100%;padding:12px;border-radius:12px;background:var(--panel);color:var(--text);border:1px solid var(--line);font:inherit}.adaptive-preview{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);font-size:.82rem;line-height:1.5}.adaptive-preview ul{margin:8px 0 0;padding-left:20px}.adaptive-actions{display:flex;flex-wrap:wrap;gap:8px}.adaptive-actions .btn{flex:1 1 140px}.adaptive-schedule-card .tiny{margin-top:12px;color:var(--muted);font-size:.68rem;line-height:1.45}
 </style>
+
+<style id="v35-1-mobile-navigation-fix">
+/* V35.3 — iPhone navigation: six items on one row; mode selector separated above the dock. */
+@media (max-width:680px){
+  body{padding-bottom:calc(168px + env(safe-area-inset-bottom))!important}
+  .nav{
+    display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;grid-auto-flow:column!important;
+    align-items:stretch;gap:3px!important;padding:6px!important;
+    width:calc(100% - 20px)!important;max-width:none!important;
+    bottom:calc(8px + env(safe-area-inset-bottom))!important;
+    border-radius:18px!important;
+  }
+  .nav button{min-width:0!important;min-height:58px!important;padding:5px 1px!important;
+    display:flex!important;flex-direction:column!important;align-items:center!important;
+    justify-content:center!important;gap:3px!important;font-size:clamp(9px,2.45vw,11px)!important;
+    line-height:1.05!important;white-space:nowrap!important;overflow:hidden}
+  .nav button .ui-icon{width:18px!important;height:18px!important;flex:0 0 auto}
+  .nav button span{display:block!important;max-width:100%;overflow:hidden;text-overflow:clip}
+  .global-mode-switch{
+    position:fixed!important;left:50%!important;right:auto!important;
+    bottom:calc(112px + env(safe-area-inset-bottom))!important;
+    top:auto!important;transform:translateX(-50%)!important;z-index:65!important;
+    box-shadow:0 8px 24px rgba(0,0,0,.38)!important;
+  }
+}
+@media (min-width:681px){.global-mode-switch{position:fixed;right:18px;top:94px}}
+</style>
+
 </head>
 
 <body>
@@ -1280,6 +1311,36 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     </div>
 
   </div>
+</div>
+
+<div class="card adaptive-schedule-card" id="adaptiveScheduleCard">
+  <div class="eyebrow">V31 · Smart Programming Engine</div>
+  <h3>Oggi il programma cambia?</h3>
+  <p class="small">Segnala un imprevisto o una giornata di recupero. Il coach ricalcola il microciclo senza accumulare sedute o perdere la progressione.</p>
+  <div class="adaptive-fields">
+    <label for="adaptiveChoice">Cosa vuoi fare oggi?</label>
+    <select id="adaptiveChoice">
+      <option value="rest">Recupero completo</option>
+      <option value="active">Recupero attivo</option>
+      <option value="home">Allenamento breve a casa</option>
+      <option value="normal">Mantieni l'allenamento previsto</option>
+    </select>
+    <label for="adaptiveReason">Perché cambi il programma?</label>
+    <select id="adaptiveReason">
+      <option value="time">Imprevisto / mancanza di tempo</option>
+      <option value="fatigue">Stanchezza generale</option>
+      <option value="soreness">Indolenzimento o recupero incompleto</option>
+      <option value="pain">Dolore o sintomi alla spalla</option>
+      <option value="other">Altro motivo</option>
+    </select>
+  </div>
+  <div id="adaptiveSchedulePreview" class="adaptive-preview" aria-live="polite">Scegli come gestire oggi per vedere la proposta del coach.</div>
+  <div class="adaptive-actions">
+    <button class="btn orange" type="button" onclick="previewAdaptiveSchedule()">Analizza e proponi</button>
+    <button class="btn" type="button" onclick="applyAdaptiveSchedule()">Conferma modifica</button>
+    <button class="btn secondary" type="button" onclick="resetAdaptiveSchedule()">Annulla modifica</button>
+  </div>
+  <p class="tiny">La proposta non viene applicata finché non la confermi. Le sedute già completate non vengono spostate. Se il recupero è insufficiente, il coach può consigliare di saltare una seduta invece di recuperarla.</p>
 </div>
 
 <div class="card wow-deck" id="wowDeck">
@@ -1529,13 +1590,16 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <label class="checkline"><input type="checkbox" id="planRower" onchange="savePlanPreferences()"> Vogatore / RowErg</label>
     <label class="checkline"><input type="checkbox" id="planAssaultBike" onchange="savePlanPreferences()"> Assault Bike</label>
     <label class="checkline"><input type="checkbox" id="planTreadmill" onchange="savePlanPreferences()"> Tapis roulant</label>
+    <label class="checkline"><input type="checkbox" id="planStairClimber" onchange="savePlanPreferences()"> StairMaster / StepMill</label>
+    <label class="checkline"><input type="checkbox" id="planIndoorBike" onchange="savePlanPreferences()"> Cyclette / Spin bike</label>
     <label class="checkline"><input type="checkbox" id="planSled" onchange="savePlanPreferences()"> Sled Push / Pull</label>
     <label class="checkline"><input type="checkbox" id="planWallBall" onchange="savePlanPreferences()"> Wall Ball</label>
     <label class="checkline"><input type="checkbox" id="planCarry" onchange="savePlanPreferences()"> Farmer Carry</label>
   </div>
   <div class="field" style="margin-top:12px"><label for="planCoachMode">Gestione allenamento</label><select id="planCoachMode" onchange="savePlanPreferences()"><option value="auto">Coach automatico · sceglie in base a obiettivo e recupero</option><option value="free">Scelta libera · decido io la modalità della seduta</option></select></div>
-  <div class="field"><label for="planFreeFocus">Modalità libera predefinita</label><select id="planFreeFocus" onchange="savePlanPreferences()"><option value="auto">Nessuna · lascia decidere al coach</option><option value="upper">Parte superiore</option><option value="lower">Parte inferiore</option><option value="gym">Sala pesi completa</option><option value="skierg">SkiErg</option><option value="rower">Vogatore</option><option value="assaultBike">Assault Bike</option><option value="hyrox">HYROX / funzionale</option><option value="run">Corsa</option><option value="recovery">Recupero / mobilità</option></select></div>
-  <div class="info" id="planGymStatus" style="margin-top:10px">Seleziona le modalità disponibili: il coach userà soltanto quelle abilitate.</div>
+  <div class="field"><label for="planFreeFocus">Modalità che vuoi svolgere</label><select id="planFreeFocus" onchange="onPlanFocusChange()"><option value="auto">Lascia decidere al coach</option><option value="upper">Sala pesi · parte superiore</option><option value="lower">Sala pesi · parte inferiore</option><option value="gym">Sala pesi completa</option><option value="skierg">SkiErg</option><option value="rower">Vogatore</option><option value="assaultBike">Assault Bike</option><option value="hyrox">HYROX / funzionale</option><option value="run">Corsa</option><option value="recovery">Recupero / mobilità</option></select><p class="small">Se scegli una modalità specifica, il coach la considera la tua preferenza e passa alla scelta libera. Potrà modificarla solo per sicurezza, dolore, recupero o attrezzatura non disponibile, spiegandoti il motivo.</p></div>
+  <div class="info" id="planGymStatus" style="margin-top:10px">Seleziona le attrezzature disponibili e la modalità che desideri svolgere.</div>
+  <div class="info" id="planDecisionExplanation" style="margin-top:10px" aria-live="polite">Il coach spiegherà qui perché propone o modifica la modalità scelta.</div>
   <button type="button" class="btn full" style="margin-top:10px" onclick="savePlanPreferences(true)">Salva modalità del piano</button>
 </div>
 
@@ -1558,7 +1622,8 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </div>
 
 <div class="card">
-  <div id="weekGrid" class="week-grid"></div>
+  <div class="card" id="v32RecoveryPanel" style="margin:12px 0;padding:14px;border:1px solid var(--line);background:var(--panel)"><div class="eyebrow">V32 · RECOVERY INTELLIGENCE</div><h2>Check-in quotidiano</h2><p class="small">Registra come ti senti oggi. Il coach propone un adattamento, senza aumentare automaticamente il carico.</p><div class="grid two"><div class="field"><label for="v32Sleep">Qualità del sonno (0–10)</label><input id="v32Sleep" type="number" min="0" max="10" step="1" value="7"></div><div class="field"><label for="v32Fatigue">Fatica generale (0–10)</label><input id="v32Fatigue" type="number" min="0" max="10" step="1" value="3"></div><div class="field"><label for="v32Soreness">Indolenzimento muscolare (0–10)</label><input id="v32Soreness" type="number" min="0" max="10" step="1" value="2"></div><div class="field"><label for="v32Stress">Stress percepito (0–10)</label><input id="v32Stress" type="number" min="0" max="10" step="1" value="3"></div><div class="field"><label for="v32Pain">Dolore (0–10)</label><input id="v32Pain" type="number" min="0" max="10" step="1" value="0"></div><div class="field"><label for="v32Energy">Energia / motivazione (0–10)</label><input id="v32Energy" type="number" min="0" max="10" step="1" value="7"></div></div><button class="btn full" type="button" onclick="v32SaveCheckin()">Analizza recupero di oggi</button><div id="v32Decision" class="info" aria-live="polite" style="margin-top:10px">Completa il check-in per ricevere una proposta.</div><div id="v32Alternative" class="small" style="margin-top:8px"></div></div><div class="card" id="v33PerformancePanel" style="margin:12px 0;padding:14px;border:1px solid var(--line);background:var(--panel)"><div class="eyebrow">V33 · PERFORMANCE & LONGEVITY</div><h2>Cruscotto Performance & Longevità</h2><p class="small">Monitora capacità fisiche e andamento nel tempo. I dati mancanti restano non valutati: nessun punteggio inventato.</p><div class="grid two"><div class="field"><label for="v33Strength">Forza · test personale (0–100)</label><input id="v33Strength" type="number" min="0" max="100" step="1" placeholder="es. 65"></div><div class="field"><label for="v33Endurance">Resistenza · test personale (0–100)</label><input id="v33Endurance" type="number" min="0" max="100" step="1" placeholder="es. 70"></div><div class="field"><label for="v33Mobility">Mobilità (0–100)</label><input id="v33Mobility" type="number" min="0" max="100" step="1" placeholder="es. 60"></div><div class="field"><label for="v33Balance">Equilibrio (0–100)</label><input id="v33Balance" type="number" min="0" max="100" step="1" placeholder="es. 75"></div><div class="field"><label for="v33Cardio">Capacità cardiovascolare · test personale (0–100)</label><input id="v33Cardio" type="number" min="0" max="100" step="1" placeholder="es. 68"></div></div><button class="btn full" type="button" onclick="v33SaveAssessment()">Salva valutazione</button><div id="v33Summary" class="info" aria-live="polite" style="margin-top:10px">Inserisci i valori dei test che hai realmente effettuato.</div><div id="v33History" style="margin-top:10px"></div></div>
+<div class="card" id="v31StrategyPanel" style="margin:12px 0;padding:14px;border:1px solid var(--line);background:var(--panel)"><div class="eyebrow">V31 · SMART PROGRAMMING ENGINE</div><strong id="v31StrategyTitle">Programmazione intelligente</strong><p class="small" id="v31StrategySummary" style="margin:7px 0">Il coach distribuisce obiettivo, livello, disponibilità e progressione.</p><div class="small" id="v31StrategyDetails" aria-live="polite"></div></div><div id="weekGrid" class="week-grid"></div>
 </div>
 
 </section>
@@ -1972,11 +2037,12 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </div>
 
 <div class="card expert-only">
-  <div class="eyebrow">Equilibrio ultime 7 giornate</div>
-  <h2>Aerobico, forza e recupero</h2>
+  <div class="eyebrow">Equilibrio ultime 7 giornate · V30</div>
+  <h2>Aerobico, forza, mobilità e recupero</h2>
   <p class="small">Riepilogo informativo rispetto a obiettivi generali di salute; non è una prescrizione clinica individuale.</p>
   <div class="balance-row"><span>Aerobico</span><div class="balance-track"><i id="aerobicBalanceBar"></i></div><strong id="aerobicBalance">0 min</strong></div>
   <div class="balance-row"><span>Forza</span><div class="balance-track"><i id="strengthBalanceBar"></i></div><strong id="strengthBalance">0 giorni</strong></div>
+  <div class="balance-row"><span>Mobilità / equilibrio</span><div class="balance-track"><i id="mobilityBalanceBar"></i></div><strong id="mobilityBalance">0 giorni</strong></div>
   <div class="balance-row"><span>Recupero</span><div class="balance-track"><i id="recoveryBalanceBar"></i></div><strong id="recoveryBalance">0 giorni</strong></div>
   <div id="weeklyBalanceAdvice" class="trend-summary"></div>
 </div>
@@ -2074,6 +2140,17 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
         <option>5</option>
         <option>6</option>
       </select>
+      <div class="small" style="margin-top:8px">Disponibilità settimanale · seleziona i giorni in cui puoi allenarti. Il coach distribuirà le sedute rispettando questa disponibilità.</div>
+      <div class="checks" id="v31AvailabilityDays" style="margin-top:8px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px">
+        <label class="checkline"><input type="checkbox" data-v31-day="0" checked> Lun</label>
+        <label class="checkline"><input type="checkbox" data-v31-day="1" checked> Mar</label>
+        <label class="checkline"><input type="checkbox" data-v31-day="2"> Mer</label>
+        <label class="checkline"><input type="checkbox" data-v31-day="3" checked> Gio</label>
+        <label class="checkline"><input type="checkbox" data-v31-day="4"> Ven</label>
+        <label class="checkline"><input type="checkbox" data-v31-day="5" checked> Sab</label>
+        <label class="checkline"><input type="checkbox" data-v31-day="6"> Dom</label>
+      </div>
+      <div class="tiny" id="v31AvailabilityHint" aria-live="polite">I giorni selezionati definiscono quando collocare le sedute; il numero massimo resta quello impostato sopra.</div>
     </div>
 
     <div class="field">
@@ -2084,6 +2161,8 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
         <option value="30">30 min</option>
         <option value="45">45 min</option>
         <option value="60" selected>60 min</option>
+        <option value="75">75 min</option>
+        <option value="90">90 min</option>
       </select>
     </div>
 
@@ -2174,6 +2253,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
     <label class="checkline"><input type="checkbox" id="eqRower"> Vogatore / RowErg</label>
     <label class="checkline"><input type="checkbox" id="eqAssaultBike"> Assault Bike</label>
     <label class="checkline"><input type="checkbox" id="eqTreadmill"> Tapis roulant</label>
+    <label class="checkline"><input type="checkbox" id="eqStairClimber"> StairMaster / StepMill</label>
     <label class="checkline"><input type="checkbox" id="eqSled"> Sled Push / Pull</label>
     <label class="checkline"><input type="checkbox" id="eqWallBall"> Wall Ball</label>
     <label class="checkline"><input type="checkbox" id="eqCarry"> Farmer Carry / kettlebell</label>
@@ -2452,8 +2532,30 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
   <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
   <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
   <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
+  <button type="button" data-page="coach"><svg class="ui-icon"><use href="#i-brain"></use></svg><span>Coach</span></button>
   <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
 </nav>
+
+<section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
+  <div class="section-head"><div><p class="eyebrow">V35.3 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="card" style="padding:16px;margin:12px 0">
+    <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
+    <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
+      <label>Energia <output id="v34EnergyOut">3</output>/5<input id="v34Energy" type="range" min="1" max="5" value="3"></label>
+      <label>Qualità del sonno <output id="v34SleepOut">3</output>/5<input id="v34Sleep" type="range" min="1" max="5" value="3"></label>
+      <label>Fatica percepita <output id="v34FatigueOut">3</output>/5<input id="v34Fatigue" type="range" min="1" max="5" value="3"></label>
+      <label>Indolenzimento <output id="v34SorenessOut">2</output>/5<input id="v34Soreness" type="range" min="1" max="5" value="2"></label>
+    </div>
+    <label style="display:block;margin-top:12px">Dolore? <select id="v34Pain"><option value="0">No</option><option value="1">Lieve</option><option value="2">Moderato</option><option value="3">Forte / in peggioramento</option></select></label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" type="button" id="v34Analyze">Analizza e adatta la seduta</button><button class="btn secondary" type="button" id="v34Save">Salva check-in</button></div>
+    <div id="v34Advice" class="notice" role="status" aria-live="polite" style="margin-top:12px">Completa il check-in per ricevere un'indicazione.</div>
+  </div>
+  <div class="card" style="padding:16px;margin:12px 0"><h3>Alternative intelligenti</h3><p class="muted">Scegli il tipo di seduta prevista: il coach propone una variante meno impegnativa o compatibile.</p>
+    <label>Allenamento previsto <select id="v34Session"><option value="strength">Forza</option><option value="hyrox">HYROX / conditioning</option><option value="run">Corsa</option><option value="mobility">Mobilità</option><option value="cardio">Cardio</option></select></label>
+    <button class="btn secondary" type="button" id="v34Alternative" style="margin-top:10px">Trova alternativa</button><p id="v34AlternativeOut" class="notice" aria-live="polite">Le alternative appariranno qui.</p>
+  </div>
+  <div class="card" style="padding:16px;margin:12px 0"><h3>Andamento e guida</h3><div id="v34Trend">Ancora nessun check-in salvato.</div><p class="muted" style="margin-top:10px">Il coach usa i check-in registrati su questo dispositivo. Non interpreta dati come diagnosi e non aumenta automaticamente i carichi.</p><button class="btn secondary" type="button" id="v34Export">Esporta storico coach (JSON)</button></div>
+</section>
 
 <div id="sessionModal" class="modal hidden">
 
@@ -2623,28 +2725,56 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 
 <div id="onboardingModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
   <div class="modal-box onboarding-box">
-    <div class="onboarding-progress" aria-hidden="true"><span class="active"></span><span></span><span></span></div>
+    <div class="onboarding-progress" aria-hidden="true"><span class="active"></span><span></span><span></span><span></span><span></span></div>
     <section class="onboarding-step" data-step="0">
       <div class="onboarding-mark"><svg class="ui-icon"><use href="#i-shield"></use></svg></div>
-      <div class="eyebrow">Configurazione iniziale</div>
-      <h2 id="onboardingTitle">Un coach costruito intorno a te</h2>
-      <p class="small">Tre passaggi per calibrare obiettivo, disponibilità e protezione della spalla. Potrai cambiare tutto dalle impostazioni.</p>
-      <div class="field onboarding-field"><label for="onboardGoal">Obiettivo principale</label><select id="onboardGoal"><option value="hybrid">Fitness ibrido</option><option value="fatloss">Ricomposizione corporea</option><option value="definition">Definizione muscolare</option><option value="muscleGain">Aumento massa muscolare</option><option value="strengthFocus">Forza generale</option><option value="run5k">Running 5 km</option><option value="run10k">Running 10 km</option><option value="halfMarathon">Mezza maratona</option><option value="endurance">Resistenza aerobica</option><option value="hyrox">HYROX</option><option value="military">Preparazione Military</option><option value="longevity">Longevità</option></select></div>
+      <div class="eyebrow">Configurazione V30 · 1/5</div>
+      <h2 id="onboardingTitle">Qual è il tuo obiettivo?</h2>
+      <p class="small">Il coach costruirà il programma intorno alla priorità principale e alle capacità che vuoi mantenere o sviluppare.</p>
+      <div class="field onboarding-field"><label for="onboardGoal">Obiettivo principale</label><select id="onboardGoal">
+        <option value="hybrid">Hybrid completo</option><option value="fatloss">Dimagrimento / ricomposizione</option><option value="definition">Definizione muscolare</option><option value="muscleGain">Aumento massa muscolare</option><option value="strengthFocus">Forza generale</option><option value="run5k">Running 5 km</option><option value="run10k">Running 10 km</option><option value="halfMarathon">Mezza maratona</option><option value="endurance">Resistenza aerobica</option><option value="hyrox">HYROX</option><option value="military">Preparazione Military</option><option value="longevity">Longevità atletica</option>
+      </select></div>
+      <div class="field onboarding-field"><label>Priorità complementari</label><div class="checks">
+        <label class="checkline"><input type="checkbox" id="onboardPriorityMuscle"> Forza e massa muscolare</label>
+        <label class="checkline"><input type="checkbox" id="onboardPriorityRunning"> Corsa</label>
+        <label class="checkline"><input type="checkbox" id="onboardPriorityHyrox"> HYROX / conditioning</label>
+        <label class="checkline"><input type="checkbox" id="onboardPriorityEndurance" checked> Resistenza aerobica</label>
+        <label class="checkline"><input type="checkbox" id="onboardPriorityMobility" checked> Mobilità, equilibrio e coordinazione</label>
+      </div></div>
     </section>
     <section class="onboarding-step hidden" data-step="1">
-      <div class="eyebrow">Tempo e livello</div>
-      <h2>Un piano realistico vince</h2>
-      <div class="grid2 onboarding-field">
-        <div class="field"><label for="onboardLevel">Esperienza</label><select id="onboardLevel"><option value="beginner">Principiante</option><option value="intermediate" selected>Intermedio</option><option value="advanced">Avanzato</option></select></div>
-        <div class="field"><label for="onboardDays">Giorni a settimana</label><select id="onboardDays"><option value="3">3 giorni</option><option value="4">4 giorni</option><option value="5" selected>5 giorni</option><option value="6">6 giorni</option></select></div>
-        <div class="field"><label for="onboardMinutes">Minuti per seduta</label><select id="onboardMinutes"><option value="20">20 minuti</option><option value="30" selected>30 minuti</option><option value="45">45 minuti</option><option value="60">60 minuti</option></select></div>
-      </div>
+      <div class="eyebrow">Configurazione V30 · 2/5</div><h2>Dove e come ti alleni?</h2>
+      <p class="small">Scegli una base. Nel passaggio successivo puoi precisare ogni attrezzo presente, senza attivare quelli che la tua struttura non possiede.</p>
+      <div class="field onboarding-field"><label for="onboardEnvironment">Ambiente principale</label><select id="onboardEnvironment">
+        <option value="gymComplete">Palestra completa · pesi e area cardio</option><option value="gymWeights">Sala pesi · soprattutto pesi e macchinari</option><option value="hybridGym">Palestra + corsa / HYROX</option><option value="home">Casa · attrezzatura limitata</option><option value="outdoor">Corsa e allenamento all'aperto</option><option value="mixed">Ambienti misti · palestra, casa e outdoor</option>
+      </select></div>
+      <div class="info">“Palestra completa” abilita macchine, manubri e bilancieri. Tapis roulant, StairMaster, vogatore e cyclette vengono proposti come disponibili, ma puoi togliere quelli che non trovi nella tua palestra.</div>
     </section>
     <section class="onboarding-step hidden" data-step="2">
-      <div class="eyebrow">Regola di sicurezza</div>
-      <h2>Allenarsi bene significa anche fermarsi</h2>
-      <div class="safety-callout"><strong>Stop e valutazione</strong><p>Nuova debolezza, formicolio persistente o dolore notturno che ti sveglia bloccano automaticamente la seduta per la spalla.</p></div>
-      <label class="checkline onboarding-field"><input type="checkbox" id="onboardSafety"> Ho letto e compreso che l’app non sostituisce medico o fisioterapista.</label>
+      <div class="eyebrow">Configurazione V30 · 3/5</div><h2>Quali attrezzi hai a disposizione?</h2>
+      <p class="small">Il coach potrà usare soltanto gli strumenti selezionati e ruotarli nelle sedute aerobiche, senza inserire macchinari inesistenti.</p>
+      <div class="eyebrow" style="margin-top:12px">Forza</div><div class="checks">
+        <label class="checkline"><input type="checkbox" id="onboardMachines"> Macchinari e cavi</label><label class="checkline"><input type="checkbox" id="onboardWeights"> Manubri e kettlebell</label><label class="checkline"><input type="checkbox" id="onboardBarbell"> Bilancieri e rack</label><label class="checkline"><input type="checkbox" id="onboardBench"> Panche e step</label><label class="checkline"><input type="checkbox" id="onboardBand"> Elastici</label>
+      </div>
+      <div class="eyebrow" style="margin-top:12px">Cardio e conditioning</div><div class="checks">
+        <label class="checkline"><input type="checkbox" id="onboardTreadmill"> Tapis roulant</label><label class="checkline"><input type="checkbox" id="onboardStair"> StairMaster / StepMill</label><label class="checkline"><input type="checkbox" id="onboardRower"> Vogatore / RowErg</label><label class="checkline"><input type="checkbox" id="onboardBike"> Cyclette / Spin bike</label><label class="checkline"><input type="checkbox" id="onboardSki"> SkiErg</label><label class="checkline"><input type="checkbox" id="onboardAssault"> Assault Bike</label><label class="checkline"><input type="checkbox" id="onboardSled"> Sled Push / Pull</label><label class="checkline"><input type="checkbox" id="onboardWallBall"> Wall Ball</label><label class="checkline"><input type="checkbox" id="onboardCarry"> Farmer Carry / kettlebell</label>
+      </div>
+    </section>
+    <section class="onboarding-step hidden" data-step="3">
+      <div class="eyebrow">Configurazione V30 · 4/5</div><h2>Quanto tempo puoi dedicare?</h2>
+      <div class="grid2 onboarding-field">
+        <div class="field"><label for="onboardLevel">Esperienza</label><select id="onboardLevel"><option value="beginner">Principiante</option><option value="intermediate" selected>Intermedio</option><option value="advanced">Avanzato</option></select></div>
+        <div class="field"><label for="onboardDays">Giorni di allenamento</label><select id="onboardDays"><option value="3">3 giorni</option><option value="4" selected>4 giorni</option><option value="5">5 giorni</option><option value="6">6 giorni</option></select></div>
+        <div class="field"><label for="onboardMinutes">Durata media seduta</label><select id="onboardMinutes"><option value="30">30 minuti</option><option value="45">45 minuti</option><option value="60" selected>60 minuti</option><option value="75">75 minuti</option><option value="90">90 minuti</option></select></div>
+        <div class="field"><label for="onboardAerobic">Priorità cardio</label><select id="onboardAerobic"><option value="1">1 seduta dedicata + attività leggere</option><option value="2" selected>2 sedute aerobiche</option><option value="3">3 sedute aerobiche</option><option value="150">Progressione verso 150 min/settimana</option></select></div>
+      </div>
+      <div class="info">Il coach distribuirà forza, aerobico, mobilità ed equilibrio nella settimana. Il volume cardio crescerà gradualmente in base al livello e allo storico: non verranno imposti 150 minuti da subito se non sei già pronto.</div>
+    </section>
+    <section class="onboarding-step hidden" data-step="4">
+      <div class="eyebrow">Configurazione V30 · 5/5</div><h2>Protezione e recupero</h2>
+      <div class="safety-callout"><strong>Regola di sicurezza</strong><p>Il check-in quotidiano distingue fatica e indolenzimento da dolore vero. Dolore nuovo, acuto o crescente significa non allenare forzatamente quel distretto; in presenza di sintomi importanti o persistenti serve una valutazione professionale.</p></div>
+      <div class="field onboarding-field"><label for="onboardLimitations">Limitazioni o esercizi da evitare (facoltativo)</label><input id="onboardLimitations" type="text" maxlength="240" placeholder="Es. movimenti sopra la testa, corsa in discesa..."></div>
+      <label class="checkline onboarding-field"><input type="checkbox" id="onboardSafety"> Ho letto e compreso che l'app non sostituisce medico o fisioterapista.</label>
     </section>
     <div class="onboarding-actions"><button type="button" class="btn secondary" id="onboardLater" onclick="dismissOnboarding()">Configura dopo</button><button type="button" class="btn secondary hidden" id="onboardBack" onclick="onboardingBack()">Indietro</button><button type="button" class="btn" id="onboardNext" onclick="onboardingNext()">Continua</button></div>
   </div>
@@ -2669,14 +2799,14 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "26.0.0-LIFETIME-ADAPTIVE-COACH";
+  "35.0.0-ULTIMATE-FUSION-V26-V34";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
-  28;
+  31;
 
 const FORMULA_VERSION =
-  "2.1-SESSION-TIME-AND-LIFETIME-ADAPTATION";
+  "3.0-COORDINATED-HYBRID-LIFETIME";
 
 const KEY =
   "erjonHybridCoachAI_AdaptivePeriodization_v11";
@@ -4471,6 +4601,21 @@ const military = {
  ["dbTricepsPushdownAlt","French press manubrio da seduto","2×10–12",90,"💪","military","Solo se la posizione è confortevole; in caso di fastidio sostituisci con pushdown.","weights",{shoulderSensitive:true}]
 ].forEach(v=>add(...v));
 
+
+/* =========================================================
+   V27 PERFORMANCE HYBRID FUSION
+   Esercizi selezionati importati dalla libreria Performance Hybrid OS v27.
+   Il motore Lifetime V26 resta il sistema principale di pianificazione e adattamento.
+   ========================================================= */
+[
+  ["reverseLungeV27","Affondi indietro (Reverse Lunge)","3×8–10 per lato",150,"🦵","legs","Passo indietro controllato, bacino stabile e ginocchio in linea con il piede.","weights"],
+  ["hipThrustV27","Hip Thrust caricato","3×8–12",150,"🍑","legs","Spingi dai talloni; chiudi con retroversione del bacino senza inarcare la zona lombare.","weights"],
+  ["ytwRaiseV27","Y-T-W Raise su panca inclinata","2×8 per lettera",90,"🪽","rehab","Carico molto leggero e controllo scapolare; interrompi se compare dolore alla spalla.","weights",{shoulderSensitive:true}],
+  ["floorPressNeutralV27","Floor Press manubri presa neutra","3×8–10",150,"💪","military","Presa neutra e ROM controllato; esegui solo se completamente tollerato dalla spalla.","weights",{shoulderSensitive:true}],
+  ["chestSupportedRowV27","Rematore chest-supported","3×8–12",120,"🏋️","military","Petto appoggiato, pausa breve in chiusura e nessuno slancio lombare.","weights"],
+  ["burpeeStepV27","Burpee step-out controllato","3×6–8",120,"⚡","hybrid","Porta un piede alla volta indietro e avanti; evita impatti e interrompi in caso di dolore.","bodyweight"]
+].forEach(v=>add(...v));
+
 const FREE_WEIGHT_ROUTINES={
  full:["goblet","rdl","dbRowSupported","dbBenchNeutral","dbSplitSquat","carry"],
  upper:["dbRowSupported","dbBenchNeutral","dbInclineCurl","dbTricepsPushdownAlt","dbLateralRaise"],
@@ -4490,6 +4635,13 @@ const GYM_ROUTINES = {
   core:["machineAbCrunch","machineBackExtension","machineCablePallof"],
   arms:["machineBiceps","machinePreacherCurl","machineCableCurl","machineTriceps","machineOverheadTriceps"]
 };
+
+/* V27 · integrazione nelle routine Lifetime, senza duplicati */
+FREE_WEIGHT_ROUTINES.full = unique([...FREE_WEIGHT_ROUTINES.full,"hipThrustV27","chestSupportedRowV27"]);
+FREE_WEIGHT_ROUTINES.lower = unique([...FREE_WEIGHT_ROUTINES.lower,"reverseLungeV27","hipThrustV27"]);
+FREE_WEIGHT_ROUTINES.upper = unique([...FREE_WEIGHT_ROUTINES.upper,"chestSupportedRowV27","floorPressNeutralV27"]);
+FREE_WEIGHT_ROUTINES.upperPull = unique([...FREE_WEIGHT_ROUTINES.upperPull,"chestSupportedRowV27"]);
+
 const GYM_LOAD_IDS = Object.keys(EX).filter(id=>EX[id]?.e==="machines");
 
 function gymExerciseIds(){
@@ -4505,7 +4657,7 @@ function renderGymPreview(){
   const box=document.getElementById("gymPreview"),info=document.getElementById("gymProgressionInfo");if(!box)return;
   if(!data().settings.equipment.machines&&!data().settings.equipment.weights){box.innerHTML='<div class="warning">Attiva Sala pesi/macchinari oppure Manubri/Kettlebell in Impostazioni.</div>';if(info)info.textContent="Attiva almeno una modalità di forza per visualizzare gli esercizi.";return;}
   const ids=gymExerciseIds();if(!ids.length){box.innerHTML='<div class="small">Nessun esercizio compatibile con lo stato di recupero selezionato.</div>';return;}
-  box.innerHTML=ids.map(id=>{const e=EX[id],hist=data().progression.loadHistory?.[id]||[],last=hist.at(-1);let hint=last?`Ultimo carico: ${last.kg} kg`:'Prima esposizione: carico tecnico leggero';if(last&&last.technique==="good"&&Number(last.rpe)<=8&&Number(last.postPain)<=2)hint+=' · valuta il minimo incremento solo se hai completato tutte le ripetizioni';else if(last)hint+=' · mantieni o riduci finché tecnica, RPE e dolore non sono adeguati';return `<div class="workout-item"><div><strong>${escapeHtml(e.i)} ${escapeHtml(e.t)}</strong><br><span>${escapeHtml(e.d)} · recupero ${Math.round(e.s/60)} min circa</span><br><span>${escapeHtml(hint)}</span></div><span class="tag">MACCHINA</span></div>`}).join("");
+  box.innerHTML=ids.map(id=>{const e=EX[id],hist=data().progression.loadHistory?.[id]||[],last=hist.at(-1);let hint=last?`Ultimo carico: ${last.kg} kg`:'Prima esposizione: carico tecnico leggero';if(last&&last.technique==="good"&&Number(last.rpe)<=8&&Number(last.postPain)<=2)hint+=' · valuta il minimo incremento solo se hai completato tutte le ripetizioni';else if(last)hint+=' · mantieni o riduci finché tecnica, RPE e dolore non sono adeguati';const label=e.e==="machines"?"MACCHINA":e.e==="weights"?"PESI LIBERI":"CORPO LIBERO";return `<div class="workout-item"><div><strong>${escapeHtml(e.i)} ${escapeHtml(e.t)}</strong><br><span>${escapeHtml(e.d)} · recupero ${Math.round(e.s/60)} min circa</span><br><span>${escapeHtml(hint)}</span></div><span class="tag">${label}</span></div>`}).join("");
   if(info)info.textContent="Doppia progressione: prima completa il range alto con tecnica pulita, RPE ≤8 e dolore ≤2/10; poi aumenta solo del minimo scatto disponibile (indicativamente 2–5%). Nessun massimale o cedimento.";
 }
 function startGym(){
@@ -4896,8 +5048,8 @@ function defaults(){
       minutes:
         60,
 
-      trainingModes:{gym:true,skiErg:false,rower:false,assaultBike:false,treadmill:false,sled:false,wallBall:false,carry:false,coachMode:"auto",freeFocus:"auto"},
-      planPreferences:{gym:true,skiErg:false,rower:false,assaultBike:false,treadmill:false,sled:false,wallBall:false,carry:false,coachMode:"auto",freeFocus:"auto"},
+      trainingModes:{gym:true,skiErg:false,rower:false,assaultBike:false,treadmill:false,stairClimber:false,indoorBike:false,sled:false,wallBall:false,carry:false,coachMode:"auto",freeFocus:"auto"},
+      planPreferences:{gym:true,skiErg:false,rower:false,assaultBike:false,treadmill:false,stairClimber:false,indoorBike:false,sled:false,wallBall:false,carry:false,coachMode:"auto",freeFocus:"auto"},
       equipment:{
         band:true,
         weights:false,
@@ -4910,7 +5062,7 @@ function defaults(){
         indoorBike:false,
         bikeTrainer:false,
         machines:true,
-        skiErg:false,rower:false,assaultBike:false,sled:false,wallBall:false,carry:false
+        skiErg:false,rower:false,assaultBike:false,treadmill:false,stairClimber:false,indoorBike:false,sled:false,wallBall:false,carry:false
       },
       runSurface:"outdoor",
 
@@ -4928,6 +5080,8 @@ function defaults(){
       voice:true,
 
       onboardingComplete:false,
+      onboardingVersion:0,
+      aerobicTargetMinutes:150,
 
       masterThresholds:{
         acCaution:1.45,
@@ -5075,7 +5229,16 @@ function norm(v){
       equipment:{
         ...b.settings.equipment,
         ...(ss.equipment || {}),
-        machines:!!(ss.equipment?.machines ?? b.settings.equipment?.machines ?? false)
+        machines:!!(ss.equipment?.machines ?? b.settings.equipment?.machines ?? false),
+        treadmill:!!(ss.equipment?.treadmill ?? ss.trainingModes?.treadmill ?? b.settings.equipment.treadmill),
+        stairClimber:!!(ss.equipment?.stairClimber ?? ss.trainingModes?.stairClimber ?? b.settings.equipment.stairClimber),
+        rower:!!(ss.equipment?.rower ?? ss.trainingModes?.rower ?? b.settings.equipment.rower),
+        skiErg:!!(ss.equipment?.skiErg ?? ss.trainingModes?.skiErg ?? b.settings.equipment.skiErg),
+        assaultBike:!!(ss.equipment?.assaultBike ?? ss.trainingModes?.assaultBike ?? b.settings.equipment.assaultBike),
+        indoorBike:!!(ss.equipment?.indoorBike ?? ss.trainingModes?.indoorBike ?? b.settings.equipment.indoorBike),
+        sled:!!(ss.equipment?.sled ?? ss.trainingModes?.sled ?? b.settings.equipment.sled),
+        wallBall:!!(ss.equipment?.wallBall ?? ss.trainingModes?.wallBall ?? b.settings.equipment.wallBall),
+        carry:!!(ss.equipment?.carry ?? ss.trainingModes?.carry ?? b.settings.equipment.carry)
       },
       runSurface:(ss.runSurface||b.settings.runSurface)==="treadmill"?"treadmill":"outdoor",
 
@@ -6162,7 +6325,7 @@ const PERIODIZATION = {
 
 };
 
-function getWeekTemplate(
+function v30GetWeekTemplateBase(
   goal = data().settings.goal
 ){
   // V19: microcicli specifici per composizione corporea, adattati ai giorni disponibili.
@@ -6199,6 +6362,104 @@ function getWeekTemplate(
   const block=PERIODIZATION[goal]||PERIODIZATION.hybrid;
   const base=[...(block[periodizationWeek()-1]||block[0])];
   return applyCyclingPreferencesToWeek(applyGoalDeload(applySecondaryGoalBalance(base,goal)));
+}
+
+
+/* =========================================================
+   V31 · SMART PROGRAMMING ENGINE
+   Layer compatibile sopra il microciclo V30.1.
+   ========================================================= */
+function v31SelectAvailableDays(raw,n){
+  const valid=[...new Set((raw||[]).map(Number).filter(x=>Number.isInteger(x)&&x>=0&&x<7))].sort((a,b)=>a-b);
+  const count=Math.max(1,Math.min(6,Number(n)||4));
+  if(valid.length<=count)return valid;
+  if(count===1)return [valid[Math.floor((valid.length-1)/2)]];
+  const picked=[];
+  for(let i=0;i<count;i++){const index=Math.round(i*(valid.length-1)/(count-1));if(!picked.includes(valid[index]))picked.push(valid[index]);}
+  return picked;
+}
+function v31AvailableWeekdays(){
+  const s=data().settings||{},n=Math.max(1,Math.min(6,Number(s.days)||4));
+  const raw=Array.isArray(s.availabilityDays)?s.availabilityDays:null;
+  if(raw){const selected=v31SelectAvailableDays(raw,n);if(selected.length)return selected;}
+  return [0,1,2,3,4,5,6].filter(i=>maskLegacyFallback(n)[i]);
+}
+function maskLegacyFallback(n){return ({3:[1,0,1,0,1,0,0],4:[1,1,0,1,0,1,0],5:[1,1,1,0,1,1,0],6:[1,1,1,1,1,1,0]}[n]||[1,1,1,0,1,1,0]);}
+function v31SessionFamily(type){
+  if(["strength","strengthLight","power","gym","militaryStrength","militaryBodyweight"].includes(type))return "strength";
+  if(["easy","long","progressive","fartlek","interval","tempo","threshold","mtb","roadBike","indoorBike"].includes(type))return "aerobic";
+  if(["hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation","hybridEngine","hybridTest","militaryConditioning"].includes(type))return "conditioning";
+  if(["mobility","rehab","stretching"].includes(type))return "mobility";
+  return "recovery";
+}
+function v31RebalanceWeek(base,goal){
+  const s=data().settings||{},level=s.athleteLevel||"intermediate",minutes=Number(s.minutes)||60;
+  const available=v31AvailableWeekdays(),out=Array(7).fill("recovery");
+  const source=[...(base||[])];
+  const active=source.filter(x=>x&&x!=="recovery");
+  const cap=Math.min(available.length,Math.max(1,Number(s.days)||4));
+  let sessions=active.slice(0,cap);
+  // 20–30 minute sessions are kept focused: remove an accessory slot before key sessions.
+  if(minutes<=30&&sessions.length>3){
+    const drop=sessions.findIndex(x=>["rehab","strengthLight","easy","mobility"].includes(x));
+    if(drop>=0)sessions.splice(drop,1);
+  }
+  // Beginner profiles avoid stacking demanding quality sessions on adjacent training days.
+  if(level==="beginner"){
+    for(let i=1;i<sessions.length;i++){
+      const prev=v31SessionFamily(sessions[i-1]),cur=v31SessionFamily(sessions[i]);
+      if(prev==="conditioning"&&cur==="conditioning")sessions[i]="easy";
+      if(prev==="aerobic"&&cur==="aerobic"&&["interval","tempo","threshold","fartlek"].includes(sessions[i]))sessions[i]="easy";
+    }
+  }
+  // Respect equipment and selected training modes: unavailable modalities are replaced by recovery/easy.
+  const eq=s.equipment||{},m=s.trainingModes||s.planPreferences||{};
+  sessions=sessions.map(type=>{
+    if(["mtb","roadBike","indoorBike"].includes(type)&&!(eq.mtb||eq.roadBike||eq.indoorBike||eq.bikeTrainer))return "easy";
+    if(["hyroxTech","hyroxEngine","hyroxHIIT","hyroxSimulation"].includes(type)&&!(m.skiErg||m.rower||m.sled||m.wallBall||m.carry||eq.skiErg||eq.rower||eq.sled))return goal==="hyrox"?"strengthLight":"easy";
+    return type;
+  });
+  // Distribute in the order of the goal template over the user's actual available weekdays.
+  sessions.forEach((type,i)=>{if(available[i]!==undefined)out[available[i]]=type;});
+  return out;
+}
+function getWeekTemplate(goal=data().settings.goal){
+  const base=v30GetWeekTemplateBase(goal);
+  return v31RebalanceWeek(base,goal);
+}
+function v31ProgrammingProfile(){
+  const s=data().settings||{},goal=s.goal||"hybrid",level=s.athleteLevel||"intermediate",days=v31AvailableWeekdays(),minutes=Number(s.minutes)||60,week=getWeekTemplate(goal);
+  const counts={strength:0,aerobic:0,conditioning:0,mobility:0,recovery:0};
+  week.forEach(t=>counts[v31SessionFamily(t)]++);
+  const stage=periodizationStage(),signal=progressionSignal();
+  const progression=signal==="progress"?"Aumenta una sola variabile dopo una seduta ben tollerata.":signal==="reduce"||signal==="blocked"?"Riduci o sospendi la progressione: recupero e sicurezza hanno priorità.":signal==="hold"?"Mantieni il carico attuale e consolida la tecnica.":"Costruisci una base tecnica; attendi feedback sufficienti prima di aumentare.";
+  const levelLabel={beginner:"Principiante",intermediate:"Intermedio",advanced:"Avanzato"}[level]||level;
+  const goalLabel=({fatloss:"Ricomposizione corporea",definition:"Definizione",muscleGain:"Ipertrofia",strengthFocus:"Forza",run5k:"Running 5 km",run10k:"Running 10 km",halfMarathon:"Mezza maratona",endurance:"Resistenza aerobica",hyrox:"HYROX",longevity:"Longevità atletica",hybrid:"Hybrid completo",military:"Military fitness"})[goal]||goal;
+  return {goal,goalLabel,level,levelLabel,days,minutes,week,counts,stage,signal,progression};
+}
+function renderV31Programming(){
+  const panel=document.getElementById("v31StrategyPanel");if(!panel)return;
+  try{
+    const p=v31ProgrammingProfile(),names=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+    const active=p.week.map((t,i)=>t!=="recovery"?`${names[i]}: ${sessionLabel(t)}`:null).filter(Boolean);
+    const title=document.getElementById("v31StrategyTitle"),summary=document.getElementById("v31StrategySummary"),details=document.getElementById("v31StrategyDetails");
+    if(title)title.textContent=`${p.goalLabel} · ${p.levelLabel}`;
+    if(summary)summary.textContent=`${p.days.length} giorni disponibili · ${p.minutes} minuti per seduta · ${p.stage.name} (settimana ${periodizationWeek()}/12).`;
+    if(details)details.textContent=`Distribuzione: ${p.counts.strength} forza · ${p.counts.aerobic} aerobico · ${p.counts.conditioning} conditioning · ${p.counts.mobility} mobilità · ${p.counts.recovery} recupero. ${active.join(" | ")} Progressione: ${p.progression}`;
+    const hint=document.getElementById("v31AvailabilityHint");if(hint)hint.textContent=`Selezionati ${p.days.length} giorni: ${p.days.map(i=>names[i]).join(", ")}. Il numero di sedute effettive è limitato a ${Math.min(p.days.length,Number(data().settings.days)||4)}.`;
+  }catch(e){console.warn("V31 programming profile",e);}
+}
+function initV31Availability(){
+  const wrap=document.getElementById("v31AvailabilityDays");if(!wrap)return;
+  const saved=data().settings.availabilityDays;
+  const fallback=maskLegacyFallback(Number(data().settings.days)||4);
+  wrap.querySelectorAll("[data-v31-day]").forEach(el=>{const i=Number(el.dataset.v31Day);el.checked=Array.isArray(saved)?saved.includes(i):!!fallback[i];});
+  wrap.querySelectorAll("[data-v31-day]").forEach(el=>el.addEventListener("change",()=>{
+    const checked=[...wrap.querySelectorAll("[data-v31-day]")].filter(x=>x.checked);
+    const days=Math.max(1,Math.min(6,Number(document.getElementById("days")?.value)||4));
+    const hint=document.getElementById("v31AvailabilityHint");
+    if(hint)hint.textContent=checked.length?`${checked.length} giorni selezionati · massimo ${days} sedute settimanali. I giorni in eccesso saranno considerati disponibilità di riserva.`:"Seleziona almeno un giorno disponibile.";
+  }));
 }
 
 function applyGoalDeload(base){
@@ -8255,7 +8516,7 @@ add("farmerCarry","Farmer Carry","4×20–30 m · recupero 60–90 sec",480,"RPE
 
 function selectedModes(){
   const s=data().settings||{},m=s.trainingModes||{},e=s.equipment||{};
-  return {gym:!!(s.planPreferences?.gym??m.gym??e.machines),skiErg:!!m.skiErg,rower:!!m.rower,assaultBike:!!m.assaultBike,treadmill:!!m.treadmill||s.runSurface==="treadmill",sled:!!m.sled,wallBall:!!m.wallBall,carry:!!m.carry,coachMode:m.coachMode||"auto",freeFocus:m.freeFocus||"auto"};
+  return {gym:!!(s.planPreferences?.gym??m.gym??e.machines),skiErg:!!m.skiErg,rower:!!m.rower,assaultBike:!!m.assaultBike,treadmill:!!m.treadmill||s.runSurface==="treadmill",stairClimber:!!m.stairClimber,indoorBike:!!m.indoorBike,sled:!!m.sled,wallBall:!!m.wallBall,carry:!!m.carry,coachMode:m.coachMode||"auto",freeFocus:m.freeFocus||"auto"};
 }
 function applyModalitiesToWorkout(ids,type){
   const m=selectedModes(),safetyLimited=blocked||mode==="safe"||mode==="recovery"||selectedPain>=3;
@@ -8833,18 +9094,13 @@ function renderDuration(
    ========================================================= */
 
 function mask(n){
-
-  return (
-    {
-      3:[1,0,1,0,1,0,0],
-      4:[1,1,0,1,0,1,0],
-      5:[1,1,1,0,1,1,0],
-      6:[1,1,1,1,1,1,0]
-    }[n]
-    ||
-    [1,1,1,0,1,1,0]
-  );
-
+  const legacy=({3:[1,0,1,0,1,0,0],4:[1,1,0,1,0,1,0],5:[1,1,1,0,1,1,0],6:[1,1,1,1,1,1,0]}[n]||[1,1,1,0,1,1,0]);
+  const chosen=data().settings.availabilityDays;
+  if(!Array.isArray(chosen)||!chosen.length)return legacy;
+  const selected=v31SelectAvailableDays(chosen,n);
+  if(!selected.length)return legacy;
+  const allowed=new Set(selected);
+  return Array.from({length:7},(_,i)=>allowed.has(i)?1:0);
 }
 
 /* =========================================================
@@ -9381,14 +9637,15 @@ function generateToday(){
       "todaySessionType"
     )
     .innerHTML =
-      `<strong>${escapeHtml(sessionLabel(generatedSessionType))}</strong>`+
+      `<strong>${escapeHtml(coachSessionDisplayLabel(generatedSessionType))}</strong>`+
       (physiqueGoal?`<br><strong>Obiettivo:</strong> ${activeGoal==="fatloss"?"Dimagrimento e ricomposizione":"Definizione muscolare"}${goalCoachingCue?` · ${escapeHtml(goalCoachingCue)}`:""}`:"")+
       `<br>Settimana ${periodizationWeek()}/12 · ${
         escapeHtml(
           periodizationStage().name
         )
       }${escapeHtml(equipmentNote)}`+
-      (muscleAdaptation.changed?'<br><strong>Muscle Recovery · SEDUTA ADATTATA</strong><br>Ho modificato esercizi e stimolo per rispettare i distretti affaticati e mantenere il lavoro sui gruppi recuperati.':'');
+      (muscleAdaptation.changed?'<br><strong>Muscle Recovery · SEDUTA ADATTATA</strong><br>Ho modificato esercizi e stimolo per rispettare i distretti affaticati e mantenere il lavoro sui gruppi recuperati.':'')+
+      `<br><strong>Perché questa modalità?</strong> ${escapeHtml(coachDecisionExplanation({muscleChanged:muscleAdaptation.changed}))}`;
 
 }
 
@@ -9837,6 +10094,7 @@ function showPage(name){
     "physio",
     "tests",
     "progress",
+    "coach",
     "settings",
     "training",
     "stretching",
@@ -10169,7 +10427,155 @@ function weekEditorOptions(selected,planned){
     uniqueTypes.map(type=>`<option value="${escapeHtml(type)}" ${selected===type?"selected":""}>${escapeHtml(sessionLabel(type))}</option>`).join("");
 }
 
+/* =========================================================
+   V30 · ADAPTIVE SCHEDULE ENGINE
+   Riprogramma solo il microciclo corrente; non altera la progressione.
+   ========================================================= */
+function adaptiveWeekStart(){
+  const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-dayIndex());return d;
+}
+function adaptiveDateKey(index){const d=adaptiveWeekStart();d.setDate(d.getDate()+index);return localDay(d);}
+function adaptiveBaseWeek(){
+  const d=data(),template=getWeekTemplate(d.settings.goal),available=mask(d.settings.days);
+  return template.map((v,i)=>sessionTypeForDay(i,available[i]?v:"recovery"));
+}
+function adaptivePlan(choice,reason){
+  const today=dayIndex(),base=adaptiveBaseWeek(),plan=[...base],d=data();
+  const current=plan[today]||"recovery";
+  const completed=d.sessions.some(x=>isDailyPlanSession(x)&&(x.day||localDay(new Date(x.date)))===localDay());
+  if(completed)return {ok:false,message:"La seduta prevista oggi risulta già completata: non modifico il piano."};
+  if(choice==="normal")return {ok:true,plan,changes:[],message:"Il programma originale resta invariato."};
+  if(choice==="active"){
+    plan[today]="recovery";
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi recupero attivo leggero. Le sedute future restano invariate."};
+  }
+  if(choice==="home"){
+    const homeType=["strength","power","militaryStrength"].includes(current)?"strengthLight":(["interval","tempo","threshold","long"].includes(current)?"easy":"mobility");
+    plan[today]=homeType;
+    return {ok:true,plan,changes:[{day:today,from:current,to:homeType}],message:"Conversione in seduta breve e più gestibile. Nessun recupero obbligatorio nei giorni successivi."};
+  }
+  plan[today]="recovery";
+  if(reason==="time"){
+    if(current==="recovery")return {ok:true,plan,changes:[],message:"Oggi era già previsto recupero: il calendario resta invariato."};
+    const demanding=new Set(["strength","power","interval","tempo","threshold","long","hyrox","hyroxEngine","militaryStrength"]);
+    let slot=-1;
+    for(let i=today+1;i<7;i++){
+      if(plan[i]!=="recovery")continue;
+      const prev=plan[i-1]||"recovery",next=plan[i+1]||"recovery";
+      if(!demanding.has(prev)&&!demanding.has(next)){slot=i;break;}
+    }
+    if(slot>=0 && current!=="recovery"){
+      plan[slot]=current;
+      return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"},{day:slot,from:"recovery",to:current}],message:`Imprevisto logistico: la seduta viene spostata al ${["lunedì","martedì","mercoledì","giovedì","venerdì","sabato","domenica"][slot]}, primo spazio libero. Il resto del piano non cambia.`};
+    }
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Non c'è uno spazio libero sicuro nei prossimi giorni: meglio saltare questa seduta che comprimere il recupero."};
+  }
+  if(reason==="fatigue"||reason==="soreness"){
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Segnale di recupero incompleto: oggi riposo. Non sposto automaticamente il carico sui giorni successivi; il check giornaliero rivaluterà la prontezza."};
+  }
+  if(reason==="pain"){
+    return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi niente seduta programmata. Se il dolore è nuovo, intenso o associato a debolezza/formicolio, evita di allenarti e chiedi una valutazione sanitaria."};
+  }
+  return {ok:true,plan,changes:[{day:today,from:current,to:"recovery"}],message:"Oggi recupero. Il coach non accumula sedute: rivaluta il programma al prossimo check."};
+}
+function adaptiveOverridesSnapshot(changes,overrides){
+  const snapshot={};
+  (changes||[]).forEach(change=>{
+    const key=weeklyOverrideKey(change.day);
+    snapshot[key]=Object.prototype.hasOwnProperty.call(overrides||{},key)?overrides[key]:null;
+  });
+  return snapshot;
+}
+function previewAdaptiveSchedule(){
+  const choice=document.getElementById("adaptiveChoice")?.value||"rest",reason=document.getElementById("adaptiveReason")?.value||"other";
+  const d=data(),result=adaptivePlan(choice,reason);
+  result.choice=choice;result.reason=reason;result.createdAt=Date.now();
+  result.baseRevision=Number(d.storageRevision||0);
+  result.previousOverrides=adaptiveOverridesSnapshot(result.changes,d.settings.weeklyOverrides||{});
+  window.__adaptiveScheduleDraft=result;
+  const box=document.getElementById("adaptiveSchedulePreview");if(!box)return;
+  if(!result.ok){box.textContent=result.message;return;}
+  const names=["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"];
+  const changes=result.changes||[];
+  box.innerHTML=`<strong>${escapeHtml(result.message)}</strong>`+(changes.length?`<ul>${changes.map(c=>`<li>${names[c.day]}: ${escapeHtml(sessionLabel(c.from))} → <strong>${escapeHtml(sessionLabel(c.to))}</strong></li>`).join("")}</ul>`:`<p>Nessuna modifica al calendario.</p>`)+`<p class="tiny">Proposta calcolata sulla revisione ${result.baseRevision}. Conferma per applicarla.</p>`;
+}
+function applyAdaptiveSchedule(){
+  const draft=window.__adaptiveScheduleDraft;
+  if(!draft){previewAdaptiveSchedule();notify("Prima analizza la proposta.","error");return;}
+  if(!draft.ok){notify(draft.message,"error");return;}
+  const d=data();
+  const selectedChoice=document.getElementById("adaptiveChoice")?.value||"rest";
+  const selectedReason=document.getElementById("adaptiveReason")?.value||"other";
+  if(selectedChoice!==(draft.choice||"rest")||selectedReason!==(draft.reason||"other")){
+    window.__adaptiveScheduleDraft=null;
+    previewAdaptiveSchedule();
+    notify("Hai cambiato le risposte dopo l'analisi. Ho aggiornato la proposta: controllala e confermala di nuovo.","error");
+    return;
+  }
+  if(Number(d.storageRevision||0)!==Number(draft.baseRevision||0)){
+    window.__adaptiveScheduleDraft=null;
+    previewAdaptiveSchedule();
+    notify("Il programma è cambiato dopo l'analisi. Ho aggiornato la proposta: controllala e confermala di nuovo.","error");
+    return;
+  }
+  if(!Array.isArray(draft.changes)||!draft.changes.length){window.__adaptiveScheduleDraft=null;notify("Nessuna modifica da applicare.");return;}
+  d.settings.weeklyOverrides={...(d.settings.weeklyOverrides||{})};
+  // Snapshot BEFORE changing anything: this is the exact state needed for a reliable undo.
+  const previousOverrides=adaptiveOverridesSnapshot(draft.changes,d.settings.weeklyOverrides);
+  draft.changes.forEach(c=>{
+    const key=weeklyOverrideKey(c.day);
+    if(c.to)d.settings.weeklyOverrides[key]=c.to;
+    else delete d.settings.weeklyOverrides[key];
+  });
+  d.adaptiveScheduleHistory=Array.isArray(d.adaptiveScheduleHistory)?d.adaptiveScheduleHistory:[];
+  const record={id:`adaptive-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,date:localDay(),week:periodizationWeek(),choice:draft.choice||"rest",reason:draft.reason||"other",changes:draft.changes.map(c=>({...c})),previousOverrides,createdAt:new Date().toISOString()};
+  d.adaptiveScheduleHistory.push(record);
+  d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.slice(-100);
+  const saved=save(d);
+  if(!runtimeHealth.lastSaveOk){
+    // Do not leave a false success state if local persistence failed.
+    Object.entries(previousOverrides).forEach(([key,value])=>{if(value===null)delete d.settings.weeklyOverrides[key];else d.settings.weeklyOverrides[key]=value;});
+    d.adaptiveScheduleHistory=d.adaptiveScheduleHistory.filter(x=>x.id!==record.id);
+    window.__adaptiveScheduleDraft=null;
+    notify("Non sono riuscito a salvare le modifiche. Il calendario non è stato confermato: esporta un backup e riprova.","error");
+    return;
+  }
+  window.__adaptiveScheduleDraft=null;
+  renderWeek();
+  if(selectedPain!==null)evaluate();
+  renderAdaptiveScheduleStatus();
+  notify("Calendario adattato e salvato sul dispositivo.");
+}
+function resetAdaptiveSchedule(){
+  const d=data(),today=localDay();
+  const history=Array.isArray(d.adaptiveScheduleHistory)?d.adaptiveScheduleHistory:[];
+  const record=[...history].reverse().find(x=>x.date===today&&x.previousOverrides&&x.changes);
+  if(!record){
+    notify("Non ci sono modifiche adattive di oggi da annullare. Per cambiare una singola giornata usa il calendario settimanale.");
+    return;
+  }
+  d.settings.weeklyOverrides={...(d.settings.weeklyOverrides||{})};
+  Object.entries(record.previousOverrides).forEach(([key,value])=>{
+    if(value===null)delete d.settings.weeklyOverrides[key];
+    else d.settings.weeklyOverrides[key]=value;
+  });
+  d.adaptiveScheduleHistory=history.filter(x=>x.id!==record.id);
+  save(d);
+  if(!runtimeHealth.lastSaveOk){notify("Ripristino non salvato. Riprova e verifica il backup locale.","error");return;}
+  renderWeek();if(selectedPain!==null)evaluate();
+  window.__adaptiveScheduleDraft=null;
+  const box=document.getElementById("adaptiveSchedulePreview");if(box)box.textContent="Ultima modifica adattiva di oggi annullata. Il calendario precedente è stato ripristinato.";
+  renderAdaptiveScheduleStatus();
+  notify("Calendario precedente ripristinato.");
+}
+function renderAdaptiveScheduleStatus(){
+  const box=document.getElementById("adaptiveSchedulePreview");if(!box)return;
+  const current=data().settings.weeklyOverrides?.[weeklyOverrideKey(dayIndex())];
+  if(current&&!window.__adaptiveScheduleDraft)box.textContent=`Oggi il calendario è personalizzato: ${sessionLabel(current)}.`;
+}
+
 function renderWeek(){
+  renderV31Programming();
 
   const d =
     data();
@@ -10967,7 +11373,7 @@ function renderSession(){
     );
 
   reason.textContent =
-    e.reason || "";
+    [e.reason,e.adaptiveNote].filter(Boolean).join(" · ");
 
   reason.className =
     "reason "+
@@ -13667,13 +14073,14 @@ function renderCalibrationReport(){
 function renderWeeklyBalance(){
   const recent=data().sessions.filter(session=>masterDaysAgo(session.date)>=0&&masterDaysAgo(session.date)<7);
   const daysFor=predicate=>new Set(recent.filter(predicate).map(session=>session.day||localDay(new Date(session.date)))).size;
-  const aerobic=recent.filter(session=>/run|corsa|walk|cammin|cycling|bike|bici|cyclette|mtb|swim|nuoto|hyrox/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`)).reduce((sum,session)=>sum+Number(session.durationSec||0)/60,0);
+  const aerobic=recent.filter(session=>/run|corsa|walk|cammin|cycling|bike|bici|cyclette|mtb|swim|nuoto|hyrox|cardio|stair|stepmill|rower|vogatore|treadmill|assault|skierg/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`)).reduce((sum,session)=>sum+Number(session.durationSec||0)/60,0);
   const strengthDays=daysFor(session=>/strength|forza|legs|military|hyrox|calisthenics/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
   const recoveryDays=daysFor(session=>/recovery|recupero|mobility|mobilità|stretch|rehab|fisio|physio/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
-  document.getElementById("aerobicBalance").textContent=`${Math.round(aerobic)} min`;document.getElementById("strengthBalance").textContent=`${strengthDays} giorni`;document.getElementById("recoveryBalance").textContent=`${recoveryDays} giorni`;
-  document.getElementById("aerobicBalanceBar").style.width=`${masterClamp(aerobic/150*100)}%`;document.getElementById("strengthBalanceBar").style.width=`${masterClamp(strengthDays/2*100)}%`;document.getElementById("recoveryBalanceBar").style.width=`${masterClamp(recoveryDays/2*100)}%`;
-  const messages=[];if(aerobic<150)messages.push(`aerobico registrato ${Math.round(aerobic)}/150 min`);else messages.push("quota aerobica generale raggiunta");if(strengthDays<2)messages.push(`forza ${strengthDays}/2 giorni`);else messages.push("forza distribuita su almeno 2 giorni");
-  document.getElementById("weeklyBalanceAdvice").textContent=`Riepilogo: ${messages.join(" · ")}. Intensità, condizioni personali e lavoro fisico possono richiedere adattamenti.`;
+  const mobilityDays=daysFor(session=>/mobility|mobilità|stretch|balance|equilibrio|coordinazione/i.test(`${session.trainingCategory||""} ${session.generatedSessionType||""} ${session.type||""}`));
+  document.getElementById("aerobicBalance").textContent=`${Math.round(aerobic)} min`;document.getElementById("strengthBalance").textContent=`${strengthDays} giorni`;document.getElementById("mobilityBalance").textContent=`${mobilityDays} giorni`;document.getElementById("recoveryBalance").textContent=`${recoveryDays} giorni`;
+  document.getElementById("aerobicBalanceBar").style.width=`${masterClamp(aerobic/150*100)}%`;document.getElementById("strengthBalanceBar").style.width=`${masterClamp(strengthDays/2*100)}%`;document.getElementById("mobilityBalanceBar").style.width=`${masterClamp(mobilityDays/2*100)}%`;document.getElementById("recoveryBalanceBar").style.width=`${masterClamp(recoveryDays/2*100)}%`;
+  const messages=[];if(aerobic<150)messages.push(`aerobico registrato ${Math.round(aerobic)}/150 min`);else messages.push("quota aerobica generale raggiunta");if(strengthDays<2)messages.push(`forza ${strengthDays}/2 giorni`);else messages.push("forza distribuita su almeno 2 giorni");if(mobilityDays<2)messages.push(`mobilità/equilibrio ${mobilityDays}/2 giorni`);else messages.push("mobilità ed equilibrio distribuiti nella settimana");
+  document.getElementById("weeklyBalanceAdvice").textContent=`Riepilogo: ${messages.join(" · ")}. Il riferimento aerobico si raggiunge gradualmente; intensità, condizioni personali e lavoro fisico possono richiedere adattamenti.`;
 }
 
 /* =========================================================
@@ -13957,12 +14364,12 @@ function loadSettings(){
   document.getElementById("eqIndoorBike").checked=!!s.equipment.indoorBike;
   document.getElementById("eqBikeTrainer").checked=!!s.equipment.bikeTrainer;
   document.getElementById("eqMachines").checked=!!s.equipment.machines;
-  ["skiErg","rower","assaultBike","treadmill","sled","wallBall","carry"].forEach(k=>{const el=document.getElementById("eq"+k.charAt(0).toUpperCase()+k.slice(1));if(el)el.checked=!!(s.trainingModes?.[k]??s.equipment?.[k])});
+  ["skiErg","rower","assaultBike","treadmill","stairClimber","indoorBike","sled","wallBall","carry"].forEach(k=>{const el=document.getElementById("eq"+k.charAt(0).toUpperCase()+k.slice(1));if(el)el.checked=!!(s.trainingModes?.[k]??s.equipment?.[k])});
   const gymModeEnabled=!!(s.trainingModes?.gym ?? s.equipment.machines);
   document.getElementById("settingsGymMode").checked=gymModeEnabled;
   const planGym=document.getElementById("planGymMode");
   if(planGym)planGym.checked=!!(s.planPreferences?.gym ?? gymModeEnabled);
-  ["skiErg","rower","assaultBike","treadmill","sled","wallBall","carry"].forEach(k=>{const a=document.getElementById("plan"+k.charAt(0).toUpperCase()+k.slice(1)),b=document.getElementById("eq"+k.charAt(0).toUpperCase()+k.slice(1));if(a)a.checked=!!(s.trainingModes?.[k]??s.equipment?.[k]);if(b)b.checked=!!(s.trainingModes?.[k]??s.equipment?.[k])});
+  ["skiErg","rower","assaultBike","treadmill","stairClimber","indoorBike","sled","wallBall","carry"].forEach(k=>{const a=document.getElementById("plan"+k.charAt(0).toUpperCase()+k.slice(1)),b=document.getElementById("eq"+k.charAt(0).toUpperCase()+k.slice(1));if(a)a.checked=!!(s.trainingModes?.[k]??s.equipment?.[k]);if(b)b.checked=!!(s.trainingModes?.[k]??s.equipment?.[k])});
   if(document.getElementById("planCoachMode"))document.getElementById("planCoachMode").value=s.trainingModes?.coachMode||"auto";
   if(document.getElementById("planFreeFocus"))document.getElementById("planFreeFocus").value=s.trainingModes?.freeFocus||"auto";
   updatePlanGymStatus();
@@ -14049,6 +14456,7 @@ function saveSettings(){
           )
           .value
       ),
+    availabilityDays:(()=>{const picked=[...document.querySelectorAll("[data-v31-day]")].filter(x=>x.checked).map(x=>Number(x.dataset.v31Day));return picked.length?picked:[0,1,3,5];})(),
 
     minutes:
       Number(
@@ -14108,17 +14516,17 @@ function saveSettings(){
       indoorBike:document.getElementById("eqIndoorBike").checked,
       bikeTrainer:document.getElementById("eqBikeTrainer").checked,
       machines:document.getElementById("eqMachines").checked || document.getElementById("settingsGymMode").checked,
-      skiErg:document.getElementById("eqSkiErg").checked,rower:document.getElementById("eqRower").checked,assaultBike:document.getElementById("eqAssaultBike").checked,sled:document.getElementById("eqSled").checked,wallBall:document.getElementById("eqWallBall").checked,carry:document.getElementById("eqCarry").checked
+      skiErg:document.getElementById("eqSkiErg").checked,rower:document.getElementById("eqRower").checked,assaultBike:document.getElementById("eqAssaultBike").checked,treadmill:document.getElementById("eqTreadmill").checked,stairClimber:document.getElementById("eqStairClimber").checked,sled:document.getElementById("eqSled").checked,wallBall:document.getElementById("eqWallBall").checked,carry:document.getElementById("eqCarry").checked
     },
     trainingModes:{
       ...(d.settings.trainingModes||{}),
       gym:document.getElementById("settingsGymMode").checked || document.getElementById("eqMachines").checked,
-      skiErg:document.getElementById("eqSkiErg").checked,rower:document.getElementById("eqRower").checked,assaultBike:document.getElementById("eqAssaultBike").checked,treadmill:document.getElementById("eqTreadmill").checked,sled:document.getElementById("eqSled").checked,wallBall:document.getElementById("eqWallBall").checked,carry:document.getElementById("eqCarry").checked
+      skiErg:document.getElementById("eqSkiErg").checked,rower:document.getElementById("eqRower").checked,assaultBike:document.getElementById("eqAssaultBike").checked,treadmill:document.getElementById("eqTreadmill").checked,stairClimber:document.getElementById("eqStairClimber").checked,indoorBike:document.getElementById("eqIndoorBike").checked,sled:document.getElementById("eqSled").checked,wallBall:document.getElementById("eqWallBall").checked,carry:document.getElementById("eqCarry").checked
     },
     planPreferences:{
       ...(d.settings.planPreferences||{}),
       gym:document.getElementById("settingsGymMode").checked || document.getElementById("eqMachines").checked,
-      skiErg:document.getElementById("eqSkiErg").checked,rower:document.getElementById("eqRower").checked,assaultBike:document.getElementById("eqAssaultBike").checked,treadmill:document.getElementById("eqTreadmill").checked,sled:document.getElementById("eqSled").checked,wallBall:document.getElementById("eqWallBall").checked,carry:document.getElementById("eqCarry").checked
+      skiErg:document.getElementById("eqSkiErg").checked,rower:document.getElementById("eqRower").checked,assaultBike:document.getElementById("eqAssaultBike").checked,treadmill:document.getElementById("eqTreadmill").checked,stairClimber:document.getElementById("eqStairClimber").checked,indoorBike:document.getElementById("eqIndoorBike").checked,sled:document.getElementById("eqSled").checked,wallBall:document.getElementById("eqWallBall").checked,carry:document.getElementById("eqCarry").checked
     },
     runSurface:document.getElementById("runSurfaceSelect")?.value==="treadmill"?"treadmill":"outdoor",
 
@@ -14204,23 +14612,73 @@ function saveSettings(){
 
 }
 
-function updatePlanGymStatus(){
-  const selected=!!document.getElementById("planGymMode")?.checked;
-  const status=document.getElementById("planGymStatus");
-  if(status){const m=selectedModes();const names=[m.gym&&"Sala pesi",m.skiErg&&"SkiErg",m.rower&&"Vogatore",m.assaultBike&&"Assault Bike",m.treadmill&&"Tapis roulant",m.sled&&"Sled",m.wallBall&&"Wall Ball",m.carry&&"Farmer Carry"].filter(Boolean);status.textContent=`Attive: ${names.length?names.join(" · "):"nessuna attrezzatura specifica"}. Modalità: ${m.coachMode==="auto"?"coach automatico":"scelta libera"}. Il coach rispetta obiettivo, recupero e sicurezza.`;}
+function onPlanFocusChange(){
+  const focus=document.getElementById("planFreeFocus")?.value||"auto";
+  const coachMode=document.getElementById("planCoachMode");
+  // A concrete user selection is an instruction, not merely an equipment preset.
+  if(coachMode && focus!=="auto") coachMode.value="free";
+  if(coachMode && focus==="auto") coachMode.value="auto";
+  savePlanPreferences();
+  explainCoachDecision();
 }
-
+function coachSessionDisplayLabel(type){
+  const m=selectedModes(),labels={upper:"Sala pesi · parte superiore",lower:"Sala pesi · parte inferiore",gym:"Sala pesi completa",skierg:"SkiErg",rower:"Vogatore",assaultBike:"Assault Bike",hyrox:"HYROX / funzionale",run:"Corsa",recovery:"Recupero / mobilità"};
+  if(m.coachMode==="free"&&m.freeFocus!=="auto"&&labels[m.freeFocus])return labels[m.freeFocus];
+  return sessionLabel(type);
+}
+function coachDecisionExplanation(extra={}){
+  const d=data(),m=selectedModes(),focus=m.freeFocus||"auto";
+  const goalLabels={fatloss:"dimagrimento e ricomposizione",definition:"definizione",muscleGain:"ipertrofia",strengthFocus:"forza",hybrid:"allenamento ibrido",hyrox:"HYROX",run5k:"corsa 5 km",run10k:"corsa 10 km",halfMarathon:"mezza maratona",endurance:"resistenza aerobica",longevity:"longevità"};
+  const focusLabels={upper:"sala pesi · parte superiore",lower:"sala pesi · parte inferiore",gym:"sala pesi completa",skierg:"SkiErg",rower:"vogatore",assaultBike:"Assault Bike",hyrox:"HYROX / funzionale",run:"corsa",recovery:"recupero e mobilità"};
+  const goal=goalLabels[d.settings?.goal]||"obiettivo impostato";
+  const selected=focusLabels[focus]||"modalità automatica";
+  const gymAvailable=!!m.gym;
+  const safetyLimited=!!(blocked||mode==="safe"||mode==="recovery"||(Number(selectedPain)>=3));
+  const pain=Number(selectedPain||0);
+  const lines=[];
+  if(focus!=="auto" && m.coachMode==="free"){
+    lines.push(`Hai scelto ${selected}. La tua preferenza è prioritaria e il coach la userà come modalità della seduta.`);
+  }else{
+    lines.push(`Hai lasciato la scelta al coach. La modalità viene selezionata in base a ${goal}, recupero, sicurezza e piano settimanale.`);
+  }
+  if((focus==="gym"||focus==="upper"||focus==="lower")&&!gymAvailable){
+    lines.push("Attenzione: la sala pesi non risulta abilitata tra le attrezzature. La seduta userà un'alternativa compatibile a corpo libero o con l'attrezzatura disponibile.");
+  }else if((focus==="gym"||focus==="upper"||focus==="lower")&&gymAvailable){
+    lines.push("Attrezzatura sala pesi disponibile: macchine, cavi, manubri e bilancieri vengono considerati nella selezione degli esercizi.");
+  }
+  if(safetyLimited){
+    lines.push(pain>=3?"La scelta può essere modificata perché il check segnala dolore elevato: la sicurezza viene prima della modalità preferita.":"La scelta può essere adattata perché il controllo di recupero/sicurezza ha segnalato una limitazione.");
+  }
+  if(extra.muscleChanged) lines.push("Alcuni esercizi o distretti sono stati adattati per il recupero muscolare; la modalità generale resta quella scelta quando è sicuro mantenerla.");
+  if(extra.changedByCoach) lines.push(extra.changedByCoach);
+  lines.push("Nessuna modifica viene nascosta: controlla il motivo mostrato nella scheda prima di iniziare.");
+  return lines.join(" ");
+}
+function explainCoachDecision(extra={}){
+  const el=document.getElementById("planDecisionExplanation");
+  if(el)el.textContent=coachDecisionExplanation(extra);
+}
+function updatePlanGymStatus(){
+  const status=document.getElementById("planGymStatus");
+  if(status){
+    const m=selectedModes();
+    const names=[m.gym&&"Sala pesi",m.skiErg&&"SkiErg",m.rower&&"Vogatore",m.assaultBike&&"Assault Bike",m.treadmill&&"Tapis roulant",m.stairClimber&&"StairMaster",m.indoorBike&&"Cyclette",m.sled&&"Sled",m.wallBall&&"Wall Ball",m.carry&&"Farmer Carry"].filter(Boolean);
+    const focusLabels={upper:"Sala pesi · parte superiore",lower:"Sala pesi · parte inferiore",gym:"Sala pesi completa",skierg:"SkiErg",rower:"Vogatore",assaultBike:"Assault Bike",hyrox:"HYROX / funzionale",run:"Corsa",recovery:"Recupero / mobilità"};
+    status.textContent=`Attrezzature abilitate: ${names.length?names.join(" · "):"nessuna attrezzatura specifica"}. Gestione: ${m.coachMode==="auto"?"coach automatico":"preferenza utente"}. Modalità richiesta: ${focusLabels[m.freeFocus]||"decide il coach"}.`;
+  }
+  explainCoachDecision();
+}
 function savePlanPreferences(showNotice=false){
   const d=data();
-  const keys=["skiErg","rower","assaultBike","treadmill","sled","wallBall","carry"];
+  const keys=["skiErg","rower","assaultBike","treadmill","stairClimber","indoorBike","sled","wallBall","carry"];
   const modes={...(d.settings.trainingModes||{}),gym:!!document.getElementById("planGymMode")?.checked,coachMode:document.getElementById("planCoachMode")?.value||"auto",freeFocus:document.getElementById("planFreeFocus")?.value||"auto"};
   keys.forEach(k=>{modes[k]=!!document.getElementById("plan"+k.charAt(0).toUpperCase()+k.slice(1))?.checked;const setting=document.getElementById("eq"+k.charAt(0).toUpperCase()+k.slice(1));if(setting)setting.checked=modes[k]});
   d.settings.trainingModes=modes;
   d.settings.planPreferences={...(d.settings.planPreferences||{}),...modes};
-  d.settings.equipment={...(d.settings.equipment||{}),machines:modes.gym,skiErg:modes.skiErg,rower:modes.rower,assaultBike:modes.assaultBike,sled:modes.sled,wallBall:modes.wallBall,carry:modes.carry};
+  d.settings.equipment={...(d.settings.equipment||{}),machines:modes.gym,skiErg:modes.skiErg,rower:modes.rower,assaultBike:modes.assaultBike,treadmill:modes.treadmill,stairClimber:modes.stairClimber,indoorBike:modes.indoorBike,sled:modes.sled,wallBall:modes.wallBall,carry:modes.carry};
   const settingsToggle=document.getElementById("settingsGymMode");if(settingsToggle)settingsToggle.checked=modes.gym;
   const machineToggle=document.getElementById("eqMachines");if(machineToggle)machineToggle.checked=modes.gym;
-  save(d);updatePlanGymStatus();
+  save(d);updatePlanGymStatus();explainCoachDecision();
   if(showNotice)notify("Modalità e attrezzature del piano salvate. Il coach userà solo quelle selezionate.","success");
   renderLongTermPlanner();
 }
@@ -14339,7 +14797,7 @@ function exportData(){
     url;
 
   a.download =
-    `picari-hybrid-coach-v25-backup-${localDay()}.json`;
+    `picari-hybrid-coach-v29-backup-${localDay()}.json`;
 
   a.click();
 
@@ -14379,7 +14837,7 @@ async function shareBackup(){
 
   const file=new File(
     [JSON.stringify(payload,null,2)],
-    `picari-hybrid-coach-v25-backup-${localDay()}.json`,
+    `picari-hybrid-coach-v29-backup-${localDay()}.json`,
     {type:"application/json"}
   );
 
@@ -14961,11 +15419,11 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V26 versione e schema",()=>APP_VERSION.startsWith("26.0.0")&&SCHEMA_VERSION===28);
+  test("V35 versione e schema",()=>APP_VERSION.startsWith("35.0.0")&&SCHEMA_VERSION===31);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
-  test("V24 backup con versione coerente",()=>exportData.toString().includes("v25-backup")&&shareBackup.toString().includes("v25-backup"));
+  test("V29 backup con versione coerente",()=>exportData.toString().includes("v29-backup")&&shareBackup.toString().includes("v29-backup"));
   test("V18 import con limiti di sicurezza",()=>installSafeImport.toString().includes("25*1024*1024")&&installSafeImport.toString().includes("100000"));
   test("V25 database 36 macchinari",()=>GYM_LOAD_IDS.length===36&&GYM_LOAD_IDS.every(id=>EX[id]?.e==="machines"));
   test("V25 sette schede palestra coerenti",()=>Object.keys(GYM_ROUTINES).join(",")==="full,upper,upperPull,upperPush,lower,core,arms"&&Object.values(GYM_ROUTINES).every(ids=>ids.length>=3&&ids.every(id=>GYM_LOAD_IDS.includes(id))));
@@ -14977,6 +15435,14 @@ function runSelfTests(){
   test("V17 carichi progressivi con feedback",()=>typeof GYM_LOAD_IDS[0]==="string"&&data().progression&&data().progression.loadHistory&&typeof renderGymPreview==="function");
   test("V17 storico conserva RPE dolore tecnica",()=>markStepCompleted.toString().includes("blockRPE")&&markStepCompleted.toString().includes("blockPain")&&markStepCompleted.toString().includes("technique")&&saveCompletedSession.toString().includes("step.technique"));
   test("V17 controllo navigazione palestra",()=>document.getElementById("page-gym")&&typeof showPage==="function"&&showPage.toString().includes("gym"));
+  test("adaptive schedule genera proposta",()=>typeof adaptivePlan==="function"&&adaptivePlan("rest","time").ok);
+  test("adaptive schedule non sovraccarica per fatica",()=>{const r=adaptivePlan("rest","fatigue");return r.ok&&r.changes.length===1&&r.changes[0].to==="recovery";});
+  test("adaptive schedule mantiene il piano se normale",()=>adaptivePlan("normal","time").changes.length===0);
+  test("adaptive schedule salva cronologia locale",()=>typeof applyAdaptiveSchedule==="function"&&Array.isArray(data().adaptiveScheduleHistory||[]));
+  test("adaptive schedule UI presente",()=>["adaptiveChoice","adaptiveReason","adaptiveSchedulePreview"].every(id=>!!document.getElementById(id)));
+  test("adaptive schedule snapshot conserva override precedenti",()=>{const k=weeklyOverrideKey(0),snap=adaptiveOverridesSnapshot([{day:0}],{[k]:"strength"});return snap[k]==="strength";});
+  test("adaptive schedule snapshot distingue override assente",()=>{const k=weeklyOverrideKey(6),snap=adaptiveOverridesSnapshot([{day:6}],{});return Object.prototype.hasOwnProperty.call(snap,k)&&snap[k]===null;});
+  test("adaptive schedule annullamento richiede cronologia valida",()=>typeof resetAdaptiveSchedule==="function"&&typeof applyAdaptiveSchedule==="function");
   runtimeHealth.tests=tests;
   return tests;
 }
@@ -15545,7 +16011,7 @@ function lifetimeGroupForExercise(step){
   const name=String(step?.name||step?.title||step?.exercise||step?.t||"").toLowerCase();
   const text=id+" "+name;
   const groups=[];
-  if(/squat|goblet|split|lunge|step.?up|thrust|bridge|wall.?sit|sled.?push|sled.?pull|run|hyroxrun|march|bike|rowerg|rower|assaultbike|calf|deadlift|hinge|leg|hamstring|quad|glute|cycling|treadmill/.test(text))groups.push("legs");
+  if(/squat|goblet|split|lunge|step.?up|thrust|bridge|wall.?sit|sled.?push|sled.?pull|run|hyroxrun|march|bike|rowerg|rower|assaultbike|stair|stepmill|calf|deadlift|hinge|leg|hamstring|quad|glute|cycling|treadmill/.test(text))groups.push("legs");
   if(/inclinepush|wallpush|push.?up|chest|petto|dip|tricep|bench|press|pec.?deck/.test(text))groups.push("push");
   if(/row|pull|lat|pulldown|bicep|curl|back|schiena|face.?pull/.test(text))groups.push("pull");
   if(/shoulder|spalla|deltoid|lateral.?raise|alzate|overhead|militarypress|scap|cuff|ski.?erg|skierg|wall.?ball/.test(text))groups.push("shoulders");
@@ -15722,6 +16188,7 @@ function plannedPreviewItems(type,previewDayIndex=null){
 }
 
 function renderWeek(){
+  renderV31Programming();
   const d=data(),week=getWeekTemplate(d.settings.goal),available=mask(d.settings.days);
   const days=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"],stage=periodizationStage();
   const title=`Settimana ${periodizationWeek()}/12 · ${stage.name}`;
@@ -15790,8 +16257,867 @@ runSelfTests=function(){
 const lifetimeDOMContentLoadedRefresh=()=>{try{loadMuscleRecoveryCheck();renderWeek();updateMuscleRecoverySummary();}catch(error){console.warn("Lifetime planner refresh:",error);}};
 document.addEventListener("DOMContentLoaded",lifetimeDOMContentLoadedRefresh);
 
+/* LIFETIME HYBRID EVOLUTION V29.0 · adaptive, shoulder-safe, resilient local history */
+const LIFETIME_BACKUP_KEY=`${KEY}_verifiedLocalSnapshots_v2`;
+function lifetimeEnsureState(d){
+  d.coachLearning=d.coachLearning||{};
+  d.coachLearning.sessionsObserved=Math.max(0,Number(d.coachLearning.sessionsObserved||0));
+  d.coachLearning.feedback={too_easy:0,right:0,too_hard:0,...(d.coachLearning.feedback||{})};
+  d.coachLearning.byExercise=d.coachLearning.byExercise||{};
+  d.longTerm=d.longTerm||{careerStartDate:d.createdAt||new Date().toISOString(),phaseAnchor:d.programStartDate||localDay()};
+  if(!Number.isFinite(Date.parse(d.longTerm.careerStartDate||"")))d.longTerm.careerStartDate=d.createdAt||new Date().toISOString();
+  if(!d.longTerm.phaseAnchor)d.longTerm.phaseAnchor=d.programStartDate||localDay();
+  return d;
+}
+const lifetimeNormBase=norm;
+norm=function(v){return lifetimeEnsureState(lifetimeNormBase(v));};
+// defaults() bypasses norm() when no local record exists; normalize that path too.
+const lifetimeDataBase=data;
+data=function(){return lifetimeEnsureState(lifetimeDataBase());};
+function lifetimeFeedbackProfile(){
+  const d=lifetimeEnsureState(data()),f=d.coachLearning.feedback;
+  const n=Number(f.too_easy||0)+Number(f.right||0)+Number(f.too_hard||0);
+  return {n,easy:n?Number(f.too_easy||0)/n:0,right:n?Number(f.right||0)/n:0,hard:n?Number(f.too_hard||0)/n:0};
+}
+function lifetimeAdaptiveDecision(){
+  const d=lifetimeEnsureState(data());
+  const recent=(d.sessions||[]).filter(s=>!s.incomplete).slice(-6);
+  const rpe=recent.map(s=>Number(s.rpe??s.sessionRPE??s.blockRPE??0)).filter(x=>x>0&&x<=10);
+  const avg=rpe.length?rpe.reduce((a,b)=>a+b,0)/rpe.length:0;
+  const rec=getMuscleRecoveryProfile(),max=Math.max(0,...Object.values(rec.score||{}).map(Number));
+  const rh=(d.readinessHistory||[]).slice(-7).map(x=>Number(x.score??x.readiness??0)).filter(x=>x>0&&x<=100);
+  const ready=rh.length?rh.reduce((a,b)=>a+b,0)/rh.length:0;
+  const fb=lifetimeFeedbackProfile();
+  const painReaction=recent.slice(-3).some(s=>Number(s.postPain||0)>=4||Number(s.nextDayReaction||0)>=3);
+  let action="maintain",volume=1,intensity=1,reasons=[];
+  // Safety hierarchy: pain/reaction > local recovery > systemic deload > progression.
+  if(painReaction){action="protect";volume=.65;intensity=.80;reasons.push("dolore post-seduta o reazione del giorno successivo");}
+  else if(max>=7.5){action="recover";volume=.50;intensity=.70;reasons.push("recupero insufficiente in almeno un distretto");}
+  else if((avg>=9&&rpe.length>=2)||(fb.hard>=.35&&fb.n>=4)||(ready>0&&ready<45&&rh.length>=3)){
+    action="deload";volume=.65;intensity=.85;reasons.push("RPE, feedback o readiness indicano necessità di scarico");
+  }
+  else if(max>=5){action="adapt";volume=.80;intensity=.90;reasons.push("recupero muscolare ancora incompleto");}
+  else if(fb.easy>=.50&&fb.n>=4&&avg>0&&avg<=7.5){action="progress";volume=1.0;intensity=1.0;reasons.push("feedback favorevoli: valuta una progressione minima e controllata");}
+  else reasons.push("dati insufficienti o segnali stabili: mantieni il carico senza aumenti automatici");
+  return {action,volume,intensity,reasons,avgRpe:Number(avg.toFixed(1)),readiness:Math.round(ready),muscleFatigue:Math.round(max),feedbackCount:fb.n};
+}
+function lifetimeShoulderRisk(e){
+  const id=typeof e==="string"?e:String(e?.id||""),x=EX[id]||((e&&typeof e==="object")?e:{});
+  const t=`${id} ${x?.t||e?.name||e?.t||""}`.toLowerCase();
+  return x?.shoulderSensitive===true||/overhead|military.?press|push.?press|upright.?row|dips?|deep.?push.?up|burpee|wall.?ball|ski.?erg|kipping|behind.?neck|snatch|jerk|ytw.?raise|floor.?press/.test(t);
+}
+function lifetimeExerciseLearningRisk(e){
+  const id=typeof e==="string"?e:String(e?.id||""),r=data().coachLearning?.byExercise?.[id];
+  if(!r)return {blocked:false,caution:false,averagePain:0};
+  const n=Math.max(0,Number(r.painCount??r.n??0)),averagePain=n?Number(r.painTotal||0)/n:0;
+  return {blocked:n>=2&&averagePain>=3,caution:n>=2&&averagePain>=2,averagePain};
+}
+function lifetimeShoulderFilter(list){
+  const d=data(),c=d.settings?.muscleRecoveryCheck,pain=Number(selectedPain||0);
+  const soreness=c?.date===localDay()?Number(c.values?.shoulders||0):0;
+  const night=Number(document.getElementById("night")?.value||0),tingling=Number(document.getElementById("tingling")?.value||0),weakness=Number(document.getElementById("weakness")?.value||0);
+  const red=night>=3||tingling>=3||weakness>=3;
+  return (list||[]).filter(e=>{
+    const risk=lifetimeShoulderRisk(e),learned=lifetimeExerciseLearningRisk(e);
+    if(learned.blocked)return false;
+    if(red){const groups=lifetimeGroupForExercise({id:typeof e==="string"?e:e?.id,name:e?.t||e?.name||""});return !risk&&!groups.some(g=>["push","pull","shoulders"].includes(g));}
+    if((pain>=1||soreness>=1)&&risk)return false;
+    if(learned.caution&&risk)return false;
+    return true;
+  });
+}
+const lifetimeStartBase=startWorkout;
+startWorkout=function(list,type,flow=false,origin="extra"){
+  const normalized=(list||[]).map(e=>typeof e==="string"?({...EX[e],id:e,t:EX[e]?.t||e}):({...e}));
+  let safe=lifetimeShoulderFilter(normalized);
+  const decision=lifetimeAdaptiveDecision();
+  if(["adapt","deload","recover","protect"].includes(decision.action)){
+    safe=safe.map(e=>{
+      const sets=Math.max(1,Number(e.sets||parseSets(e.d)||1));
+      const reduced=Math.max(1,Math.floor(sets*decision.volume));
+      const cue=decision.action==="protect"?"Protezione: riduci volume e mantieni solo ROM indolore; interrompi se i sintomi aumentano."
+        :decision.action==="recover"?"Recupero: volume ridotto e intensità leggera, senza arrivare a cedimento."
+        :decision.action==="deload"?"Deload anticipato: circa 35% di volume in meno e carico prudente (RPE massimo 6–7)."
+        :"Adattamento: riduci il volume e mantieni almeno 2–3 ripetizioni in riserva.";
+      return {...e,sets:reduced,adaptiveNote:[e.adaptiveNote,cue].filter(Boolean).join(" ")};
+    });
+  }else if(decision.action==="progress"){
+    safe=safe.map(e=>({...e,adaptiveNote:"Progressione prudente: aumenta una sola variabile solo se tecnica, recupero e dolore restano favorevoli; nessun aumento automatico del carico."}));
+  }
+  if(!safe.length){notify("Coach: nessun esercizio compatibile con i segnali attuali. Scegli recupero/mobilità e rivaluta; se i sintomi persistono, chiedi indicazioni al professionista che ti segue.","error");return;}
+  const d=data();d.coachLearning.lastDecision={...decision,date:new Date().toISOString(),type};save(d);
+  return lifetimeStartBase(safe,type,flow,origin);
+};
+const lifetimeSaveBase=saveCompletedSession;
+saveCompletedSession=function(){
+  const before=new Set((data().sessions||[]).map(s=>String(s.id||"")));
+  const result=lifetimeSaveBase();
+  try{
+    const d=lifetimeEnsureState(data()),fresh=d.sessions.filter(s=>!before.has(String(s.id||""))&&!s.incomplete);
+    fresh.forEach(s=>{
+      d.coachLearning.sessionsObserved++;
+      const f=s.recommendationFeedback;
+      if(["too_easy","right","too_hard"].includes(f))d.coachLearning.feedback[f]=(d.coachLearning.feedback[f]||0)+1;
+      (s.completedSteps||[]).forEach(e=>{
+        if(!e.id)return;
+        const r=d.coachLearning.byExercise[e.id]||(d.coachLearning.byExercise[e.id]={n:0,rpeTotal:0,rpeCount:0,painTotal:0,painCount:0});
+        r.n++;
+        const rp=Number(e.blockRPE??e.rpe);if(Number.isFinite(rp)&&rp>0&&rp<=10){r.rpeTotal+=rp;r.rpeCount++;}
+        const pn=Number(e.blockPain??e.pain);if(Number.isFinite(pn)&&pn>=0&&pn<=5){r.painTotal+=pn;r.painCount++;}
+      });
+    });
+    if(fresh.length){save(d);lifetimeCreateLocalSnapshot("post-workout");}
+    lifetimeRefreshPanel();
+  }catch(e){console.warn("Coach learning:",e);}
+  return result;
+};
+function lifetimeCareerSummary(){
+  const d=lifetimeEnsureState(data()),ss=d.sessions.filter(s=>!s.incomplete);
+  const raw=Date.parse(d.longTerm.careerStartDate||d.createdAt||Date.now()),start=Number.isFinite(raw)?raw:Date.now();
+  const days=Math.max(0,Math.floor((Date.now()-start)/86400000));
+  return {days,sessions:ss.length,cycles:Math.floor(days/84),careerStartDate:new Date(start).toISOString()};
+}
+function lifetimeCreateLocalSnapshot(reason="manual"){
+  try{
+    const d=data(),hash=storageHash(d),arr=JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]");
+    const next=arr.filter(x=>x?.hash!==hash);
+    next.unshift({createdAt:new Date().toISOString(),reason,data:d,hash});
+    // Keep two independent restore points to reduce localStorage quota pressure.
+    next.splice(2);
+    let candidate=next,raw=JSON.stringify(candidate),stored=false;
+    while(candidate.length){
+      try{localStorage.setItem(LIFETIME_BACKUP_KEY,raw);stored=localStorage.getItem(LIFETIME_BACKUP_KEY)===raw;if(stored)break;}catch{}
+      candidate=candidate.slice(0,-1);raw=JSON.stringify(candidate);
+    }
+    if(!stored)throw Error("Spazio locale insufficiente: esporta un backup JSON esterno.");
+    const verify=JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]");
+    if(!verify[0]?.data||verify[0].hash!==storageHash(verify[0].data))throw Error("Verifica integrità snapshot non riuscita");
+    return {ok:true,count:verify.length,hash};
+  }catch(e){return {ok:false,error:String(e.message||e)};}
+}
+function lifetimeListLocalSnapshots(){
+  try{return JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]").map((x,i)=>({index:i,date:x.createdAt,valid:!!x.data&&x.hash===storageHash(x.data),sessions:x.data?.sessions?.length||0,reason:x.reason||""}));}catch{return [];}
+}
+function lifetimeRestoreLocalSnapshot(i){
+  const a=JSON.parse(localStorage.getItem(LIFETIME_BACKUP_KEY)||"[]"),x=a[Number(i)];
+  if(!x?.data||x.hash!==storageHash(x.data))throw Error("Backup non valido: ripristino annullato");
+  const safety=lifetimeCreateLocalSnapshot("pre-restore");
+  if(!safety.ok)throw Error(`Impossibile creare la copia di sicurezza prima del ripristino: ${safety.error}`);
+  const d=norm(x.data);if(!Array.isArray(d.sessions)||!d.settings)throw Error("Storico o impostazioni non validi");
+  const saved=save(d);if(runtimeHealth.lastSaveOk===false)throw Error("Salvataggio del ripristino non riuscito");
+  return {ok:true,sessions:saved.sessions.length};
+}
+function lifetimeBackupAudit(){
+  const rawText=localStorage.getItem(KEY),raw=rawText?JSON.parse(rawText):null,sn=lifetimeListLocalSnapshots();
+  return {primaryHashValid:hasValidStorageHash(raw),sessions:data().sessions.length,snapshots:sn.length,validSnapshots:sn.filter(x=>x.valid).length,indexedDB:runtimeHealth.idbOk===true,cloudRequired:false};
+}
+function lifetimeRefreshSnapshotSelect(){
+  const sel=document.getElementById("lifeSnapshotSelect");if(!sel)return;
+  sel.innerHTML=lifetimeListLocalSnapshots().map(x=>`<option value="${x.index}">${new Date(x.date).toLocaleString("it-IT")} · ${x.sessions} sessioni · ${x.valid?"integro":"NON VALIDO"}</option>`).join("")||'<option value="">Nessun backup</option>';
+}
+function lifetimeInstallPanel(){
+  if(document.getElementById("lifetimeUltimatePanel"))return;
+  const host=document.getElementById("page-progress");if(!host)return;
+  const s=document.createElement("section");s.id="lifetimeUltimatePanel";s.className="card";
+  s.innerHTML='<div class="eyebrow">Lifetime Definitive Coach · adattivo</div><h2>Percorso a lungo termine</h2><div id="lifeDecision" class="info"></div><div id="lifeCareer" class="small"></div><div class="grid2"><button class="btn secondary" id="lifeBackup">Crea backup locale</button><button class="btn secondary" id="lifeAudit">Verifica archivio</button></div><div class="grid2"><select id="lifeSnapshotSelect" aria-label="Backup locale da ripristinare"></select><button class="btn danger" id="lifeRestore">Ripristina copia</button></div><div id="lifeBackupInfo" class="small"></div><p class="small">Le copie locali proteggono da errori accidentali sul dispositivo, ma non sostituiscono l’esportazione periodica di un file JSON su una destinazione sicura scelta da te.</p>';
+  host.appendChild(s);lifetimeRefreshSnapshotSelect();
+  s.querySelector("#lifeBackup").onclick=()=>{const r=lifetimeCreateLocalSnapshot();s.querySelector("#lifeBackupInfo").textContent=r.ok?`Copia locale verificata (${r.count} snapshot).`:`Errore: ${r.error}`;lifetimeRefreshSnapshotSelect();};
+  s.querySelector("#lifeAudit").onclick=()=>{const a=lifetimeBackupAudit();s.querySelector("#lifeBackupInfo").textContent=`Dati ${a.primaryHashValid?"integri":"da verificare"} · ${a.sessions} sessioni · copie valide ${a.validSnapshots}/${a.snapshots} · IndexedDB ${a.indexedDB?"attivo":"non confermato"} · nessun cloud richiesto.`;};
+  s.querySelector("#lifeRestore").onclick=()=>{const i=s.querySelector("#lifeSnapshotSelect").value;if(i===""||!confirm("Ripristinare questa copia? Prima verrà creata e verificata una copia dello stato attuale."))return;try{const r=lifetimeRestoreLocalSnapshot(i);s.querySelector("#lifeBackupInfo").textContent=`Ripristino completato: ${r.sessions} sessioni.`;location.reload();}catch(e){s.querySelector("#lifeBackupInfo").textContent=`Ripristino annullato: ${e.message}`;}};
+  lifetimeRefreshPanel();
+}
+function lifetimeRefreshPanel(){
+  const e=document.getElementById("lifeDecision");if(!e)return;
+  const x=lifetimeAdaptiveDecision(),c=lifetimeCareerSummary();
+  e.textContent=`Decisione: ${x.action.toUpperCase()}. Volume ${Math.round(x.volume*100)}%, intensità ${Math.round(x.intensity*100)}%. ${x.reasons.join("; ")}`;
+  document.getElementById("lifeCareer").textContent=`Storico continuo: ${c.days} giorni · ${c.sessions} sessioni · ${c.cycles} cicli da 12 settimane. Lo storico non viene azzerato al cambio di ciclo.`;
+}
+function lifetimeUltimateSelfTests(){
+  const t=[],ck=(n,f)=>{try{t.push({name:n,ok:!!f()});}catch(e){t.push({name:n,ok:false,error:String(e)});}};
+  const simulate=(sessions=[],feedback={too_easy:0,right:0,too_hard:0},score={legs:0,push:0,pull:0,shoulders:0,core:0},readiness=[])=>{
+    const oldData=data,oldRecovery=getMuscleRecoveryProfile;
+    try{data=()=>({sessions,readinessHistory:readiness,coachLearning:{sessionsObserved:sessions.length,feedback,byExercise:{}},settings:{}});getMuscleRecoveryProfile=()=>({score});return lifetimeAdaptiveDecision();}
+    finally{data=oldData;getMuscleRecoveryProfile=oldRecovery;}
+  };
+  ck("V28.1 schema conserva storico e dati Lifetime",()=>{const n=norm({sessions:[{id:"keep"}],coachLearning:{sessionsObserved:2},longTerm:{careerStartDate:new Date().toISOString()}});return n.sessions.length===1&&n.coachLearning.sessionsObserved===2&&!!n.longTerm.careerStartDate;});
+  ck("V28.1 feedback usa solo valutazioni reali",()=>{const old=data;try{data=()=>({coachLearning:{feedback:{too_easy:2,right:1,too_hard:1},sessionsObserved:20}});const f=lifetimeFeedbackProfile();return f.n===4&&f.easy===.5&&f.hard===.25;}finally{data=old;}});
+  ck("V28.1 dolore ha priorità sul deload",()=>simulate([{rpe:9},{rpe:9},{postPain:4,rpe:9}]).action==="protect");
+  ck("V28.1 recupero severo ha priorità sul deload",()=>simulate([{rpe:9},{rpe:9}],{}, {legs:8,push:0,pull:0,shoulders:0,core:0}).action==="recover");
+  ck("V28.1 deload anticipato su RPE elevato",()=>simulate([{rpe:9},{rpe:9}]).action==="deload");
+  ck("V28.1 adattamento su fatica moderata",()=>simulate([],{too_easy:0,right:0,too_hard:0},{legs:6,push:0,pull:0,shoulders:0,core:0}).action==="adapt");
+  ck("V28.1 progressione richiede feedback sufficienti",()=>simulate([{rpe:6},{rpe:7},{rpe:7},{rpe:6}],{too_easy:3,right:1,too_hard:0}).action==="progress");
+  ck("V28.1 nessun dato non genera progressione automatica",()=>simulate().action==="maintain");
+  ck("V28.1 classificazione esercizi spalla",()=>lifetimeShoulderRisk({id:"militaryPress",t:"Military press"})&&lifetimeShoulderRisk("wallBallSkill"));
+  ck("V28.1 storico pluriennale continuo",()=>lifetimeCareerSummary().sessions>=0&&Number.isFinite(lifetimeCareerSummary().days));
+  ck("V28.1 snapshot con checksum",()=>{const r=lifetimeCreateLocalSnapshot("test");return r.ok&&lifetimeListLocalSnapshots()[0]?.valid;});
+  ck("V28.1 limite snapshot locali",()=>lifetimeListLocalSnapshots().length<=2);
+  ck("V28.1 ripristino protetto da checksum",()=>typeof lifetimeRestoreLocalSnapshot==="function"&&typeof lifetimeBackupAudit==="function");
+  ck("V28.1 timer e guida serie ereditati",()=>typeof renderSession==="function"&&typeof finishTimer==="function"&&typeof isGuidedSetExercise==="function");
+  return t;
+}
+
+const lifetimeTestsBase=runSelfTests;runSelfTests=function(){
+  const tests=lifetimeTestsBase();
+  // Earlier regression checks inspected Function#toString. Lifetime wrappers
+  // legitimately change that text, so validate the preserved base functions.
+  const replaceCheck=(name,ok,error)=>{const t=tests.find(x=>x.name===name);if(t){t.ok=!!ok;if(error)t.error=error;else delete t.error;}};
+  replaceCheck('durate separate',markStepCompleted.toString().includes('elapsedSec')&&lifetimeSaveBase.toString().includes('activeDurationSec'));
+  replaceCheck('salvataggio idempotente',lifetimeSaveBase.toString().includes('sourceSessionId')&&saveSessionDraft.toString().includes('activeSessionId'));
+  replaceCheck('V25 guida serie in qualsiasi sessione',lifetimeStartBase.toString().includes('isGuidedSetExercise')&&finishTimer.toString().includes('isGuidedSetExercise'));
+  replaceCheck('V17 storico conserva RPE dolore tecnica',markStepCompleted.toString().includes('blockRPE')&&markStepCompleted.toString().includes('blockPain')&&markStepCompleted.toString().includes('technique')&&lifetimeSaveBase.toString().includes('step.technique'));
+  return tests.concat(lifetimeUltimateSelfTests());
+};
+window.addEventListener("DOMContentLoaded",()=>{try{lifetimeInstallPanel();const r=lifetimeCreateLocalSnapshot("avvio");lifetimeRefreshSnapshotSelect();lifetimeRefreshPanel();if(!r.ok)console.warn("Lifetime snapshot non creato:",r.error);}catch(error){console.error("Lifetime initialization:",error);}});
+/* END LIFETIME HYBRID EVOLUTION V29.0 */
+
 /* END LIFETIME CONSOLIDATION */
+
+
+/* =========================================================
+   V29.0 · HYBRID EVOLUTION ENGINE
+   Configurable goal weighting, weekly composition, coordinated
+   strength/running progression, adaptive recovery and shoulder guard.
+   ========================================================= */
+const V29_GOAL_WEIGHTS={strength:2,running:2,hyrox:1,endurance:1,mobility:1};
+function v29EnsureState(d){
+  d=lifetimeEnsureState(d||{});
+  d.v29=d.v29||{};
+  d.v29.goalWeights={...V29_GOAL_WEIGHTS,...(d.v29.goalWeights||{})};
+  d.v29.progression=d.v29.progression||{strength:{},running:{},lastDecision:null};
+  d.v29.shoulderEvents=Array.isArray(d.v29.shoulderEvents)?d.v29.shoulderEvents:[];
+  d.v29.deloadLog=Array.isArray(d.v29.deloadLog)?d.v29.deloadLog:[];
+  return d;
+}
+const v29NormBase=norm;
+norm=function(v){return v29EnsureState(v29NormBase(v));};
+const v29DataBase=data;
+data=function(){return v29EnsureState(v29DataBase());};
+function v29Clamp(n,min=0,max=3){n=Number(n);return Number.isFinite(n)?Math.max(min,Math.min(max,n)):0;}
+function v29GoalWeights(){
+  const d=data(),w=d.v29.goalWeights||{},p=d.settings.goalPriorities||{};
+  return {strength:v29Clamp(p.muscle||p.strength?Math.max(w.strength||0,1):w.strength||0),running:v29Clamp(p.running?Math.max(w.running||0,1):w.running||0),hyrox:v29Clamp(p.hyrox?Math.max(w.hyrox||0,1):w.hyrox||0),endurance:v29Clamp(p.endurance?Math.max(w.endurance||0,1):w.endurance||0),mobility:v29Clamp(p.mobility?Math.max(w.mobility||0,1):w.mobility||0)};
+}
+function v29GoalMixSummary(){
+  const s=data().settings,w=v29GoalWeights();
+  const primary=s.goal||"hybrid",days=Math.max(3,Math.min(6,Number(s.days)||4));
+  const run=Math.max(w.running,["run5k","run10k","halfMarathon","endurance"].includes(primary)?3:0);
+  const strength=Math.max(w.strength,["muscleGain","strengthFocus","fatloss","definition"].includes(primary)?2:0);
+  const hyrox=Math.max(w.hyrox,primary==="hyrox"?3:0);
+  return {primary,days,run,strength,hyrox,endurance:w.endurance,mobility:w.mobility};
+}
+function v29ComposeWeek(base,goal){
+  const out=[...(base||[])],mix=v29GoalMixSummary();
+  if(out.length!==7)return out;
+  const active=out.map((x,i)=>({x,i})).filter(z=>z.x!=='recovery');
+  if(active.length>mix.days){
+    const remove=active.slice(mix.days).map(z=>z.i).sort((a,b)=>b-a);
+    remove.forEach(i=>out[i]='recovery');
+  }
+  const indices=out.map((x,i)=>({x,i})).filter(z=>z.x!=='recovery').map(z=>z.i);
+  const setType=(types,type)=>{
+    if(!indices.length)return;
+    const exists=indices.some(i=>types.includes(out[i]));
+    if(exists)return;
+    const candidates=indices.filter(i=>['easy','strengthLight','strength','power','hyroxTech','hybridEngine'].includes(out[i]));
+    if(!candidates.length)return;
+    const idx=candidates[candidates.length-1];out[idx]=type;
+  };
+  // Preserve the primary template. Secondary priorities only reshape compatible slots.
+  if(mix.run>=2 && !["run5k","run10k","halfMarathon","endurance"].includes(goal))setType(['easy','long','interval','tempo'],'easy');
+  if(mix.strength>=2 && !['muscleGain','strengthFocus','fatloss','definition'].includes(goal))setType(['strength','strengthLight','power'],'strengthLight');
+  if(mix.hyrox>=2 && goal!=='hyrox' && indices.length>=5)setType(['hyroxTech','hyroxHIIT','hybridEngine'],'hyroxTech');
+  // Cap hard running/conditioning exposures to protect recovery in mixed plans.
+  const hard=indices.filter(i=>['interval','tempo','threshold','hyroxHIIT','hybridTest'].includes(out[i]));
+  hard.slice(1).forEach(i=>out[i]='easy');
+  // Preserve exact selected training-day count after any substitutions.
+  const activeNow=out.filter(x=>x!=='recovery').length;
+  if(activeNow>mix.days){let excess=activeNow-mix.days;for(let i=6;i>=0&&excess;i--)if(!['recovery','mobility','stretching'].includes(out[i])){out[i]='recovery';excess--;}}
+  return out;
+}
+const v29WeekBase=getWeekTemplate;
+getWeekTemplate=function(goal=data().settings.goal){return v29ComposeWeek(v29WeekBase(goal),goal);};
+
+function v29RecentExerciseHistory(id){
+  const ss=(data().sessions||[]).filter(s=>!s.incomplete).slice(-12).reverse();
+  const rows=[];
+  for(const s of ss){
+    const steps=(s.completedSteps||[]).filter(x=>String(x.id||'')===String(id));
+    const prescribed=(s.prescribedWorkout||[]).filter(x=>String(x.id||'')===String(id));
+    for(const x of (steps.length?steps:prescribed))rows.push({date:s.date||s.day,rpe:Number(x.blockRPE??x.rpe??s.rpe??0),pain:Number(x.blockPain??x.pain??s.postPain??0),weight:Number(x.weightKg||0),reps:Number(x.repsCompleted||x.reps||0),type:s.generatedSessionType||s.type});
+    if(rows.length>=3)break;
+  }
+  return rows;
+}
+function v29StrengthAdvice(id){
+  const h=v29RecentExerciseHistory(id).filter(x=>x.weight>0),d=data();
+  if(!h.length)return 'Progressione forza: registra il carico effettivo per calibrare i prossimi incrementi.';
+  const last=h[0],good=h.filter(x=>x.rpe>0&&x.rpe<=7&&x.pain<2).length;
+  if(last.pain>=3||last.rpe>=9)return 'Forza: non aumentare il carico; riduci 5–10% o interrompi se il dolore aumenta.';
+  if(good>=2)return 'Forza: se tutte le ripetizioni sono tecniche e senza dolore, valuta un incremento minimo (2–2,5%) nella prossima esposizione.';
+  if(last.rpe>=8)return 'Forza: mantieni il carico e consolida la tecnica prima di progredire.';
+  return 'Forza: mantieni il carico; servono altre esposizioni registrate per una progressione affidabile.';
+}
+function v29RunningTrend(){
+  const ss=(data().sessions||[]).filter(s=>!s.incomplete&&/run|running|corsa|interval|tempo|long/i.test(String(s.generatedSessionType||s.type||''))).slice(-8);
+  const acts=(data().activities||[]).filter(a=>/run|running|corsa/i.test(String(a.type||a.category||''))).slice(-8);
+  const all=[...ss,...acts].map(x=>({date:x.date||x.day,minutes:Number(x.durationSec?x.durationSec/60:x.minutes||x.durationMin||0),rpe:Number(x.rpe||x.sessionRPE||0),distance:Number(x.distanceKm||x.km||0),pain:Number(x.postPain||0)})).filter(x=>x.minutes>0);
+  if(!all.length)return {count:0,advice:'Corsa: registra durata, distanza e RPE per costruire una progressione personale.'};
+  const recent=all.slice(-3),avg=recent.reduce((a,x)=>a+x.minutes,0)/recent.length,hard=recent.filter(x=>x.rpe>=8||x.pain>=3).length;
+  return {count:all.length,avgMinutes:avg,advice:hard?'Corsa: mantieni o riduci il carico; le ultime sedute indicano fatica o reazione.':`Corsa: mantieni la qualità; se recupero e gambe sono buoni, aumenta al massimo il volume settimanale del 5–8%, senza aumentare contemporaneamente intensità e durata.`};
+}
+function v29CoordinatedDecision(){
+  const d=data(),base=v29AdaptiveBase(),run=v29RunningTrend(),recent=(d.sessions||[]).filter(s=>!s.incomplete).slice(-6);
+  const highRun=recent.filter(s=>/run|running|corsa|interval|tempo|long/i.test(String(s.generatedSessionType||s.type||''))&&Number(s.rpe||0)>=8).length;
+  let action=base.action,volume=base.volume,intensity=base.intensity,reasons=[...(base.reasons||[])];
+  if(highRun>=2&&!['protect','recover','deload'].includes(action)){action='adapt';volume=Math.min(volume,.85);intensity=Math.min(intensity,.9);reasons.push('due o più sedute di corsa impegnative recenti: carico ibrido riequilibrato');}
+  const strengthLoads=Object.values(d.progression?.loadHistory||{}).flat().slice(-10);
+  const runLoad=recent.filter(s=>/run|running|corsa|interval|tempo|long/i.test(String(s.generatedSessionType||s.type||''))).reduce((a,s)=>a+Number(s.sessionLoad||0),0);
+  return {...base,action,volume,intensity,reasons,runTrend:run,highRunSessions:highRun,runLoadRecent:runLoad,strengthRecords:strengthLoads.length};
+}
+const v29AdaptiveBase=lifetimeAdaptiveDecision;
+lifetimeAdaptiveDecision=function(){return v29CoordinatedDecision();};
+
+// Apply the shoulder guard to every session entry point and attach exercise-specific coaching.
+const v29StartBase=startWorkout;
+startWorkout=function(list,type,flow=false,origin='extra'){
+  const decision=v29CoordinatedDecision();
+  let safe=lifetimeShoulderFilter((list||[]).map(e=>typeof e==='string'?({...EX[e],id:e,t:EX[e]?.t||e}):({...e})));
+  if(!safe.length){notify('Coach: nessun esercizio compatibile con i segnali registrati. Scegli recupero/mobilità e rivaluta; per sintomi persistenti chiedi indicazioni al professionista che ti segue.','error');return;}
+  safe=safe.map(e=>{
+    const id=e.id||'',cat=String(e.c||EX[id]?.c||'').toLowerCase();
+    let note='';
+    if(/run|cardio|running|corsa/.test(cat)||/run|tempo|interval|long/i.test(String(type||'')))note=v29RunningTrend().advice;
+    else if(lifetimeGroupForExercise({id,name:e.t||''}).some(g=>['push','pull','legs'].includes(g)))note=v29StrengthAdvice(id);
+    if(decision.action==='protect'||decision.action==='recover'||decision.action==='deload'||decision.action==='adapt'){
+      const cue=decision.action==='protect'?'Protezione prioritaria: solo movimento indolore, senza forzare ROM.':decision.action==='recover'?'Recupero prioritario: seduta leggera, niente cedimento.':decision.action==='deload'?'Deload adattivo: volume ridotto e intensità prudente.':'Adattamento: mantieni 2–3 ripetizioni in riserva.';
+      note=[cue,note].filter(Boolean).join(' ');
+    }
+    return {...e,reason:[e.reason,note].filter(Boolean).join(' · '),adaptiveNote:note};
+  });
+  const d=data();d.v29.progression.lastDecision={date:new Date().toISOString(),action:decision.action,volume:decision.volume,intensity:decision.intensity,runTrend:decision.runTrend};save(d);
+  return v29StartBase(safe,type,flow,origin);
+};
+
+// Apply the coordinated decision to the actual prescription, not only to an explanatory badge.
+const v29ApplyMasterBase=applyMasterToWorkout;
+applyMasterToWorkout=function(list){
+  const base=v29ApplyMasterBase(list||[]),d=v29CoordinatedDecision();
+  const factor=d.action==='protect'?.65:d.action==='recover'?.72:d.action==='deload'?.65:d.action==='adapt'?.85:1;
+  if(factor>=.999)return base;
+  return base.map(source=>{
+    const e={...source},timed=/run|hyrox|pool|cycling|recovery|cardio/i.test(String(e.c||''))||/min|sec/i.test(String(e.d||''));
+    if(timed)e.s=Math.max(30,Math.round(Number(e.s||90)*factor));
+    else if(typeof adjustRepDose==='function')e.d=adjustRepDose(String(e.d||''),'reduce');
+    e.reason=[e.reason,`V29 ${d.action}: dose adattata (${Math.round(factor*100)}% del volume/tempo previsto).`].filter(Boolean).join(' · ');
+    return e;
+  });
+};
+
+// Keep goal controls understandable and adjustable without removing the original priority switches.
+function v29InstallGoalControls(){
+  const page=document.getElementById('page-settings');if(!page||document.getElementById('v29GoalControls'))return;
+  const card=document.createElement('section');card.id='v29GoalControls';card.className='card';
+  card.innerHTML=`<div class="eyebrow">V29 · Composizione intelligente</div><h3>Quanto deve pesare ogni priorità?</h3><p class="small">Imposta il peso delle priorità secondarie. Il coach conserva l'obiettivo principale e usa questi valori per riequilibrare gli slot compatibili, senza aumentare i giorni selezionati.</p><div class="grid2">${[['strength','Forza e massa'],['running','Running'],['hyrox','HYROX'],['endurance','Resistenza'],['mobility','Mobilità']].map(([k,label])=>`<label class="field"><span>${label}</span><select data-v29-weight="${k}"><option value="0">Esclusa</option><option value="1">Bassa</option><option value="2">Media</option><option value="3">Alta</option></select></label>`).join('')}</div><div class="info" id="v29GoalSummary">La composizione viene aggiornata in base alle priorità salvate.</div>`;
+  const anchor=page.querySelector('.card');if(anchor?.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else page.appendChild(card);
+}
+const v29LoadSettingsBase=loadSettings;
+loadSettings=function(){v29InstallGoalControls();v29LoadSettingsBase();const w=data().v29.goalWeights||V29_GOAL_WEIGHTS;document.querySelectorAll('[data-v29-weight]').forEach(el=>{el.value=String(v29Clamp(w[el.dataset.v29Weight]??0));});v29UpdateGoalSummary();};
+function v29UpdateGoalSummary(){const el=document.getElementById('v29GoalSummary');if(!el)return;const m=v29GoalMixSummary();el.textContent=`Obiettivo: ${m.primary} · ${m.days} giorni · priorità corsa ${m.run}/3 · forza ${m.strength}/3 · HYROX ${m.hyrox}/3. Il coach non aggiunge sedute oltre il limite impostato.`;}
+document.addEventListener('change',e=>{if(e.target?.matches?.('[data-v29-weight]'))v29UpdateGoalSummary();});
+const v29SaveSettingsBase=saveSettings;
+saveSettings=function(){v29SaveSettingsBase();const d=data();d.v29.goalWeights={...(d.v29.goalWeights||V29_GOAL_WEIGHTS)};document.querySelectorAll('[data-v29-weight]').forEach(el=>{d.v29.goalWeights[el.dataset.v29Weight]=v29Clamp(el.value);});save(d);v29UpdateGoalSummary();};
+
+function v29RunTests(){
+  const tests=[],ck=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(e){tests.push({name,ok:false,error:String(e.message||e)});}};
+  ck('V29 schema conserva storico precedente',()=>{const n=norm({sessions:[{id:'legacy-v26'}],settings:{goal:'fatloss'},progression:{byExercise:{x:1}}});return n.sessions.length===1&&n.progression.byExercise.x===1&&n.v29.goalWeights.running===2;});
+  ck('V29 composizione settimanale conserva sette giorni',()=>getWeekTemplate().length===7);
+  ck('V29 composizione non supera giorni impostati',()=>{const d=data(),old=d.settings.days;let ok=true;for(const days of [3,4,5,6]){d.settings.days=days;save(d);for(const g of ['fatloss','hybrid','run10k','hyrox','muscleGain'])if(getWeekTemplate(g).filter(x=>x!=='recovery').length>days)ok=false;}d.settings.days=old;save(d);return ok;});
+  ck('V29 priorità secondarie regolabili',()=>typeof v29GoalWeights==='function'&&typeof v29ComposeWeek==='function');
+  ck('V29 andamento corsa senza dati non inventa progressione',()=>v29RunningTrend().count===0||typeof v29RunningTrend().advice==='string');
+  ck('V29 progressione forza richiede carichi registrati',()=>v29StrengthAdvice('exercise-without-history').includes('registra'));
+  ck('V29 decisione coordinata restituisce volume e intensità validi',()=>{const x=v29CoordinatedDecision();return x.volume>0&&x.volume<=1&&x.intensity>0&&x.intensity<=1;});
+  ck('V29 filtro spalla presente',()=>typeof lifetimeShoulderFilter==='function'&&typeof lifetimeShoulderRisk==='function');
+  ck('V29 backup e ripristino Lifetime mantenuti',()=>typeof lifetimeCreateLocalSnapshot==='function'&&typeof lifetimeRestoreLocalSnapshot==='function');
+  ck('V29 UI obiettivi configurabili',()=>!!document.getElementById('v29GoalControls')||!!document.getElementById('page-settings'));
+  return tests;
+}
+const v29SelfTestsBase=runSelfTests;
+runSelfTests=function(){return v29SelfTestsBase().concat(v29RunTests());};
+window.v29RunTests=v29RunTests;
+window.v29Diagnostics=()=>({version:APP_VERSION,goalMix:v29GoalMixSummary(),decision:v29CoordinatedDecision(),running:v29RunningTrend(),career:lifetimeCareerSummary(),backup:lifetimeBackupAudit()});
+document.addEventListener('DOMContentLoaded',()=>{try{v29InstallGoalControls();const w=data().v29.goalWeights||V29_GOAL_WEIGHTS;document.querySelectorAll('[data-v29-weight]').forEach(el=>el.value=String(v29Clamp(w[el.dataset.v29Weight]??0)));v29UpdateGoalSummary();}catch(e){console.error('V29 initialization',e);}});
+/* END V29.1 HYBRID EVOLUTION ENGINE */
+
+
+
+/* =========================================================
+   V29.1 · EQUIPMENT INVENTORY + SMART SUBSTITUTIONS
+   - Inventario macchina per macchina
+   - Alternativa automatica o scelta manuale
+   - Risoluzione anche nelle schede generate dal coach
+   ========================================================= */
+const V291_MACHINE_ALTERNATIVES = {
+  machineLegPress:["goblet","squat","reverseLunge"],
+  machineLegCurl:["rdl","bridge"],
+  machineLegExtension:["squat","goblet","reverseLunge"],
+  machineHipAbduction:["sideLegRaise","reverseLunge","split"],
+  machineHipAdduction:["squeezeBridge","squat","split"],
+  machineCalf:["calf"],
+  machineChestPress:["dbBenchNeutral","floorPressNeutralV27","wallPush","inclinePush"],
+  machineSeatedRow:["dbRowSupported","chestSupportedRowV27","rowDB","rowTowel"],
+  machineLatPulldown:["rowDB","dbRowSupported","rowTowel"],
+  machineReverseFly:["scapset","pullApart","chestSupportedRowV27"],
+  machineBiceps:["dbInclineCurl"],
+  machineTriceps:["dbTricepsPushdownAlt","wallPush"],
+  machineAbCrunch:["deadbug"],
+  machineBackExtension:["bird","bridge","rdl"],
+  machineHipThrust:["hipThrustV27","bridge","rdl"],
+  machineCablePallof:["deadbug","caliSideKnee"],
+  machineInclinePress:["dbBenchNeutral","floorPressNeutralV27","inclinePush","wallPush"],
+  machinePecDeck:["dbBenchNeutral","wallPush","inclinePush"],
+  machineAssistedPullup:["rowDB","dbRowSupported","rowTowel"],
+  machineLowRow:["dbRowSupported","chestSupportedRowV27","rowDB","rowTowel"],
+  machineHighRow:["dbRowSupported","chestSupportedRowV27","rowDB","rowTowel"],
+  machinePullover:["dbRowSupported","rowTowel","scapset"],
+  machineLateralRaise:["dbLateralRaise","scapset"],
+  machineShoulderPress:["wallPush","inclinePush"],
+  machinePreacherCurl:["dbInclineCurl"],
+  machineCableCurl:["dbInclineCurl"],
+  machineOverheadTriceps:["dbTricepsPushdownAlt","wallPush"],
+  machineGluteKick:["hipThrustV27","bridge","reverseLunge"],
+  machineSeatedLegCurl:["rdl","bridge"],
+  machineHackSquat:["goblet","barbellSquat","squat"],
+  machineSmithSquat:["barbellSquat","goblet","squat"],
+  machineCableRow:["dbRowSupported","chestSupportedRowV27","rowTowel"],
+  machineCableFly:["dbBenchNeutral","wallPush","inclinePush"],
+  machineCableFacePull:["scapset","pullApart","dbRowSupported"],
+  machineSeatedCalf:["calf"],
+  machineGluteAbduction:["sideLegRaise","reverseLunge","split"]
+};
+const V291_MACHINE_LABELS = {
+  machineLegPress:"Leg Press",machineLegCurl:"Leg Curl seduto",
+  machineLegExtension:"Leg Extension",machineHipAbduction:"Abductor",
+  machineHipAdduction:"Adductor",machineCalf:"Calf machine",
+  machineChestPress:"Chest Press",machineSeatedRow:"Seated Row",
+  machineLatPulldown:"Lat Machine",machineReverseFly:"Reverse Fly",
+  machineBiceps:"Curl macchina",machineTriceps:"Pushdown cavo",
+  machineAbCrunch:"Abdominal Crunch",machineBackExtension:"Back Extension",
+  machineHipThrust:"Glute Drive / Hip Thrust",machineCablePallof:"Pallof Press",
+  machineInclinePress:"Chest Press inclinata",machinePecDeck:"Pectoral machine",
+  machineAssistedPullup:"Trazioni assistite",machineLowRow:"Low Row",
+  machineHighRow:"High Row",machinePullover:"Pullover macchina",
+  machineLateralRaise:"Alzate laterali macchina",machineShoulderPress:"Shoulder Press",
+  machinePreacherCurl:"Curl Scott",machineCableCurl:"Curl al cavo",
+  machineOverheadTriceps:"Estensioni tricipiti",machineGluteKick:"Glute Kickback",
+  machineSeatedLegCurl:"Leg Curl sdraiato",machineHackSquat:"Hack Squat",
+  machineSmithSquat:"Multipower",machineCableRow:"Rematore al cavo",
+  machineCableFly:"Croci ai cavi",machineCableFacePull:"Face Pull",
+  machineSeatedCalf:"Calf seduto",machineGluteAbduction:"Abduzione anca al cavo"
+};
+function v291State(){
+  const d=data();d.v29=d.v29||{};
+  d.v29.machineAvailability=d.v29.machineAvailability||{};
+  d.v29.machineAlternatives=d.v29.machineAlternatives||{};
+  return d.v29;
+}
+function v291MachineAvailable(id){
+  const v=v291State().machineAvailability[id];
+  return v!==false;
+}
+function v291ShoulderRestricted(){
+  return !!(blocked||mode==="safe"||mode==="recovery"||Number(selectedPain||0)>=3);
+}
+function v291CanUse(id){
+  const e=EX[id];if(!e)return false;
+  if(v291ShoulderRestricted()&&e.shoulderSensitive)return false;
+  return eqAvailable(id);
+}
+function v291ResolveAlternative(machineId){
+  const state=v291State(),custom=state.machineAlternatives[machineId];
+  const candidates=[custom,...(V291_MACHINE_ALTERNATIVES[machineId]||[])].filter(Boolean);
+  for(const id of candidates){
+    if(id===machineId||!v291CanUse(id))continue;
+    return id;
+  }
+  return null;
+}
+function v291ResolveExerciseList(list){
+  const out=[],seen=new Set();
+  for(const original of (Array.isArray(list)?list:[])){
+    let item=typeof original==="string"?exercise(original):original;
+    if(!item)continue;
+    const id=item.id||item.key;
+    if(EX[id]?.e==="machines"&&!v291MachineAvailable(id)){
+      const alt=v291ResolveAlternative(id);
+      if(!alt)continue;
+      const replacement=exercise(alt);
+      if(!replacement)continue;
+      item={...replacement,substitutionReason:`Alternativa a ${V291_MACHINE_LABELS[id]||EX[id].t}: macchinario non disponibile`,substitutedFrom:id};
+    }
+    const finalId=item.id||item.key;
+    if(!finalId||seen.has(finalId))continue;
+    if(v291ShoulderRestricted()&&EX[finalId]?.shoulderSensitive)continue;
+    if(EX[finalId]&&!eqAvailable(finalId))continue;
+    seen.add(finalId);out.push(item);
+  }
+  return out;
+}
+function v291InstallEquipmentPanel(){
+  const page=document.getElementById("page-settings");if(!page||document.getElementById("v291EquipmentInventory"))return;
+  const card=document.createElement("section");card.id="v291EquipmentInventory";card.className="card";
+  const groups=[
+    ["Gambe e glutei",["machineLegPress","machineLegCurl","machineLegExtension","machineHipAbduction","machineHipAdduction","machineCalf","machineHipThrust","machineGluteKick","machineSeatedLegCurl","machineHackSquat","machineSmithSquat","machineSeatedCalf","machineGluteAbduction"]],
+    ["Petto e spalle",["machineChestPress","machineInclinePress","machinePecDeck","machineCableFly","machineShoulderPress","machineLateralRaise"]],
+    ["Schiena",["machineSeatedRow","machineLatPulldown","machineReverseFly","machineAssistedPullup","machineLowRow","machineHighRow","machinePullover","machineCableRow","machineCableFacePull"]],
+    ["Braccia",["machineBiceps","machineTriceps","machinePreacherCurl","machineCableCurl","machineOverheadTriceps"]],
+    ["Core",["machineAbCrunch","machineBackExtension","machineCablePallof"]]
+  ];
+  const rows=groups.map(([group,ids])=>`<details style="margin-top:10px" open><summary style="font-weight:800;padding:8px;cursor:pointer">${group} · ${ids.length} attrezzi</summary><div style="display:grid;gap:8px;margin-top:8px">${ids.filter(id=>EX[id]).map(id=>{
+    const alternatives=(V291_MACHINE_ALTERNATIVES[id]||[]).filter(x=>EX[x]);
+    return `<div class="workout-item" style="grid-template-columns:minmax(0,1fr) minmax(125px,180px);align-items:start"><div><strong>${V291_MACHINE_LABELS[id]||EX[id].t}</strong><br><span>${EX[id].d}</span><label class="checkline" style="margin-top:6px"><input type="checkbox" data-v291-machine="${id}" checked> Disponibile</label></div><div class="field"><label>Se manca, usa</label><select data-v291-alt="${id}"><option value="">Scelta automatica</option>${alternatives.map(a=>`<option value="${a}">${EX[a].t}</option>`).join("")}</select></div></div>`;
+  }).join("")}</div></details>`).join("");
+  card.innerHTML=`<div class="eyebrow">V30 · Inventario reale palestra</div><h3>Quali macchinari hai davvero a disposizione?</h3><p class="small">Disattiva ogni attrezzo assente o guasto. Il coach lo sostituisce nella scheda, quando esiste un'alternativa compatibile con attrezzatura e sicurezza. Puoi scegliere anche una sostituzione manuale.</p><div class="info" style="margin-top:10px">Le alternative sono proposte in base al movimento e all'attrezzatura registrata. Non sono sempre equivalenti biomeccanici: scegli solo varianti che sai eseguire senza dolore.</div>${rows}<button class="btn full" style="margin-top:12px" type="button" onclick="v291SaveInventory()">Salva inventario attrezzi</button><div id="v291InventoryStatus" class="small" style="margin-top:8px">Inventario non modificato.</div>`;
+  const anchor=document.getElementById("v29GoalControls");
+  if(anchor?.parentNode)anchor.parentNode.insertBefore(card,anchor.nextSibling);else page.appendChild(card);
+  v291LoadInventory();
+}
+function v291LoadInventory(){
+  const state=v291State();
+  document.querySelectorAll("[data-v291-machine]").forEach(el=>el.checked=state.machineAvailability[el.dataset.v291Machine]!==false);
+  document.querySelectorAll("[data-v291-alt]").forEach(el=>el.value=state.machineAlternatives[el.dataset.v291Alt]||"");
+}
+function v291SaveInventory(){
+  const d=data();d.v29=d.v29||{};d.v29.machineAvailability=d.v29.machineAvailability||{};d.v29.machineAlternatives=d.v29.machineAlternatives||{};
+  document.querySelectorAll("[data-v291-machine]").forEach(el=>d.v29.machineAvailability[el.dataset.v291Machine]=!!el.checked);
+  document.querySelectorAll("[data-v291-alt]").forEach(el=>{if(el.value)d.v29.machineAlternatives[el.dataset.v291Alt]=el.value;else delete d.v29.machineAlternatives[el.dataset.v291Alt];});
+  save(d);const status=document.getElementById("v291InventoryStatus");if(status)status.textContent="Inventario salvato. Le prossime schede useranno questi attrezzi e le alternative selezionate.";
+  if(typeof renderGymPreview==="function")renderGymPreview();
+  if(typeof renderPreviews==="function")renderPreviews();
+}
+const v291LoadSettingsBase=loadSettings;
+loadSettings=function(){v291InstallEquipmentPanel();v291LoadSettingsBase();v291LoadInventory();};
+const v291GymExerciseIdsBase=gymExerciseIds;
+gymExerciseIds=function(){
+  const base=v291GymExerciseIdsBase();
+  return v291ResolveExerciseList(base).map(x=>x.id||x.key).filter(Boolean);
+};
+const v291RenderGymPreviewBase=renderGymPreview;
+renderGymPreview=function(){
+  v291RenderGymPreviewBase();
+  const box=document.getElementById("gymPreview");if(!box)return;
+  const state=v291State(),missing=Object.entries(state.machineAvailability).filter(([,v])=>v===false).length;
+  if(missing){const note=document.createElement("div");note.className="info";note.style.marginTop="8px";note.textContent=`Inventario: ${missing} macchinari segnati come non disponibili. Le schede vengono adattate con le alternative selezionate o automatiche.`;box.appendChild(note);}
+};
+const v291StartWorkoutBase=startWorkout;
+startWorkout=function(list,type,isAutoFlow=false,sessionOrigin="extra"){
+  const resolved=v291ResolveExerciseList(list);
+  if(!resolved.length){notify("Non ci sono esercizi compatibili con attrezzatura e stato di recupero. Controlla inventario e impostazioni.","error");return;}
+  v291StartWorkoutBase(resolved,type,isAutoFlow,sessionOrigin);
+};
+const v291RunTestsBase=runSelfTests;
+function v291RunTests(){
+  const tests=[],check=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(e){tests.push({name,ok:false,error:String(e.message||e)});}};
+  check("V29.1 inventario macchina predefinito disponibile",()=>GYM_LOAD_IDS.every(id=>v291MachineAvailable(id)));
+  check("V29.1 ogni macchinario ha alternative documentate",()=>GYM_LOAD_IDS.every(id=>(V291_MACHINE_ALTERNATIVES[id]||[]).some(a=>!!EX[a])));
+  check("V29.1 alternative rispettano attrezzatura disponibile",()=>{const d=data();d.v29=d.v29||{};d.v29.machineAvailability={...(d.v29.machineAvailability||{})};d.v29.machineAlternatives={...(d.v29.machineAlternatives||{})};const old={...d.v29.machineAvailability};d.settings.equipment.weights=false;const id="machineSeatedRow";d.v29.machineAvailability[id]=false;save(d);const alt=v291ResolveAlternative(id);d.settings.equipment.weights=true;save(d);Object.assign(d.v29.machineAvailability,old);save(d);return !alt||eqAvailable(alt);});
+  check("V29.1 sostituzione non duplica esercizi",()=>{const x=v291ResolveExerciseList(["machineLegPress","machineLegPress"]);return x.length===1;});
+  check("V29.1 filtro spalla applicato alle alternative",()=>{const old=selectedPain;selectedPain=4;const a=v291ResolveAlternative("machineChestPress");selectedPain=old;return !a||!EX[a]?.shoulderSensitive;});
+  check("V29.1 inventario UI installabile",()=>!!document.getElementById("page-settings")&&typeof v291SaveInventory==="function");
+  check("V29.1 lista alternativa non contiene ID mancanti",()=>Object.values(V291_MACHINE_ALTERNATIVES).flat().every(id=>!!EX[id]));
+  return tests;
+}
+runSelfTests=function(){return v291RunTestsBase().concat(v291RunTests());};
+window.v291RunTests=v291RunTests;
+document.addEventListener("DOMContentLoaded",()=>{try{v291InstallEquipmentPanel();v291LoadInventory();}catch(e){console.error("V29.1 inventory",e);}});
+/* END V29.1 */
+
+/* =========================================================
+   V30 · HYBRID LONGEVITY COACH
+   ========================================================= */
+
+// Nuova stazione cardio: disponibile solo se dichiarata nell'inventario.
+add("stairClimberEasy","StairMaster · aerobico controllato","10–20 min continui",900,"RPE 4–6 · ritmo sostenibile","cardio","Passo regolare, busto alto, appoggio leggero alle maniglie. Riduci o interrompi in caso di dolore a ginocchia, anche o schiena.","stairClimber");
+add("assaultBikeEasy","Assault Bike · aerobico facile","10–20 min continui",900,"RPE 4–5 · ritmo uniforme","cardio","Mantieni una cadenza sostenibile, senza sprint massimali. Riduci il lavoro delle braccia se la spalla è sensibile.","assaultBike",{shoulderSensitive:true});
+add("treadmillEasy","Tapis roulant · aerobico facile","20–30 min in Zona 2",1500,"RPE 3–4 · ritmo conversazionale","cardio","Cammina in salita o corri a ritmo facile. Aumenta gradualmente e usa la clip di sicurezza.","treadmill");
+add("sideLegRaise","Abduzioni anca da sdraiato","2×12–15 per lato",120,"Controllo del bacino","legs","Movimento lento, senza compensare con il tronco.");
+add("squeezeBridge","Adduzione isometrica con ponte","2×10–12 · tenuta 3 sec",120,"Controllo adduttori e glutei","legs","Stringi un cuscino tra le ginocchia senza provocare dolore.");
+add("balanceSingleLeg","Equilibrio monopodalico","2×20–30 sec per lato",120,"Controllo e stabilità","mobility","Vicino a un appoggio stabile; bacino livellato e ginocchio morbido. Interrompi se compare dolore o instabilità marcata.");
+add("balanceTandemWalk","Camminata in tandem","2×10 passi controllati",90,"Coordinazione ed equilibrio","mobility","Cammina vicino a un supporto stabile, senza fretta.");
+
+const V30_GOAL_LABELS={fatloss:"dimagrimento e ricomposizione",definition:"definizione muscolare",muscleGain:"ipertrofia",strengthFocus:"forza",run5k:"running 5 km",run10k:"running 10 km",halfMarathon:"mezza maratona",endurance:"resistenza aerobica",hyrox:"HYROX",military:"preparazione atletica",hybrid:"sviluppo ibrido",longevity:"longevità atletica"};
+function v30ApplyEnvironmentPreset(preset,force=true){
+  const ids={onboardMachines:"machines",onboardWeights:"weights",onboardBarbell:"weights",onboardBench:"bench",onboardBand:"band",onboardTreadmill:"treadmill",onboardStair:"stairClimber",onboardRower:"rower",onboardBike:"indoorBike",onboardSki:"skiErg",onboardAssault:"assaultBike",onboardSled:"sled",onboardWallBall:"wallBall",onboardCarry:"carry"};
+  const vals={
+    gymComplete:{machines:true,weights:true,bench:true,band:true,treadmill:true,stairClimber:true,rower:true,indoorBike:true,skiErg:false,assaultBike:false,sled:false,wallBall:false,carry:true},
+    gymWeights:{machines:true,weights:true,bench:true,band:true,treadmill:false,stairClimber:false,rower:false,indoorBike:false,skiErg:false,assaultBike:false,sled:false,wallBall:false,carry:true},
+    hybridGym:{machines:true,weights:true,bench:true,band:true,treadmill:true,stairClimber:true,rower:true,indoorBike:true,skiErg:true,assaultBike:true,sled:true,wallBall:true,carry:true},
+    home:{machines:false,weights:true,bench:false,band:true,treadmill:false,stairClimber:false,rower:false,indoorBike:false,skiErg:false,assaultBike:false,sled:false,wallBall:false,carry:false},
+    outdoor:{machines:false,weights:false,bench:false,band:false,treadmill:false,stairClimber:false,rower:false,indoorBike:false,skiErg:false,assaultBike:false,sled:false,wallBall:false,carry:false},
+    mixed:{machines:true,weights:true,bench:true,band:true,treadmill:true,stairClimber:false,rower:false,indoorBike:false,skiErg:false,assaultBike:false,sled:false,wallBall:false,carry:true}
+  }[preset]||{};
+  Object.entries(ids).forEach(([id,key])=>{const el=document.getElementById(id);if(el&&Object.prototype.hasOwnProperty.call(vals,key))el.checked=!!vals[key];});
+}
+function v30ReadOnboardEquipment(){
+  const read=id=>!!document.getElementById(id)?.checked;
+  return {machines:read("onboardMachines"),weights:read("onboardWeights")||read("onboardBarbell"),bench:read("onboardBench"),band:read("onboardBand"),treadmill:read("onboardTreadmill"),stairClimber:read("onboardStair"),rower:read("onboardRower"),indoorBike:read("onboardBike"),skiErg:read("onboardSki"),assaultBike:read("onboardAssault"),sled:read("onboardSled"),wallBall:read("onboardWallBall"),carry:read("onboardCarry")};
+}
+function v30SetOnboardFromSettings(s){
+  const e=s.equipment||{},m=s.trainingModes||{};
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.checked=!!value;};
+  set("onboardMachines",e.machines);set("onboardWeights",e.weights);set("onboardBarbell",e.weights);set("onboardBench",e.bench);set("onboardBand",e.band);
+  set("onboardTreadmill",m.treadmill||e.treadmill);set("onboardStair",m.stairClimber||e.stairClimber);set("onboardRower",m.rower||e.rower);set("onboardBike",m.indoorBike||e.indoorBike);set("onboardSki",m.skiErg||e.skiErg);set("onboardAssault",m.assaultBike||e.assaultBike);set("onboardSled",m.sled||e.sled);set("onboardWallBall",m.wallBall||e.wallBall);set("onboardCarry",m.carry||e.carry);
+}
+function v30SyncEquipmentUI(s){
+  const e=s.equipment||{},m=s.trainingModes||{};
+  const map={eqMachines:e.machines,eqWeights:e.weights,eqBench:e.bench,eqBand:e.band,eqTreadmill:m.treadmill||e.treadmill,eqStairClimber:m.stairClimber||e.stairClimber,eqRower:m.rower||e.rower,eqIndoorBike:m.indoorBike||e.indoorBike,eqSkiErg:m.skiErg||e.skiErg,eqAssaultBike:m.assaultBike||e.assaultBike,eqSled:m.sled||e.sled,eqWallBall:m.wallBall||e.wallBall,eqCarry:m.carry||e.carry,settingsGymMode:m.gym||e.machines};
+  Object.entries(map).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.checked=!!value;});
+}
+function renderOnboarding(){
+  document.querySelectorAll(".onboarding-step").forEach((el,index)=>el.classList.toggle("hidden",index!==onboardingStep));
+  document.querySelectorAll(".onboarding-progress span").forEach((el,index)=>el.classList.toggle("active",index<=onboardingStep));
+  document.getElementById("onboardBack").classList.toggle("hidden",onboardingStep===0);
+  document.getElementById("onboardNext").textContent=onboardingStep===4?"Crea il mio programma":"Continua";
+  document.getElementById("onboardLater").classList.toggle("hidden",onboardingStep===4);
+}
+function openOnboarding(){
+  const d=data(),s=d.settings||{};onboardingStep=0;
+  document.getElementById("onboardGoal").value=s.goal||"hybrid";
+  document.getElementById("onboardLevel").value=s.athleteLevel||"intermediate";
+  document.getElementById("onboardDays").value=String(s.days||4);
+  document.getElementById("onboardMinutes").value=String(s.minutes||60);
+  document.getElementById("onboardSafety").checked=false;
+  document.getElementById("onboardLimitations").value=s.limitations||"";
+  const p=s.goalPriorities||{};document.getElementById("onboardPriorityMuscle").checked=!!(p.muscle||p.strength);document.getElementById("onboardPriorityRunning").checked=!!p.running;document.getElementById("onboardPriorityHyrox").checked=!!p.hyrox;document.getElementById("onboardPriorityEndurance").checked=p.endurance!==false;document.getElementById("onboardPriorityMobility").checked=p.mobility!==false;
+  const m=s.trainingModes||{};document.getElementById("onboardEnvironment").value=m.gym?(m.skiErg||m.sled?"hybridGym":(m.treadmill||m.stairClimber||m.rower||m.indoorBike?"gymComplete":"gymWeights")):(s.runSurface==="outdoor"?"outdoor":"mixed");
+  v30SetOnboardFromSettings(s);
+  const cardio=s.aerobicTargetMinutes||150;document.getElementById("onboardAerobic").value=String(cardio>=150?"150":(s.aerobicSessions||2));
+  renderOnboarding();document.getElementById("onboardingModal").classList.remove("hidden");document.getElementById("onboardGoal").focus();
+}
+function dismissOnboarding(){
+  const d=data();d.settings.onboardingVersion=30;save(d);
+  document.getElementById("onboardingModal").classList.add("hidden");notify("Configurazione rimandata. Puoi riaprirla da Altro → Profilo, dati e backup.");document.querySelector('.nav button[data-page="today"]')?.focus();
+}
+function onboardingBack(){onboardingStep=Math.max(0,onboardingStep-1);renderOnboarding();}
+function onboardingNext(){
+  if(onboardingStep===1)v30ApplyEnvironmentPreset(document.getElementById("onboardEnvironment").value);
+  if(onboardingStep<4){onboardingStep++;renderOnboarding();document.querySelector(`.onboarding-step[data-step="${onboardingStep}"] select, .onboarding-step[data-step="${onboardingStep}"] input`)?.focus();return;}
+  if(!document.getElementById("onboardSafety").checked){notify("Conferma di aver letto la regola di sicurezza.","error");return;}
+  const d=data(),s=d.settings,e=v30ReadOnboardEquipment(),env=document.getElementById("onboardEnvironment").value;
+  s.goal=document.getElementById("onboardGoal").value;s.athleteLevel=document.getElementById("onboardLevel").value;s.days=Number(document.getElementById("onboardDays").value);s.minutes=Number(document.getElementById("onboardMinutes").value);
+  s.goalPriorities={...(s.goalPriorities||{}),muscle:document.getElementById("onboardPriorityMuscle").checked,strength:document.getElementById("onboardPriorityMuscle").checked,running:document.getElementById("onboardPriorityRunning").checked,hyrox:document.getElementById("onboardPriorityHyrox").checked,endurance:document.getElementById("onboardPriorityEndurance").checked,mobility:document.getElementById("onboardPriorityMobility").checked};
+  s.equipment={...(s.equipment||{}),...e};
+  const gym=["gymComplete","gymWeights","hybridGym"].includes(env);
+  s.trainingModes={...(s.trainingModes||{}),gym,...Object.fromEntries(["treadmill","stairClimber","rower","indoorBike","skiErg","assaultBike","sled","wallBall","carry"].map(k=>[k,!!e[k]])),coachMode:"auto",freeFocus:"auto"};
+  s.planPreferences={...(s.planPreferences||{}),...s.trainingModes};
+  s.aerobicSessions=Number(document.getElementById("onboardAerobic").value)==150?2:Number(document.getElementById("onboardAerobic").value);
+  s.aerobicTargetMinutes=150;
+  s.limitations=document.getElementById("onboardLimitations").value.trim();
+  s.onboardingComplete=true;s.onboardingVersion=30;
+  if(s.goal==="longevity"){s.goalPriorities.endurance=true;s.goalPriorities.mobility=true;}
+  if(s.goal==="hybrid"||s.goal==="fatloss"||s.goal==="definition"){if(!s.goalPriorities.endurance)s.goalPriorities.endurance=true;}
+  save(d);document.getElementById("onboardingModal").classList.add("hidden");
+  v30SyncEquipmentUI(s);dashboard(true);renderWeek();renderPreviews();renderGymPreview();notify("Profilo V30 salvato. Il coach ha organizzato obiettivi, attrezzatura e programmazione settimanale.");
+}
+
+function v30CardioChoice(){
+  const m=selectedModes(),s=data().settings,goal=s.goal||"hybrid";
+  const options=[];
+  if(m.treadmill)options.push("treadmill");if(m.stairClimber)options.push("stair");if(m.rower)options.push("rower");if(m.indoorBike)options.push("bike");if(m.assaultBike)options.push("assault");if(m.skiErg)options.push("ski");
+  if(!options.length)return null;
+  const recent=(data().sessions||[]).filter(x=>!x.incomplete&&Date.now()-Date.parse(x.date||0)<35*86400000);
+  const cardioCount=recent.filter(x=>/cardio|stairmaster|stepmill|tapis roulant|rowerg|vogatore|assault bike|skierg|cyclette|spin bike/i.test(`${x.type||""} ${x.generatedSessionType||""} ${x.trainingCategory||""} ${(x.prescribedWorkout||[]).map(y=>y.title||y.id).join(" ")}`)).length;
+  return options[cardioCount%options.length];
+}
+function v30CardioExercise(choice){
+  if(choice==="stair")return "stairClimberEasy";
+  if(choice==="rower")return "rowErgEasy";
+  if(choice==="assault")return "assaultBikeEasy";
+  if(choice==="ski")return "skiErgEasy";
+  if(choice==="bike")return "indoorRide";
+  return "treadmillEasy";
+}
+const v30SessionLabelBase=sessionLabel;
+sessionLabel=function(type){
+  const s=data().settings||{},generalGoal=["fatloss","definition","muscleGain","strengthFocus","hybrid","longevity"].includes(s.goal);
+  if(type==="easy"&&generalGoal){const choice=v30CardioChoice(),labels={treadmill:"Tapis roulant",stair:"StairMaster",rower:"Vogatore",bike:"Cyclette",assault:"Assault Bike",ski:"SkiErg"};if(choice&&labels[choice])return `${labels[choice]} · aerobico facile`;}
+  return v30SessionLabelBase(type);
+};
+const v30ApplyModalitiesBase=applyModalitiesToWorkout;
+applyModalitiesToWorkout=function(ids,type){
+  let out=v30ApplyModalitiesBase(ids,type);
+  const s=data().settings,m=selectedModes();
+  const generalGoal=["fatloss","definition","muscleGain","strengthFocus","hybrid","longevity"].includes(s.goal);
+  if(type==="easy"&&generalGoal&&m.coachMode!=="free"){
+    const choice=v30CardioChoice(),id=v30CardioExercise(choice);
+    if(choice&&EX[id])out=["breathing",id,"walk","stretch"];
+  }
+  if(type==="mobility")out=[...out,"balanceSingleLeg","balanceTandemWalk"];
+  return out;
+};
+
+const v30WeeklyGoalReasonBase=weeklyGoalReason;
+weeklyGoalReason=function(type,goal){
+  if(type==="easy"&&["fatloss","definition","muscleGain","strengthFocus","hybrid","longevity"].includes(goal)){const choice=v30CardioChoice(),labels={treadmill:"tapis roulant",stair:"StairMaster",rower:"vogatore",bike:"cyclette",assault:"Assault Bike",ski:"SkiErg"};if(choice&&labels[choice])return `Per ${V30_GOAL_LABELS[goal]||"sviluppo atletico"}: lavoro aerobico facile in Zona 2 su ${labels[choice]}, scelto tra le attrezzature dichiarate disponibili.`;}
+  return v30WeeklyGoalReasonBase(type,goal);
+};
+function v31Init(){
+  initV31Availability();
+  renderV31Programming();
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",v31Init,{once:true});else v31Init();
+
+function v30RunTests(){
+  const tests=[],ck=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(e){tests.push({name,ok:false,error:String(e.message||e)});}};
+  ck("V30 onboarding a 5 passaggi",()=>document.querySelectorAll("#onboardingModal .onboarding-step").length===5&&document.querySelectorAll("#onboardingModal .onboarding-progress span").length===5);
+  ck("V30 inventario cardio completo",()=>!!EX.stairClimberEasy&&EX.stairClimberEasy.e==="stairClimber"&&!!EX.treadmillEasy&&EX.treadmillEasy.e==="treadmill"&&!!document.getElementById("eqStairClimber")&&!!document.getElementById("planStairClimber"));
+  ck("V30 preset palestra completa include cardio standard",()=>{const ids=["onboardMachines","onboardWeights","onboardBench","onboardTreadmill","onboardStair","onboardRower","onboardBike"],old=ids.map(id=>document.getElementById(id).checked);v30ApplyEnvironmentPreset("gymComplete");const ok=ids.every(id=>document.getElementById(id).checked);ids.forEach((id,i)=>document.getElementById(id).checked=old[i]);return ok;});
+  ck("V30 scelta cardio rispetta inventario",()=>{const d=data(),old={...d.settings.trainingModes};d.settings.trainingModes={...old,gym:true,treadmill:false,stairClimber:true,rower:false,indoorBike:false,assaultBike:false,skiErg:false};save(d);const ok=v30CardioChoice()==="stair";d.settings.trainingModes=old;save(d);return ok;});
+  ck("V30 mobilità include equilibrio",()=>!!EX.balanceSingleLeg&&!!EX.balanceTandemWalk&&!!document.getElementById("mobilityBalance")&&Array.isArray(plan("mobility")));
+  ck("V30 storico e dati precedenti preservati",()=>Array.isArray(data().sessions)&&Array.isArray(data().activities)&&SCHEMA_VERSION===31);
+  ck("V30 migrazione attrezzatura cardio V29",()=>{const n=norm({sessions:[],settings:{trainingModes:{treadmill:true,rower:true,stairClimber:true}}});return n.settings.equipment.treadmill&&n.settings.equipment.rower&&n.settings.equipment.stairClimber;});
+  ck("V31 weekday availability",()=>v31AvailableWeekdays().length>=1&&v31AvailableWeekdays().length<=6);
+  ck("V31 schedule has seven days",()=>getWeekTemplate().length===7);
+  ck("V31 respects weekly session cap",()=>getWeekTemplate().filter(x=>x!=="recovery").length<=Number(data().settings.days||4));
+  ck("V31 programming profile",()=>{const p=v31ProgrammingProfile();return !!p.goalLabel&&!!p.levelLabel&&p.minutes>0&&p.days.length>0;});
+  ck("V31 no unavailable cycling modality",()=>getWeekTemplate().every(x=>!["mtb","roadBike","indoorBike"].includes(x)||(data().settings.equipment?.mtb||data().settings.equipment?.roadBike||data().settings.equipment?.indoorBike||data().settings.equipment?.bikeTrainer)));
+  return tests;
+}
+const v30RunTestsBase=runSelfTests;
+runSelfTests=function(){return v30RunTestsBase().concat(v30RunTests());};
+// V30.1 safety wrapper: the diagnostic suite temporarily changes settings to
+// exercise equipment selection. Preserve the exact persisted app state even if
+// a test throws, so running diagnostics can never leave a user's profile altered.
+const v30RunTestsCore=v30RunTests;
+v30RunTests=function(){
+  const storageKey=KEY;
+  let snapshot=null,hadSnapshot=false;
+  try{
+    snapshot=localStorage.getItem(storageKey);
+    hadSnapshot=snapshot!==null;
+  }catch(error){
+    console.warn("V30.1 test snapshot unavailable:",error);
+  }
+  try{
+    return v30RunTestsCore();
+  }finally{
+    try{
+      if(hadSnapshot)localStorage.setItem(storageKey,snapshot);
+      else localStorage.removeItem(storageKey);
+    }catch(error){
+      console.error("V30.1 could not restore test snapshot:",error);
+    }
+  }
+};
+window.v30RunTests=v30RunTests;
+
+// First-run onboarding V30: shown once for existing profiles too, without resetting training history.
+document.addEventListener("DOMContentLoaded",()=>{
+  try{
+    const d=data();
+    if(Number(d.settings.onboardingVersion||0)<30){
+      setTimeout(()=>{if(!document.getElementById("sessionModal")?.classList.contains("show"))openOnboarding();},350);
+    }
+  }catch(error){console.warn("V30 onboarding startup:",error);}
+});
+/* END V30 */
+
+/* V32 Recovery Intelligence: daily readiness, fatigue analysis and safe session alternatives. */
+function v32Clamp(v){v=Number(v);return Number.isFinite(v)?Math.max(0,Math.min(10,v)):0;}
+function v32Assess(input){
+ const x={sleep:v32Clamp(input.sleep),fatigue:v32Clamp(input.fatigue),soreness:v32Clamp(input.soreness),stress:v32Clamp(input.stress),pain:v32Clamp(input.pain),energy:v32Clamp(input.energy)};
+ let score=Math.max(0,Math.min(100,Math.round((x.sleep*10+(10-x.fatigue)*10+(10-x.soreness)*10+(10-x.stress)*10+(10-x.pain)*15+x.energy*5)/6)));
+ let level='green',action='maintain',volume=1,intensity=1,reasons=[];
+ if(x.pain>=5){level='red';action='stop_and_assess';volume=0;intensity=0;reasons.push('dolore elevato: non allenare la zona dolorante e valuta un professionista sanitario');}
+ else if(x.pain>=3){level='red';action='replace';volume=.5;intensity=.6;reasons.push('dolore presente: sostituisci la seduta che coinvolge la zona interessata');}
+ else if(x.fatigue>=8||x.soreness>=8||score<35){level='red';action='recovery';volume=.4;intensity=.6;reasons.push('fatica o indolenzimento molto elevati');}
+ else if(score<55||x.fatigue>=6||x.stress>=8||x.sleep<=3){level='amber';action='reduce';volume=.7;intensity=.8;reasons.push('readiness ridotta: diminuisci volume e intensità');}
+ else if(score>=80&&x.fatigue<=3&&x.pain===0){level='green';action='maintain';reasons.push('recupero favorevole: mantieni il piano, senza aumenti automatici');}
+ else reasons.push('segnali intermedi: mantieni la seduta prevista monitorando le sensazioni');
+ return {score,level,action,volume,intensity,reasons,input:x};
+}
+function v32AlternativeFor(type,equipment={}){
+ const gym=!!(equipment.weights||equipment.gym||equipment.machines),bike=!!(equipment.indoorBike||equipment.bikeTrainer),row=!!equipment.rower,walk=equipment.walking!==false;
+ if(type==='strength'||type==='gym')return gym?'strength_technique':'mobility';
+ if(type==='run')return bike?'indoorBike':(walk?'briskWalk':'mobility');
+ if(type==='hyrox'||type==='conditioning')return bike?'indoorBike':(row?'rowerEasy':'mobility');
+ return 'mobility';
+}
+function v32TodayEquipment(){const d=data(),e=d.settings?.equipment||{},m=d.settings?.trainingModes||{};return {...e,...m};}
+function v32SaveCheckin(){
+ const ids=['Sleep','Fatigue','Soreness','Stress','Pain','Energy'],keys=['sleep','fatigue','soreness','stress','pain','energy'],x={};ids.forEach((id,i)=>x[keys[i]]=v32Clamp(document.getElementById('v32'+id)?.value));
+ const result=v32Assess(x),d=data();d.settings=d.settings||{};d.settings.recoveryDaily={date:new Date().toISOString().slice(0,10),...x,result};save(d);
+ const labels={maintain:'Mantieni la seduta',reduce:'Riduci volume e intensità',recovery:'Recupero attivo o riposo',replace:'Sostituisci la seduta',stop_and_assess:'Interrompi e valuta il dolore'};
+ const el=document.getElementById('v32Decision');if(el)el.innerHTML='<strong>Readiness '+result.score+'/100 · '+labels[result.action]+'</strong><br>Volume suggerito: '+Math.round(result.volume*100)+'% · Intensità: '+Math.round(result.intensity*100)+'%<br>'+result.reasons.join('; ');
+ const alt=document.getElementById('v32Alternative');if(alt){const a=v32AlternativeFor('conditioning',v32TodayEquipment());alt.textContent=result.action==='replace'?'Alternativa possibile, se non provoca dolore: '+a+'. La sostituzione va confermata manualmente.':'Alternativa disponibile se la seduta prevista non è adatta: '+a+'.';}
+ return result;
+}
+function v32RestoreCheckin(){try{const x=data().settings?.recoveryDaily;if(!x)return;['Sleep','Fatigue','Soreness','Stress','Pain','Energy'].forEach((id)=>{const k=id.toLowerCase(),el=document.getElementById('v32'+id);if(el&&x[k]!==undefined)el.value=x[k];});}catch(e){console.warn('V32 restore check-in',e);}}
+function v32RunTests(){const t=[],ck=(n,f)=>{try{t.push({name:n,ok:!!f()});}catch(e){t.push({name:n,ok:false,error:String(e.message||e)});}};
+ ck('V32 dolore alto blocca allenamento',()=>v32Assess({pain:8}).action==='stop_and_assess');
+ ck('V32 dolore moderato propone sostituzione',()=>v32Assess({pain:3}).action==='replace');
+ ck('V32 fatica alta propone recupero',()=>v32Assess({fatigue:9,soreness:8}).action==='recovery');
+ ck('V32 sonno basso riduce carico',()=>v32Assess({sleep:2,fatigue:3,soreness:2,stress:3,pain:0,energy:6}).action==='reduce');
+ ck('V32 readiness favorevole non aumenta carico',()=>{const r=v32Assess({sleep:10,fatigue:0,soreness:0,stress:0,pain:0,energy:10});return r.volume===1&&r.score===100;});
+ ck('V32 input fuori range limitati',()=>v32Clamp(-5)===0&&v32Clamp(50)===10);
+ ck('V32 alternativa corsa usa cyclette se disponibile',()=>v32AlternativeFor('run',{indoorBike:true})==='indoorBike');
+ ck('V32 alternativa conditioning senza cardio propone mobilità',()=>v32AlternativeFor('conditioning',{})==='mobility');
+ for(let i=0;i<100;i++){const r=v32Assess({sleep:i%11,fatigue:(i*3)%11,soreness:(i*7)%11,stress:(i*5)%11,pain:i%10,energy:(i*9)%11});if(!(r.score>=0&&r.score<=100&&r.volume>=0&&r.volume<=1&&r.intensity>=0&&r.intensity<=1))return t.concat([{name:'V32 stress 100 combinazioni',ok:false}]);}
+ ck('V32 stress 100 combinazioni',()=>true);return t;
+}
+window.v32Assess=v32Assess;window.v32RunTests=v32RunTests;window.v32AlternativeFor=v32AlternativeFor;
+document.addEventListener('DOMContentLoaded',v32RestoreCheckin);
+
+
+/* V33 PERFORMANCE & LONGEVITY */
+function v33Clamp(v){const n=Number(v);return Number.isFinite(n)?Math.max(0,Math.min(100,n)):null;}
+function v33Assessments(){const a=data().performance;return Array.isArray(a)?a.filter(x=>x&&x.date&&x.values&&typeof x.values==='object').slice(-200):[];}
+function v33SaveAssessment(){
+ const ids=['Strength','Endurance','Mobility','Balance','Cardio'],keys=['strength','endurance','mobility','balance','cardio'],values={};let count=0;
+ ids.forEach((id,i)=>{const el=document.getElementById('v33'+id),raw=el?.value;if(raw!==''&&raw!==undefined){const n=Number(raw);if(!Number.isFinite(n)||n<0||n>100){throw new Error('Inserisci valori compresi tra 0 e 100.');}values[keys[i]]=n;count++;}});
+ if(!count){notify('Inserisci almeno un risultato di test reale.','error');return false;}
+ const d=data();d.performance=Array.isArray(d.performance)?d.performance:[];d.performance.push({id:crypto.randomUUID?.()||String(Date.now()),date:new Date().toISOString(),values});d.performance=d.performance.slice(-200);save(d);v33Render();notify('Valutazione salvata.');return true;
+}
+function v33Render(){
+ const hist=v33Assessments(),latest=hist.at(-1),summary=document.getElementById('v33Summary'),history=document.getElementById('v33History');
+ if(summary){if(!latest){summary.textContent='Nessuna valutazione registrata. Inserisci i risultati dei test che hai realmente effettuato.';}else{const labels={strength:'Forza',endurance:'Resistenza',mobility:'Mobilità',balance:'Equilibrio',cardio:'Capacità cardiovascolare'};summary.innerHTML='<strong>Ultima valutazione · '+new Date(latest.date).toLocaleDateString('it-IT')+'</strong><br>'+Object.entries(latest.values).map(([k,v])=>labels[k]+': '+v+'/100').join(' · ');}}
+ if(history){const keys=['strength','endurance','mobility','balance','cardio'],labels={strength:'Forza',endurance:'Resistenza',mobility:'Mobilità',balance:'Equilibrio',cardio:'Cardio'};history.innerHTML=hist.length?'<strong>Andamento delle ultime valutazioni</strong>'+keys.map(k=>{const pts=hist.filter(x=>Number.isFinite(Number(x.values[k]))).slice(-6);if(!pts.length)return '';const vals=pts.map(x=>Number(x.values[k]));const delta=vals.length>1?vals.at(-1)-vals[0]:null;return '<div class="small" style="padding:5px 0;border-bottom:1px solid var(--line)"><strong>'+labels[k]+'</strong>: '+vals.join(' → ')+'/100'+(delta===null?'':' · variazione '+(delta>0?'+':'')+delta.toFixed(0));}).join('')+'<p class="small">I punteggi sono autovalutazioni/test inseriti manualmente, non misure cliniche né confronti standardizzati se i protocolli cambiano.</p>':'<span class="small">Lo storico apparirà dopo la prima valutazione.</span>';}
+}
+function v33RunTests(){const t=[],ck=(name,fn)=>{try{t.push({name,ok:!!fn()});}catch(e){t.push({name,ok:false,error:String(e.message||e)});}};
+ ck('V33 limita valori al range 0–100',()=>v33Clamp(-5)===0&&v33Clamp(120)===100);
+ ck('V33 rifiuta valori non numerici',()=>v33Clamp('abc')===null);
+ ck('V33 non inventa valutazioni assenti',()=>v33Assessments().every(x=>x.values&&typeof x.values==='object'));
+ ck('V33 conserva cinque domini distinti',()=>['strength','endurance','mobility','balance','cardio'].length===5);
+ ck('V33 conserva storico cronologico fino a 200 record',()=>{const a=v33Assessments();return a.length<=200;});
+ for(let i=0;i<500;i++){const n=(i*37)%151-25,c=v33Clamp(n);if(c!==null&&(c<0||c>100))return t.concat([{name:'V33 stress 500 valori',ok:false}]);}
+ ck('V33 stress 500 valori limite',()=>true);return t;
+}
+window.v33RunTests=v33RunTests;window.v33Render=v33Render;window.v33SaveAssessment=v33SaveAssessment;
+document.addEventListener('DOMContentLoaded',v33Render);
+
 </script>
 
+<script>
+/* V35 Ultimate Fusion — V26 core + V34 evolution, isolated additive coach module */
+(()=>{
+ 'use strict';
+ const KEY='ep_hybrid_coach_v34_checkins';
+ const $=id=>document.getElementById(id);
+ const safeRead=()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(x)?x.filter(v=>v&&typeof v==='object').slice(-180):[]}catch(_){return []}};
+ const safeWrite=a=>{const raw=JSON.stringify(a.slice(-180));localStorage.setItem(KEY,raw);if(localStorage.getItem(KEY)!==raw)throw new Error('Verifica salvataggio non riuscita')};
+ const val=id=>Math.max(1,Math.min(5,Number($(id)?.value)||1));
+ function record(){return {id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2)),date:new Date().toISOString(),energy:val('v34Energy'),sleep:val('v34Sleep'),fatigue:val('v34Fatigue'),soreness:val('v34Soreness'),pain:Number($('v34Pain')?.value)||0}}
+ function advice(r){if(r.pain>=2)return {level:'stop',title:'Non forzare la zona dolorante',body:'Evita la seduta che provoca dolore. Se il dolore è forte, peggiora o persiste, interrompi e chiedi una valutazione a un professionista sanitario.'};const score=(r.energy+r.sleep+(6-r.fatigue)+(6-r.soreness))/4;if(score<2.5)return {level:'low',title:'Giornata di recupero',body:'Sostituisci il lavoro intenso con recupero, camminata facile o mobilità indolore. Riprendi gradualmente quando ti senti meglio.'};if(score<3.5)return {level:'mod',title:'Riduci il carico',body:'Mantieni la tecnica, riduci volume o intensità e lascia margine. Evita test massimali e conditioning intenso.'};return {level:'ok',title:'Puoi seguire il programma con autoregolazione',body:'Esegui la seduta prevista senza aumentare automaticamente carichi o volume. Interrompi se compaiono sintomi insoliti.'}}
+ function renderAdvice(a){$('v34Advice').innerHTML='<strong>'+a.title+'</strong><p>'+a.body+'</p>';}
+ function updateTrend(){const a=safeRead();if(!a.length){$('v34Trend').textContent='Ancora nessun check-in salvato.';return}const last=a[a.length-1],avg=k=>(a.slice(-7).reduce((s,x)=>s+(Number(x[k])||0),0)/Math.min(7,a.length)).toFixed(1);$('v34Trend').innerHTML='<p><strong>'+a.length+'</strong> check-in salvati · ultimo: '+new Date(last.date).toLocaleString('it-IT')+'</p><p>Media ultimi 7 check-in — energia '+avg('energy')+'/5 · sonno '+avg('sleep')+'/5 · fatica '+avg('fatigue')+'/5 · indolenzimento '+avg('soreness')+'/5</p>';}
+ function save(){const a=safeRead();a.push(record());safeWrite(a);updateTrend();renderAdvice(advice(a[a.length-1]));}
+ function alternative(){const kind=$('v34Session').value;const pain=Number($('v34Pain').value)||0;let t={strength:'Tecnica a carico leggero, 2–3 serie facili e lontane dal cedimento; oppure mobilità generale.',hyrox:'Camminata o cyclette facile e mobilità; evita circuiti ad alta intensità.',run:'Camminata veloce o corsa-camminata facile, solo se priva di dolore.',mobility:'Routine breve e delicata, senza forzare ampiezza o posizioni dolorose.',cardio:'Zona facile a basso impatto: cyclette o camminata, se disponibili.'}[kind];if(pain>=2)t='Con dolore moderato o forte: non sostituire con un altro esercizio sulla stessa zona. Sospendi il lavoro provocativo e valuta un parere professionale.';$('v34AlternativeOut').textContent=t;}
+ function bind(){['Energy','Sleep','Fatigue','Soreness'].forEach(n=>{const el=$('v34'+n),out=$('v34'+n+'Out');el?.addEventListener('input',()=>out.textContent=el.value)});$('v34Analyze')?.addEventListener('click',()=>renderAdvice(advice(record())));$('v34Save')?.addEventListener('click',()=>{try{save()}catch(e){$('v34Advice').textContent='Errore nel salvataggio: '+e.message}});$('v34Alternative')?.addEventListener('click',alternative);$('v34Export')?.addEventListener('click',()=>{const blob=new Blob([JSON.stringify(safeRead(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hybrid-coach-v34-checkins.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});updateTrend();}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
+ window.V34CoachTest={advice,safeRead,safeWrite,alternative};
+})();
+</script>
 </body>
 </html>
+
+
+
