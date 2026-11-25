@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- V35 ULTIMATE FUSION: V26 training engine retained; V34 programming, recovery, performance and personal-coach modules integrated. Schema 31 intentionally retained for data compatibility. -->
 <!-- Codice completo pronto da copiare. Per eseguirlo, salva il contenuto con estensione .html -->
 <html lang="it">
 <head>
@@ -14,7 +15,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Picari Hybrid Coach — Personal Trainer Evolution V34</title>
+<title>Erjon Picari Hybrid Coach — Ultimate Fusion V35</title>
 
 <style>
 :root{
@@ -2507,7 +2508,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </nav>
 
 <section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
-  <div class="section-head"><div><p class="eyebrow">V34 · PERSONAL TRAINER EVOLUTION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="section-head"><div><p class="eyebrow">V35 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
   <div class="card" style="padding:16px;margin:12px 0">
     <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
     <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
@@ -2769,7 +2770,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
    ========================================================= */
 
 const APP_VERSION =
-  "34.0.0-PERFORMANCE-LONGEVITY";
+  "35.0.0-ULTIMATE-FUSION-V26-V34";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
@@ -15338,7 +15339,7 @@ function runSelfTests(){
   test("V25 priorità secondarie integrate anche nella ricomposizione",()=>{const old=data().settings.goalPriorities;const d=data();d.settings.goalPriorities={...old,muscle:true,mobility:true};save(d);const out=getWeekTemplate("fatloss");d.settings.goalPriorities=old;save(d);return out.length===7&&out.some(x=>x==="strength")&&out.some(x=>x==="mobility")});
   test("V24 rimosse schede duplicate fuori dalle impostazioni",()=>!document.getElementById("physiqueGoalCard")&&!document.querySelector("button[onclick*=startPhysiqueWorkout]"));
   test("V24 impostazioni iniziali ricomposizione",()=>defaults().settings.goal==="fatloss"&&defaults().settings.days===4&&defaults().settings.minutes===60);
-  test("V30 versione e schema",()=>APP_VERSION.startsWith("31.0.0")&&SCHEMA_VERSION===31);
+  test("V35 versione e schema",()=>APP_VERSION.startsWith("35.0.0")&&SCHEMA_VERSION===31);
   test("V18 check-in stress/fatica disponibile",()=>!!document.getElementById("stressLevel")&&!!document.getElementById("muscleFatigue"));
   test("V18 conversione passo 5:30 = 10.91 km/h",()=>Math.abs(paceToSpeedKmh("5:30")-3600/330)<0.01);
   test("V18 conversione passo rifiuta input invalido",()=>paceToSpeedKmh("5:90")===null&&paceToSpeedKmh("abc")===null&&paceToSpeedKmh("1:00")===null);
@@ -17016,7 +17017,7 @@ document.addEventListener('DOMContentLoaded',v33Render);
 </script>
 
 <script>
-/* V34 Personal Trainer Evolution — isolated, additive module */
+/* V35 Ultimate Fusion — V26 core + V34 evolution, isolated additive coach module */
 (()=>{
  'use strict';
  const KEY='ep_hybrid_coach_v34_checkins';
