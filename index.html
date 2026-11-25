@@ -1127,7 +1127,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </style>
 
 <style id="v35-1-mobile-navigation-fix">
-/* V35.3 — iPhone navigation: six items on one row; mode selector separated above the dock. */
+/* V35.4 — iPhone navigation: six items on one row; mode selector separated above the dock. */
 @media (max-width:680px){
   body{padding-bottom:calc(168px + env(safe-area-inset-bottom))!important}
   .nav{
@@ -2537,7 +2537,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </nav>
 
 <section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
-  <div class="section-head"><div><p class="eyebrow">V35.3 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="section-head"><div><p class="eyebrow">V35.4 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
   <div class="card" style="padding:16px;margin:12px 0">
     <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
     <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
@@ -8650,6 +8650,13 @@ function plan(type){
       "stretch"
     ],
 
+    gym:
+      [
+        "breathing",
+        ...(GYM_ROUTINES.full || []),
+        "stretch"
+      ],
+
     strength:
       bodyweight
         ?bodyweightMilitaryStrength()
@@ -9123,7 +9130,16 @@ function setWeekOverride(index,value){
   else delete d.settings.weeklyOverrides[key];
   save(d);
   renderWeek();
-  if(index===dayIndex()&&selectedPain!==null)evaluate();
+  if(index===dayIndex()){
+    if(selectedPain!==null){
+      evaluate();
+    }else{
+      // Keep today's home summary aligned with the selected weekly override.
+      if(typeof dashboard==="function")dashboard(true);
+      if(typeof renderCoachPulse==="function")renderCoachPulse();
+      if(typeof renderTodayPreview==="function")renderTodayPreview();
+    }
+  }
   notify(value?"Giornata personalizzata.":"Giornata ripristinata dal piano.");
 }
 
