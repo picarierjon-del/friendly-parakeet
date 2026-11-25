@@ -1127,7 +1127,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </style>
 
 <style id="v35-1-mobile-navigation-fix">
-/* V35.4 — iPhone navigation: six items on one row; mode selector separated above the dock. */
+/* V35.5 — iPhone navigation: six items on one row; mode selector separated above the dock. */
 @media (max-width:680px){
   body{padding-bottom:calc(168px + env(safe-area-inset-bottom))!important}
   .nav{
@@ -2537,7 +2537,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </nav>
 
 <section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
-  <div class="section-head"><div><p class="eyebrow">V35.4 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="section-head"><div><p class="eyebrow">V35.5 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
   <div class="card" style="padding:16px;margin:12px 0">
     <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
     <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
@@ -6425,7 +6425,21 @@ function v31RebalanceWeek(base,goal){
 }
 function getWeekTemplate(goal=data().settings.goal){
   const base=v30GetWeekTemplateBase(goal);
-  return v31RebalanceWeek(base,goal);
+  const week=v31RebalanceWeek(base,goal);
+  // Lifetime rule: preserve at least one actual running Z2 session in strength/
+  // hybrid/longevity plans. Optional cycling substitutions must not erase the
+  // only easy run; the user may still manually override any individual day.
+  const z2ProtectedGoals=["fatloss","definition","muscleGain","strengthFocus","hybrid","longevity"];
+  if(z2ProtectedGoals.includes(goal) && !week.includes("easy")){
+    const available=v31AvailableWeekdays();
+    const replaceable=["mtb","roadBike","indoorBike","power","strengthLight"];
+    let idx=available.find(i=>replaceable.includes(week[i]));
+    if(idx===undefined && available.length>=3){
+      idx=available.find(i=>week[i]==="strength");
+    }
+    if(idx!==undefined)week[idx]="easy";
+  }
+  return week;
 }
 function v31ProgrammingProfile(){
   const s=data().settings||{},goal=s.goal||"hybrid",level=s.athleteLevel||"intermediate",days=v31AvailableWeekdays(),minutes=Number(s.minutes)||60,week=getWeekTemplate(goal);
@@ -9152,9 +9166,9 @@ function scheduledSessionType(){
     dayIndex();
 
   const trainingDay =
-    mask(
-      d.settings.days
-    )[index];
+    Array.isArray(d.settings.availabilityDays)
+      ? v31AvailableWeekdays().includes(index)
+      : mask(d.settings.days)[index];
 
   if(!trainingDay){
     return "recovery";
@@ -16256,6 +16270,9 @@ const lifetimeSelfTestsBase=runSelfTests;
 runSelfTests=function(){
   const tests=lifetimeSelfTestsBase();
   const check=(name,fn)=>{try{tests.push({name,ok:!!fn()});}catch(error){tests.push({name,ok:false,error:String(error)});}};
+  check("Lifetime: Z2 corsa preservata nei piani forza/ipertrofia",()=>["muscleGain","strengthFocus","fatloss","definition","hybrid","longevity"].every(goal=>getWeekTemplate(goal).includes("easy")));
+  check("Lifetime: Z2 non sostituita dalla preferenza bici automatica",()=>{const s=data().settings,old=s.cycling;s.cycling={enabled:true,substituteEasyRun:true,maxSessions:4};try{return getWeekTemplate("muscleGain").includes("easy");}finally{s.cycling=old;}});
+  check("Lifetime: giorni personalizzati rispettati nel calendario",()=>{const s=data().settings,old=s.availabilityDays;s.availabilityDays=[0,2,4];try{const days=v31AvailableWeekdays();return days.length===3&&days.every(i=>[0,2,4].includes(i));}finally{s.availabilityDays=old;}});
   check("Lifetime: Sala pesi disponibile nel calendario",()=>weekEditorOptions("gym","strength").includes('value="gym"'));
   check("Lifetime: routine palestra contiene esercizi validi",()=>lifetimeGymPool("full").length>=3&&lifetimeGymPool("full").every(id=>!!EX[id]));
   check("Lifetime: etichetta Sala pesi",()=>sessionLabel("gym")==="Sala pesi");
