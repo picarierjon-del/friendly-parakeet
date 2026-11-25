@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#061827">
+<meta name="theme-color" content="#080d16">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Picari Hybrid Coach">
@@ -15,7 +15,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Picari Hybrid Coach — Smart Edition V36</title>
+<title>Erjon Picari Hybrid Coach — Signature V37</title>
 
 <style>
 :root{
@@ -1127,7 +1127,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </style>
 
 <style id="v35-1-mobile-navigation-fix">
-/* V36 — iPhone navigation: six items on one row; mode selector separated above the dock. */
+/* V37 — iPhone navigation: six items on one row; mode selector separated above the dock. */
 @media (max-width:680px){
   body{padding-bottom:calc(168px + env(safe-area-inset-bottom))!important}
   .nav{
@@ -1178,7 +1178,7 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 </style>
 
 <style id="v36-smart-interface">
-/* V36 · SMART INTERFACE REDESIGN — presentation layer only; original engine and data schema retained */
+/* V37 · SMART INTERFACE REDESIGN — presentation layer only; original engine and data schema retained */
 :root{--bg:#080d14;--panel:#111a25;--panel2:#172434;--line:rgba(173,190,209,.13);--text:#f4f7fb;--muted:#93a2b4;--green:#a3e635;--blue:#a3e635;--orange:#ff9b54;--radius:20px;--shadow:0 14px 38px rgba(0,0,0,.22)}
 html{background:var(--bg);scroll-behavior:smooth}
 body{background:radial-gradient(ellipse at 50% -18%,rgba(163,230,53,.075),transparent 43%),var(--bg);color:var(--text);letter-spacing:-.01em}
@@ -1230,6 +1230,39 @@ label{font-size:.78rem;font-weight:750;color:#c7d0da}
 @media(max-width:380px){.training-hub,.module-grid{grid-template-columns:1fr}.brand small{max-width:58vw}.nav button{font-size:.55rem}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
+
+<style id="v37-signature-interface">
+:root{--bg:#080d16;--panel:#111a27;--panel2:#172334;--line:rgba(178,198,220,.12);--text:#f5f7fb;--muted:#9ba9bb;--green:#b8f36b;--blue:#7dd3fc;--radius:22px;--shadow:0 18px 55px rgba(0,0,0,.30)}
+html{background:#080d16}body{background:radial-gradient(ellipse at 50% -15%,rgba(139,190,89,.13),transparent 42%),linear-gradient(180deg,#080d16 0%,#0b111c 48%,#080d16 100%);padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+.topbar{padding:14px clamp(16px,3vw,30px);background:rgba(8,13,22,.82);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(24px)}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#d2fa91,#7ba83d);color:#10180a;box-shadow:0 8px 26px rgba(184,243,107,.16)}
+.brand h1{font-size:1rem;letter-spacing:-.025em}.brand small{color:#8795a8}
+.container{display:block;max-width:920px;padding:18px 18px 28px}.sidebar{display:none!important}.main{display:flex;gap:15px;min-width:0}
+.page{max-width:860px;width:100%;margin:0 auto;animation:v37-rise .24s ease both}
+@keyframes v37-rise{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:none}}
+.card{padding:clamp(16px,2.4vw,23px);border-radius:22px;background:linear-gradient(155deg,rgba(22,33,48,.97),rgba(14,22,34,.98));border:1px solid rgba(190,210,232,.10);box-shadow:0 10px 32px rgba(0,0,0,.16)}
+.card h2{font-size:clamp(1.2rem,3vw,1.55rem);letter-spacing:-.035em}.card h3{letter-spacing:-.02em}
+.eyebrow{color:#b8f36b;letter-spacing:1.25px;font-size:.62rem}.small,.muted{color:#9ba9bb}
+.hero{padding:clamp(19px,3vw,28px);border:1px solid rgba(184,243,107,.17);background:radial-gradient(circle at 100% 0,rgba(184,243,107,.13),transparent 38%),linear-gradient(135deg,#172638,#111a27 70%);border-radius:26px}
+.hero h2{font-size:clamp(1.45rem,4vw,2.05rem);line-height:1.12;letter-spacing:-.045em;max-width:18ch}
+.readiness{background:rgba(5,11,18,.42);border:1px solid rgba(255,255,255,.07);border-radius:16px}.readiness strong{font-size:1.35rem}.readiness span{font-size:.59rem;letter-spacing:.08em}
+.wow-deck{border-radius:26px;background:radial-gradient(circle at 95% 5%,rgba(184,243,107,.12),transparent 36%),linear-gradient(145deg,#172538,#101925);border-color:rgba(184,243,107,.16)}
+.wow-title{font-size:clamp(1.45rem,4vw,2.1rem);letter-spacing:-.045em}.wow-score{color:#d3f7a0}.wow-actions{gap:8px}.wow-actions .btn{min-height:44px}
+.btn{border-radius:14px;font-weight:750;letter-spacing:-.01em}.btn.primary,.btn:not(.secondary):not(.orange):not(.purple):not(.blue){background:linear-gradient(135deg,#c8f58a,#9bd45d);color:#10170b;border:0;box-shadow:0 8px 22px rgba(184,243,107,.12)}.btn.secondary{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#dbe4ee}
+.nav{width:min(560px,calc(100% - 24px));grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:7px;border-radius:23px;border:1px solid rgba(210,225,242,.14);background:rgba(12,18,28,.88);box-shadow:0 18px 60px rgba(0,0,0,.5);backdrop-filter:blur(28px) saturate(160%)}
+.nav button{min-width:0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 2px;border-radius:16px;color:#8f9bad;font-size:.62rem;font-weight:750;letter-spacing:-.01em;white-space:nowrap}
+.nav button .ui-icon{width:21px;height:21px}.nav button.active{color:#d7f7a6;background:linear-gradient(145deg,rgba(184,243,107,.15),rgba(184,243,107,.055));box-shadow:inset 0 0 0 1px rgba(184,243,107,.12)}
+.page-intro{padding:8px 3px 3px}.page-intro h2{font-size:clamp(1.45rem,4vw,2rem);letter-spacing:-.045em;margin-bottom:5px}.page-intro p{font-size:.84rem;color:var(--muted);line-height:1.5}
+.settings-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}.settings-shortcut{display:grid;grid-template-columns:38px minmax(0,1fr) 12px;align-items:center;gap:10px;text-align:left;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);color:var(--text)}.settings-shortcut strong,.settings-shortcut small{display:block}.settings-shortcut strong{font-size:.8rem}.settings-shortcut small{font-size:.68rem;color:var(--muted);margin-top:3px;line-height:1.35}.settings-shortcut b{color:#b8f36b}.shortcut-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(184,243,107,.12);color:#c9f58c;font-size:1.1rem}
+.training-hub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hub-card{min-width:0;padding:15px;grid-template-columns:42px minmax(0,1fr) 12px;border-radius:19px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,#172538,#101925);box-shadow:0 8px 24px rgba(0,0,0,.13);transition:transform .16s,border-color .16s}.hub-card:active{transform:scale(.985)}.hub-card strong{font-size:.85rem}.hub-card small{font-size:.7rem;line-height:1.4}.hub-card>.ui-icon{width:40px;height:40px;border-radius:13px}
+.field input,.field select,.field textarea,select,input,textarea{border-radius:13px}.field label{font-size:.75rem;color:#b7c3d1}.workout-item{border-radius:16px;border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
+.adaptive-schedule-card{background:linear-gradient(145deg,rgba(22,33,48,.96),rgba(14,22,34,.98))}.adaptive-schedule-card h3{font-size:1rem}
+.global-mode-switch{position:fixed;top:76px;right:12px;z-index:29;transform:scale(.82);transform-origin:top right;opacity:.84}
+@media(max-width:620px){.container{padding:13px 12px 24px}.topbar{padding:11px 14px}.brand h1{font-size:.91rem}.brand small{font-size:.62rem}.logo{width:38px;height:38px}.card{padding:15px;border-radius:19px}.hero{padding:18px}.hero-grid{gap:11px}.readiness-pair{grid-template-columns:repeat(2,minmax(0,1fr))}.training-hub{grid-template-columns:1fr}.settings-shortcuts{grid-template-columns:1fr}.nav{width:calc(100% - 18px);bottom:calc(7px + env(safe-area-inset-bottom));padding:5px;gap:2px}.nav button{min-height:51px;font-size:.58rem}.nav button .ui-icon{width:19px;height:19px}.global-mode-switch{top:69px;right:6px;transform:scale(.72)}}
+@media(min-width:900px){.container{padding-top:25px}.page{max-width:860px}.hero-grid{grid-template-columns:minmax(0,1fr) 220px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+
 </head>
 
 <body>
@@ -1648,6 +1681,7 @@ label{font-size:.78rem;font-weight:750;color:#c7d0da}
 </section>
 
 <section id="page-plan" class="hidden">
+<div class="page-intro"><div class="eyebrow">La tua settimana</div><h2>Programma intelligente</h2><p>Una settimana leggibile, adattiva e collegata alla seduta di oggi.</p></div>
 
 <div class="card period-card">
   <div class="eyebrow">Macro ciclo adattivo</div>
@@ -2051,6 +2085,7 @@ label{font-size:.78rem;font-weight:750;color:#c7d0da}
 </section>
 
 <section id="page-progress" class="hidden">
+<div class="page-intro"><div class="eyebrow">Andamento nel tempo</div><h2>I tuoi progressi</h2><p>Numeri essenziali per capire cosa sta migliorando e dove intervenire.</p></div>
 
 <div class="card">
   <div class="eyebrow">Attività da altre app</div>
@@ -2165,6 +2200,16 @@ label{font-size:.78rem;font-weight:750;color:#c7d0da}
 </section>
 
 <section id="page-settings" class="hidden">
+
+<div class="card settings-welcome">
+  <div class="eyebrow">Il tuo spazio personale</div>
+  <h2>Impostazioni e strumenti</h2>
+  <p class="small">Profilo, attrezzatura, preferenze e sicurezza. Gli strumenti avanzati restano disponibili qui, senza appesantire la navigazione quotidiana.</p>
+  <div class="settings-shortcuts">
+    <button class="settings-shortcut" type="button" onclick="showPage('coach')"><span class="shortcut-icon">✦</span><span><strong>Coach intelligente</strong><small>Check-in, adattamento e alternative</small></span><b>›</b></button>
+    <button class="settings-shortcut" type="button" onclick="showPage('more')"><span class="shortcut-icon">⌘</span><span><strong>Altri strumenti</strong><small>Libreria, fisioterapia e test</small></span><b>›</b></button>
+  </div>
+</div>
 
 <div class="card">
 
@@ -2513,7 +2558,8 @@ label{font-size:.78rem;font-weight:750;color:#c7d0da}
   <div class="card hero compact-hero">
     <div class="eyebrow">Centro allenamento</div>
     <h2>Scegli lo stimolo giusto</h2>
-    <p class="small">I moduli rispettano readiness, attrezzatura, fase del macro ciclo e regole di sicurezza della spalla.</p>
+    <p class="small">Un unico punto di accesso per tutte le discipline. Il coach adatta le proposte a recupero, attrezzatura, obiettivo e storico.</p>
+    <button type="button" class="btn primary full" style="margin-top:14px" onclick="showPage('today');document.getElementById('todayWorkout')?.scrollIntoView({behavior:'smooth',block:'start'})">Apri la seduta guidata di oggi</button>
   </div>
   <div class="training-hub">
     <button class="hub-card accent-green" onclick="showPage('shoulder')"><svg class="ui-icon"><use href="#i-heart"></use></svg><span><strong>Spalla & recupero</strong><small>Rehab, mobilità, palla, roller e piscina</small></span><b>→</b></button>
@@ -2617,16 +2663,15 @@ label{font-size:.78rem;font-weight:750;color:#c7d0da}
 </div>
 
 <nav class="nav" aria-label="Navigazione principale">
-  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
-  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
-  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
+  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Home</span></button>
+  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenamento</span></button>
+  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Programma</span></button>
   <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
-  <button type="button" data-page="coach"><svg class="ui-icon"><use href="#i-brain"></use></svg><span>Coach</span></button>
-  <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
+  <button type="button" data-page="settings" data-related="more,coach,library,physio,tests"><svg class="ui-icon"><use href="#i-settings"></use></svg><span>Impostazioni</span></button>
 </nav>
 
 <section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
-  <div class="section-head"><div><p class="eyebrow">V36 · SMART EDITION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="section-head"><div><p class="eyebrow">V37 · SIGNATURE INTERFACE</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
   <div class="card" style="padding:16px;margin:12px 0">
     <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
     <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
@@ -15683,7 +15728,7 @@ function openOnboarding(){
 
 function dismissOnboarding(){
   document.getElementById("onboardingModal").classList.add("hidden");
-  notify("Configurazione rimandata. Puoi riaprirla da Altro → Profilo, dati e backup.");
+  notify("Configurazione rimandata. Puoi riaprirla da Impostazioni → Profilo personale.");
   document.querySelector('.nav button[data-page="today"]')?.focus();
 }
 
@@ -17257,7 +17302,7 @@ document.addEventListener('DOMContentLoaded',v33Render);
 
 <script>
 
-/* V36 · adaptive gym dose + simplified gym interface */
+/* V37 · adaptive gym dose + simplified gym interface */
 (function(){
   const gymCaps = {
     full: {light:3, moderate:5, strong:6},
