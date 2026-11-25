@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#080d16">
+<meta name="theme-color" content="#061827">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Picari Hybrid Coach">
@@ -15,7 +15,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Picari Hybrid Coach AI · V38 Signature</title>
+<title>Erjon Picari Hybrid Coach — Ultimate Fusion V35</title>
 
 <style>
 :root{
@@ -1127,7 +1127,7 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 </style>
 
 <style id="v35-1-mobile-navigation-fix">
-/* V38 — iPhone navigation: six items on one row; mode selector separated above the dock. */
+/* V35.7 — iPhone navigation: six items on one row; mode selector separated above the dock. */
 @media (max-width:680px){
   body{padding-bottom:calc(168px + env(safe-area-inset-bottom))!important}
   .nav{
@@ -1177,239 +1177,6 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 }
 </style>
 
-<style id="v36-smart-interface">
-/* V38 · SMART INTERFACE REDESIGN — presentation layer only; original engine and data schema retained */
-:root{--bg:#080d14;--panel:#111a25;--panel2:#172434;--line:rgba(173,190,209,.13);--text:#f4f7fb;--muted:#93a2b4;--green:#a3e635;--blue:#a3e635;--orange:#ff9b54;--radius:20px;--shadow:0 14px 38px rgba(0,0,0,.22)}
-html{background:var(--bg);scroll-behavior:smooth}
-body{background:radial-gradient(ellipse at 50% -18%,rgba(163,230,53,.075),transparent 43%),var(--bg);color:var(--text);letter-spacing:-.01em}
-.topbar{max-width:1180px;margin:14px auto 0;padding:14px 18px;border:1px solid var(--line);border-radius:22px;background:rgba(15,23,33,.88);box-shadow:0 8px 28px rgba(0,0,0,.18);backdrop-filter:blur(22px)}
-.logo{background:linear-gradient(145deg,#d9f99d,#a3e635);color:#17220b;box-shadow:0 8px 24px rgba(163,230,53,.15)}
-.brand h1{font-size:1rem;letter-spacing:-.035em}.brand small{font-size:.67rem}
-.container{max-width:1180px;margin:0 auto;padding:18px 18px 130px;grid-template-columns:minmax(0,1fr);gap:16px}
-.sidebar{display:none!important}.main{width:100%;min-width:0;gap:16px}
-.page{max-width:980px;width:100%;margin:0 auto;animation:v36-in .22s ease both}
-@keyframes v36-in{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
-.card{padding:clamp(15px,2vw,22px);border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(19,29,42,.97),rgba(13,21,31,.97));box-shadow:0 10px 28px rgba(0,0,0,.14)}
-.card h2,.card h3{letter-spacing:-.035em}.eyebrow{color:#b6c0cc;font-size:.63rem;letter-spacing:.13em}
-.hero{background:linear-gradient(130deg,rgba(163,230,53,.11),rgba(20,33,43,.96) 65%);border-color:rgba(163,230,53,.19)}
-.hero h2{font-size:clamp(1.45rem,3vw,2rem);letter-spacing:-.055em}
-.btn,.button,button.btn{border-radius:14px;font-weight:800;min-height:42px;transition:transform .16s ease,filter .16s ease}
-.btn.primary,.btn:not(.secondary):not(.danger){background:linear-gradient(135deg,#c4f36b,#91d52c);color:#17220b;border:0;box-shadow:0 8px 22px rgba(163,230,53,.13)}
-.btn:active,.hub-card:active,.nav button:active{transform:scale(.985)}
-input,select,textarea{border-radius:13px!important;border-color:var(--line)!important;background:#0c1520!important;color:var(--text)!important;min-height:42px}
-label{font-size:.78rem;font-weight:750;color:#c7d0da}
-.grid2,.grid3,.grid4,.training-hub,.module-grid{gap:12px}
-.hub-card{background:#111c28;border:1px solid var(--line);border-radius:18px;box-shadow:none;padding:15px;min-height:84px}
-.hub-card>.ui-icon{background:rgba(163,230,53,.1)!important;color:#c1f278!important;border-radius:13px}
-.hub-card strong{font-size:.88rem}.hub-card small{font-size:.68rem}
-.nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(720px,calc(100% - 24px));max-width:720px;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:7px;border:1px solid rgba(190,207,225,.14);border-radius:22px;background:rgba(12,18,27,.92);box-shadow:0 16px 50px rgba(0,0,0,.48);backdrop-filter:blur(26px) saturate(145%)}
-.nav button{min-width:0;min-height:54px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:15px;color:#8e9baa;font-size:.63rem;font-weight:800}
-.nav button .ui-icon{width:20px;height:20px}.nav button.active{color:#d8f99a;background:rgba(163,230,53,.11);box-shadow:inset 0 0 0 1px rgba(163,230,53,.15)}
-.global-mode-switch{top:18px;right:max(18px,calc((100vw - 1140px)/2));background:rgba(13,21,31,.92);border-color:var(--line);box-shadow:none}
-.experience-switch button{min-height:32px}
-.week-grid{gap:10px}.day-card,.planner-row{border-radius:16px}
-.modal-box{border-radius:24px;background:#111c28}
-.toast{border-radius:14px}
-/* Reduce clutter without deleting advanced controls: tuck secondary details behind their existing disclosure elements. */
-.page details{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.018)}
-.page details>summary{font-weight:800;cursor:pointer;min-height:30px;display:flex;align-items:center}
-.page .small,.page small{line-height:1.45}
-@media(min-width:900px){.container{padding-top:22px}.page{max-width:920px}.hero-grid{grid-template-columns:minmax(0,1fr) 250px}}
-@media(max-width:680px){
- body{padding-bottom:calc(94px + env(safe-area-inset-bottom))}
- .topbar{margin:0;padding:10px 14px;border-radius:0 0 18px 18px;border-width:0 0 1px;position:sticky;top:0;z-index:45;background:rgba(8,13,20,.92)}
- .logo{width:40px;height:40px;border-radius:13px}.brand h1{font-size:.86rem}.brand small{max-width:65vw;font-size:.57rem}
- .container{padding:12px 12px 110px;gap:12px}.main{gap:12px}.page{max-width:none}
- .card{padding:15px;border-radius:17px}.hero-grid{grid-template-columns:1fr}.hero h2{font-size:1.42rem}
- .training-hub,.module-grid{grid-template-columns:1fr 1fr;gap:8px}.hub-card{grid-template-columns:36px minmax(0,1fr) auto;gap:9px;padding:11px;min-height:78px}.hub-card>.ui-icon{width:36px;height:36px;padding:8px}.hub-card strong{font-size:.76rem}.hub-card small{font-size:.61rem}
- .nav{width:calc(100% - 16px);bottom:calc(7px + env(safe-area-inset-bottom));padding:5px;border-radius:18px;gap:2px}.nav button{min-height:51px;font-size:.59rem}.nav button .ui-icon{width:19px;height:19px}
- .global-mode-switch{top:auto;left:auto;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));transform:none;padding:3px;border-radius:12px;background:rgba(13,21,31,.94)}
- .experience-switch button{font-size:.58rem;padding:6px 8px;min-height:29px}
- .week-grid{grid-template-columns:1fr 1fr;gap:8px}
-}
-@media(max-width:380px){.training-hub,.module-grid{grid-template-columns:1fr}.brand small{max-width:58vw}.nav button{font-size:.55rem}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style>
-
-<style id="v37-signature-interface">
-:root{--bg:#080d16;--panel:#111a27;--panel2:#172334;--line:rgba(178,198,220,.12);--text:#f5f7fb;--muted:#9ba9bb;--green:#b8f36b;--blue:#7dd3fc;--radius:22px;--shadow:0 18px 55px rgba(0,0,0,.30)}
-html{background:#080d16}body{background:radial-gradient(ellipse at 50% -15%,rgba(139,190,89,.13),transparent 42%),linear-gradient(180deg,#080d16 0%,#0b111c 48%,#080d16 100%);padding-bottom:calc(104px + env(safe-area-inset-bottom))}
-.topbar{padding:14px clamp(16px,3vw,30px);background:rgba(8,13,22,.82);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(24px)}
-.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#d2fa91,#7ba83d);color:#10180a;box-shadow:0 8px 26px rgba(184,243,107,.16)}
-.brand h1{font-size:1rem;letter-spacing:-.025em}.brand small{color:#8795a8}
-.container{display:block;max-width:920px;padding:18px 18px 28px}.sidebar{display:none!important}.main{display:flex;gap:15px;min-width:0}
-.page{max-width:860px;width:100%;margin:0 auto;animation:v37-rise .24s ease both}
-@keyframes v37-rise{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:none}}
-.card{padding:clamp(16px,2.4vw,23px);border-radius:22px;background:linear-gradient(155deg,rgba(22,33,48,.97),rgba(14,22,34,.98));border:1px solid rgba(190,210,232,.10);box-shadow:0 10px 32px rgba(0,0,0,.16)}
-.card h2{font-size:clamp(1.2rem,3vw,1.55rem);letter-spacing:-.035em}.card h3{letter-spacing:-.02em}
-.eyebrow{color:#b8f36b;letter-spacing:1.25px;font-size:.62rem}.small,.muted{color:#9ba9bb}
-.hero{padding:clamp(19px,3vw,28px);border:1px solid rgba(184,243,107,.17);background:radial-gradient(circle at 100% 0,rgba(184,243,107,.13),transparent 38%),linear-gradient(135deg,#172638,#111a27 70%);border-radius:26px}
-.hero h2{font-size:clamp(1.45rem,4vw,2.05rem);line-height:1.12;letter-spacing:-.045em;max-width:18ch}
-.readiness{background:rgba(5,11,18,.42);border:1px solid rgba(255,255,255,.07);border-radius:16px}.readiness strong{font-size:1.35rem}.readiness span{font-size:.59rem;letter-spacing:.08em}
-.wow-deck{border-radius:26px;background:radial-gradient(circle at 95% 5%,rgba(184,243,107,.12),transparent 36%),linear-gradient(145deg,#172538,#101925);border-color:rgba(184,243,107,.16)}
-.wow-title{font-size:clamp(1.45rem,4vw,2.1rem);letter-spacing:-.045em}.wow-score{color:#d3f7a0}.wow-actions{gap:8px}.wow-actions .btn{min-height:44px}
-.btn{border-radius:14px;font-weight:750;letter-spacing:-.01em}.btn.primary,.btn:not(.secondary):not(.orange):not(.purple):not(.blue){background:linear-gradient(135deg,#c8f58a,#9bd45d);color:#10170b;border:0;box-shadow:0 8px 22px rgba(184,243,107,.12)}.btn.secondary{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#dbe4ee}
-.nav{width:min(560px,calc(100% - 24px));grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:7px;border-radius:23px;border:1px solid rgba(210,225,242,.14);background:rgba(12,18,28,.88);box-shadow:0 18px 60px rgba(0,0,0,.5);backdrop-filter:blur(28px) saturate(160%)}
-.nav button{min-width:0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 2px;border-radius:16px;color:#8f9bad;font-size:.62rem;font-weight:750;letter-spacing:-.01em;white-space:nowrap}
-.nav button .ui-icon{width:21px;height:21px}.nav button.active{color:#d7f7a6;background:linear-gradient(145deg,rgba(184,243,107,.15),rgba(184,243,107,.055));box-shadow:inset 0 0 0 1px rgba(184,243,107,.12)}
-.page-intro{padding:8px 3px 3px}.page-intro h2{font-size:clamp(1.45rem,4vw,2rem);letter-spacing:-.045em;margin-bottom:5px}.page-intro p{font-size:.84rem;color:var(--muted);line-height:1.5}
-.settings-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}.settings-shortcut{display:grid;grid-template-columns:38px minmax(0,1fr) 12px;align-items:center;gap:10px;text-align:left;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);color:var(--text)}.settings-shortcut strong,.settings-shortcut small{display:block}.settings-shortcut strong{font-size:.8rem}.settings-shortcut small{font-size:.68rem;color:var(--muted);margin-top:3px;line-height:1.35}.settings-shortcut b{color:#b8f36b}.shortcut-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(184,243,107,.12);color:#c9f58c;font-size:1.1rem}
-.training-hub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hub-card{min-width:0;padding:15px;grid-template-columns:42px minmax(0,1fr) 12px;border-radius:19px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,#172538,#101925);box-shadow:0 8px 24px rgba(0,0,0,.13);transition:transform .16s,border-color .16s}.hub-card:active{transform:scale(.985)}.hub-card strong{font-size:.85rem}.hub-card small{font-size:.7rem;line-height:1.4}.hub-card>.ui-icon{width:40px;height:40px;border-radius:13px}
-.field input,.field select,.field textarea,select,input,textarea{border-radius:13px}.field label{font-size:.75rem;color:#b7c3d1}.workout-item{border-radius:16px;border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
-.adaptive-schedule-card{background:linear-gradient(145deg,rgba(22,33,48,.96),rgba(14,22,34,.98))}.adaptive-schedule-card h3{font-size:1rem}
-.global-mode-switch{position:fixed;top:76px;right:12px;z-index:29;transform:scale(.82);transform-origin:top right;opacity:.84}
-@media(max-width:620px){.container{padding:13px 12px 24px}.topbar{padding:11px 14px}.brand h1{font-size:.91rem}.brand small{font-size:.62rem}.logo{width:38px;height:38px}.card{padding:15px;border-radius:19px}.hero{padding:18px}.hero-grid{gap:11px}.readiness-pair{grid-template-columns:repeat(2,minmax(0,1fr))}.training-hub{grid-template-columns:1fr}.settings-shortcuts{grid-template-columns:1fr}.nav{width:calc(100% - 18px);bottom:calc(7px + env(safe-area-inset-bottom));padding:5px;gap:2px}.nav button{min-height:51px;font-size:.58rem}.nav button .ui-icon{width:19px;height:19px}.global-mode-switch{top:69px;right:6px;transform:scale(.72)}}
-@media(min-width:900px){.container{padding-top:25px}.page{max-width:860px}.hero-grid{grid-template-columns:minmax(0,1fr) 220px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
-</style>
-
-<style id="v38-signature-redesign">
-/* =========================================================
-   V38 · SIGNATURE REDESIGN — complete visual system
-   Existing app logic, page IDs, controls and storage untouched.
-   ========================================================= */
-:root{
- --bg:#080d14!important;--panel:#111a26!important;--panel2:#172333!important;
- --line:rgba(164,184,207,.13)!important;--text:#f4f7fb!important;
- --muted:#91a0b4!important;--accent:#c5f36a!important;--accent2:#91d84d!important;
- --blue:#76c8ff!important;--radius:24px;
-}
-html{background:#080d14!important;scroll-behavior:smooth}
-body{
- background:
- radial-gradient(ellipse at 15% -8%,rgba(130,190,92,.12),transparent 34rem),
- radial-gradient(ellipse at 100% 25%,rgba(65,133,185,.09),transparent 38rem),
- #080d14!important;color:var(--text)!important;
- font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif!important;
- letter-spacing:-.012em;
-}
-.app{max-width:1440px!important;margin:0 auto!important;padding:0 22px 120px!important}
-.topbar{
- position:sticky!important;top:0!important;z-index:80!important;padding-top:max(14px,env(safe-area-inset-top))!important;
- min-height:76px!important;padding:14px 20px!important;margin:0 -22px 22px!important;
- background:rgba(8,13,20,.84)!important;backdrop-filter:blur(24px) saturate(150%)!important;
- -webkit-backdrop-filter:blur(24px) saturate(150%)!important;
- border:0!important;border-bottom:1px solid rgba(180,200,220,.11)!important;
- border-radius:0 0 24px 24px!important;box-shadow:0 10px 40px rgba(0,0,0,.18)!important;
-}
-.topbar .logo{width:48px!important;height:48px!important;border-radius:17px!important;
- background:linear-gradient(145deg,#d8ff91,#8ecb42)!important;color:#101b0c!important;
- box-shadow:0 8px 28px rgba(166,226,92,.2)!important}
-.topbar .brand h1{font-size:clamp(14px,2vw,19px)!important;font-weight:850!important;letter-spacing:-.045em!important}
-.topbar .brand small{font-size:11px!important;opacity:.68!important}
-.topbar .pill{font-size:9px!important;letter-spacing:.08em!important;border-radius:999px!important}
-.container{display:grid!important;grid-template-columns:250px minmax(0,1fr)!important;gap:24px!important;align-items:start!important}
-.sidebar{position:sticky!important;top:100px!important;max-height:calc(100vh - 120px)!important;overflow:auto!important;padding:0 4px 12px 0!important;scrollbar-width:thin}
-.main{min-width:0!important;max-width:1000px!important;width:100%!important;margin:0 auto!important}
-.card{
- background:linear-gradient(155deg,rgba(22,33,48,.96),rgba(14,22,33,.98))!important;
- border:1px solid rgba(169,190,214,.12)!important;border-radius:24px!important;
- padding:clamp(18px,2.6vw,28px)!important;
- box-shadow:0 12px 36px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.025)!important;
- margin-bottom:16px!important;
-}
-.card.hero{
- background:
- radial-gradient(ellipse at 88% 0%,rgba(193,243,106,.13),transparent 38%),
- linear-gradient(145deg,#1a2939,#101925 72%)!important;
- border-color:rgba(197,243,106,.2)!important;min-height:unset!important;
-}
-.hero h2,.page-intro h2{font-size:clamp(27px,4.6vw,42px)!important;line-height:1.06!important;letter-spacing:-.055em!important;font-weight:850!important}
-h2{letter-spacing:-.04em!important;font-weight:800!important}
-h3{letter-spacing:-.025em!important;font-weight:760!important}
-.eyebrow{font-size:10px!important;letter-spacing:.18em!important;font-weight:850!important;color:#c5f36a!important}
-.small,.card p{line-height:1.58!important}
-.page-intro{padding:12px 4px 20px!important}
-.page-intro p{max-width:58ch!important;color:#9eacbf!important}
-button,.btn,select,input,textarea{font-family:inherit!important}
-.btn,button.btn{
- min-height:48px!important;border-radius:15px!important;font-weight:760!important;
- transition:transform .18s ease,border-color .18s ease,filter .18s ease!important;
-}
-.btn:active,button:active{transform:scale(.985)!important}
-.btn.primary,.btn.full:not(.secondary){box-shadow:0 8px 24px rgba(172,226,91,.14)!important}
-input,select,textarea{
- min-height:48px!important;border-radius:15px!important;
- background:#0b1420!important;border:1px solid rgba(169,190,214,.15)!important;
- color:#f4f7fb!important;padding:12px 15px!important;
-}
-label{font-size:13px!important;font-weight:720!important;color:#c0ccda!important;margin-bottom:7px!important}
-.field{margin-bottom:15px!important}
-.workout-item,.module,.settings-shortcut{
- border:1px solid rgba(169,190,214,.13)!important;border-radius:18px!important;
- background:rgba(255,255,255,.035)!important;transition:background .2s,border-color .2s!important;
-}
-.module{padding:18px!important;min-height:150px!important}
-.module:hover,.settings-shortcut:hover{background:rgba(197,243,106,.07)!important;border-color:rgba(197,243,106,.28)!important}
-.settings-welcome{padding:26px!important}
-.settings-shortcut{width:100%!important;padding:16px!important;margin-top:12px!important}
-.settings-shortcut .shortcut-icon{border-radius:14px!important;background:rgba(197,243,106,.13)!important;color:#c5f36a!important}
-.progress{height:8px!important;border-radius:99px!important;background:#263344!important;overflow:hidden!important}
-.progress span{border-radius:99px!important}
-.readiness{border-radius:18px!important;background:rgba(255,255,255,.045)!important;border:1px solid var(--line)!important;padding:15px!important}
-.adaptive-fields{gap:12px!important}
-.hidden{display:none!important}
-
-/* Main navigation becomes a compact, legible app dock. */
-.nav{
- position:fixed!important;z-index:120!important;left:50%!important;bottom:max(12px,env(safe-area-inset-bottom))!important;
- transform:translateX(-50%)!important;width:min(720px,calc(100% - 28px))!important;
- display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:5px!important;
- padding:8px!important;border-radius:24px!important;
- background:rgba(12,19,29,.9)!important;backdrop-filter:blur(26px) saturate(160%)!important;
- -webkit-backdrop-filter:blur(26px) saturate(160%)!important;
- border:1px solid rgba(185,204,225,.16)!important;
- box-shadow:0 18px 60px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.06)!important;
-}
-.nav button{
- min-width:0!important;min-height:58px!important;padding:7px 3px!important;
- display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;
- border:0!important;border-radius:17px!important;background:transparent!important;
- color:#8e9bad!important;font-size:10px!important;font-weight:720!important;line-height:1.1!important;
- white-space:nowrap!important;overflow:hidden!important;
-}
-.nav button span{display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.nav button .ui-icon{width:20px!important;height:20px!important;flex:none!important}
-.nav button.active{background:linear-gradient(145deg,rgba(197,243,106,.18),rgba(197,243,106,.08))!important;color:#d8ff9a!important;box-shadow:inset 0 0 0 1px rgba(197,243,106,.16)!important}
-.global-mode-switch{
- position:fixed!important;z-index:110!important;left:50%!important;bottom:calc(max(12px,env(safe-area-inset-bottom)) + 78px)!important;
- transform:translateX(-50%)!important;right:auto!important;top:auto!important;
- padding:4px!important;border-radius:999px!important;background:rgba(13,21,31,.9)!important;
- border:1px solid rgba(185,204,225,.14)!important;backdrop-filter:blur(18px)!important;
- box-shadow:0 8px 24px rgba(0,0,0,.28)!important;
-}
-.global-mode-switch button{font-size:10px!important;padding:8px 12px!important;border-radius:999px!important;min-height:32px!important}
-
-/* Expert mode remains available; in Simple mode advanced content is tucked away. */
-body:not(.expert-mode) .advanced-only,body:not(.expert-mode) .expert-only{display:none!important}
-body:not(.expert-mode) .sidebar .rules{display:none!important}
-@media(max-width:900px){
- .container{display:block!important}
- .sidebar{display:none!important}
- .app{padding:0 14px 150px!important}
- .topbar{margin:0 -14px 14px!important;padding:12px 15px!important;min-height:70px!important}
- .topbar .pill{display:none!important}
- .main{width:100%!important}
- .card{border-radius:21px!important;margin-bottom:12px!important;padding:18px!important}
- .page-intro{padding:12px 4px 16px!important}
- .hero-grid{grid-template-columns:1fr!important;gap:18px!important}
- .readiness-pair{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
- .global-mode-switch{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 76px)!important}
-}
-@media(max-width:390px){
- .nav{width:calc(100% - 18px)!important;gap:2px!important;padding:6px!important}
- .nav button{font-size:9px!important;min-height:55px!important}
- .nav button .ui-icon{width:18px!important;height:18px!important}
- .topbar .brand h1{font-size:12px!important}
- .topbar .brand small{font-size:9px!important}
- .app{padding-left:10px!important;padding-right:10px!important}
-}
-@media(min-width:901px){
- .nav{position:sticky!important;left:auto!important;bottom:auto!important;transform:none!important;width:100%!important;max-width:1000px!important;margin:18px auto 24px!important}
- .global-mode-switch{position:fixed!important;left:auto!important;right:24px!important;bottom:24px!important;transform:none!important}
- .app{padding-bottom:24px!important}
-}
-</style>
 </head>
 
 <body>
@@ -1828,7 +1595,6 @@ body:not(.expert-mode) .sidebar .rules{display:none!important}
 </section>
 
 <section id="page-plan" class="hidden">
-<div class="page-intro"><div class="eyebrow">La tua settimana</div><h2>Programma intelligente</h2><p>Una settimana leggibile, adattiva e collegata alla seduta di oggi.</p></div>
 
 <div class="card period-card">
   <div class="eyebrow">Macro ciclo adattivo</div>
@@ -2010,30 +1776,18 @@ body:not(.expert-mode) .sidebar .rules{display:none!important}
     <p class="small">Scegli liberamente il distretto da allenare oggi. Se le gambe sono stanche, seleziona Parte alta, Schiena + bicipiti, Petto + tricipiti o Braccia: il coach evita il lavoro diretto sulle gambe e adatta la seduta al recupero.</p>
   </div>
   <div class="card">
-    <div class="field gym-focus-field">
-      <label for="gymFocusSelect">Allenamento di oggi</label>
-      <select id="gymFocusSelect" onchange="selectGym(this.value,null)">
-        <option value="full">Full body</option>
-        <option value="upper">Parte alta</option>
-        <option value="lower">Gambe</option>
-        <option value="upperPull">Schiena + bicipiti</option>
-        <option value="upperPush">Petto + tricipiti</option>
-        <option value="arms">Braccia</option>
-        <option value="core">Core</option>
-      </select>
+    <div class="segment">
+      <button class="active" onclick="selectGym('full',this)">Full body</button>
+      <button onclick="selectGym('upper',this)">Parte alta</button>
+      <button onclick="selectGym('lower',this)">Gambe</button>
+      <button onclick="selectGym('core',this)">Core</button>
+      <button onclick="selectGym('upperPull',this)">Schiena + bicipiti</button>
+      <button onclick="selectGym('upperPush',this)">Petto + tricipiti</button>
+      <button onclick="selectGym('arms',this)">Braccia</button>
     </div>
-    <div class="field gym-focus-field">
-      <label for="gymEffortSelect">Dose della seduta</label>
-      <select id="gymEffortSelect" onchange="renderGymPreview()">
-        <option value="auto">Adattiva · decide il coach</option>
-        <option value="light">Leggera · ripresa / recupero</option>
-        <option value="moderate">Moderata · standard</option>
-        <option value="strong">Intensa · solo se recuperato</option>
-      </select>
-    </div>
-    <div id="gymProgressionInfo" class="info">Il coach regola esercizi, serie e carico in base alla tua esperienza recente, alle pause, al recupero e alle ultime sedute. Non devi completare una lista infinita.</div>
+    <div id="gymProgressionInfo" class="info">Progressione iniziale: scegli un carico che lasci circa 2–4 ripetizioni in riserva (RPE 6–8). Prima aumentano le ripetizioni entro il range; poi il carico di poco.</div>
     <div id="gymPreview" class="workout-list" style="margin-top:10px"></div>
-    <button class="btn full" style="margin-top:12px" onclick="startGym()">Avvia allenamento</button>
+    <button class="btn full" style="margin-top:12px" onclick="startGym()">Avvia scheda sala pesi</button>
   </div>
   <div class="card info"><strong>Flusso guidato V25.</strong> Il coach guida ogni esercizio a serie: serie → recupero → serie successiva. Dopo l’ultima serie esegue un recupero di transizione e passa automaticamente all’esercizio successivo. Il tempo stimato include lavoro, recuperi, transizioni e preparazione. Puoi mettere in pausa o saltare il recupero.</div>
   <div class="card warning"><strong>Spalla e sicurezza.</strong> I macchinari disponibili non sono tutti automaticamente adatti a ogni persona. Chest Press, Lat Machine e Reverse Fly sono opzionali e vanno esclusi se provocano dolore o non sono stati autorizzati nel percorso di recupero. Niente massimali o cedimento nelle prime settimane.</div>
@@ -2232,7 +1986,6 @@ body:not(.expert-mode) .sidebar .rules{display:none!important}
 </section>
 
 <section id="page-progress" class="hidden">
-<div class="page-intro"><div class="eyebrow">Andamento nel tempo</div><h2>I tuoi progressi</h2><p>Numeri essenziali per capire cosa sta migliorando e dove intervenire.</p></div>
 
 <div class="card">
   <div class="eyebrow">Attività da altre app</div>
@@ -2347,16 +2100,6 @@ body:not(.expert-mode) .sidebar .rules{display:none!important}
 </section>
 
 <section id="page-settings" class="hidden">
-
-<div class="card settings-welcome">
-  <div class="eyebrow">Il tuo spazio personale</div>
-  <h2>Impostazioni e strumenti</h2>
-  <p class="small">Profilo, attrezzatura, preferenze e sicurezza. Gli strumenti avanzati restano disponibili qui, senza appesantire la navigazione quotidiana.</p>
-  <div class="settings-shortcuts">
-    <button class="settings-shortcut" type="button" onclick="showPage('coach')"><span class="shortcut-icon">✦</span><span><strong>Coach intelligente</strong><small>Check-in, adattamento e alternative</small></span><b>›</b></button>
-    <button class="settings-shortcut" type="button" onclick="showPage('more')"><span class="shortcut-icon">⌘</span><span><strong>Altri strumenti</strong><small>Libreria, fisioterapia e test</small></span><b>›</b></button>
-  </div>
-</div>
 
 <div class="card">
 
@@ -2705,8 +2448,7 @@ body:not(.expert-mode) .sidebar .rules{display:none!important}
   <div class="card hero compact-hero">
     <div class="eyebrow">Centro allenamento</div>
     <h2>Scegli lo stimolo giusto</h2>
-    <p class="small">Un unico punto di accesso per tutte le discipline. Il coach adatta le proposte a recupero, attrezzatura, obiettivo e storico.</p>
-    <button type="button" class="btn primary full" style="margin-top:14px" onclick="showPage('today');document.getElementById('todayWorkout')?.scrollIntoView({behavior:'smooth',block:'start'})">Apri la seduta guidata di oggi</button>
+    <p class="small">I moduli rispettano readiness, attrezzatura, fase del macro ciclo e regole di sicurezza della spalla.</p>
   </div>
   <div class="training-hub">
     <button class="hub-card accent-green" onclick="showPage('shoulder')"><svg class="ui-icon"><use href="#i-heart"></use></svg><span><strong>Spalla & recupero</strong><small>Rehab, mobilità, palla, roller e piscina</small></span><b>→</b></button>
@@ -2810,15 +2552,16 @@ body:not(.expert-mode) .sidebar .rules{display:none!important}
 </div>
 
 <nav class="nav" aria-label="Navigazione principale">
-  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Home</span></button>
-  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenamento</span></button>
-  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Programma</span></button>
+  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
+  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
+  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
   <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
-  <button type="button" data-page="settings" data-related="more,coach,library,physio,tests"><svg class="ui-icon"><use href="#i-settings"></use></svg><span>Impostazioni</span></button>
+  <button type="button" data-page="coach"><svg class="ui-icon"><use href="#i-brain"></use></svg><span>Coach</span></button>
+  <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
 </nav>
 
 <section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
-  <div class="section-head"><div><p class="eyebrow">V38 · SIGNATURE INTERFACE</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="section-head"><div><p class="eyebrow">V35.7 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
   <div class="card" style="padding:16px;margin:12px 0">
     <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
     <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
@@ -15875,7 +15618,7 @@ function openOnboarding(){
 
 function dismissOnboarding(){
   document.getElementById("onboardingModal").classList.add("hidden");
-  notify("Configurazione rimandata. Puoi riaprirla da Impostazioni → Profilo personale.");
+  notify("Configurazione rimandata. Puoi riaprirla da Altro → Profilo, dati e backup.");
   document.querySelector('.nav button[data-page="today"]')?.focus();
 }
 
@@ -17446,131 +17189,3 @@ document.addEventListener('DOMContentLoaded',v33Render);
 
 
 
-
-<script>
-
-/* V38 · adaptive gym dose + simplified gym interface */
-(function(){
-  const gymCaps = {
-    full: {light:3, moderate:5, strong:6},
-    upper: {light:3, moderate:5, strong:6},
-    lower: {light:3, moderate:4, strong:5},
-    upperPull: {light:3, moderate:4, strong:5},
-    upperPush: {light:3, moderate:4, strong:5},
-    arms: {light:2, moderate:3, strong:4},
-    core: {light:2, moderate:3, strong:4}
-  };
-  const curated = {
-    lower: ["machineLegPress","machineLegCurl","machineHipThrust","machineCalf","barbellSquat","barbellRDL","dbSplitSquat","goblet","reverseLungeV27"],
-    full: ["machineLegPress","machineSeatedRow","machineChestPress","machineLegCurl","machineLatPulldown","goblet","rdl","dbRowSupported","dbBenchNeutral","carry"],
-    upper: ["machineChestPress","machineSeatedRow","machineLatPulldown","machineReverseFly","machineBiceps","dbRowSupported","dbBenchNeutral"],
-    upperPull: ["machineSeatedRow","machineLatPulldown","machineLowRow","machineBiceps","chestSupportedRowV27","dbInclineCurl"],
-    upperPush: ["machineChestPress","machineInclinePress","machineTriceps","machineLateralRaise","dbBenchNeutral","dbTricepsPushdownAlt"],
-    arms: ["machineBiceps","machineTriceps","machinePreacherCurl","machineCableCurl","dbInclineCurl","dbTricepsPushdownAlt"],
-    core: ["machineAbCrunch","machineCablePallof","deadbug","carry"]
-  };
-  function validPool(focus){
-    const pool=lifetimeGymPool(focus)||[];
-    const preferred=curated[focus]||curated.full;
-    const ordered=[...preferred.filter(id=>pool.includes(id)),...pool.filter(id=>!preferred.includes(id))];
-    return [...new Set(ordered)].filter(id=>EX[id]&&eqAvailable(id));
-  }
-  function recentGymHistory(){
-    return (data().sessions||[]).filter(s=>!s.incomplete && /sala pesi|gym|strength/i.test(String(s.type||"")+" "+String(s.generatedSessionType||""))).sort((a,b)=>Date.parse(b.date||0)-Date.parse(a.date||0));
-  }
-  function adaptiveDose(){
-    const history=recentGymHistory(),last=history[0],now=Date.now();
-    const gap=last&&Number.isFinite(Date.parse(last.date))?(now-Date.parse(last.date))/86400000:999;
-    const count=history.length;
-    const decision=typeof v29CoordinatedDecision==="function"?v29CoordinatedDecision():lifetimeAdaptiveDecision();
-    if(decision.action==="protect"||decision.action==="recover"||decision.action==="deload")return {level:"light",why:"Il recupero registrato richiede una seduta ridotta."};
-    if(gap>45)return {level:"light",why:"Ripresa dopo una pausa lunga: volume ridotto per ricostruire gradualmente la tolleranza."};
-    if(gap>21)return {level:"light",why:"Sono passate più di 3 settimane dall’ultima seduta: ripartenza leggera."};
-    if(count<4)return {level:"light",why:"Prime sedute: il coach costruisce una base tecnica e aumenta il volume per gradi."};
-    if(decision.action==="adapt")return {level:"light",why:"Il recupero è incompleto: oggi riduciamo il volume."};
-    return {level:"moderate",why:"Seduta standard: progressione graduale, senza cedimento."};
-  }
-  function selectedDose(){
-    const choice=document.getElementById("gymEffortSelect")?.value||"auto";
-    const auto=adaptiveDose();
-    if(choice==="auto")return auto;
-    // User can ask for less; a high-effort choice never overrides recovery protections.
-    if(choice==="strong" && ["protect","recover","deload","adapt"].includes((v29CoordinatedDecision?.()||lifetimeAdaptiveDecision()).action))
-      return {level:"light",why:"Il coach ha abbassato automaticamente l’intensità per proteggere il recupero."};
-    return {level:choice,why:choice==="light"?"Dose leggera selezionata.":choice==="moderate"?"Dose moderata selezionata.":"Dose intensa selezionata; mantieni sempre 1–3 ripetizioni in riserva."};
-  }
-  function dosesFor(level){
-    if(level==="light")return {sets:2,reps:"2×8–10",rest:90};
-    if(level==="strong")return {sets:3,reps:"3×8–12",rest:120};
-    return {sets:3,reps:"3×8–10",rest:105};
-  }
-  window.selectGym=function(type,btn){
-    gymRoutine=["full","upper","lower","core","upperPull","upperPush","arms"].includes(type)?type:"full";
-    const select=document.getElementById("gymFocusSelect");if(select)select.value=gymRoutine;
-    if(btn)segment(btn);
-    renderGymPreview();
-  };
-  window.renderGymPreview=function(){
-    const box=document.getElementById("gymPreview"),info=document.getElementById("gymProgressionInfo");
-    if(!box)return;
-    if(!data().settings.equipment.machines&&!data().settings.equipment.weights){
-      box.innerHTML='<div class="warning">Attiva Sala pesi/macchinari o Manubri nelle impostazioni.</div>';
-      if(info)info.textContent="Manca l’attrezzatura selezionata.";return;
-    }
-    const focus=gymRoutine||"full",dose=selectedDose(),caps=gymCaps[focus]||gymCaps.full;
-    const cap=caps[dose.level]||caps.moderate,ids=validPool(focus).slice(0,cap);
-    if(!ids.length){box.innerHTML='<div class="small">Nessun esercizio compatibile con attrezzatura e recupero.</div>';return;}
-    const label={light:"Leggera",moderate:"Moderata",strong:"Intensa"}[dose.level];
-    box.innerHTML=`<div class="gym-session-summary"><strong>${label} · ${ids.length} esercizi</strong><span>${dose.why}</span></div>`+
-      ids.map((id,i)=>{const e=EX[id];return `<div class="workout-item gym-simple-item"><div><strong>${i+1}. ${escapeHtml(e.i||"")} ${escapeHtml(e.t)}</strong><br><span>${dosesFor(dose.level).reps} · recupero ${dosesFor(dose.level).rest} sec</span></div></div>`}).join("");
-    if(info)info.textContent="Progressione automatica: prima consolida ripetizioni e tecnica, poi aumenta poco il carico. Se riparti dopo una pausa o i dati indicano fatica, il coach riduce la dose. Il deload resta prioritario rispetto alla scelta intensa.";
-  };
-  window.startGym=function(){
-    if(!requiredCheck())return;
-    const eq=data().settings.equipment||{};
-    if(!eq.machines&&!eq.weights){notify("Attiva Sala pesi/macchinari o Manubri nelle impostazioni.","error");showPage("settings");return;}
-    const focus=gymRoutine||"full",dose=selectedDose(),cap=(gymCaps[focus]||gymCaps.full)[dose.level]||4;
-    const ids=validPool(focus).slice(0,cap);
-    if(!ids.length){notify("Nessun esercizio compatibile con attrezzatura e recupero.","error");return;}
-    let list=fitToTime(enhance(ids,"strength"),data().settings.minutes);
-    const rx=dosesFor(dose.level);
-    list=(list||[]).map(item=>{
-      const e=typeof item==="string"?({...EX[item],id:item}):({...item});
-      const timed=/cardio|run|cycling/i.test(String(e.c||""));
-      if(!timed)e.d=rx.reps;
-      e.s=timed?e.s:rx.rest;
-      e.reason=[e.reason,`Dose ${dose.level}: ${dose.why}`].filter(Boolean).join(" · ");
-      return e;
-    });
-    const title={full:"Full body",upper:"Parte alta",lower:"Gambe",core:"Core",upperPull:"Schiena + bicipiti",upperPush:"Petto + tricipiti",arms:"Braccia"}[focus]||"Full body";
-    startWorkout(list,`Sala pesi · ${title} · ${dose.level}`);
-  };
-  const css=document.createElement("style");
-  css.id="v358GymCleanStyles";
-  css.textContent=`
-    #page-gym .hero p{max-width:58ch}
-    #page-gym .gym-focus-field{margin:12px 0}
-    #page-gym .gym-focus-field select{width:100%;min-height:48px;border-radius:14px;font-size:15px}
-    #page-gym #gymProgressionInfo{font-size:.82rem;line-height:1.5}
-    #page-gym .gym-session-summary{display:grid;gap:5px;padding:12px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035)}
-    #page-gym .gym-session-summary span{font-size:.78rem;color:var(--muted);line-height:1.45}
-    #page-gym .gym-simple-item{padding:10px 12px;margin:7px 0;border-radius:13px}
-    #page-gym .gym-simple-item strong{font-size:.88rem}
-    #page-gym .gym-simple-item span{font-size:.76rem;color:var(--muted)}
-    #page-gym .card.warning{font-size:.8rem;line-height:1.5}
-  `;
-  document.head.appendChild(css);
-  document.addEventListener("DOMContentLoaded",()=>{
-    const select=document.getElementById("gymFocusSelect");if(select)select.value=gymRoutine||"full";
-    renderGymPreview();
-  });
-  window.v358GymDiagnostics=()=>({
-    lowerRoutine:validPool("lower").slice(0,4),
-    gymCaps,
-    adaptiveDose:adaptiveDose(),
-    adaptiveEngine:typeof lifetimeAdaptiveDecision==="function",
-    deloadEngine:typeof v29CoordinatedDecision==="function"
-  });
-})();
-
-</script>
