@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- V35 ULTIMATE FUSION: V26 training engine retained; V34 programming, recovery, performance and personal-coach modules integrated. Schema 31 intentionally retained for data compatibility. -->
+<!-- V43 COACH IOS EDITION · V26/V34 ENGINE PRESERVED: V26 training engine retained; V34 programming, recovery, performance and personal-coach modules integrated. Schema 31 intentionally retained for data compatibility. -->
 <!-- Codice completo pronto da copiare. Per eseguirlo, salva il contenuto con estensione .html -->
 <html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#061827">
+<meta name="theme-color" content="#080d16">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Picari Hybrid Coach">
@@ -15,7 +15,7 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 
-<title>Erjon Picari Hybrid Coach — Ultimate Fusion V35</title>
+<title>Erjon Picari Hybrid Coach AI · V43 Fluid iPhone Edition</title>
 
 <style>
 :root{
@@ -1124,10 +1124,59 @@ body.simple-mode .expert-only{display:none!important}.advanced-check{margin-top:
 
 
 .adaptive-schedule-card{border:1px solid var(--line);background:linear-gradient(145deg,rgba(17,42,55,.94),rgba(7,22,34,.98))}.adaptive-fields{display:grid;grid-template-columns:1fr;gap:7px;margin:14px 0}.adaptive-fields label{font-size:.72rem;font-weight:800;color:var(--muted)}.adaptive-fields select{width:100%;padding:12px;border-radius:12px;background:var(--panel);color:var(--text);border:1px solid var(--line);font:inherit}.adaptive-preview{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);font-size:.82rem;line-height:1.5}.adaptive-preview ul{margin:8px 0 0;padding-left:20px}.adaptive-actions{display:flex;flex-wrap:wrap;gap:8px}.adaptive-actions .btn{flex:1 1 140px}.adaptive-schedule-card .tiny{margin-top:12px;color:var(--muted);font-size:.68rem;line-height:1.45}
+
+/* V40 · GreenTheory clean equipment UI */
+.gt-panel{margin-bottom:14px;background:linear-gradient(145deg,rgba(18,31,44,.98),rgba(8,16,26,.98));border:1px solid rgba(255,255,255,.09)}
+.gt-brand-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+.gt-brand{display:flex;align-items:flex-start;gap:9px;padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.035);font-size:.82rem}
+.gt-brand input{margin-top:3px;accent-color:var(--orange)}.gt-brand span{display:grid;gap:3px}.gt-brand small{color:var(--muted);font-size:.7rem;line-height:1.35}
+.gt-catalog-head{display:flex;justify-content:space-between;align-items:center;margin:14px 0 8px;font-size:.84rem}.gt-catalog-head span{color:var(--muted);font-size:.72rem}
+.gt-machine-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.gt-machine{padding:10px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.025);font-size:.76rem;line-height:1.35}.gt-machine b{display:block;font-size:.78rem;margin-bottom:3px}.gt-machine small{color:var(--muted);font-size:.68rem}.gt-machine label{display:flex;gap:7px;align-items:flex-start}.gt-machine input{accent-color:var(--orange);margin-top:2px}
+.gt-choice-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.gt-choice-row .btn{min-height:48px}
+@media(max-width:430px){.gt-brand-grid,.gt-machine-grid{grid-template-columns:1fr}.gt-panel{padding:13px}}
+
+
+/* V41: compact tap-first equipment picker and iPhone layout */
+.gt-brand-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gt-brand-quick{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;min-height:86px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font:inherit}
+.gt-brand-quick b{font-size:.83rem}.gt-brand-quick small{font-size:.69rem;color:var(--muted)}.gt-brand-quick span{font-size:.68rem;color:var(--orange);font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.gt-brand-quick[aria-pressed="false"]{opacity:.52;border-style:dashed}.gt-groups{display:grid;gap:8px}
+.gt-group{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.02)}
+.gt-group summary{cursor:pointer;list-style:none;padding:13px;display:flex;justify-content:space-between;gap:8px;align-items:center;font-weight:800;font-size:.82rem}.gt-group summary::-webkit-details-marker{display:none}.gt-group summary span{color:var(--muted);font-size:.7rem;font-weight:600}
+.gt-group-items{padding:0 10px 10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.gt-machine{min-width:0;padding:9px;border-radius:9px}.gt-machine label{align-items:center}.gt-machine b{overflow-wrap:anywhere}.gt-machine small{display:block}
+.nav button[data-page="coach"]{color:var(--orange)}
+#page-plan .week-grid,#page-plan .grid,#page-plan .adaptive-fields{min-width:0;max-width:100%}
+#page-plan .week-grid>*{min-width:0;overflow-wrap:anywhere}
+#page-plan .card{max-width:100%;overflow:hidden}
+#page-plan button,#page-plan select,#page-plan input{max-width:100%;min-width:0}
+@media(max-width:430px){.gt-brand-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gt-group-items{grid-template-columns:repeat(2,minmax(0,1fr))}.gt-panel{padding:12px}.gt-brand-quick{min-height:92px;padding:10px}.nav button span{font-size:.62rem}}
+
+/* V42 · Mobile-first layout repair: never allow machine labels to overflow their cards. */
+#gtEquipmentPanel,#gtMachineCatalog,.gt-groups,.gt-group,.gt-group-items,.gt-machine{min-width:0;max-width:100%;box-sizing:border-box}
+#gtMachineCatalog .gt-group-items{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+#gtMachineCatalog .gt-machine{display:block;overflow:hidden;padding:12px;background:rgba(255,255,255,.035)}
+#gtMachineCatalog .gt-machine label{display:grid;grid-template-columns:24px minmax(0,1fr);gap:9px;align-items:start;width:100%;min-width:0}
+#gtMachineCatalog .gt-machine label>span{display:block;min-width:0;width:100%;overflow-wrap:anywhere;word-break:normal;white-space:normal;line-height:1.35}
+#gtMachineCatalog .gt-machine b{display:block;font-size:.8rem;line-height:1.3;overflow-wrap:anywhere;word-break:normal}
+#gtMachineCatalog .gt-machine small{display:block;margin-top:4px;font-size:.68rem;line-height:1.35;overflow-wrap:anywhere}
+#gtMachineCatalog .gt-machine input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--orange)}
+.gt-brand-quick{min-width:0;overflow:hidden}.gt-brand-quick b,.gt-brand-quick small{max-width:100%;overflow-wrap:anywhere}
+#page-plan #weekGrid{margin-top:12px}
+#page-plan .week-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#page-plan .week-grid>*{min-width:0;max-width:100%;overflow-wrap:anywhere}
+#page-plan details.v42-fold{border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025);margin:10px 0;overflow:hidden}
+#page-plan details.v42-fold>summary,#page-tests details.v42-fold>summary{padding:15px;cursor:pointer;list-style:none;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:10px}
+#page-plan details.v42-fold>summary::-webkit-details-marker,#page-tests details.v42-fold>summary::-webkit-details-marker{display:none}
+#page-plan details.v42-fold>summary:after,#page-tests details.v42-fold>summary:after{content:'+';color:var(--orange);font-size:1.2rem}
+#page-plan details.v42-fold[open]>summary:after,#page-tests details.v42-fold[open]>summary:after{content:'−'}
+#page-plan details.v42-fold>.card,#page-plan details.v42-fold>.v42-fold-content,#page-tests details.v42-fold>.v42-fold-content{margin:0!important;border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important}
+#page-tests details.v42-fold{border:1px solid var(--line);border-radius:16px;margin:12px 0;overflow:hidden}
+@media(max-width:520px){#gtMachineCatalog .gt-group-items{grid-template-columns:minmax(0,1fr)}#page-plan .week-grid{grid-template-columns:minmax(0,1fr)}#page-plan .card{padding:13px}#page-plan .week-grid .day-card{width:100%;min-width:0}}
 </style>
 
 <style id="v35-1-mobile-navigation-fix">
-/* V35.7 — iPhone navigation: six items on one row; mode selector separated above the dock. */
+/* V39 — iPhone navigation: six items on one row; mode selector separated above the dock. */
 @media (max-width:680px){
   body{padding-bottom:calc(168px + env(safe-area-inset-bottom))!important}
   .nav{
@@ -1177,6 +1226,274 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 }
 </style>
 
+<style id="v36-smart-interface">
+/* V39 · SMART INTERFACE REDESIGN — presentation layer only; original engine and data schema retained */
+:root{--bg:#080d14;--panel:#111a25;--panel2:#172434;--line:rgba(173,190,209,.13);--text:#f4f7fb;--muted:#93a2b4;--green:#a3e635;--blue:#a3e635;--orange:#ff9b54;--radius:20px;--shadow:0 14px 38px rgba(0,0,0,.22)}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 50% -18%,rgba(163,230,53,.075),transparent 43%),var(--bg);color:var(--text);letter-spacing:-.01em}
+.topbar{max-width:1180px;margin:14px auto 0;padding:14px 18px;border:1px solid var(--line);border-radius:22px;background:rgba(15,23,33,.88);box-shadow:0 8px 28px rgba(0,0,0,.18);backdrop-filter:blur(22px)}
+.logo{background:linear-gradient(145deg,#d9f99d,#a3e635);color:#17220b;box-shadow:0 8px 24px rgba(163,230,53,.15)}
+.brand h1{font-size:1rem;letter-spacing:-.035em}.brand small{font-size:.67rem}
+.container{max-width:1180px;margin:0 auto;padding:18px 18px 130px;grid-template-columns:minmax(0,1fr);gap:16px}
+.sidebar{display:none!important}.main{width:100%;min-width:0;gap:16px}
+.page{max-width:980px;width:100%;margin:0 auto;animation:v36-in .22s ease both}
+@keyframes v36-in{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}
+.card{padding:clamp(15px,2vw,22px);border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(19,29,42,.97),rgba(13,21,31,.97));box-shadow:0 10px 28px rgba(0,0,0,.14)}
+.card h2,.card h3{letter-spacing:-.035em}.eyebrow{color:#b6c0cc;font-size:.63rem;letter-spacing:.13em}
+.hero{background:linear-gradient(130deg,rgba(163,230,53,.11),rgba(20,33,43,.96) 65%);border-color:rgba(163,230,53,.19)}
+.hero h2{font-size:clamp(1.45rem,3vw,2rem);letter-spacing:-.055em}
+.btn,.button,button.btn{border-radius:14px;font-weight:800;min-height:42px;transition:transform .16s ease,filter .16s ease}
+.btn.primary,.btn:not(.secondary):not(.danger){background:linear-gradient(135deg,#c4f36b,#91d52c);color:#17220b;border:0;box-shadow:0 8px 22px rgba(163,230,53,.13)}
+.btn:active,.hub-card:active,.nav button:active{transform:scale(.985)}
+input,select,textarea{border-radius:13px!important;border-color:var(--line)!important;background:#0c1520!important;color:var(--text)!important;min-height:42px}
+label{font-size:.78rem;font-weight:750;color:#c7d0da}
+.grid2,.grid3,.grid4,.training-hub,.module-grid{gap:12px}
+.hub-card{background:#111c28;border:1px solid var(--line);border-radius:18px;box-shadow:none;padding:15px;min-height:84px}
+.hub-card>.ui-icon{background:rgba(163,230,53,.1)!important;color:#c1f278!important;border-radius:13px}
+.hub-card strong{font-size:.88rem}.hub-card small{font-size:.68rem}
+.nav{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(720px,calc(100% - 24px));max-width:720px;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:7px;border:1px solid rgba(190,207,225,.14);border-radius:22px;background:rgba(12,18,27,.92);box-shadow:0 16px 50px rgba(0,0,0,.48);backdrop-filter:blur(26px) saturate(145%)}
+.nav button{min-width:0;min-height:54px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:15px;color:#8e9baa;font-size:.63rem;font-weight:800}
+.nav button .ui-icon{width:20px;height:20px}.nav button.active{color:#d8f99a;background:rgba(163,230,53,.11);box-shadow:inset 0 0 0 1px rgba(163,230,53,.15)}
+.global-mode-switch{top:18px;right:max(18px,calc((100vw - 1140px)/2));background:rgba(13,21,31,.92);border-color:var(--line);box-shadow:none}
+.experience-switch button{min-height:32px}
+.week-grid{gap:10px}.day-card,.planner-row{border-radius:16px}
+.modal-box{border-radius:24px;background:#111c28}
+.toast{border-radius:14px}
+/* Reduce clutter without deleting advanced controls: tuck secondary details behind their existing disclosure elements. */
+.page details{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.018)}
+.page details>summary{font-weight:800;cursor:pointer;min-height:30px;display:flex;align-items:center}
+.page .small,.page small{line-height:1.45}
+@media(min-width:900px){.container{padding-top:22px}.page{max-width:920px}.hero-grid{grid-template-columns:minmax(0,1fr) 250px}}
+@media(max-width:680px){
+ body{padding-bottom:calc(94px + env(safe-area-inset-bottom))}
+ .topbar{margin:0;padding:10px 14px;border-radius:0 0 18px 18px;border-width:0 0 1px;position:sticky;top:0;z-index:45;background:rgba(8,13,20,.92)}
+ .logo{width:40px;height:40px;border-radius:13px}.brand h1{font-size:.86rem}.brand small{max-width:65vw;font-size:.57rem}
+ .container{padding:12px 12px 110px;gap:12px}.main{gap:12px}.page{max-width:none}
+ .card{padding:15px;border-radius:17px}.hero-grid{grid-template-columns:1fr}.hero h2{font-size:1.42rem}
+ .training-hub,.module-grid{grid-template-columns:1fr 1fr;gap:8px}.hub-card{grid-template-columns:36px minmax(0,1fr) auto;gap:9px;padding:11px;min-height:78px}.hub-card>.ui-icon{width:36px;height:36px;padding:8px}.hub-card strong{font-size:.76rem}.hub-card small{font-size:.61rem}
+ .nav{width:calc(100% - 16px);bottom:calc(7px + env(safe-area-inset-bottom));padding:5px;border-radius:18px;gap:2px}.nav button{min-height:51px;font-size:.59rem}.nav button .ui-icon{width:19px;height:19px}
+ .global-mode-switch{top:auto;left:auto;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));transform:none;padding:3px;border-radius:12px;background:rgba(13,21,31,.94)}
+ .experience-switch button{font-size:.58rem;padding:6px 8px;min-height:29px}
+ .week-grid{grid-template-columns:1fr 1fr;gap:8px}
+}
+@media(max-width:380px){.training-hub,.module-grid{grid-template-columns:1fr}.brand small{max-width:58vw}.nav button{font-size:.55rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
+<style id="v37-signature-interface">
+:root{--bg:#080d16;--panel:#111a27;--panel2:#172334;--line:rgba(178,198,220,.12);--text:#f5f7fb;--muted:#9ba9bb;--green:#b8f36b;--blue:#7dd3fc;--radius:22px;--shadow:0 18px 55px rgba(0,0,0,.30)}
+html{background:#080d16}body{background:radial-gradient(ellipse at 50% -15%,rgba(139,190,89,.13),transparent 42%),linear-gradient(180deg,#080d16 0%,#0b111c 48%,#080d16 100%);padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+.topbar{padding:14px clamp(16px,3vw,30px);background:rgba(8,13,22,.82);border-bottom:1px solid rgba(255,255,255,.07);backdrop-filter:blur(24px)}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#d2fa91,#7ba83d);color:#10180a;box-shadow:0 8px 26px rgba(184,243,107,.16)}
+.brand h1{font-size:1rem;letter-spacing:-.025em}.brand small{color:#8795a8}
+.container{display:block;max-width:920px;padding:18px 18px 28px}.sidebar{display:none!important}.main{display:flex;gap:15px;min-width:0}
+.page{max-width:860px;width:100%;margin:0 auto;animation:v37-rise .24s ease both}
+@keyframes v37-rise{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:none}}
+.card{padding:clamp(16px,2.4vw,23px);border-radius:22px;background:linear-gradient(155deg,rgba(22,33,48,.97),rgba(14,22,34,.98));border:1px solid rgba(190,210,232,.10);box-shadow:0 10px 32px rgba(0,0,0,.16)}
+.card h2{font-size:clamp(1.2rem,3vw,1.55rem);letter-spacing:-.035em}.card h3{letter-spacing:-.02em}
+.eyebrow{color:#b8f36b;letter-spacing:1.25px;font-size:.62rem}.small,.muted{color:#9ba9bb}
+.hero{padding:clamp(19px,3vw,28px);border:1px solid rgba(184,243,107,.17);background:radial-gradient(circle at 100% 0,rgba(184,243,107,.13),transparent 38%),linear-gradient(135deg,#172638,#111a27 70%);border-radius:26px}
+.hero h2{font-size:clamp(1.45rem,4vw,2.05rem);line-height:1.12;letter-spacing:-.045em;max-width:18ch}
+.readiness{background:rgba(5,11,18,.42);border:1px solid rgba(255,255,255,.07);border-radius:16px}.readiness strong{font-size:1.35rem}.readiness span{font-size:.59rem;letter-spacing:.08em}
+.wow-deck{border-radius:26px;background:radial-gradient(circle at 95% 5%,rgba(184,243,107,.12),transparent 36%),linear-gradient(145deg,#172538,#101925);border-color:rgba(184,243,107,.16)}
+.wow-title{font-size:clamp(1.45rem,4vw,2.1rem);letter-spacing:-.045em}.wow-score{color:#d3f7a0}.wow-actions{gap:8px}.wow-actions .btn{min-height:44px}
+.btn{border-radius:14px;font-weight:750;letter-spacing:-.01em}.btn.primary,.btn:not(.secondary):not(.orange):not(.purple):not(.blue){background:linear-gradient(135deg,#c8f58a,#9bd45d);color:#10170b;border:0;box-shadow:0 8px 22px rgba(184,243,107,.12)}.btn.secondary{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);color:#dbe4ee}
+.nav{width:min(560px,calc(100% - 24px));grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:7px;border-radius:23px;border:1px solid rgba(210,225,242,.14);background:rgba(12,18,28,.88);box-shadow:0 18px 60px rgba(0,0,0,.5);backdrop-filter:blur(28px) saturate(160%)}
+.nav button{min-width:0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 2px;border-radius:16px;color:#8f9bad;font-size:.62rem;font-weight:750;letter-spacing:-.01em;white-space:nowrap}
+.nav button .ui-icon{width:21px;height:21px}.nav button.active{color:#d7f7a6;background:linear-gradient(145deg,rgba(184,243,107,.15),rgba(184,243,107,.055));box-shadow:inset 0 0 0 1px rgba(184,243,107,.12)}
+.page-intro{padding:8px 3px 3px}.page-intro h2{font-size:clamp(1.45rem,4vw,2rem);letter-spacing:-.045em;margin-bottom:5px}.page-intro p{font-size:.84rem;color:var(--muted);line-height:1.5}
+.settings-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:16px}.settings-shortcut{display:grid;grid-template-columns:38px minmax(0,1fr) 12px;align-items:center;gap:10px;text-align:left;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);color:var(--text)}.settings-shortcut strong,.settings-shortcut small{display:block}.settings-shortcut strong{font-size:.8rem}.settings-shortcut small{font-size:.68rem;color:var(--muted);margin-top:3px;line-height:1.35}.settings-shortcut b{color:#b8f36b}.shortcut-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(184,243,107,.12);color:#c9f58c;font-size:1.1rem}
+.training-hub{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.hub-card{min-width:0;padding:15px;grid-template-columns:42px minmax(0,1fr) 12px;border-radius:19px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(145deg,#172538,#101925);box-shadow:0 8px 24px rgba(0,0,0,.13);transition:transform .16s,border-color .16s}.hub-card:active{transform:scale(.985)}.hub-card strong{font-size:.85rem}.hub-card small{font-size:.7rem;line-height:1.4}.hub-card>.ui-icon{width:40px;height:40px;border-radius:13px}
+.field input,.field select,.field textarea,select,input,textarea{border-radius:13px}.field label{font-size:.75rem;color:#b7c3d1}.workout-item{border-radius:16px;border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
+.adaptive-schedule-card{background:linear-gradient(145deg,rgba(22,33,48,.96),rgba(14,22,34,.98))}.adaptive-schedule-card h3{font-size:1rem}
+.global-mode-switch{position:fixed;top:76px;right:12px;z-index:29;transform:scale(.82);transform-origin:top right;opacity:.84}
+@media(max-width:620px){.container{padding:13px 12px 24px}.topbar{padding:11px 14px}.brand h1{font-size:.91rem}.brand small{font-size:.62rem}.logo{width:38px;height:38px}.card{padding:15px;border-radius:19px}.hero{padding:18px}.hero-grid{gap:11px}.readiness-pair{grid-template-columns:repeat(2,minmax(0,1fr))}.training-hub{grid-template-columns:1fr}.settings-shortcuts{grid-template-columns:1fr}.nav{width:calc(100% - 18px);bottom:calc(7px + env(safe-area-inset-bottom));padding:5px;gap:2px}.nav button{min-height:51px;font-size:.58rem}.nav button .ui-icon{width:19px;height:19px}.global-mode-switch{top:69px;right:6px;transform:scale(.72)}}
+@media(min-width:900px){.container{padding-top:25px}.page{max-width:860px}.hero-grid{grid-template-columns:minmax(0,1fr) 220px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+
+<style id="v39-smart-design-system">
+/* V39 SMART iOS DESIGN SYSTEM — one coherent presentation layer */
+:root{
+  color-scheme:dark;
+  --bg:#080e16;
+  --surface-0:#0d1622;
+  --surface-1:#121e2c;
+  --surface-2:#192738;
+  --surface-raised:#1d2c3e;
+  --stroke:rgba(180,199,220,.13);
+  --stroke-strong:rgba(180,199,220,.22);
+  --ink:#f4f7fb;
+  --ink-soft:#c2cedb;
+  --muted:#8d9caf;
+  --ok:#b9ef68;
+  --ok-soft:rgba(185,239,104,.12);
+  --info:#78c8f5;
+  --info-soft:rgba(120,200,245,.12);
+  --warning:#ffbf69;
+  --warning-soft:rgba(255,191,105,.12);
+  --danger:#ff7d83;
+  --danger-soft:rgba(255,125,131,.12);
+  --shadow-card:0 12px 32px rgba(0,0,0,.18);
+  --radius-card:22px;
+  --radius-control:15px;
+  --space-card:clamp(16px,2.2vw,24px);
+  --text-body:15px;
+  --text-caption:12px;
+  --tap:48px;
+}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse at 12% -10%,rgba(185,239,104,.09),transparent 34rem),
+    radial-gradient(ellipse at 95% 20%,rgba(120,200,245,.07),transparent 36rem),
+    var(--bg);
+  font-size:var(--text-body);
+  line-height:1.48;
+  padding-bottom:calc(112px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button,select,input,textarea{font:inherit}
+button{touch-action:manipulation}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--ok);outline-offset:3px
+}
+.app{max-width:1440px;margin:0 auto}
+.topbar{
+  top:0;z-index:60;
+  padding:calc(10px + env(safe-area-inset-top)) 16px 12px;
+  background:rgba(8,14,22,.9);
+  border-bottom:1px solid var(--stroke);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  backdrop-filter:blur(18px) saturate(140%);
+}
+.logo{
+  width:46px;height:46px;border-radius:15px;
+  color:#14200d;background:linear-gradient(145deg,#d9ff9c,#a5df55);
+  box-shadow:0 6px 20px rgba(185,239,104,.16)
+}
+.brand h1{font-size:clamp(13px,1.7vw,18px);font-weight:850;letter-spacing:-.04em}
+.brand small{font-size:11px;color:var(--muted)}
+.container{grid-template-columns:260px minmax(0,1fr);gap:22px;padding:18px}
+.sidebar{position:sticky;top:94px;align-self:start;max-height:calc(100vh - 110px);overflow:auto}
+.main{min-width:0;max-width:1000px;width:100%;margin:0 auto}
+.card{
+  background:linear-gradient(155deg,var(--surface-1),var(--surface-0));
+  border:1px solid var(--stroke);border-radius:var(--radius-card);
+  padding:var(--space-card);box-shadow:var(--shadow-card)
+}
+.card.hero{
+  background:
+    radial-gradient(ellipse at 88% 0%,rgba(185,239,104,.13),transparent 42%),
+    linear-gradient(145deg,#1b2a3b,#101a27 72%);
+  border-color:rgba(185,239,104,.2)
+}
+.card h2,.card h3{letter-spacing:-.035em}
+.card h2{font-size:clamp(24px,4vw,36px);line-height:1.08;font-weight:850}
+.card h3{font-size:clamp(17px,2.5vw,22px);font-weight:780}
+.eyebrow{font-size:10px;letter-spacing:.16em;font-weight:850;color:var(--ok)}
+.small,.tiny,.muted{color:var(--muted);line-height:1.52}
+.readiness{border:1px solid var(--stroke);border-radius:17px;background:rgba(255,255,255,.035);padding:13px}
+.readiness strong,.master-stat strong,.wow-mini strong{font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.workout-item,.module,.settings-shortcut,.readiness,.prediction-card{
+  border-color:var(--stroke);border-radius:17px
+}
+.btn,button.btn{
+  min-height:var(--tap);border-radius:var(--radius-control);font-weight:760;
+  transition:background-color .16s ease,border-color .16s ease,transform .12s ease
+}
+.btn:active,button:active{transform:scale(.985)}
+.btn.primary,.btn.full:not(.secondary){
+  box-shadow:0 7px 20px rgba(185,239,104,.13)
+}
+input,select,textarea{
+  min-height:var(--tap);border-radius:var(--radius-control);
+  background:var(--surface-0);border:1px solid var(--stroke-strong);
+  color:var(--ink);padding:12px 14px
+}
+label{color:var(--ink-soft);font-size:13px;font-weight:720}
+.field{margin-bottom:14px}
+.info,.notice{border-radius:15px;line-height:1.5}
+.progress,.wow-meter,.fatigue-meter,.master-curve{border-radius:99px;overflow:hidden}
+.page-intro{padding:10px 4px 18px}
+.page-intro p{max-width:60ch;color:var(--muted)}
+/* App dock: one-thumb targets, labels never clip, safe-area respected. */
+.nav{
+  position:fixed;z-index:100;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);width:min(700px,calc(100% - 24px));
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;
+  padding:7px;border:1px solid var(--stroke-strong);border-radius:23px;
+  background:rgba(12,20,30,.92);
+  -webkit-backdrop-filter:blur(22px) saturate(145%);
+  backdrop-filter:blur(22px) saturate(145%);
+  box-shadow:0 16px 48px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.05)
+}
+.nav button{
+  min-width:0;min-height:58px;padding:7px 2px;border:0;border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  color:var(--muted);background:transparent;font-size:10px;font-weight:740;line-height:1.05
+}
+.nav button span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav button .ui-icon{width:20px;height:20px;flex:none}
+.nav button.active{
+  color:var(--ok);background:linear-gradient(145deg,rgba(185,239,104,.16),rgba(185,239,104,.06));
+  box-shadow:inset 0 0 0 1px rgba(185,239,104,.15)
+}
+.global-mode-switch{
+  position:fixed;z-index:95;left:50%;right:auto;top:auto;
+  bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  padding:4px;border:1px solid var(--stroke);border-radius:999px;
+  background:rgba(13,21,31,.92);box-shadow:0 8px 24px rgba(0,0,0,.25);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)
+}
+.global-mode-switch button{min-height:32px;padding:7px 12px;border-radius:999px;font-size:10px}
+body:not(.expert-mode) .advanced-only,body:not(.expert-mode) .expert-only{display:none}
+@media(min-width:901px){
+  body{padding-bottom:30px}
+  .nav{position:sticky;left:auto;bottom:auto;transform:none;width:min(100%,1000px);margin:18px auto 24px}
+  .global-mode-switch{left:auto;right:24px;bottom:24px;transform:none}
+}
+@media(max-width:900px){
+  .container{display:block;padding:12px}
+  .sidebar{display:none}
+  .main{width:100%}
+  .topbar{padding-left:14px;padding-right:14px}
+  .card{margin-bottom:12px}
+  .hero-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+  .readiness-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:390px){
+  .container{padding:9px}
+  .nav{width:calc(100% - 16px);gap:2px;padding:6px}
+  .nav button{min-height:56px;font-size:9px}
+  .nav button .ui-icon{width:18px;height:18px}
+  .brand h1{font-size:12px}
+  .brand small{font-size:9px}
+  .global-mode-switch{bottom:calc(77px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+</style>
+<style>
+/* V46 · Daily Coach Welcome: progressive disclosure, iPhone-first */
+.daily-welcome{position:relative;overflow:hidden;border:1px solid rgba(132,204,22,.28);background:radial-gradient(circle at 100% 0%,rgba(132,204,22,.14),transparent 42%),linear-gradient(145deg,#111d29,#0b131d 72%);padding:clamp(17px,4vw,25px);margin-bottom:14px}
+.daily-welcome .welcome-date{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:#b8cf9b;font-weight:800}
+.daily-welcome h2{font-size:clamp(1.5rem,5vw,2.15rem);line-height:1.12;margin:8px 0}
+.daily-welcome .welcome-session{border:1px solid rgba(132,204,22,.25);background:rgba(132,204,22,.075);border-radius:16px;padding:14px;margin:15px 0}
+.daily-welcome .welcome-session strong{display:block;font-size:1.08rem;margin-bottom:5px}
+.daily-welcome .welcome-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.daily-welcome .welcome-actions .btn:first-child{grid-column:1/-1;min-height:54px;font-size:1rem}
+.daily-welcome .welcome-check{font-size:.9rem;color:var(--muted);margin:9px 0 0}
+.daily-welcome details{margin-top:12px;border-top:1px solid rgba(255,255,255,.09);padding-top:11px}
+.daily-welcome summary{cursor:pointer;font-weight:750;padding:5px 0}
+.daily-welcome .welcome-change{display:grid;gap:10px;margin-top:12px}
+.daily-welcome .welcome-change .btn{width:100%}
+.daily-welcome .welcome-note{font-size:.78rem;color:var(--muted);line-height:1.45}
+@media(max-width:620px){.daily-welcome{border-radius:20px}.daily-welcome .welcome-actions{grid-template-columns:1fr 1fr}.daily-welcome .welcome-actions .btn:first-child{grid-column:1/-1}}
+</style>
 </head>
 
 <body>
@@ -1303,6 +1620,44 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 <main class="main">
 
 <section id="page-today">
+
+<div class="card daily-welcome" id="dailyWelcomeCard">
+  <div class="welcome-date" id="dailyWelcomeDate">OGGI · IL TUO COACH</div>
+  <h2 id="dailyWelcomeGreeting">Buongiorno Erjon.</h2>
+  <p class="small" id="dailyWelcomePrompt">Come andiamo oggi? Prima vediamo la seduta prevista, poi scegli tu come procedere.</p>
+  <div class="welcome-session">
+    <div class="eyebrow">OGGI IL PROGRAMMA PREVEDE</div>
+    <strong id="dailyWelcomeSession">Preparazione della seduta…</strong>
+    <div class="small" id="dailyWelcomeReason">Il Coach considera obiettivo, attrezzatura disponibile, progressione e recupero.</div>
+  </div>
+  <div class="welcome-actions">
+    <button class="btn primary" type="button" id="dailyWelcomeGo" onclick="v46WelcomeProceed()">AVVIA ALLENAMENTO</button>
+    <button class="btn secondary" type="button" onclick="v46OpenChange()">Cambia allenamento</button>
+    <button class="btn secondary" type="button" onclick="v46ChooseRecovery()">Oggi recupero</button>
+    <button class="btn secondary" type="button" onclick="v46OpenFeeling()">Come mi sento?</button>
+  </div>
+  <details id="dailyWelcomeChangeDetails">
+    <summary>Modifica la seduta di oggi</summary>
+    <div class="welcome-change">
+      <div class="field"><label for="v46TodayChoice">Cosa preferisci fare?</label>
+        <select id="v46TodayChoice">
+          <option value="auto">Segui il programma del Coach</option>
+          <option value="gym">Sala pesi</option>
+          <option value="upper">Sala pesi · parte superiore</option>
+          <option value="lower">Sala pesi · parte inferiore</option>
+          <option value="run">Corsa / tapis roulant</option>
+          <option value="bike">Cyclette</option>
+          <option value="hyrox">HYROX / funzionale</option>
+          <option value="recovery">Recupero / mobilità</option>
+        </select>
+      </div>
+      <button class="btn primary" type="button" onclick="v46ApplyTodayChoice()">Conferma scelta di oggi</button>
+      <p class="welcome-note">La tua scelta vale per la seduta di oggi. Il Coach verifica comunque recupero, sicurezza e attrezzatura selezionata. Non sposta automaticamente gli altri giorni.</p>
+    </div>
+  </details>
+  <p class="welcome-check" id="dailyWelcomeStatus">La seduta viene preparata in base al tuo profilo. Puoi cambiarla senza modificare il resto della settimana.</p>
+</div>
+
 
 <div class="card hero">
   <div class="hero-grid">
@@ -1595,6 +1950,7 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 </section>
 
 <section id="page-plan" class="hidden">
+<div class="page-intro"><div class="eyebrow">La tua settimana</div><h2>Programma intelligente</h2><p>Una settimana leggibile, adattiva e collegata alla seduta di oggi.</p></div>
 
 <div class="card period-card">
   <div class="eyebrow">Macro ciclo adattivo</div>
@@ -1770,24 +2126,51 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 </section>
 
 <section id="page-gym" class="hidden">
+  <div class="gt-panel card" id="gtEquipmentPanel">
+    <div class="eyebrow">GREEN THEORY · ATTREZZATURA REALE</div>
+    <h2>La tua sala pesi</h2>
+    <p class="small">Scegli le linee e le attrezzature presenti con un tap. Apri solo il gruppo che vuoi controllare: niente elenco infinito.</p>
+    <div class="gt-brand-grid" id="gtBrandQuickGrid">
+      <button type="button" class="gt-brand-quick" data-gt-brand-toggle="panatta"><b>Panatta / Diamond Presti</b><small>Macchine e linee guidate</small><span data-gt-brand-state="panatta">Attivo</span></button>
+      <button type="button" class="gt-brand-quick" data-gt-brand-toggle="titan"><b>TITAN Mechanix</b><small>DHZ × Metem Fit · 16 macchine</small><span data-gt-brand-state="titan">Attivo</span></button>
+      <button type="button" class="gt-brand-quick" data-gt-brand-toggle="lacertosus"><b>Certosus / Lacertotus</b><small>Linea Diamond</small><span data-gt-brand-state="lacertosus">Attivo</span></button>
+      <button type="button" class="gt-brand-quick" data-gt-brand-toggle="kingsbox"><b>KingsBox</b><small>Rig e forza funzionale</small><span data-gt-brand-state="kingsbox">Attivo</span></button>
+    </div>
+    <div class="gt-catalog-head"><strong>Attrezzatura selezionabile</strong><span id="gtCatalogCount">—</span></div>
+    <div id="gtMachineCatalog" class="gt-groups"></div>
+    <p class="tiny">Le linee e i gruppi sono selezioni di disponibilità, non una certificazione del modello esatto presente in sede.</p>
+  </div>
+
   <div class="card hero compact-hero">
     <div class="eyebrow">Progressive Strength · Sala pesi</div>
     <h2>Allenamento progressivo con macchinari</h2>
     <p class="small">Scegli liberamente il distretto da allenare oggi. Se le gambe sono stanche, seleziona Parte alta, Schiena + bicipiti, Petto + tricipiti o Braccia: il coach evita il lavoro diretto sulle gambe e adatta la seduta al recupero.</p>
   </div>
   <div class="card">
-    <div class="segment">
-      <button class="active" onclick="selectGym('full',this)">Full body</button>
-      <button onclick="selectGym('upper',this)">Parte alta</button>
-      <button onclick="selectGym('lower',this)">Gambe</button>
-      <button onclick="selectGym('core',this)">Core</button>
-      <button onclick="selectGym('upperPull',this)">Schiena + bicipiti</button>
-      <button onclick="selectGym('upperPush',this)">Petto + tricipiti</button>
-      <button onclick="selectGym('arms',this)">Braccia</button>
+    <div class="field gym-focus-field">
+      <label for="gymFocusSelect">Allenamento di oggi</label>
+      <select id="gymFocusSelect" onchange="selectGym(this.value,null)">
+        <option value="full">Full body</option>
+        <option value="upper">Parte alta</option>
+        <option value="lower">Gambe</option>
+        <option value="upperPull">Schiena + bicipiti</option>
+        <option value="upperPush">Petto + tricipiti</option>
+        <option value="arms">Braccia</option>
+        <option value="core">Core</option>
+      </select>
     </div>
-    <div id="gymProgressionInfo" class="info">Progressione iniziale: scegli un carico che lasci circa 2–4 ripetizioni in riserva (RPE 6–8). Prima aumentano le ripetizioni entro il range; poi il carico di poco.</div>
+    <div class="field gym-focus-field">
+      <label for="gymEffortSelect">Dose della seduta</label>
+      <select id="gymEffortSelect" onchange="renderGymPreview()">
+        <option value="auto">Adattiva · decide il coach</option>
+        <option value="light">Leggera · ripresa / recupero</option>
+        <option value="moderate">Moderata · standard</option>
+        <option value="strong">Intensa · solo se recuperato</option>
+      </select>
+    </div>
+    <div id="gymProgressionInfo" class="info">Il coach regola esercizi, serie e carico in base alla tua esperienza recente, alle pause, al recupero e alle ultime sedute. Non devi completare una lista infinita.</div>
     <div id="gymPreview" class="workout-list" style="margin-top:10px"></div>
-    <button class="btn full" style="margin-top:12px" onclick="startGym()">Avvia scheda sala pesi</button>
+    <button class="btn full" style="margin-top:12px" onclick="startGym()">Avvia allenamento</button>
   </div>
   <div class="card info"><strong>Flusso guidato V25.</strong> Il coach guida ogni esercizio a serie: serie → recupero → serie successiva. Dopo l’ultima serie esegue un recupero di transizione e passa automaticamente all’esercizio successivo. Il tempo stimato include lavoro, recuperi, transizioni e preparazione. Puoi mettere in pausa o saltare il recupero.</div>
   <div class="card warning"><strong>Spalla e sicurezza.</strong> I macchinari disponibili non sono tutti automaticamente adatti a ogni persona. Chest Press, Lat Machine e Reverse Fly sono opzionali e vanno esclusi se provocano dolore o non sono stati autorizzati nel percorso di recupero. Niente massimali o cedimento nelle prime settimane.</div>
@@ -1986,6 +2369,7 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 </section>
 
 <section id="page-progress" class="hidden">
+<div class="page-intro"><div class="eyebrow">Andamento nel tempo</div><h2>I tuoi progressi</h2><p>Numeri essenziali per capire cosa sta migliorando e dove intervenire.</p></div>
 
 <div class="card">
   <div class="eyebrow">Attività da altre app</div>
@@ -2100,6 +2484,16 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 </section>
 
 <section id="page-settings" class="hidden">
+
+<div class="card settings-welcome">
+  <div class="eyebrow">Il tuo spazio personale</div>
+  <h2>Impostazioni e strumenti</h2>
+  <p class="small">Profilo, attrezzatura, preferenze e sicurezza. Gli strumenti avanzati restano disponibili qui, senza appesantire la navigazione quotidiana.</p>
+  <div class="settings-shortcuts">
+    <button class="settings-shortcut" type="button" onclick="showPage('coach')"><span class="shortcut-icon">✦</span><span><strong>Coach intelligente</strong><small>Check-in, adattamento e alternative</small></span><b>›</b></button>
+    <button class="settings-shortcut" type="button" onclick="showPage('more')"><span class="shortcut-icon">⌘</span><span><strong>Altri strumenti</strong><small>Libreria, fisioterapia e test</small></span><b>›</b></button>
+  </div>
+</div>
 
 <div class="card">
 
@@ -2448,7 +2842,8 @@ body.simple-mode .nav button svg{width:19px;height:19px}
   <div class="card hero compact-hero">
     <div class="eyebrow">Centro allenamento</div>
     <h2>Scegli lo stimolo giusto</h2>
-    <p class="small">I moduli rispettano readiness, attrezzatura, fase del macro ciclo e regole di sicurezza della spalla.</p>
+    <p class="small">Un unico punto di accesso per tutte le discipline. Il coach adatta le proposte a recupero, attrezzatura, obiettivo e storico.</p>
+    <button type="button" class="btn primary full" style="margin-top:14px" onclick="showPage('today');document.getElementById('todayWorkout')?.scrollIntoView({behavior:'smooth',block:'start'})">Apri la seduta guidata di oggi</button>
   </div>
   <div class="training-hub">
     <button class="hub-card accent-green" onclick="showPage('shoulder')"><svg class="ui-icon"><use href="#i-heart"></use></svg><span><strong>Spalla & recupero</strong><small>Rehab, mobilità, palla, roller e piscina</small></span><b>→</b></button>
@@ -2552,16 +2947,22 @@ body.simple-mode .nav button svg{width:19px;height:19px}
 </div>
 
 <nav class="nav" aria-label="Navigazione principale">
-  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Oggi</span></button>
-  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Piano</span></button>
-  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenati</span></button>
+  <button type="button" class="active" data-page="today"><svg class="ui-icon"><use href="#i-home"></use></svg><span>Home</span></button>
+  <button type="button" data-page="training" data-related="shoulder,military,running,work,stretching,calisthenics,gym"><svg class="ui-icon"><use href="#i-train"></use></svg><span>Allenamento</span></button>
+  <button type="button" data-page="plan"><svg class="ui-icon"><use href="#i-calendar"></use></svg><span>Programma</span></button>
   <button type="button" data-page="progress"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Progressi</span></button>
-  <button type="button" data-page="coach"><svg class="ui-icon"><use href="#i-brain"></use></svg><span>Coach</span></button>
-  <button type="button" data-page="more" data-related="library,physio,tests,settings"><svg class="ui-icon"><use href="#i-more"></use></svg><span>Altro</span></button>
+  <button type="button" data-page="coach"><svg class="ui-icon"><use href="#i-chart"></use></svg><span>Coach</span></button>
+  <button type="button" data-page="settings" data-related="more,coach,library,physio,tests"><svg class="ui-icon"><use href="#i-settings"></use></svg><span>Impostazioni</span></button>
 </nav>
 
 <section id="page-coach" class="page hidden" aria-labelledby="coachTitle" style="padding:16px;max-width:900px;margin:0 auto">
-  <div class="section-head"><div><p class="eyebrow">V35.7 · ULTIMATE FUSION</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Analisi dei progressi, adattamento della giornata e alternative pratiche.</p></div></div>
+  <div class="section-head"><div><p class="eyebrow">V42 · COACH & METODO</p><h2 id="coachTitle">Il tuo Personal Coach</h2><p class="muted">Perché oggi fai questa seduta, quale capacità allena e come si collega al tuo obiettivo di longevità atletica.</p></div></div>
+  <div class="card" id="coachSessionRationale" style="padding:16px;margin:12px 0;border-color:var(--orange)">
+    <div class="eyebrow">IL SENSO DELL’ALLENAMENTO</div><h3>Perché questa seduta?</h3>
+    <p class="muted">Il coach spiega la tipologia proposta, lo stimolo principale, lo scopo per la tua forma fisica e perché volume e intensità sono adeguati oggi.</p>
+    <div id="coachRationaleLive" aria-live="polite" class="info">Apri qui la spiegazione della seduta selezionata: forza, corsa, HYROX o recupero.</div>
+    <button class="btn secondary full" type="button" onclick="coachExplainCurrentSession()">Spiegami l’allenamento di oggi</button>
+  </div>
   <div class="card" style="padding:16px;margin:12px 0">
     <h3>Check-in di oggi</h3><p class="muted">Valuta come ti senti prima di iniziare. Il consiglio non sostituisce una valutazione sanitaria.</p>
     <div class="grid two" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px">
@@ -2823,7 +3224,7 @@ body.simple-mode .nav button svg{width:19px;height:19px}
    ========================================================= */
 
 const APP_VERSION =
-  "35.0.0-ULTIMATE-FUSION-V26-V34";
+  "45.0.0-COMPLETE-COACH-EQUIPMENT-ADAPTIVE";
 // V25: coach unico a obiettivi multipli, storico persistente, stima realistica della seduta e guida completa serie/recuperi.
 
 const SCHEMA_VERSION =
@@ -15618,7 +16019,7 @@ function openOnboarding(){
 
 function dismissOnboarding(){
   document.getElementById("onboardingModal").classList.add("hidden");
-  notify("Configurazione rimandata. Puoi riaprirla da Altro → Profilo, dati e backup.");
+  notify("Configurazione rimandata. Puoi riaprirla da Impostazioni → Profilo personale.");
   document.querySelector('.nav button[data-page="today"]')?.focus();
 }
 
@@ -17179,13 +17580,752 @@ document.addEventListener('DOMContentLoaded',v33Render);
  function updateTrend(){const a=safeRead();if(!a.length){$('v34Trend').textContent='Ancora nessun check-in salvato.';return}const last=a[a.length-1],avg=k=>(a.slice(-7).reduce((s,x)=>s+(Number(x[k])||0),0)/Math.min(7,a.length)).toFixed(1);$('v34Trend').innerHTML='<p><strong>'+a.length+'</strong> check-in salvati · ultimo: '+new Date(last.date).toLocaleString('it-IT')+'</p><p>Media ultimi 7 check-in — energia '+avg('energy')+'/5 · sonno '+avg('sleep')+'/5 · fatica '+avg('fatigue')+'/5 · indolenzimento '+avg('soreness')+'/5</p>';}
  function save(){const a=safeRead();a.push(record());safeWrite(a);updateTrend();renderAdvice(advice(a[a.length-1]));}
  function alternative(){const kind=$('v34Session').value;const pain=Number($('v34Pain').value)||0;let t={strength:'Tecnica a carico leggero, 2–3 serie facili e lontane dal cedimento; oppure mobilità generale.',hyrox:'Camminata o cyclette facile e mobilità; evita circuiti ad alta intensità.',run:'Camminata veloce o corsa-camminata facile, solo se priva di dolore.',mobility:'Routine breve e delicata, senza forzare ampiezza o posizioni dolorose.',cardio:'Zona facile a basso impatto: cyclette o camminata, se disponibili.'}[kind];if(pain>=2)t='Con dolore moderato o forte: non sostituire con un altro esercizio sulla stessa zona. Sospendi il lavoro provocativo e valuta un parere professionale.';$('v34AlternativeOut').textContent=t;}
- function bind(){['Energy','Sleep','Fatigue','Soreness'].forEach(n=>{const el=$('v34'+n),out=$('v34'+n+'Out');el?.addEventListener('input',()=>out.textContent=el.value)});$('v34Analyze')?.addEventListener('click',()=>renderAdvice(advice(record())));$('v34Save')?.addEventListener('click',()=>{try{save()}catch(e){$('v34Advice').textContent='Errore nel salvataggio: '+e.message}});$('v34Alternative')?.addEventListener('click',alternative);$('v34Export')?.addEventListener('click',()=>{const blob=new Blob([JSON.stringify(safeRead(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hybrid-coach-v34-checkins.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});updateTrend();}
+ function bind(){['Energy','Sleep','Fatigue','Soreness'].forEach(n=>{const el=$('v34'+n),out=$('v34'+n+'Out');el?.addEventListener('input',()=>out.textContent=el.value)});$('v34Analyze')?.addEventListener('click',()=>renderAdvice(advice(record())));$('v34Save')?.addEventListener('click',()=>{try{save()}catch(e){$('v34Advice').textContent='Errore nel salvataggio: '+e.message}});$('v34Alternative')?.addEventListener('click',alternative);$('v34Export')?.addEventListener('click',()=>{const blob=new Blob([JSON.stringify(safeRead(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='hybrid-coach-checkins.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});updateTrend();}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind,{once:true});else bind();
  window.V34CoachTest={advice,safeRead,safeWrite,alternative};
 })();
 </script>
+
+<script id="v39-mobile-runtime">
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const nav=document.querySelector('.nav');
+  if(nav){
+    nav.querySelectorAll('button').forEach(btn=>{
+      btn.setAttribute('aria-label',(btn.innerText||'').trim());
+      btn.addEventListener('click',()=>{nav.querySelectorAll('button').forEach(x=>x.classList.remove('pressed'));btn.classList.add('pressed');});
+    });
+  }
+  // Keep the active navigation state synchronized with all existing showPage calls.
+  const originalShowPage=window.showPage;
+  if(typeof originalShowPage==='function'){
+    window.showPage=function(name){
+      const result=originalShowPage.apply(this,arguments);
+      const active=nav?.querySelector('button.active');
+      if(active)active.setAttribute('aria-current','page');
+      window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+      return result;
+    };
+  }
+  // Small, unobtrusive save status; existing localStorage + IndexedDB persistence remains authoritative.
+  window.v39RuntimeAudit=function(){
+    const d=typeof data==='function'?data():null;
+    return {
+      appVersion:typeof APP_VERSION!=='undefined'?APP_VERSION:null,
+      schemaVersion:typeof SCHEMA_VERSION!=='undefined'?SCHEMA_VERSION:null,
+      localStorageAvailable:!!window.localStorage,
+      indexedDBAvailable:'indexedDB' in window,
+      primaryRecordPresent:!!localStorage.getItem('erjonHybridCoachAI_AdaptivePeriodization_v11'),
+      sessionDraftPresent:!!localStorage.getItem('erjonHybridCoachAI_AdaptivePeriodization_v11_sessionDraft_v2'),
+      sessions:d?.sessions?.length??null,
+      activeNavigation:nav?.querySelector('button.active')?.dataset.page||null
+    };
+  };
+})();
+</script>
+
+
+<script>
+/* V42 GreenTheory responsive equipment, plan-first layout and collapsible assessments. */
+(function(){
+'use strict';
+const GT_EXERCISES=[
+['Shoulder Press Prona','Spalle','panatta','Macchine spalle'],['Super Deltoid Press','Spalle','panatta','Macchine spalle'],['Shoulder Press Matrix','Spalle','panatta','Macchine spalle'],['Real Delt Posteriori','Spalle','panatta','Macchine spalle'],
+['Squat Machine','Gambe','panatta','Macchine gambe'],['Leg Press 45°','Gambe','panatta','Macchine gambe'],['Master Gluteus Machine','Glutei','panatta','Macchine gambe'],['Reverse Hyper Extension','Schiena / glutei','panatta','Macchine gambe'],['Leg Extension','Gambe','panatta','Macchine gambe'],['Lat Squat','Gambe','panatta','Macchine gambe'],['Leg Press','Gambe','panatta','Macchine gambe'],['Rear Kick Machine','Glutei','panatta','Macchine gambe'],['Leg Press Matrix','Gambe','panatta','Macchine gambe'],['Leg Curl Sdraiato','Gambe','panatta','Macchine gambe'],['Leg Curl Seduto','Gambe','panatta','Macchine gambe'],['Gluteus Machine Matrix','Glutei','panatta','Macchine gambe'],['Leg Extension Matrix','Gambe','panatta','Macchine gambe'],['Leg Curl Sdraiato Matrix','Gambe','panatta','Macchine gambe'],
+['Power Smith Machine','Petto / forza','panatta','Macchine petto'],['Low Chest Machine','Petto','panatta','Macchine petto'],['Pectoral Machine','Petto','panatta','Macchine petto'],['Pec Fly','Petto','panatta','Macchine petto'],['Chest Press','Petto','panatta','Macchine petto'],['Assisted Chin and Dip','Schiena / tricipiti','panatta','Macchine schiena'],['Power Smith Machine Inclinata','Petto','panatta','Macchine petto'],['Chest Fly Machine','Petto','panatta','Macchine petto'],
+['Row Machine','Schiena','panatta','Macchine schiena'],['Lat Pulldown','Schiena','panatta','Macchine schiena'],['Lat Pulldown Matrix','Schiena','panatta','Macchine schiena'],['Rear Delt Centro Schiena','Schiena / spalle','panatta','Macchine schiena'],['Compound Row','Schiena','panatta','Macchine schiena'],['Alternate Arm Curl','Braccia','panatta','Macchine braccia'],
+['Chest Press inclinata','Petto','kingsbox','Strutture e bilancieri'],['Shoulder Press','Spalle','kingsbox','Strutture e bilancieri'],['Squat rack / bilanciere','Forza totale','kingsbox','Strutture e bilancieri'],['Deadlift / stacco','Catena posteriore','kingsbox','Strutture e bilancieri'],['Rig / trazioni','Schiena / core','kingsbox','Strutture e bilancieri'],
+['Chest Press / spinta guidata','Petto','titan','Macchine TITAN'],['Row / rematore guidato','Schiena','titan','Macchine TITAN'],['Lat machine / tirata verticale','Schiena','titan','Macchine TITAN'],['Leg press / spinta gambe','Gambe','titan','Macchine TITAN'],['Leg extension','Gambe','titan','Macchine TITAN'],['Leg curl','Gambe','titan','Macchine TITAN'],['Shoulder press','Spalle','titan','Macchine TITAN'],['Abductor / adductor','Anche','titan','Macchine TITAN'],
+['Panca e manubri','Forza totale','lacertosus','Panche e pesi liberi'],['Bilanciere e dischi','Forza totale','lacertosus','Panche e pesi liberi'],['Manubri','Forza totale','lacertosus','Panche e pesi liberi'],['Panca inclinabile','Forza totale','lacertosus','Panche e pesi liberi']
+];
+const BRAND={panatta:'Panatta / Diamond Presti',titan:'TITAN Mechanix',lacertosus:'Certosus / Lacertotus',kingsbox:'KingsBox'};
+const read=()=>{try{return JSON.parse(localStorage.getItem('gtV40Equipment')||'{}')}catch(e){return {}}};
+const write=v=>{try{localStorage.setItem('gtV40Equipment',JSON.stringify(v));return true}catch(e){return false}};
+const key=x=>x[2]+'_'+x[0].toLowerCase().replace(/[^a-z0-9]+/g,'_');
+function render(){const root=document.getElementById('gtMachineCatalog');if(!root)return;const state=read();state.brands=state.brands||{};const active=Object.keys(BRAND).filter(b=>state.brands[b]!==false);
+ document.querySelectorAll('[data-gt-brand-toggle]').forEach(btn=>{const b=btn.dataset.gtBrandToggle,on=active.includes(b);btn.setAttribute('aria-pressed',String(on));const st=btn.querySelector('[data-gt-brand-state]');if(st)st.textContent=on?'Selezionato':'Escluso'});
+ const list=GT_EXERCISES.filter(x=>active.includes(x[2]));const groups=[...new Set(list.map(x=>x[3]))];root.innerHTML=groups.map((g,i)=>{const items=list.filter(x=>x[3]===g);const n=items.filter(x=>state.available?.[key(x)]!==false).length;return `<details class="gt-group" ${i===0?'open':''}><summary>${g}<span>${n}/${items.length} disponibili · apri</span></summary><div class="gt-group-items">${items.map(x=>`<div class="gt-machine"><label><input type="checkbox" data-gt-machine="${key(x)}" ${state.available?.[key(x)]===false?'':'checked'}><span><b>${x[0]}</b><small>${x[1]} · ${BRAND[x[2]]}</small></span></label></div>`).join('')}</div></details>`}).join('');
+ const count=document.getElementById('gtCatalogCount');if(count)count.textContent=active.length+' linee · '+list.filter(x=>state.available?.[key(x)]!==false).length+' voci attive';}
+function toggleBrand(b){const s=read();s.brands=s.brands||{};s.brands[b]=s.brands[b]===false;write(s);render()}
+function saveMachine(e){const s=read();s.available=s.available||{};s.available[e.target.dataset.gtMachine]=e.target.checked;write(s);render()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-gt-brand-toggle]');if(b)toggleBrand(b.dataset.gtBrandToggle)});
+document.addEventListener('change',e=>{if(e.target.matches('[data-gt-machine]')){const details=e.target.closest('details');saveMachine(e);if(details)details.open=true}});
+document.addEventListener('DOMContentLoaded',render);
+window.gtV41Render=render;window.gtV40ExportEquipment=()=>JSON.stringify(read(),null,2);window.gtV40CatalogCount=()=>GT_EXERCISES.length;
+window.gtV41RunSelfTests=()=>{const t=[],add=(name,fn)=>{try{t.push({name,ok:!!fn()})}catch(e){t.push({name,ok:false,error:String(e)})}};add('Catalogo completo e raggruppato',()=>GT_EXERCISES.length>=45&&GT_EXERCISES.every(x=>x[3]));add('Quattro linee selezionabili con tap',()=>Object.keys(BRAND).length===4&&Object.keys(BRAND).every(b=>document.querySelector(`[data-gt-brand-toggle="${b}"]`)));add('Gruppi chiusi/aperti senza lista infinita',()=>!!document.querySelector('#gtMachineCatalog details.gt-group'));add('Persistenza locale configurazione',()=>typeof localStorage==='object');add('Coach tab disponibile',()=>!!document.querySelector('.nav [data-page="coach"]'));return {passed:t.filter(x=>x.ok).length,total:t.length,tests:t}};
+})();
+
+/* V41: explain the actual selected session in plain language. */
+function coachExplainCurrentSession(){
+ const out=document.getElementById('coachRationaleLive');if(!out)return;
+ const page=document.querySelector('.nav button.active')?.dataset.page||'';
+ const goal=data().settings?.goal||'hybrid';const g={longevity:'Longevità atletica',fatloss:'Ricomposizione corporea',hybrid:'Preparazione ibrida'}[goal]||'Obiettivo personale';
+ const labels={full:'Forza full body',upper:'Forza parte superiore',lower:'Forza gambe',upperPull:'Schiena e bicipiti',upperPush:'Petto e tricipiti',arms:'Braccia',core:'Core'};
+ const focus=document.getElementById('gymFocusSelect')?.value||'full';
+ const text=page==='gym'||page==='training'?`${labels[focus]||'Forza'}: sviluppa o mantiene la forza e la massa muscolare, sostiene ossa, tendini e autonomia funzionale. La selezione degli esercizi e la dose vanno adattate a recupero, tecnica, dolore e attrezzatura effettivamente disponibile. Obiettivo di riferimento: ${g}.`:`La seduta viene scelta per allenare una capacità alla volta senza perdere l’equilibrio tra forza, resistenza aerobica, mobilità e recupero. Scopo: migliorare la capacità fisica oggi e mantenerla sostenibile nel lungo periodo. Obiettivo di riferimento: ${g}.`;
+ out.textContent=text;
+}
+window.addEventListener('DOMContentLoaded',()=>{coachExplainCurrentSession();document.addEventListener('change',e=>{if(['gymFocusSelect','planFreeFocus','planCoachMode'].includes(e.target.id))coachExplainCurrentSession()})});
+
+</script>
+
+
+<script>
+/* V41 iOS timer resilience: absolute deadline, local persistence, resume reconciliation. */
+(function(){
+ const KEY='ep_hybrid_v41_timer';
+ function snap(){try{const state={running:!!timerRunning,left:Number(timerLeft)||0,deadline:timerRunning&&timerDeadline?Number(timerDeadline):null,initial:Number(timerInitial)||0,savedAt:Date.now()};localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+ function restore(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(!s)return;if(s.running&&s.deadline){timerDeadline=s.deadline;timerLeft=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));if(timerLeft>0){timerRunning=false;if(!timerId&&typeof startRealTimer==='function')startRealTimer();}else{timerLeft=0;timerRunning=false;timerDeadline=null;const d=document.getElementById('timerDisplay');if(d)d.textContent='TEMPO TERMINATO';notify('Il timer è terminato mentre l’app era in background.');}}else if(!timerRunning&&s.left>0){timerLeft=s.left;timerInitial=s.initial||s.left;}}catch(e){console.warn('Timer restore',e)}}
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')snap();else{if(timerRunning&&timerDeadline){timerLeft=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));if(timerLeft<=0){timerLeft=0;timerRunning=false;timerDeadline=null;try{finishTimer()}catch(e){}}else{if(typeof updateTimer==='function')updateTimer();}}snap();}});
+ window.addEventListener('pagehide',snap);window.addEventListener('pageshow',()=>{restore();if(typeof updateTimer==='function')updateTimer()});
+ const originalStart=window.startRealTimer; if(typeof originalStart==='function')window.startRealTimer=function(){originalStart();snap()};
+ const originalStop=window.stopTimer;if(typeof originalStop==='function')window.stopTimer=function(...args){const r=originalStop.apply(this,args);snap();return r};
+ const originalFinish=window.finishTimer;if(typeof originalFinish==='function')window.finishTimer=function(...args){const r=originalFinish.apply(this,args);localStorage.removeItem(KEY);return r};
+ document.addEventListener('DOMContentLoaded',()=>{restore();if('Notification'in window&&Notification.permission==='default'){/* permission is requested only after an explicit user action */}});
+ window.v41TimerSnapshot=snap;const pulse=setInterval(()=>{if(timerRunning)snap()},5000);
+})();
+</script>
+
+
+<script>
+/* V42 layout controller: surface the actual weekly plan first; tuck infrequent tools behind one tap. */
+(function(){
+'use strict';
+function wrapInDetails(node, title, id){
+ if(!node || node.closest('details.v42-fold')) return;
+ const d=document.createElement('details');d.className='v42-fold';d.id=id;
+ const summary=document.createElement('summary');summary.textContent=title;
+ const content=document.createElement('div');content.className='v42-fold-content';
+ node.parentNode.insertBefore(d,node);d.appendChild(summary);d.appendChild(content);content.appendChild(node);
+}
+function init(){
+ const plan=document.getElementById('page-plan');if(plan){
+  const intro=plan.querySelector('.page-intro');
+  const week=plan.querySelector('#weekGrid');
+  if(intro&&week&&week.parentNode!==intro.parentNode) intro.after(week);
+  else if(intro&&week) intro.after(week);
+  const builder=plan.querySelector('#planBuilderCard');wrapInDetails(builder,'Personalizza il piano e le attrezzature','v42PlanBuilderFold');
+  const planner=[...plan.querySelectorAll('.card')].find(x=>x.querySelector('#longTermPlanner'));
+  wrapInDetails(planner,'Fasi delle prossime 8 settimane','v42LongTermFold');
+  wrapInDetails(document.getElementById('v32RecoveryPanel'),'Check-in recupero di oggi','v42RecoveryFold');
+  wrapInDetails(document.getElementById('v33PerformancePanel'),'Valutazioni e test performance','v42PerformanceFold');
+  wrapInDetails(document.getElementById('v31StrategyPanel'),'Dettagli della strategia del coach','v42StrategyFold');
+ }
+ const tests=document.getElementById('page-tests');if(tests){
+  const cards=[...tests.children].filter(x=>x.classList?.contains('card'));
+  if(cards.length>1){const formCard=cards[1];wrapInDetails(formCard,'Esegui test periodico · apri solo quando serve','v42TestFormFold');}
+  const history=tests.querySelector('#testsHistory')?.closest('.card');wrapInDetails(history,'Storico dei test','v42TestHistoryFold');
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+window.v42LayoutSelfTest=function(){const q=id=>document.getElementById(id);return {planVisibleFirst:!!q('weekGrid')&&q('weekGrid').previousElementSibling?.classList.contains('page-intro'),planBuilderCollapsed:!!q('v42PlanBuilderFold')&&!q('v42PlanBuilderFold').open,checkinCollapsed:!!q('v42RecoveryFold')&&!q('v42RecoveryFold').open,performanceTestsCollapsed:!!q('v42PerformanceFold')&&!q('v42PerformanceFold').open,periodicTestCollapsed:!!q('v42TestFormFold')&&!q('v42TestFormFold').open,machineCardsFit:!!document.querySelector('#gtMachineCatalog .gt-machine label>span')};};
+})();
+</script>
+
+
+
+<style>
+/* V43 · fluid iPhone layout and progressive disclosure */
+:root{scroll-behavior:smooth}
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+.card,.modal-box,.gt-panel,.workout-item{min-width:0;max-width:100%}
+#page-gym .gt-groups,#page-gym .gt-group,#page-gym .gt-machines{min-width:0;max-width:100%}
+#page-gym .gt-machine,#page-gym .gt-machine label{min-width:0;max-width:100%;width:100%}
+#page-gym .gt-machine label{display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;gap:10px;padding:12px}
+#page-gym .gt-machine label>span{min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.25}
+#page-gym .gt-machine input{width:28px;height:28px;min-width:28px;margin:0}
+#page-gym .gt-machines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:430px){#page-gym .gt-machines{grid-template-columns:minmax(0,1fr)}#page-gym .gt-machine label{grid-template-columns:36px minmax(0,1fr)}}
+.v43-fold{border:1px solid var(--line);border-radius:16px;background:var(--panel);margin:10px 0;overflow:hidden;min-width:0}
+.v43-fold>summary{list-style:none;cursor:pointer;padding:15px 16px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px}
+.v43-fold>summary::-webkit-details-marker{display:none}
+.v43-fold>summary:after{content:'+';color:var(--orange);font-size:1.25rem;flex:0 0 auto}
+.v43-fold[open]>summary:after{content:'−'}
+.v43-fold-content{padding:0 12px 12px;min-width:0}
+.v43-fold-content>.card{margin:0 0 10px!important}
+#sessionModal .live-reg.v43-fold{margin-top:12px}
+#sessionModal .live-reg.v43-fold>.v43-fold-content{padding:0 10px 12px}
+#page-today .v43-home-fold{margin-top:10px}
+#page-today .v43-home-fold .card{margin:0!important}
+@media(max-width:430px){.timer{font-size:2.5rem}#sessionModal .modal-box{width:calc(100vw - 20px);max-width:calc(100vw - 20px);padding:14px}#sessionModal .timer-controls,#sessionModal .timer-tools{grid-template-columns:repeat(2,minmax(0,1fr))}#page-plan .week-grid{min-width:0}#page-plan .week-grid>*{min-width:0;overflow-wrap:anywhere}}
+</style>
+<script>
+/* V43 · simple daily surface, optional tools, equipment-led programming. */
+(function(){
+'use strict';
+function fold(node,title,id){if(!node||node.closest('details.v43-fold'))return null;const d=document.createElement('details');d.className='v43-fold';d.id=id;const sm=document.createElement('summary');sm.textContent=title;const c=document.createElement('div');c.className='v43-fold-content';node.parentNode.insertBefore(d,node);d.append(sm,c);c.append(node);return d;}
+function groupNodes(parent,nodes,title,id){if(!parent||!nodes.length)return;const d=document.createElement('details');d.className='v43-fold v43-home-fold';d.id=id;const sm=document.createElement('summary');sm.textContent=title;const c=document.createElement('div');c.className='v43-fold-content';parent.insertBefore(d,nodes[0]);d.append(sm,c);nodes.forEach(n=>{if(n&&n.parentNode===parent)c.append(n)});}
+function init(){
+ const today=document.getElementById('page-today');if(today){
+  const schedule=document.getElementById('adaptiveScheduleCard');fold(schedule,'Modifica la seduta di oggi · sposta o salta','v43DailyAdjustFold');
+  const decision=document.getElementById('decisionCard'),master=document.getElementById('masterCoachCard');groupNodes(today,[decision,master].filter(Boolean),'Analisi avanzata del coach','v43CoachAnalysisFold');
+  const wow=document.getElementById('wowDeck');if(wow){const b=wow.querySelector('.wow-actions');if(b){const first=b.querySelector('button');if(first)first.textContent='Apri check-in / coach';}}
+ }
+ const modal=document.getElementById('sessionModal');if(modal){const live=modal.querySelector('.live-reg');if(live)fold(live,'Feedback RPE e autoregolazione · facoltativo','v43LiveRpeFold');}
+ const plan=document.getElementById('page-plan');if(plan){
+  const check=plan.querySelector('#v32RecoveryPanel');fold(check,'Check-in recupero · quando serve','v43RecoveryFold');
+  const assess=plan.querySelector('#v33PerformancePanel');fold(assess,'Test performance · ogni 4–8 settimane','v43AssessmentFold');
+  const strat=plan.querySelector('#v31StrategyPanel');fold(strat,'Dettagli della strategia','v43StrategyFold');
+ }
+ const homeAside=document.querySelector('aside');if(homeAside){const cards=[...homeAside.querySelectorAll(':scope > .card')];if(cards.length>3)groupNodes(homeAside,cards.slice(3),'Profilo, ciclo e regole · dettagli','v43ProfileDetailsFold');}
+ // Keep the real weekly plan at the top; hide configuration and non-daily tools.
+ const planPage=document.getElementById('page-plan');if(planPage){const intro=planPage.querySelector('.page-intro'),week=planPage.querySelector('#weekGrid');if(intro&&week&&week.previousElementSibling!==intro)intro.after(week);}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+
+// A selected treadmill or indoor bike is a real training modality, not just a label.
+const originalTreadmill=window.applyTreadmillToWorkout;
+window.applyTreadmillToWorkout=function(list){
+ const modes=typeof selectedModes==='function'?selectedModes():{};
+ if(runType==='pool'||runType==='hyrox'||['mtb','roadBike','indoorBike'].includes(runType))return list;
+ if(modes.treadmill){runSurface='treadmill';return typeof originalTreadmill==='function'?originalTreadmill(list):list;}
+ if(modes.indoorBike){
+  const cardioIds=new Set(['runEasy','runLong','progressiveRun','fartlek','intervals','tempo','threshold','hyroxRun']);
+  const hasRun=(list||[]).some(x=>cardioIds.has(x?.id));if(!hasRun)return list;
+  const hard=['interval','tempo','threshold','fartlek'].includes(runType);
+  const bikeId=hard?'bikeIntervals':'indoorRide';
+  const replacement=(EX&&EX[bikeId])?EX[bikeId]:null;
+  const base=(list||[]).filter(x=>!cardioIds.has(x?.id));
+  if(replacement)base.splice(Math.min(1,base.length),0,{...replacement,t:`Cyclette · ${hard?'intervalli aerobici':'base aerobica'}`,x:`Progressione su cyclette: ${hard?'intervalli controllati alternati a recupero facile':'ritmo continuo conversazionale'}. Regola resistenza e cadenza su RPE, non inseguire velocità.`});
+  return base;
+ }
+ return typeof originalTreadmill==='function'?originalTreadmill(list):list;
+};
+const oldSave=window.savePlanPreferences;
+window.savePlanPreferences=function(showNotice=false){
+ const result=typeof oldSave==='function'?oldSave(showNotice):undefined;
+ const m=typeof selectedModes==='function'?selectedModes():{};
+ const d=data();
+ if(m.treadmill){runSurface='treadmill';d.settings.runSurface='treadmill';}
+ if(m.indoorBike){d.settings.cycling={...(d.settings.cycling||{}),enabled:true,substituteEasyRun:true};}
+ else if(d.settings.cycling?.enabled && !m.indoorBike && !d.settings.cycling?.userEnabled){d.settings.cycling.enabled=false;}
+ save(d);
+ if(typeof updatePlanGymStatus==='function')updatePlanGymStatus();
+ return result;
+};
+window.v43SelfTest=function(){const ids=['v43LiveRpeFold','v43DailyAdjustFold','v43RecoveryFold','v43AssessmentFold'];return {rpeCollapsed:!!document.getElementById(ids[0])&&!document.getElementById(ids[0]).open,dailyAdjustCollapsed:!!document.getElementById(ids[1])&&!document.getElementById(ids[1]).open,recoveryCollapsed:!!document.getElementById(ids[2])&&!document.getElementById(ids[2]).open,assessmentCollapsed:!!document.getElementById(ids[3])&&!document.getElementById(ids[3]).open,profileModalities:typeof selectedModes==='function'&&!!document.getElementById('planTreadmill')&&!!document.getElementById('planIndoorBike'),bikeExerciseAvailable:!!(window.EX&&EX.indoorRide),treadmillExerciseAvailable:!!(window.EX&&EX.treadmillEasy)};};
+})();
+</script>
+
+
+
+<script>
+
+(function(){
+  const gymCaps = {
+    full: {light:3, moderate:5, strong:6},
+    upper: {light:3, moderate:5, strong:6},
+    lower: {light:3, moderate:4, strong:5},
+    upperPull: {light:3, moderate:4, strong:5},
+    upperPush: {light:3, moderate:4, strong:5},
+    arms: {light:2, moderate:3, strong:4},
+    core: {light:2, moderate:3, strong:4}
+  };
+  const curated = {
+    lower: ["machineLegPress","machineLegCurl","machineHipThrust","machineCalf","barbellSquat","barbellRDL","dbSplitSquat","goblet","reverseLungeV27"],
+    full: ["machineLegPress","machineSeatedRow","machineChestPress","machineLegCurl","machineLatPulldown","goblet","rdl","dbRowSupported","dbBenchNeutral","carry"],
+    upper: ["machineChestPress","machineSeatedRow","machineLatPulldown","machineReverseFly","machineBiceps","dbRowSupported","dbBenchNeutral"],
+    upperPull: ["machineSeatedRow","machineLatPulldown","machineLowRow","machineBiceps","chestSupportedRowV27","dbInclineCurl"],
+    upperPush: ["machineChestPress","machineInclinePress","machineTriceps","machineLateralRaise","dbBenchNeutral","dbTricepsPushdownAlt"],
+    arms: ["machineBiceps","machineTriceps","machinePreacherCurl","machineCableCurl","dbInclineCurl","dbTricepsPushdownAlt"],
+    core: ["machineAbCrunch","machineCablePallof","deadbug","carry"]
+  };
+  function validPool(focus){
+    const pool=lifetimeGymPool(focus)||[];
+    const preferred=curated[focus]||curated.full;
+    const ordered=[...preferred.filter(id=>pool.includes(id)),...pool.filter(id=>!preferred.includes(id))];
+    return [...new Set(ordered)].filter(id=>EX[id]&&eqAvailable(id));
+  }
+  function recentGymHistory(){
+    return (data().sessions||[]).filter(s=>!s.incomplete && /sala pesi|gym|strength/i.test(String(s.type||"")+" "+String(s.generatedSessionType||""))).sort((a,b)=>Date.parse(b.date||0)-Date.parse(a.date||0));
+  }
+  function adaptiveDose(){
+    const history=recentGymHistory(),last=history[0],now=Date.now();
+    const gap=last&&Number.isFinite(Date.parse(last.date))?(now-Date.parse(last.date))/86400000:999;
+    const count=history.length;
+    const decision=typeof v29CoordinatedDecision==="function"?v29CoordinatedDecision():lifetimeAdaptiveDecision();
+    if(decision.action==="protect"||decision.action==="recover"||decision.action==="deload")return {level:"light",why:"Il recupero registrato richiede una seduta ridotta."};
+    if(gap>45)return {level:"light",why:"Ripresa dopo una pausa lunga: volume ridotto per ricostruire gradualmente la tolleranza."};
+    if(gap>21)return {level:"light",why:"Sono passate più di 3 settimane dall’ultima seduta: ripartenza leggera."};
+    if(count<4)return {level:"light",why:"Prime sedute: il coach costruisce una base tecnica e aumenta il volume per gradi."};
+    if(decision.action==="adapt")return {level:"light",why:"Il recupero è incompleto: oggi riduciamo il volume."};
+    return {level:"moderate",why:"Seduta standard: progressione graduale, senza cedimento."};
+  }
+  function selectedDose(){
+    const choice=document.getElementById("gymEffortSelect")?.value||"auto";
+    const auto=adaptiveDose();
+    if(choice==="auto")return auto;
+    // User can ask for less; a high-effort choice never overrides recovery protections.
+    if(choice==="strong" && ["protect","recover","deload","adapt"].includes((v29CoordinatedDecision?.()||lifetimeAdaptiveDecision()).action))
+      return {level:"light",why:"Il coach ha abbassato automaticamente l’intensità per proteggere il recupero."};
+    return {level:choice,why:choice==="light"?"Dose leggera selezionata.":choice==="moderate"?"Dose moderata selezionata.":"Dose intensa selezionata; mantieni sempre 1–3 ripetizioni in riserva."};
+  }
+  function dosesFor(level){
+    if(level==="light")return {sets:2,reps:"2×8–10",rest:90};
+    if(level==="strong")return {sets:3,reps:"3×8–12",rest:120};
+    return {sets:3,reps:"3×8–10",rest:105};
+  }
+  window.selectGym=function(type,btn){
+    gymRoutine=["full","upper","lower","core","upperPull","upperPush","arms"].includes(type)?type:"full";
+    const select=document.getElementById("gymFocusSelect");if(select)select.value=gymRoutine;
+    if(btn)segment(btn);
+    renderGymPreview();
+  };
+  window.renderGymPreview=function(){
+    const box=document.getElementById("gymPreview"),info=document.getElementById("gymProgressionInfo");
+    if(!box)return;
+    if(!data().settings.equipment.machines&&!data().settings.equipment.weights){
+      box.innerHTML='<div class="warning">Attiva Sala pesi/macchinari o Manubri nelle impostazioni.</div>';
+      if(info)info.textContent="Manca l’attrezzatura selezionata.";return;
+    }
+    const focus=gymRoutine||"full",dose=selectedDose(),caps=gymCaps[focus]||gymCaps.full;
+    const cap=caps[dose.level]||caps.moderate,ids=validPool(focus).slice(0,cap);
+    if(!ids.length){box.innerHTML='<div class="small">Nessun esercizio compatibile con attrezzatura e recupero.</div>';return;}
+    const label={light:"Leggera",moderate:"Moderata",strong:"Intensa"}[dose.level];
+    box.innerHTML=`<div class="gym-session-summary"><strong>${label} · ${ids.length} esercizi</strong><span>${dose.why}</span></div>`+
+      ids.map((id,i)=>{const e=EX[id];return `<div class="workout-item gym-simple-item"><div><strong>${i+1}. ${escapeHtml(e.i||"")} ${escapeHtml(e.t)}</strong><br><span>${dosesFor(dose.level).reps} · recupero ${dosesFor(dose.level).rest} sec</span></div></div>`}).join("");
+    if(info)info.textContent="Progressione automatica: prima consolida ripetizioni e tecnica, poi aumenta poco il carico. Se riparti dopo una pausa o i dati indicano fatica, il coach riduce la dose. Il deload resta prioritario rispetto alla scelta intensa.";
+  };
+  window.startGym=function(){
+    if(!requiredCheck())return;
+    const eq=data().settings.equipment||{};
+    if(!eq.machines&&!eq.weights){notify("Attiva Sala pesi/macchinari o Manubri nelle impostazioni.","error");showPage("settings");return;}
+    const focus=gymRoutine||"full",dose=selectedDose(),cap=(gymCaps[focus]||gymCaps.full)[dose.level]||4;
+    const ids=validPool(focus).slice(0,cap);
+    if(!ids.length){notify("Nessun esercizio compatibile con attrezzatura e recupero.","error");return;}
+    let list=fitToTime(enhance(ids,"strength"),data().settings.minutes);
+    const rx=dosesFor(dose.level);
+    list=(list||[]).map(item=>{
+      const e=typeof item==="string"?({...EX[item],id:item}):({...item});
+      const timed=/cardio|run|cycling/i.test(String(e.c||""));
+      if(!timed)e.d=rx.reps;
+      e.s=timed?e.s:rx.rest;
+      e.reason=[e.reason,`Dose ${dose.level}: ${dose.why}`].filter(Boolean).join(" · ");
+      return e;
+    });
+    const title={full:"Full body",upper:"Parte alta",lower:"Gambe",core:"Core",upperPull:"Schiena + bicipiti",upperPush:"Petto + tricipiti",arms:"Braccia"}[focus]||"Full body";
+    startWorkout(list,`Sala pesi · ${title} · ${dose.level}`);
+  };
+  const css=document.createElement("style");
+  css.id="v358GymCleanStyles";
+  css.textContent=`
+    #page-gym .hero p{max-width:58ch}
+    #page-gym .gym-focus-field{margin:12px 0}
+    #page-gym .gym-focus-field select{width:100%;min-height:48px;border-radius:14px;font-size:15px}
+    #page-gym #gymProgressionInfo{font-size:.82rem;line-height:1.5}
+    #page-gym .gym-session-summary{display:grid;gap:5px;padding:12px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035)}
+    #page-gym .gym-session-summary span{font-size:.78rem;color:var(--muted);line-height:1.45}
+    #page-gym .gym-simple-item{padding:10px 12px;margin:7px 0;border-radius:13px}
+    #page-gym .gym-simple-item strong{font-size:.88rem}
+    #page-gym .gym-simple-item span{font-size:.76rem;color:var(--muted)}
+    #page-gym .card.warning{font-size:.8rem;line-height:1.5}
+  `;
+  document.head.appendChild(css);
+  document.addEventListener("DOMContentLoaded",()=>{
+    const select=document.getElementById("gymFocusSelect");if(select)select.value=gymRoutine||"full";
+    renderGymPreview();
+  });
+  window.v358GymDiagnostics=()=>({
+    lowerRoutine:validPool("lower").slice(0,4),
+    gymCaps,
+    adaptiveDose:adaptiveDose(),
+    adaptiveEngine:typeof lifetimeAdaptiveDecision==="function",
+    deloadEngine:typeof v29CoordinatedDecision==="function"
+  });
+})();
+
+
+</script>
+
+<script>
+/* V41 iOS timer resilience: absolute deadline, local persistence, resume reconciliation. */
+(function(){
+ const KEY='ep_hybrid_v41_timer';
+ function snap(){try{const state={running:!!timerRunning,left:Number(timerLeft)||0,deadline:timerRunning&&timerDeadline?Number(timerDeadline):null,initial:Number(timerInitial)||0,savedAt:Date.now()};localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+ function restore(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(!s)return;if(s.running&&s.deadline){timerDeadline=s.deadline;timerLeft=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));if(timerLeft>0){timerRunning=false;if(!timerId&&typeof startRealTimer==='function')startRealTimer();}else{timerLeft=0;timerRunning=false;timerDeadline=null;const d=document.getElementById('timerDisplay');if(d)d.textContent='TEMPO TERMINATO';notify('Il timer è terminato mentre l’app era in background.');}}else if(!timerRunning&&s.left>0){timerLeft=s.left;timerInitial=s.initial||s.left;}}catch(e){console.warn('Timer restore',e)}}
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')snap();else{if(timerRunning&&timerDeadline){timerLeft=Math.max(0,Math.ceil((timerDeadline-Date.now())/1000));if(timerLeft<=0){timerLeft=0;timerRunning=false;timerDeadline=null;try{finishTimer()}catch(e){}}else{if(typeof updateTimer==='function')updateTimer();}}snap();}});
+ window.addEventListener('pagehide',snap);window.addEventListener('pageshow',()=>{restore();if(typeof updateTimer==='function')updateTimer()});
+ const originalStart=window.startRealTimer; if(typeof originalStart==='function')window.startRealTimer=function(){originalStart();snap()};
+ const originalStop=window.stopTimer;if(typeof originalStop==='function')window.stopTimer=function(...args){const r=originalStop.apply(this,args);snap();return r};
+ const originalFinish=window.finishTimer;if(typeof originalFinish==='function')window.finishTimer=function(...args){const r=originalFinish.apply(this,args);localStorage.removeItem(KEY);return r};
+ document.addEventListener('DOMContentLoaded',()=>{restore();if('Notification'in window&&Notification.permission==='default'){/* permission is requested only after an explicit user action */}});
+ window.v41TimerSnapshot=snap;const pulse=setInterval(()=>{if(timerRunning)snap()},5000);
+})();
+</script>
+
+
+
+<style>
+/* V43 · fluid iPhone layout and progressive disclosure */
+:root{scroll-behavior:smooth}
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+.card,.modal-box,.gt-panel,.workout-item{min-width:0;max-width:100%}
+#page-gym .gt-groups,#page-gym .gt-group,#page-gym .gt-machines{min-width:0;max-width:100%}
+#page-gym .gt-machine,#page-gym .gt-machine label{min-width:0;max-width:100%;width:100%}
+#page-gym .gt-machine label{display:grid;grid-template-columns:42px minmax(0,1fr);align-items:center;gap:10px;padding:12px}
+#page-gym .gt-machine label>span{min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.25}
+#page-gym .gt-machine input{width:28px;height:28px;min-width:28px;margin:0}
+#page-gym .gt-machines{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:430px){#page-gym .gt-machines{grid-template-columns:minmax(0,1fr)}#page-gym .gt-machine label{grid-template-columns:36px minmax(0,1fr)}}
+.v43-fold{border:1px solid var(--line);border-radius:16px;background:var(--panel);margin:10px 0;overflow:hidden;min-width:0}
+.v43-fold>summary{list-style:none;cursor:pointer;padding:15px 16px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px}
+.v43-fold>summary::-webkit-details-marker{display:none}
+.v43-fold>summary:after{content:'+';color:var(--orange);font-size:1.25rem;flex:0 0 auto}
+.v43-fold[open]>summary:after{content:'−'}
+.v43-fold-content{padding:0 12px 12px;min-width:0}
+.v43-fold-content>.card{margin:0 0 10px!important}
+#sessionModal .live-reg.v43-fold{margin-top:12px}
+#sessionModal .live-reg.v43-fold>.v43-fold-content{padding:0 10px 12px}
+#page-today .v43-home-fold{margin-top:10px}
+#page-today .v43-home-fold .card{margin:0!important}
+@media(max-width:430px){.timer{font-size:2.5rem}#sessionModal .modal-box{width:calc(100vw - 20px);max-width:calc(100vw - 20px);padding:14px}#sessionModal .timer-controls,#sessionModal .timer-tools{grid-template-columns:repeat(2,minmax(0,1fr))}#page-plan .week-grid{min-width:0}#page-plan .week-grid>*{min-width:0;overflow-wrap:anywhere}}
+</style>
+<script>
+/* V43 · simple daily surface, optional tools, equipment-led programming. */
+(function(){
+'use strict';
+function fold(node,title,id){if(!node||node.closest('details.v43-fold'))return null;const d=document.createElement('details');d.className='v43-fold';d.id=id;const sm=document.createElement('summary');sm.textContent=title;const c=document.createElement('div');c.className='v43-fold-content';node.parentNode.insertBefore(d,node);d.append(sm,c);c.append(node);return d;}
+function groupNodes(parent,nodes,title,id){if(!parent||!nodes.length)return;const d=document.createElement('details');d.className='v43-fold v43-home-fold';d.id=id;const sm=document.createElement('summary');sm.textContent=title;const c=document.createElement('div');c.className='v43-fold-content';parent.insertBefore(d,nodes[0]);d.append(sm,c);nodes.forEach(n=>{if(n&&n.parentNode===parent)c.append(n)});}
+function init(){
+ const today=document.getElementById('page-today');if(today){
+  const schedule=document.getElementById('adaptiveScheduleCard');fold(schedule,'Modifica la seduta di oggi · sposta o salta','v43DailyAdjustFold');
+  const decision=document.getElementById('decisionCard'),master=document.getElementById('masterCoachCard');groupNodes(today,[decision,master].filter(Boolean),'Analisi avanzata del coach','v43CoachAnalysisFold');
+  const wow=document.getElementById('wowDeck');if(wow){const b=wow.querySelector('.wow-actions');if(b){const first=b.querySelector('button');if(first)first.textContent='Apri check-in / coach';}}
+ }
+ const modal=document.getElementById('sessionModal');if(modal){const live=modal.querySelector('.live-reg');if(live)fold(live,'Feedback RPE e autoregolazione · facoltativo','v43LiveRpeFold');}
+ const plan=document.getElementById('page-plan');if(plan){
+  const check=plan.querySelector('#v32RecoveryPanel');fold(check,'Check-in recupero · quando serve','v43RecoveryFold');
+  const assess=plan.querySelector('#v33PerformancePanel');fold(assess,'Test performance · ogni 4–8 settimane','v43AssessmentFold');
+  const strat=plan.querySelector('#v31StrategyPanel');fold(strat,'Dettagli della strategia','v43StrategyFold');
+ }
+ const homeAside=document.querySelector('aside');if(homeAside){const cards=[...homeAside.querySelectorAll(':scope > .card')];if(cards.length>3)groupNodes(homeAside,cards.slice(3),'Profilo, ciclo e regole · dettagli','v43ProfileDetailsFold');}
+ // Keep the real weekly plan at the top; hide configuration and non-daily tools.
+ const planPage=document.getElementById('page-plan');if(planPage){const intro=planPage.querySelector('.page-intro'),week=planPage.querySelector('#weekGrid');if(intro&&week&&week.previousElementSibling!==intro)intro.after(week);}
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+
+// A selected treadmill or indoor bike is a real training modality, not just a label.
+const originalTreadmill=window.applyTreadmillToWorkout;
+window.applyTreadmillToWorkout=function(list){
+ const modes=typeof selectedModes==='function'?selectedModes():{};
+ if(runType==='pool'||runType==='hyrox'||['mtb','roadBike','indoorBike'].includes(runType))return list;
+ if(modes.treadmill){runSurface='treadmill';return typeof originalTreadmill==='function'?originalTreadmill(list):list;}
+ if(modes.indoorBike){
+  const cardioIds=new Set(['runEasy','runLong','progressiveRun','fartlek','intervals','tempo','threshold','hyroxRun']);
+  const hasRun=(list||[]).some(x=>cardioIds.has(x?.id));if(!hasRun)return list;
+  const hard=['interval','tempo','threshold','fartlek'].includes(runType);
+  const bikeId=hard?'bikeIntervals':'indoorRide';
+  const replacement=(EX&&EX[bikeId])?EX[bikeId]:null;
+  const base=(list||[]).filter(x=>!cardioIds.has(x?.id));
+  if(replacement)base.splice(Math.min(1,base.length),0,{...replacement,t:`Cyclette · ${hard?'intervalli aerobici':'base aerobica'}`,x:`Progressione su cyclette: ${hard?'intervalli controllati alternati a recupero facile':'ritmo continuo conversazionale'}. Regola resistenza e cadenza su RPE, non inseguire velocità.`});
+  return base;
+ }
+ return typeof originalTreadmill==='function'?originalTreadmill(list):list;
+};
+const oldSave=window.savePlanPreferences;
+window.savePlanPreferences=function(showNotice=false){
+ const result=typeof oldSave==='function'?oldSave(showNotice):undefined;
+ const m=typeof selectedModes==='function'?selectedModes():{};
+ const d=data();
+ if(m.treadmill){runSurface='treadmill';d.settings.runSurface='treadmill';}
+ if(m.indoorBike){d.settings.cycling={...(d.settings.cycling||{}),enabled:true,substituteEasyRun:true};}
+ else if(d.settings.cycling?.enabled && !m.indoorBike && !d.settings.cycling?.userEnabled){d.settings.cycling.enabled=false;}
+ save(d);
+ if(typeof updatePlanGymStatus==='function')updatePlanGymStatus();
+ return result;
+};
+window.v43SelfTest=function(){const ids=['v43LiveRpeFold','v43DailyAdjustFold','v43RecoveryFold','v43AssessmentFold'];return {rpeCollapsed:!!document.getElementById(ids[0])&&!document.getElementById(ids[0]).open,dailyAdjustCollapsed:!!document.getElementById(ids[1])&&!document.getElementById(ids[1]).open,recoveryCollapsed:!!document.getElementById(ids[2])&&!document.getElementById(ids[2]).open,assessmentCollapsed:!!document.getElementById(ids[3])&&!document.getElementById(ids[3]).open,profileModalities:typeof selectedModes==='function'&&!!document.getElementById('planTreadmill')&&!!document.getElementById('planIndoorBike'),bikeExerciseAvailable:!!(window.EX&&EX.indoorRide),treadmillExerciseAvailable:!!(window.EX&&EX.treadmillEasy)};};
+})();
+</script>
+
+<style id="v44-fluid-home-css">
+/* V44: home essenziale, controlli compatti e navigazione iPhone */
+.nav{grid-template-columns:repeat(6,minmax(0,1fr));}
+.nav button{min-width:0;white-space:normal;line-height:1.1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.nav button span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.v44-home-hero{padding:19px!important;background:linear-gradient(135deg,rgba(22,199,132,.17),rgba(56,189,248,.10))!important;border-color:rgba(22,199,132,.35)!important}
+.v44-home-hero .v44-date{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:900}
+.v44-home-hero h2{font-size:1.65rem;line-height:1.12;margin:8px 0}
+.v44-home-hero p{margin:0 0 14px}
+.v44-home-hero .v44-home-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.v44-home-hero .v44-start{min-height:54px;font-size:1rem;box-shadow:0 10px 24px rgba(22,199,132,.18)}
+.v44-home-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.v44-home-stat{background:rgba(5,17,29,.56);border:1px solid var(--line);border-radius:13px;padding:10px;min-width:0}
+.v44-home-stat strong{display:block;font-size:1.05rem;line-height:1.2}
+.v44-home-stat span{display:block;font-size:.59rem;color:var(--muted);letter-spacing:.07em;margin-top:4px}
+.v44-fold{border:1px solid var(--line);border-radius:16px;background:rgba(10,25,39,.7);margin:10px 0;overflow:hidden}
+.v44-fold>summary{list-style:none;cursor:pointer;padding:15px 16px;font-weight:850;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.v44-fold>summary::-webkit-details-marker{display:none}
+.v44-fold>summary:after{content:"＋";font-size:1.2rem;color:var(--green)}
+.v44-fold[open]>summary:after{content:"−"}
+.v44-fold-content{padding:0 10px 10px}
+.v44-fold-content>.card{margin:8px 0}
+.v44-section-label{font-size:.68rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:900;padding:7px 3px}
+@media(max-width:680px){
+ .v44-home-hero{padding:16px!important}
+ .v44-home-hero h2{font-size:1.42rem}
+ .v44-home-hero .v44-home-actions{grid-template-columns:1fr}
+ .v44-home-stat{padding:9px 7px}
+ .v44-home-stat strong{font-size:.98rem}
+ .nav button{font-size:.58rem;padding:6px 1px}
+ .nav button .ui-icon{width:19px;height:19px}
+}
+</style>
+<script id="v44-fluid-home-script">
+(function(){
+ const $=(id)=>document.getElementById(id);
+ function makeFold(parent,nodes,title,id){
+  if(!parent||!nodes.length||$(id))return;
+  const d=document.createElement('details');d.className='v44-fold';d.id=id;
+  const sm=document.createElement('summary');sm.textContent=title;
+  const body=document.createElement('div');body.className='v44-fold-content';
+  parent.insertBefore(d,nodes[0]);d.append(sm,body);
+  nodes.forEach(n=>{if(n&&n.parentNode===parent)body.appendChild(n)});
+ }
+ function init(){
+  const page=$('page-today');if(!page)return;
+  if(!$('v44HomeHero')){
+   const hero=document.createElement('section');hero.className='card v44-home-hero';hero.id='v44HomeHero';
+   hero.innerHTML=`<div class="v44-date" id="v44Date"></div>
+    <h2>Il tuo allenamento, oggi.</h2>
+    <p class="small" id="v44Recommendation">La seduta consigliata dal coach, in base al tuo programma e alle tue disponibilità.</p>
+    <div class="v44-home-actions">
+     <button class="btn v44-start" type="button" id="v44Start">▶ Inizia allenamento</button>
+     <button class="btn secondary" type="button" id="v44Week">Vedi programma</button>
+    </div>
+    <div class="v44-home-stats">
+     <div class="v44-home-stat"><strong id="v44WeekCount">—</strong><span>SEDUTE SETTIMANALI</span></div>
+     <div class="v44-home-stat"><strong id="v44Recovery">—</strong><span>RECUPERO</span></div>
+     <div class="v44-home-stat"><strong id="v44Phase">—</strong><span>FASE ATTUALE</span></div>
+    </div>`;
+   page.insertBefore(hero,page.firstChild);
+   $('v44Start').addEventListener('click',()=>{if(typeof startGeneratedWorkout==='function')startGeneratedWorkout();});
+   $('v44Week').addEventListener('click',()=>{if(typeof showPage==='function')showPage('plan');});
+  }
+  const direct=[...page.children];
+  const legacyHero=direct.find(n=>n.classList?.contains('hero')&&!n.classList.contains('v44-home-hero'));
+  const wow=$('wowDeck');
+  makeFold(page,[legacyHero].filter(Boolean),'Dettagli del coach e indicatori','v44CoachSummaryFold');
+  makeFold(page,[wow].filter(Boolean),'Riepilogo attività e progressi','v44MomentumFold');
+  const cards=[...page.querySelectorAll(':scope > .card')];
+  const daily=cards.find(n=>n!==$('v44HomeHero')&&n.querySelector('h3')?.textContent.trim()==='Check quotidiano');
+  if(daily)makeFold(page,[daily],'Check-in giornaliero · apri quando serve','v44DailyCheckFold');
+  const progression=cards.find(n=>n.textContent.includes('Motore di progressione'));
+  if(progression)makeFold(page,[progression],'Dettagli della progressione','v44ProgressionFold');
+  const modules=cards.find(n=>n.textContent.includes('Moduli personali'));
+  if(modules)makeFold(page,[modules],'Altri allenamenti e moduli','v44ModulesFold');
+  const adaptive=$('adaptiveScheduleCard');
+  if(adaptive&&!adaptive.closest('details'))makeFold(page,[adaptive],'Modifica, salta o recupera una seduta','v44ScheduleFold');
+  refresh();
+  // In sessione, feedback RPE/dolore/tecnica resta facoltativo e chiuso.
+  const live=document.querySelector('#sessionModal .live-reg');
+  if(live&&!live.closest('details'))makeFold(live.parentElement,[live],'Feedback RPE e autoregolazione · facoltativo','v44RpeFold');
+ }
+ function refresh(){
+  const now=new Date();
+  const date=$('v44Date');if(date)date.textContent=now.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});
+  const title=$('todayTitle'),message=$('todayMessage'),rec=$('v44Recommendation');
+  if(rec){
+   const t=title?.textContent?.trim();
+   rec.textContent=(t&&!/completa il check/i.test(t))?t:(message?.textContent?.trim()||'Completa il check rapido per ricevere la proposta del coach.');
+  }
+  const week=$('wowWeekDone');if($('v44WeekCount'))$('v44WeekCount').textContent=week?.textContent?.trim()||'—';
+  const phase=$('todayPeriodTitle');if($('v44Phase'))$('v44Phase').textContent=phase?.textContent?.replace(/^Settimana\s*\d+\/\d+\s*·\s*/i,'').trim()||'—';
+  const readiness=$('performanceReadinessValue');if($('v44Recovery'))$('v44Recovery').textContent=readiness?.textContent?.trim()||'—';
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+ window.v44RefreshHome=refresh;
+ window.v44SelfTest=()=>({
+  homeHero:!!$('v44HomeHero'),
+  startButton:!!$('v44Start'),
+  weekButton:!!$('v44Week'),
+  checkInCollapsed:!!$('v44DailyCheckFold')&&!$('v44DailyCheckFold').open,
+  coachSummaryCollapsed:!!$('v44CoachSummaryFold')&&!$('v44CoachSummaryFold').open,
+  progressCollapsed:!!$('v44ProgressionFold')&&!$('v44ProgressionFold').open,
+  rpeOptional:!!document.querySelector('#sessionModal .live-reg'),
+  sixTabNavigation:!!document.querySelector('.nav')&&getComputedStyle(document.querySelector('.nav')).gridTemplateColumns.split(' ').length===6
+ });
+})();
+</script>
+
+
+<style>
+/* V45 Complete Coach · refinement without changing the established visual identity */
+.v45-insight{border:1px solid rgba(132,204,22,.28);background:linear-gradient(145deg,rgba(132,204,22,.09),rgba(12,26,38,.92));border-radius:16px;padding:14px;margin:12px 0;line-height:1.5}
+.v45-insight h3{margin:0 0 7px;font-size:1rem}.v45-insight p{margin:5px 0;color:var(--muted);font-size:.84rem}.v45-insight strong{color:var(--text)}
+.v45-pill{display:inline-flex;padding:4px 8px;border-radius:99px;background:rgba(132,204,22,.12);color:#b8ed69;font-size:.68rem;font-weight:800;margin:3px 4px 3px 0}
+.v45-substitution{font-size:.76rem;color:#b8ed69;margin-top:5px}.v45-mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.v45-mini{padding:10px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025)}.v45-mini b{display:block;font-size:1rem}.v45-mini small{color:var(--muted);font-size:.68rem}
+@media(max-width:420px){.v45-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<script>
+/* V46 DAILY COACH FLOW
+   - Connects the GreenTheory availability picker to the real exercise generator.
+   - Replaces unavailable machine movements only with available alternatives for the same muscle group.
+   - Adds evidence-based progression/stall summaries and a live rationale panel.
+   - Does not alter the existing persistence schema or erase user history.
+*/
+(function(){
+'use strict';
+const STORE_KEY='gtV40Equipment';
+const readInv=()=>{try{return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')}catch(_){return {}}};
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+const catalog=[
+ ['Shoulder Press Prona','panatta'],['Super Deltoid Press','panatta'],['Shoulder Press Matrix','panatta'],['Real Delt Posteriori','panatta'],
+ ['Squat Machine','panatta'],['Leg Press 45°','panatta'],['Master Gluteus Machine','panatta'],['Reverse Hyper Extension','panatta'],['Leg Extension','panatta'],['Lat Squat','panatta'],['Leg Press','panatta'],['Rear Kick Machine','panatta'],['Leg Press Matrix','panatta'],['Leg Curl Sdraiato','panatta'],['Leg Curl Seduto','panatta'],['Gluteus Machine Matrix','panatta'],['Leg Extension Matrix','panatta'],['Leg Curl Sdraiato Matrix','panatta'],
+ ['Power Smith Machine','panatta'],['Low Chest Machine','panatta'],['Pectoral Machine','panatta'],['Pec Fly','panatta'],['Chest Press','panatta'],['Assisted Chin and Dip','panatta'],['Power Smith Machine Inclinata','panatta'],['Chest Fly Machine','panatta'],['Row Machine','panatta'],['Lat Pulldown','panatta'],['Lat Pulldown Matrix','panatta'],['Rear Delt Centro Schiena','panatta'],['Compound Row','panatta'],['Alternate Arm Curl','panatta'],
+ ['Chest Press inclinata','kingsbox'],['Shoulder Press','kingsbox'],['Squat rack / bilanciere','kingsbox'],['Deadlift / stacco','kingsbox'],['Rig / trazioni','kingsbox'],
+ ['Chest Press / spinta guidata','titan'],['Row / rematore guidato','titan'],['Lat machine / tirata verticale','titan'],['Leg press / spinta gambe','titan'],['Leg extension','titan'],['Leg curl','titan'],['Shoulder press','titan'],['Abductor / adductor','titan'],
+ ['Panca e manubri','lacertosus'],['Bilanciere e dischi','lacertosus'],['Manubri','lacertosus'],['Panca inclinabile','lacertosus']
+];
+const invKey=(name,brand)=>brand+'_'+norm(name);
+function inventoryStatus(name,brand){const s=readInv();return s.brands?.[brand]!==false && s.available?.[invKey(name,brand)]!==false;}
+const links={
+ machineLegPress:[['Leg Press','panatta'],['Leg Press 45°','panatta'],['Leg Press Matrix','panatta'],['Leg press / spinta gambe','titan']],
+ machineLegExtension:[['Leg Extension','panatta'],['Leg Extension Matrix','panatta'],['Leg extension','titan']],
+ machineLegCurl:[['Leg Curl Sdraiato','panatta'],['Leg Curl Seduto','panatta'],['Leg Curl Sdraiato Matrix','panatta'],['Leg curl','titan']],
+ machineHackSquat:[['Squat Machine','panatta'],['Lat Squat','panatta']],
+ machineChestPress:[['Chest Press','panatta'],['Low Chest Machine','panatta'],['Chest Press / spinta guidata','titan']],
+ machineInclinePress:[['Power Smith Machine Inclinata','panatta'],['Chest Press inclinata','kingsbox']],
+ machinePecDeck:[['Pectoral Machine','panatta'],['Pec Fly','panatta'],['Chest Fly Machine','panatta']],
+ machineCableFly:[['Pec Fly','panatta'],['Chest Fly Machine','panatta']],
+ machineSeatedRow:[['Row Machine','panatta'],['Compound Row','panatta'],['Row / rematore guidato','titan']],
+ machineLowRow:[['Compound Row','panatta'],['Row / rematore guidato','titan']],
+ machineLatPulldown:[['Lat Pulldown','panatta'],['Lat Pulldown Matrix','panatta'],['Lat machine / tirata verticale','titan']],
+ machineAssistedPullup:[['Assisted Chin and Dip','panatta'],['Rig / trazioni','kingsbox']],
+ machineHighRow:[['Row Machine','panatta'],['Compound Row','panatta']],
+ machineReverseFly:[['Real Delt Posteriori','panatta'],['Rear Delt Centro Schiena','panatta']],
+ machineBiceps:[['Alternate Arm Curl','panatta']],
+ machinePreacherCurl:[['Alternate Arm Curl','panatta']],
+ machineHipThrust:[['Master Gluteus Machine','panatta'],['Gluteus Machine Matrix','panatta']],
+ machineGluteKick:[['Rear Kick Machine','panatta']],
+ machineHipAbduction:[['Abductor / adductor','titan']],
+ machineSmithSquat:[['Power Smith Machine','panatta'],['Squat rack / bilanciere','kingsbox']],
+};
+function muscle(id){const x=EX?.[id];const z=(id+' '+(x?.t||'')+' '+(x?.d||'')).toLowerCase();
+ if(/shoulder|deltoid|lateral raise|face pull/.test(z))return 'shoulders';
+ if(/chest|pec|bench|floor press/.test(z))return 'chest';
+ if(/row|lat|pulldown|pullup|pull up|back|dors/.test(z))return 'back';
+ if(/biceps|curl|triceps|pushdown|french press/.test(z))return 'arms';
+ if(/leg|squat|glute|hip|calf|lunge|deadlift|rdl|hamstring/.test(z))return 'legs';
+ if(/crunch|pallof|deadbug|plank|core|abdominal/.test(z))return 'core';
+ return x?.d==='legs'?'legs':x?.d==='military'?'upper':x?.d||'general';
+}
+function linkedUnavailable(id){const s=readInv(),arr=links[id]||[];return arr.length>0&&arr.every(([n,b])=>!inventoryStatus(n,b));}
+function compatibleCandidates(id,all){const group=muscle(id);return all.filter(c=>c!==id&&EX?.[c]&&muscle(c)===group&&eqAvailable(c)&&!linkedUnavailable(c)&&!EX[c]?.shoulderSensitive);}
+function resolveList(ids){
+ const all=Array.from(new Set([...(ids||[]),...(typeof GYM_ROUTINES!=="undefined"?Object.values(GYM_ROUTINES).flat():[]),...(typeof FREE_WEIGHT_ROUTINES!=="undefined"?Object.values(FREE_WEIGHT_ROUTINES).flat():[]),...(typeof EX!=="undefined"?Object.keys(EX):[])]));
+ const out=[],notes=[];
+ for(const id of ids||[]){if(!EX?.[id]||!window.eqAvailable(id))continue;if(!linkedUnavailable(id)){out.push(id);continue;}
+  const group=muscle(id);let candidates=compatibleCandidates(id,all);
+  // Keep shoulder safety: a sensitive exercise is never selected as a replacement when the source is blocked by safety.
+  if(mode==='recovery'||mode==='safe'||blocked)candidates=candidates.filter(c=>!EX[c]?.shoulderSensitive);
+  const replacement=candidates[0];
+  if(replacement){out.push(replacement);notes.push(`${EX[id].t} non disponibile → ${EX[replacement].t} (${group})`)}
+  else notes.push(`${EX[id].t}: nessuna alternativa compatibile disponibile; esercizio escluso`);
+ }
+ return {ids:Array.from(new Set(out)),notes};
+}
+if(typeof window.gymExerciseIds==='function'){
+ const original=window.gymExerciseIds;
+ window.gymExerciseIds=function(){const base=original();const resolved=resolveList(base);window.v45LastSubstitutions=resolved.notes;return resolved.ids;};
+}
+// Apply the same substitution logic to the other strength-session generators.
+if(typeof window.physiqueWorkoutIds==='function'){
+ const original=window.physiqueWorkoutIds;
+ window.physiqueWorkoutIds=function(kind){const base=original(kind);return resolveList(base).ids;};
+}
+function renderSubstitutionNotice(){const box=document.getElementById('gymProgressionInfo');if(!box)return;const notes=window.v45LastSubstitutions||[];if(notes.length){box.innerHTML='<strong>Adattamenti attrezzatura</strong><br>'+notes.map(x=>'• '+x).join('<br>')+'<br><span class="small">Le alternative sono selezionate nella stessa area muscolare e rispettano le attrezzature abilitate.</span>';}}
+if(typeof window.renderGymPreview==='function'){const original=window.renderGymPreview;window.renderGymPreview=function(){const r=original();renderSubstitutionNotice();return r;};}
+function progressionInsights(){const d=(typeof data==='function'?data():null);if(!d)return {count:0,stalls:[],recent:[]};const h=d.progression?.loadHistory||{};let count=0,stalls=[],recent=[];
+ for(const [id,rows] of Object.entries(h)){if(!Array.isArray(rows)||!rows.length)continue;count+=rows.length;const last=rows[rows.length-1],prev=rows[rows.length-2];if(prev&&Number(last.kg)<=Number(prev.kg)&&Number(last.rpe)>=8.5)stalls.push({id,name:EX?.[id]?.t||id});recent.push({id,name:EX?.[id]?.t||id,last});}
+ return {count,stalls:stalls.slice(0,6),recent:recent.sort((a,b)=>String(b.last.date||'').localeCompare(String(a.last.date||''))).slice(0,5)};
+}
+function addCoachPanels(){
+ const coach=document.getElementById('page-coach');if(coach&&!document.getElementById('v45CoachReason')){const panel=document.createElement('div');panel.className='v45-insight';panel.id='v45CoachReason';panel.innerHTML='<h3>Coach · perché questa seduta</h3><p id="v45CoachText">Il coach valuta obiettivo, piano, recupero, storico e attrezzatura selezionata.</p><div id="v45CoachTags"></div>';coach.insertBefore(panel,coach.firstElementChild);}
+ const progress=document.getElementById('page-progress');if(progress&&!document.getElementById('v45ProgressInsight')){const panel=document.createElement('div');panel.className='v45-insight';panel.id='v45ProgressInsight';panel.innerHTML='<h3>Coach · andamento dei carichi</h3><p id="v45ProgressText">Le osservazioni si basano solo sulle registrazioni presenti nello storico.</p>';progress.insertBefore(panel,progress.firstElementChild);}
+}
+function updateInsights(){
+ const d=(typeof data==='function'?data():null);if(!d)return;const s=d.settings||{},m=s.trainingModes||{},eq=s.equipment||{};const goalNames={longevity:'Longevità atletica',fatloss:'Ricomposizione',muscleGain:'Ipertrofia',strengthFocus:'Forza',hyrox:'HYROX',hybrid:'Allenamento ibrido',run5k:'Corsa 5 km',run10k:'Corsa 10 km',halfMarathon:'Mezza maratona',endurance:'Resistenza aerobica'};
+ const goal=goalNames[s.goal]||'Obiettivo personale';const active=[];if(eq.machines)active.push('macchinari');if(eq.weights)active.push('pesi liberi');if(m.treadmill||s.runSurface==='treadmill')active.push('tapis roulant');if(m.indoorBike)active.push('cyclette');
+ const p=document.getElementById('v45CoachText');if(p){const decision=(typeof masterDecisionModel==='function'?masterDecisionModel():null);const action=decision?.action||'ADATTA';const recovery=mode==='recovery'||mode==='safe'?'modalità di recupero/protezione attiva':'recupero valutato dal check-in e dallo storico';p.textContent=`Obiettivo: ${goal}. Attrezzatura abilitata: ${active.join(', ')||'da configurare'}. Il coach combina sedute recenti, progressione, recupero e vincoli dichiarati. Indicazione attuale: ${action}. ${recovery}. La proposta non sostituisce la tua scelta: puoi cambiare seduta.`;}
+ const tags=document.getElementById('v45CoachTags');if(tags)tags.innerHTML=[goal,...active].map(x=>`<span class="v45-pill">${x}</span>`).join('');
+ const q=progressionInsights(),out=document.getElementById('v45ProgressText');if(out){const stall=q.stalls.length?`Possibili stalli da rivedere: ${q.stalls.map(x=>x.name).join(', ')}. Sono segnali da verificare, non diagnosi di stallo.`:'Nessun possibile stallo rilevato nei dati recenti disponibili.';out.textContent=`${q.count} registrazioni di carico presenti nello storico. ${stall} Il coach non propone incrementi se mancano dati sufficienti su ripetizioni, tecnica, RPE e dolore.`;}
+}
+function refresh(){addCoachPanels();updateInsights();}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh);else refresh();
+document.addEventListener('click',e=>{if(e.target.closest('.nav button'))setTimeout(refresh,80)});
+document.addEventListener('change',e=>{if(e.target.matches('input,select'))setTimeout(refresh,50)});
+window.v45ResolveEquipmentList=resolveList;
+window.v45RunSelfTests=function(){const tests=[];const add=(name,fn)=>{try{tests.push({name,ok:!!fn()})}catch(e){tests.push({name,ok:false,error:String(e)})}};
+ add('Versione V45',()=>String(APP_VERSION||'').startsWith('45.'));
+ add('Catalogo GreenTheory disponibile',()=>catalog.length>=45);
+ add('Mappature esercizio-attrezzatura presenti',()=>Object.keys(links).length>=15);
+ add('Alternativa vincolata al gruppo muscolare',()=>muscle('machineLegPress')==='legs'&&muscle('machineSeatedRow')==='back');
+ add('Routine forza collegata al resolver',()=>typeof window.gymExerciseIds==='function'&&window.gymExerciseIds.toString().includes('resolveList'));
+ add('Storico carichi preservato',()=>!!(typeof data==='function'?data():null)?.progression?.loadHistory);
+ add('Nessuna modifica schema DB',()=>SCHEMA_VERSION===31);
+ return {passed:tests.filter(x=>x.ok).length,total:tests.length,tests};};
+})();
+</script>
+
+<script>
+/* V46 · welcome flow. The user chooses; no silent calendar rescheduling. */
+(function(){
+ const v46Labels={auto:'Seduta prevista dal programma',gym:'Sala pesi completa',upper:'Sala pesi · parte superiore',lower:'Sala pesi · parte inferiore',run:'Corsa / tapis roulant',bike:'Cyclette · capacità aerobica',hyrox:'HYROX / funzionale',recovery:'Recupero / mobilità'};
+ function el(id){return document.getElementById(id)}
+ window.v46RefreshWelcome=function(){
+  try{
+   const now=new Date(),hour=now.getHours(),g=hour<12?'Buongiorno Erjon.':hour<18?'Buon pomeriggio Erjon.':'Buonasera Erjon.';
+   if(el('dailyWelcomeGreeting'))el('dailyWelcomeGreeting').textContent=g;
+   if(el('dailyWelcomeDate'))el('dailyWelcomeDate').textContent=now.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'}).toUpperCase()+' · IL TUO COACH';
+   let label='Seduta prevista dal programma';
+   try{const f=typeof effectiveSessionType==='function'?effectiveSessionType():'';if(f&&typeof coachSessionDisplayLabel==='function')label=coachSessionDisplayLabel(f);else if(f)label=f;}catch(e){}
+   const chosen=el('v46TodayChoice')?.value||'auto';
+   if(chosen!=='auto')label=v46Labels[chosen]||label;
+   if(el('dailyWelcomeSession'))el('dailyWelcomeSession').textContent=label;
+   if(el('dailyWelcomeReason'))el('dailyWelcomeReason').textContent='Obiettivo: '+(data()?.settings?.goal||'profilo For Life')+'. Il Coach adatta esercizi e progressione agli attrezzi disponibili e al recupero.';
+   const done=typeof dailyPlanSessionToday==='function'&&dailyPlanSessionToday();
+   if(done){if(el('dailyWelcomeSession'))el('dailyWelcomeSession').textContent='Allenamento di oggi completato';if(el('dailyWelcomeGo'))el('dailyWelcomeGo').textContent='ALLENAMENTO COMPLETATO';if(el('dailyWelcomeStatus'))el('dailyWelcomeStatus').textContent='Ottimo lavoro. Se vuoi, puoi comunque scegliere un’attività extra.';}
+  }catch(e){console.warn('V46 welcome refresh',e)}
+ };
+ window.v46WelcomeProceed=function(){
+  if(typeof dailyPlanSessionToday==='function'&&dailyPlanSessionToday()){showPage('training');return;}
+  if(typeof selectedPain==='undefined'||selectedPain===null){v46OpenFeeling();return;}
+  if(typeof startGeneratedWorkout==='function')startGeneratedWorkout();
+ };
+ window.v46OpenFeeling=function(){
+  const check=el('painScale');if(check){check.scrollIntoView({behavior:'smooth',block:'center'});const first=check.querySelector('button');if(first)setTimeout(()=>first.focus({preventScroll:true}),350);}
+  const status=el('dailyWelcomeStatus');if(status)status.textContent='Facciamo un check rapido: seleziona come sta la spalla e, se necessario, apri i segnali aggiuntivi. Poi puoi avviare la seduta.';
+ };
+ window.v46OpenChange=function(){const d=el('dailyWelcomeChangeDetails');if(d){d.open=true;d.scrollIntoView({behavior:'smooth',block:'nearest'});} }
+ window.v46ApplyTodayChoice=function(){
+  const choice=el('v46TodayChoice')?.value||'auto';
+  if(choice==='bike'){showPage('running');if(typeof selectRun==='function')selectRun('indoorBike');if(el('dailyWelcomeStatus'))el('dailyWelcomeStatus').textContent='Cyclette selezionata. Verifica che sia attiva nel profilo attrezzatura, poi avvia la seduta dalla sezione Corsa.';return;}
+  const map={auto:'auto',gym:'gym',upper:'upper',lower:'lower',run:'run',bike:'auto',hyrox:'hyrox',recovery:'recovery'};
+  const target=el('planFreeFocus'),modeSelect=el('planCoachMode');
+  if(target){target.value=map[choice]||'auto';if(modeSelect)modeSelect.value=choice==='auto'?'auto':'free';if(typeof onPlanFocusChange==='function')onPlanFocusChange();}
+  if(choice==='recovery'){
+   const ac=el('adaptiveChoice');if(ac)ac.value='rest';
+   const reason=el('adaptiveReason');if(reason)reason.value='fatigue';
+   if(typeof previewAdaptiveSchedule==='function')previewAdaptiveSchedule();
+   const panel=el('adaptiveScheduleCard');if(panel)panel.scrollIntoView({behavior:'smooth',block:'center'});
+   if(el('dailyWelcomeStatus'))el('dailyWelcomeStatus').textContent='Proposta di recupero pronta: controlla e conferma la modifica. Il calendario non cambia finché non confermi.';
+  }else{
+   try{if(typeof selectedPain!=='undefined'&&selectedPain!==null&&typeof generateToday==='function')generateToday();}catch(e){}
+   if(el('dailyWelcomeStatus'))el('dailyWelcomeStatus').textContent='Preferenza aggiornata per oggi. La settimana non viene spostata automaticamente.';
+   if(el('dailyWelcomeChangeDetails'))el('dailyWelcomeChangeDetails').open=false;
+   v46RefreshWelcome();
+  }
+ };
+ window.v46ChooseRecovery=function(){
+  const sel=el('v46TodayChoice');if(sel)sel.value='recovery';
+  v46ApplyTodayChoice();
+ };
+ document.addEventListener('DOMContentLoaded',()=>{v46RefreshWelcome();setTimeout(v46RefreshWelcome,500);});
+})();
+</script>
 </body>
 </html>
-
-
-
